@@ -1,20 +1,22 @@
 <?php
 
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
+use function Laravel\Prompts\password;
+use App\Http\Middleware\UserMiddleware;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\Admin\ArsipBukuController;
+use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\Admin\DataBukuController;
-use App\Http\Middleware\AdminMiddleware;
-use App\Http\Middleware\UserMiddleware;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-// Auth routes (dari breeze) - letakkan di atas
-require __DIR__.'/auth.php';
 
 // User routes - gunakan class langsung
 Route::middleware(['auth', UserMiddleware::class])->group(function () {
@@ -24,7 +26,8 @@ Route::middleware(['auth', UserMiddleware::class])->group(function () {
 // Admin routes - gunakan class langsung
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/data_buku', [DataBukuController::class, 'index'])->name('admin.data_buku.index');
+     // Route resource favorit yang disederhanakan
+    Route::resource('/admin/arsip_buku', ArsipBukuController::class)->names('admin.arsip_buku');
 });
 
 // Fallback untuk redirect berdasarkan user type
@@ -44,3 +47,37 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::get('/auth/google/redirect', function () {
+    return Socialite::driver('google')->redirect();
+});
+
+Route::get('/auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->user();
+
+    $user = User::where('email', $googleUser->email)->first();
+
+    if (!$user) {
+        // Jika user belum ada, buat baru
+        $user = User::create([
+            'name' => $googleUser->name,
+            'email' => $googleUser->email,
+            'password' => Hash::make(Str::random(24)),
+        ]);
+    }
+
+    // Update/google_id dan token (baik user baru maupun existing)
+    $user->update([
+        'google_id' => $googleUser->id,
+        'google_token' => $googleUser->token,
+        'google_refresh_token' => $googleUser->refreshToken,
+    ]);
+
+    Auth::login($user);
+    return redirect('/dashboard');
+});
+
+
+
+// Auth routes (dari breeze) - letakkan di atas
+require __DIR__.'/auth.php';

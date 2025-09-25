@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 use function Laravel\Prompts\password;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\Admin\DataBukuController;
+use App\Http\Controllers\Admin\ArsipBukuController;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
@@ -25,6 +27,10 @@ Route::middleware(['auth', UserMiddleware::class])->group(function () {
 // Admin routes - gunakan class langsung
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/data_buku', [DataBukuController::class, 'index'])->name('admin.data_buku.index');
+    
+     // Route resource favorit yang disederhanakan
+    Route::resource('/admin/arsip_buku', ArsipBukuController::class)->names('admin.arsip_buku');
 });
 
 // Fallback untuk redirect berdasarkan user type

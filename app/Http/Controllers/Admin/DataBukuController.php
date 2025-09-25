@@ -9,6 +9,6 @@ class DataBukuController extends Controller
 {
     public function index()
     {
-      return view('admin.data_buku.index');
+        return view('admin.data_buku.index');
     }
 }

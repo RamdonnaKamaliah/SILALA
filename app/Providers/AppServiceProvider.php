@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Tidak perlu register middleware di sini untuk Laravel 12
+        // Middleware akan di-register melalui bootstrap/providers.php
     }
 }

@@ -27,7 +27,7 @@ Route::middleware(['auth', UserMiddleware::class])->group(function () {
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
      // Route resource favorit yang disederhanakan
-    Route::resource('/admin/arsip_buku', ArsipBukuController::class)->names('admin.arsip_buku');
+    Route::get('/admin/arsip_buku',[ArsipBukuController::class, 'index'])->name('admin.arsip_buku');
 });
 
 // Fallback untuk redirect berdasarkan user type

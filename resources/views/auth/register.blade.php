@@ -2,11 +2,18 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <!-- Name -->
+        <!-- Nama Lengkap -->
         <div>
-            <x-input-label for="name" :value="__('Name')" />
+            <x-input-label for="name" :value="__('Nama Lengkap')" />
             <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
+
+        <!-- No Telepon -->
+        <div class="mt-4">
+            <x-input-label for="phone" :value="__('No Telepon')" />
+            <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required autocomplete="tel" />
+            <x-input-error :messages="$errors->get('phone')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
@@ -14,6 +21,28 @@
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        </div>
+
+        <!-- Jenis Keanggotaan -->
+        <div class="mt-4">
+            <x-input-label for="membership_type" :value="__('Jenis Keanggotaan')" />
+            <select id="membership_type" name="membership_type" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
+                <option value="">Pilih Jenis Keanggotaan</option>
+                <option value="karyawan" {{ old('membership_type') == 'karyawan' ? 'selected' : '' }}>Karyawan</option>
+                <option value="magang" {{ old('membership_type') == 'magang' ? 'selected' : '' }}>Magang</option>
+            </select>
+            <x-input-error :messages="$errors->get('membership_type')" class="mt-2" />
+        </div>
+
+        <!-- Jenis Kelamin -->
+        <div class="mt-4">
+            <x-input-label for="gender" :value="__('Jenis Kelamin')" />
+            <select id="gender" name="gender" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
+                <option value="">Pilih Jenis Kelamin</option>
+                <option value="L" {{ old('gender') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                <option value="P" {{ old('gender') == 'P' ? 'selected' : '' }}>Perempuan</option>
+            </select>
+            <x-input-error :messages="$errors->get('gender')" class="mt-2" />
         </div>
 
         <!-- Password -->

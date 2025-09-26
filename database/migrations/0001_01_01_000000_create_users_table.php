@@ -14,9 +14,16 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('phone')->nullable();
             $table->string('email')->unique();
+            $table->enum('user_type', ['admin', 'user'])->default('user');
+            $table->enum('membership_type', ['karyawan', 'magang'])->default('karyawan');
+            $table->enum('gender', ['L', 'P'])->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('google_id')->nullable();
+            $table->string('google_token')->nullable();
+            $table->string('google_refresh_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

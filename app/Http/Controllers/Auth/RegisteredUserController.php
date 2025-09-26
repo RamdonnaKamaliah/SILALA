@@ -31,20 +31,26 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:15'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'membership_type' => ['required', 'in:karyawan,magang'],
+            'gender' => ['required', 'in:L,P'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'phone' => $request->phone,
             'email' => $request->email,
+            'user_type' => 'user', // Default user type
+            'membership_type' => $request->membership_type,
+            'gender' => $request->gender,
             'password' => Hash::make($request->password),
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        // Redirect to login after registration
+        return redirect()->route('login')->with('status', 'Registration successful. Please login.');
     }
 }

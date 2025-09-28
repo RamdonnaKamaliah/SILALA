@@ -1,125 +1,178 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-    
-<div class="google-button-container">
-    <a href="/auth/google/redirect" class="google-login-button">
-        <svg class="google-icon" width="46" height="47" viewBox="0 0 46 47" fill="none">
-            <path d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z" fill="#4285F4"/>
-            <path d="M23.4694 47C29.8061 47 35.1161 44.9144 39.0179 41.3012L31.625 35.5437C29.6301 36.9244 26.9898 37.8937 23.4987 37.8937C17.2793 37.8937 12.0281 33.7812 10.1505 28.1412L9.88649 28.1706L2.61097 33.7812L2.52296 34.0456C6.36608 41.7125 14.287 47 23.4694 47Z" fill="#34A853"/>
-            <path d="M10.1212 28.1413C9.62245 26.6725 9.32908 25.1156 9.32908 23.5C9.32908 21.8844 9.62245 20.3275 10.0918 18.8588V18.5356L2.75765 12.8369L2.52296 12.9544C0.909439 16.1269 0 19.7106 0 23.5C0 27.2894 0.909439 30.8731 2.49362 34.0456L10.1212 28.1413Z" fill="#FBBC05"/>
-            <path d="M23.4694 9.07688C27.8699 9.07688 30.8622 10.9863 32.5344 12.5725L39.1645 6.11C35.0867 2.32063 29.8061 0 23.4694 0C14.287 0 6.36607 5.2875 2.49362 12.9544L10.0918 18.8588C11.9987 13.1894 17.25 9.07688 23.4694 9.07688Z" fill="#EB4335"/>
-        </svg>
-        Sign in with Google
-    </a>
-</div>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SiLala BPMSPH</title>
 
-<div class="or-divider">
-    <div class="divider-line"></div>
-    <span class="divider-text">Or</span>
-    <div class="divider-line"></div>
-</div>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<style>
-.google-button-container {
-    margin-bottom: 1rem;
-}
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-.google-login-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 14px;
-    font-weight: 500;
-    text-decoration: none;
-    border: 1px solid #d1d5db;
-    background-color: white;
-    color: #1f2937;
-    border-radius: 8px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-}
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
 
-.google-login-button:hover {
-    background-color: #f9fafb;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+    }
 
-.google-login-button:focus {
-    outline: none;
-    background-color: #f9fafb;
-}
+    /* Desktop / landscape */
+    @media (min-width: 769px) {
+      body {
+        background: url("{{ asset('assets/bg.png') }}") no-repeat center center fixed;
+        background-size: cover;
+      }
+    }
 
-.google-icon {
-    width: 18px;
-    height: auto;
-    margin-right: 8px;
-}
+    /* Mobile / portrait */
+    @media (max-width: 768px) and (orientation: portrait) {
+      body {
+        background: url("{{ asset('assets/big.png') }}") no-repeat center center fixed;
+        background-size: cover;
+      }
+    }
 
-.or-divider {
-    display: flex;
-    align-items: center;
-    margin: 20px 0;
-    width: 100%;
-}
+    /* Mobile / landscape tetap pakai bg.png */
+    @media (max-width: 768px) and (orientation: landscape) {
+      body {
+        background: url("{{ asset('assets/bg.png') }}") no-repeat center center fixed;
+        background-size: cover;
+      }
+    }
 
-.divider-line {
-    flex: 1;
-    height: 1px;
-    background-color: #d1d5db;
-}
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 128, 0, 0.15);
+      z-index: 0;
+    }
 
-.divider-text {
-    padding: 0 12px;
-    font-size: 12px;
-    color: #9ca3af;
-    text-transform: uppercase;
-}
-</style>
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
 
-    <form method="POST" action="{{ route('login') }}">
+    @keyframes float {
+      0%   { transform: translateY(0px); }
+      50%  { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-4 relative z-10">
+
+  <!-- Container -->
+  <div class="w-full max-w-5xl grid md:grid-cols-2 bg-white/90 rounded-xl overflow-hidden border border-green-100 backdrop-blur-sm relative z-20">
+
+    <!-- Left Side: Illustration (hilang di mobile) -->
+    <div class="hidden md:flex items-center justify-center bg-green-50 p-6">
+      <img src="{{ asset('assets/libey.png') }}" alt="Library Illustration" class="w-3/4 mx-auto floating">
+    </div>
+
+    <!-- Right Side: Login Form -->
+    <div class="px-6 py-6 md:px-10 md:py-8 flex flex-col justify-center">
+
+      <h2 class="text-2xl font-semibold text-green-700 mb-2 text-center flex items-center justify-center gap-2">
+        <i class="fas fa-book text-green-600"></i>
+        Login SiLala BPMSPH
+      </h2>
+
+      <p class="text-sm text-gray-600 mb-4 text-center">
+        Masuk untuk mengakses SiLala BPMSPH.
+      </p>
+
+      <!-- Google Login -->
+      <div class="mb-4">
+        <a href="/auth/google/redirect" 
+          class="flex items-center justify-center gap-3 w-full py-2 px-4 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="w-5 h-5">
+          <span class="font-semibold text-black text-sm">Login dengan Google</span>
+        </a>
+      </div>
+
+      <div class="flex items-center my-3">
+        <div class="flex-grow h-px bg-green-200"></div>
+        <span class="px-3 text-green-400 text-xs">atau</span>
+        <div class="flex-grow h-px bg-green-200"></div>
+      </div>
+
+      <!-- Form Laravel -->
+      <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
-        <!-- Email Address -->
+        <!-- Email -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+          <label for="email" class="block text-sm font-medium text-green-700 mb-1">
+            <i class="fa-solid fa-envelope mr-2"></i>Email
+          </label>
+          <input id="email" type="email" name="email" required autofocus autocomplete="username"
+            class="block w-full px-3 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div>
+          <label for="password" class="block text-sm font-medium text-green-700 mb-1">
+            <i class="fa-solid fa-lock mr-2"></i>Password
+          </label>
+          <div class="relative flex items-center">
+            <input id="password" type="password" name="password" required autocomplete="current-password"
+              class="block w-full px-3 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm pr-10">
+            <span class="absolute right-3 cursor-pointer text-gray-400" onclick="togglePassword()">
+              <i id="eyeIcon" class="fa-solid fa-eye"></i>
+            </span>
+          </div>
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
+        <div class="flex items-center">
+          <input id="remember_me" type="checkbox" name="remember"
+            class="h-4 w-4 text-green-600 border-green-300 rounded focus:ring-green-500">
+          <label for="remember_me" class="ml-2 text-sm text-gray-600">Ingat saya</label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+        <!-- Actions -->
+        <div class="flex items-center justify-between">
+          <a href="{{ route('password.request') }}" class="text-xs text-green-700 hover:underline">Lupa Password?</a>
+          <button type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition flex items-center text-sm">
+            <i class="fa-solid fa-right-to-bracket mr-2"></i>Login
+          </button>
         </div>
-    </form>
-</x-guest-layout>
+
+        <!-- Register Link -->
+        <div class="mt-4 text-center">
+          <p class="text-xs text-gray-600 mb-2">
+            Belum punya akun? 
+            <a href="{{ route('register') }}" class="font-medium text-green-700 hover:underline">Daftar di sini</a>
+          </p>
+          <p class="text-xs text-gray-500">
+            Dengan masuk, kamu menyetujui 
+            <a href="" class="underline hover:text-green-700">Kebijakan Privasi</a> dan 
+            <a href="" class="underline hover:text-green-700">Syarat & Ketentuan</a>.
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const password = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      if (password.type === 'password') {
+        password.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        password.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+  </script>
+</body>
+</html>

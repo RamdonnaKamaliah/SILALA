@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ArsipBukuController extends Controller
+class DataPeminjamController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('admin.arsip_buku.index', ['title' => 'Data Arsip Buku']);
+        return view('admin.data_peminjam.index', ['title' => 'Data Peminjam']);
     }
 
     /**

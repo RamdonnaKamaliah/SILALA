@@ -108,46 +108,45 @@
 <body class="bg-gray-50 font-sans text-slate-700">
 
     <!-- Navbar Responsif -->
-    <header class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full px-4">
-        <div class="flex items-center justify-center">
-            <!-- Container Navbar untuk desktop dan mobile -->
-            <div class="flex items-center bg-white shadow-md rounded-full px-4 md:px-8 py-3 mobile-navbar">
-                <!-- Hamburger Menu untuk Mobile -->
-                <button id="hamburger" class="md:hidden w-8 h-8 flex flex-col justify-center items-center mr-4">
-                    <span class="hamburger-line block w-5 h-0.5 bg-gray-700 mb-1.5"></span>
-                    <span class="hamburger-line block w-5 h-0.5 bg-gray-700 mb-1.5"></span>
-                    <span class="hamburger-line block w-5 h-0.5 bg-gray-700"></span>
-                </button>
-                
-                <!-- Menu Desktop -->
-                <nav class="hidden md:flex items-center space-x-6 text-sm font-semibold ml-6">
-                    <a href="/" class="text-green-600 underline underline-offset-4">Beranda</a>
-                    <a href="#tentang" class="hover:text-green-500 transition-colors duration-200">Tentang</a>
-                    <a href="#rekomendasi" class="hover:text-green-500 transition-colors duration-200">Rekomendasi</a>
-                    <a href="#panduan" class="hover:text-green-500 transition-colors duration-200">Panduan</a>
+<header class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full px-4">
+  <div class="flex items-center justify-between md:justify-center">
+    
+    <!-- HAMBURGER (mobile only) -->
+    <button id="hamburger" class="md:hidden w-8 h-8 flex flex-col justify-center items-center">
+      <span class="hamburger-line block w-5 h-0.5 bg-gray-700 mb-1.5"></span>
+      <span class="hamburger-line block w-5 h-0.5 bg-gray-700 mb-1.5"></span>
+      <span class="hamburger-line block w-5 h-0.5 bg-gray-700"></span>
+    </button>
 
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="hover:text-green-500 transition-colors duration-200">
-                            Dashboard
-                        </a>
-                    @else
-                        <a href="{{ route('register') }}" class="hover:text-green-500 transition-colors duration-200">
-                            Register
-                        </a>
-                        <a href="{{ route('login') }}" class="text-blue-500 hover:underline transition-colors duration-200">
-                            Login
-                        </a>
-                    @endauth
-                </nav>
-            </div>
+    <!-- NAVBAR (desktop only) -->
+    <nav class="relative hidden md:flex items-center space-x-8 text-base font-semibold bg-white shadow-md rounded-full px-8 py-4">
+      <a href="/" class="relative nav-link after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[2px] after:bg-green-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">
+  Beranda
+</a>
+<a href="#tentang" class="relative nav-link after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[2px] after:bg-green-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">
+  Tentang
+</a>
+      <a href="#rekomendasi" class="relative nav-link after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[2px] after:bg-green-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">
+  Rekomendasi
+</a>
+<a href="#Panduan" class="relative nav-link after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[2px] after:bg-green-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">
+  Panduan
+</a>
+      @auth
+        <a href="{{ url('/dashboard') }}" class="relative nav-link after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[2px] after:bg-green-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">Dashboard</a>
+      @else
+        <a href="{{ route('register') }}" class="relative nav-link after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[2px] after:bg-green-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">Register</a>
+        <a href="{{ route('login') }}" class="relative nav-link after:content-[''] after:absolute after:left-0 after:-bottom-1 after:w-full after:h-[2px] after:bg-green-600 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 text-blue-500">Login</a>
+      @endauth
+    </nav>
 
-            <!-- Tombol Toggle Theme (TERPISAH) -->
-            <button id="toggle-theme" class="w-10 h-10 ml-4 flex items-center justify-center bg-gray-100 rounded-full shadow hover:bg-gray-200 transition-colors duration-200">
-                <i class="fas fa-sun text-yellow-500 text-lg dark:hidden"></i>
-                <i class="fas fa-moon text-gray-700 text-lg hidden dark:inline"></i>
-            </button>
-        </div>
-    </header>
+    <!-- Toggle Theme -->
+    <button id="toggle-theme" class="w-10 h-10 ml-4 flex items-center justify-center bg-gray-100 rounded-full shadow hover:bg-gray-200 transition-colors duration-200">
+      <i class="fas fa-sun text-yellow-500 text-lg dark:hidden"></i>
+      <i class="fas fa-moon text-gray-700 text-lg hidden dark:inline"></i>
+    </button>
+  </div>
+</header>
 
     <!-- Sidebar Mobile -->
     <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"></div>
@@ -213,44 +212,44 @@
     </aside>
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-40 relative bg-cover bg-center content-padding" 
-      style="background-image: url('{{ asset('assets/background.png') }}');">
-      <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-6">
-        
-        <!-- Judul + Icon -->
-        <h1 class="flex items-center justify-center text-4xl font-Inknut font-bold text-black">
-          <span class="mr-2">
-            <img src="{{ asset('assets/logo 1.png') }}" alt="Ilustrasi Buku" class="w-12 h-12">
-          </span> 
-          Perpustakaan
-        </h1>
+    <section class="pt-24 md:pt-32 pb-32 md:pb-40 relative bg-cover bg-center hero-section" 
+  style="background-image: url('{{ asset('assets/background.png') }}');">
+  <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-4 md:px-6">
+    
+    <!-- Judul + Icon -->
+    <h1 class="flex items-center justify-center responsive-heading md:text-4xl font-Inknut font-bold text-black">
+      <span class="mr-2">
+        <img src="{{ asset('assets/logo 1.png') }}" alt="Ilustrasi Buku" class="w-10 h-10 md:w-12 md:h-12">
+      </span> 
+      Perpustakaan
+    </h1>
 
-        <!-- BPMSPH + Deskripsi sejajar -->
-        <div class="mt-6 flex flex-col md:flex-row md:items-center md:justify-center gap-3 md:gap-6 max-w-2xl text-gray-600 text-center md:text-left">
-          <!-- BPMSPH -->
-          <span class="italic font-serif text-lg whitespace-nowrap">BPMSPH</span>
+    <!-- BPMSPH + Deskripsi sejajar -->
+    <div class="mt-4 md:mt-6 flex flex-col md:flex-row md:items-center md:justify-center gap-2 md:gap-6 max-w-2xl text-gray-600 text-center md:text-left">
+      <!-- BPMSPH -->
+      <span class="italic font-serif responsive-subheading whitespace-nowrap">BPMSPH</span>
 
-          <!-- Deskripsi -->
-          <p class="text-sm leading-relaxed">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-            Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-        </div>
+      <!-- Deskripsi -->
+      <p class="responsive-text leading-relaxed">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+        Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      </p>
+    </div>
 
-        <!-- Gambar di batas section -->
-        <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
-          <img 
-            src="{{ asset('assets/hero1.png') }}" 
-            alt="Ilustrasi Buku" 
-            class="hero-image w-72 h-auto md:w-80 md:h-auto object-contain">
-        </div>
+    <!-- Gambar di batas section -->
+    <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
+      <img 
+        src="{{ asset('assets/hero1.png') }}" 
+        alt="Ilustrasi Buku" 
+        class="hero-image w-48 md:w-72 h-auto md:w-80 md:h-auto object-contain">
+    </div>
 
-      </div>
-    </section>
+  </div>
+</section>
 
     <!-- Section Hijau -->
-    <section class="bg-[#A4B465] rounded-t-3x pt-32 pb-16 px-0">
-      <div class="max-w-7xl mx-auto space-y-12">
+    <section class="bg-[#A4B465] pt-32 pb-16 px-0 rounded-t-[50px]">
+  <div class="max-w-7xl mx-auto space-y-12">                                                                                                                   
 
         <!-- Quote Box -->
         <div class="flex justify-center px-4">
@@ -480,6 +479,57 @@
         toggleTheme.addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
         });
+
+        // animasi header
+        document.addEventListener("DOMContentLoaded", function() {
+  const links = document.querySelectorAll(".nav-link");
+  const underline = document.getElementById("active-underline");
+  const nav = document.querySelector("nav");
+
+  let activeLink = links[0]; // default aktif pertama (Beranda)
+
+  // Fungsi untuk update posisi underline
+  const updateUnderline = (link) => {
+    const rect = link.getBoundingClientRect();
+    const navRect = nav.getBoundingClientRect();
+
+    underline.style.width = `${rect.width}px`;
+    underline.style.left = `${rect.left - navRect.left}px`;
+  };
+
+  // Set awal
+  updateUnderline(activeLink);
+  activeLink.classList.add("text-green-600");
+
+  // Event klik tiap link
+  links.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      // Reset warna sebelumnya
+      activeLink.classList.remove("text-green-600");
+
+      // Set link baru aktif
+      activeLink = link;
+      activeLink.classList.add("text-green-600");
+
+      // Geser underline ke link baru
+      updateUnderline(activeLink);
+
+      // Scroll halus ke section (jika pakai anchor #id)
+      const targetId = activeLink.getAttribute("href");
+      if (targetId.startsWith("#")) {
+        document.querySelector(targetId)?.scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  });
+
+  // Update ulang posisi underline kalau window di-resize
+  window.addEventListener("resize", () => {
+    updateUnderline(activeLink);
+  });
+});
+
     </script>
 
 </body>

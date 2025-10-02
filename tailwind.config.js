@@ -13,7 +13,9 @@ darkMode: 'class',
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inknut Antiqua','Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                inknut: ['"Inknut Antiqua"', 'serif'],
+                Irish: ['Irish Grover'],
             },
         },
     },

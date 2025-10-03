@@ -183,6 +183,50 @@
   }
 }
 
+.recommend-card {
+  --card-delay: 0ms;
+  opacity: 0;
+  transform: translateY(18px) scale(.995);
+  transition: transform .6s cubic-bezier(.2,.9,.3,1) var(--card-delay),
+              opacity .6s var(--card-delay),
+              box-shadow .25s;
+  will-change: transform, opacity;
+  perspective: 1200px;
+}
+
+/* Ketika terlihat (IntersectionObserver menambahkan class is-visible) */
+.recommend-card.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Hover 3D effect hanya di device yang mendukung hover */
+@media (hover: hover) and (pointer: fine) {
+  .recommend-card:hover {
+    transform: translateY(-10px) rotateX(4deg) scale(1.02);
+    box-shadow: 0 18px 40px rgba(10,10,10,0.12);
+  }
+
+  .recommend-card .cover {
+    transform: rotateY(-8deg) translateZ(0);
+    transition: transform .45s cubic-bezier(.2,.9,.3,1);
+  }
+  .recommend-card:hover .cover {
+    transform: rotateY(-10deg) translateZ(28px) scale(1.03);
+  }
+}
+
+/* Ukuran & tampilan gambar cover */
+.recommend-card .cover {
+  border-radius: .5rem;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Tambahan detil responsif jika perlu */
+.recommend-card .meta h3 {
+  line-height: 1.05;
+}
     </style>
 </head>
 <body class="bg-gray-50 font-sans text-slate-700">
@@ -358,119 +402,108 @@
   </div>
 </div>
 
-        <!-- Card Section -->
-        <div class="space-y-10" id="rekomendasi">
-
-          <!-- Card 1 -->
-          <div class="flex flex-col md:flex-row items-start justify-between gap-4 px-4 card-flex">
-            <!-- Card Buku -->
-            <div class="card-content bg-[#A4B465] text-white dark:bg-white dark:text-gray-900 shadow-lg rounded-xl p-5 flex flex-col md:flex-row gap-4 w-full 
-            opacity-0 translate-y-10 transition-all duration-700 ease-out delay-100">
-  <img src="{{asset('assets/buku1.jpg')}}" class="w-full md:w-28 h-40 object-cover rounded-lg" alt="Buku">
-  <div>
-    <h4 class="text-xl md:text-2xl font-extrabold">Statistika Peternakan</h4>
-    <p class="mt-1">By Indah Hanaco</p>
-    <div class="mt-3 text-yellow-400 text-lg">
-      <i class="fa-solid fa-star"></i>
-      <i class="fa-solid fa-star"></i>
-      <i class="fa-solid fa-star"></i>
-      <i class="fa-solid fa-star"></i>
-      <i class="fa-regular fa-star"></i>
-    </div>
-  </div>
+<!-- Judul Section -->
+<div class="px-4 md:px-8 mb-8 text-center" id="rekomendasi">
+  <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white">
+    Rekomendasi Buku Best Seller
+  </h2>
+  <p class="mt-2 text-gray-600 dark:text-white text-base">
+    Pilihan buku terbaik untuk menambah wawasan dan inspirasi
+  </p>
 </div>
-            <!-- Label -->
-            <div class="dark:bg-white bg-[#A4B465] rounded-md shadow px-4 py-3 font-['Irish_Grover'] text-lg leading-snug text-center card-label opacity-0 translate-y-10 transition-all duration-700 ease-out delay-300 dark:text-gray-700 text-white">
-              Rekomendasi<br>Buku Novel<br>Best Seller
-            </div>
-          </div>
 
-          <!-- Card 2 -->
-          <div class="flex flex-col md:flex-row items-start justify-between gap-4 px-4 card-flex">
-            <!-- Label -->
-            <div  class="dark:bg-white bg-[#A4B465] rounded-md shadow px-4 py-3 font-['Irish_Grover'] text-lg leading-snug text-center card-label opacity-0 translate-y-10 transition-all duration-700 ease-out delay-200 dark:text-gray-900 text-white">
-              Rekomendasi<br>Buku Novel<br>Best Seller
-            </div>
-            <!-- Card Buku -->
-            <div   class="bg-[#A4B465] text-white card-content bg-[#A4B465] text-white dark:bg-white dark:text-gray-900 shadow-lg rounded-xl p-5 flex flex-col md:flex-row gap-4 w-full 
-            opacity-0 translate-y-10 transition-all duration-700 ease-out delay-100">
-              <div class="flex-1">
-                <h4 class="text-xl md:text-2xl font-extrabold">Buku Saku Pelaksanaan KIE</h4>
-                <p class="mt-1">By J. Anderson</p>
-                <div class="mt-3 text-yellow-400 text-lg">
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                </div>
-                <div class="mt-4 flex items-center text-gray-600 text-sm gap-2">
-                  <i class="fa-solid fa-user-group text-lg"></i>
-                  <span>+40</span>
-                </div>
-              </div>
-              <img src="{{asset('assets/buku2.jpg')}}" class="w-full md:w-28 h-40 object-cover rounded-lg" alt="Buku">
-            </div>
-          </div>
-
-          <!-- Card 3 -->
-          <div class="flex flex-col md:flex-row items-start justify-between gap-4 px-4 card-flex">
-            <!-- Card Buku -->
-            <div class="card-content bg-[#A4B465] text-white dark:bg-white dark:text-gray-900 shadow-lg rounded-xl p-5 flex flex-col md:flex-row gap-4 w-full 
-            opacity-0 translate-y-10 transition-all duration-700 ease-out delay-100">
-              <img src="{{asset('assets/buku3.jpg')}}" class="w-full md:w-28 h-40 object-cover rounded-lg" alt="Buku">
-              <div>
-                <h4 class="text-xl md:text-2xl font-extrabold">Statistika Peternakan</h4>
-                <p class="mt-1">By Indah Hanaco</p>
-                <div class="mt-3 text-yellow-400 text-lg">
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-regular fa-star"></i>
-                </div>
-                <div class="mt-4 flex items-center text-gray-600 text-sm gap-2">
-                  <i class="fa-solid fa-user-group text-lg"></i>
-                  <span>+20</span>
-                </div>
-              </div>
-            </div>
-            <!-- Label -->
-            <div class="dark:bg-white bg-[#A4B465] rounded-md shadow px-4 py-3 font-['Irish_Grover'] text-lg leading-snug text-center card-label opacity-0 translate-y-10 transition-all duration-700 ease-out delay-200 dark:text-gray-900 text-white">
-              Rekomendasi<br>Buku Novel<br>Best Seller
-            </div>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="flex flex-col md:flex-row items-start justify-between gap-4 px-4 card-flex">
-            <!-- Label -->
-            <div class="dark:bg-white bg-[#A4B465] rounded-md shadow px-4 py-3 font-['Irish_Grover'] text-lg leading-snug text-center card-label opacity-0 translate-y-10 transition-all duration-700 ease-out delay-300 dark:text-gray-900 text-white">
-              Rekomendasi<br>Buku Novel<br>Best Seller
-            </div>
-            <!-- Card Buku -->
-            <div   class="card-content bg-[#A4B465] text-white dark:bg-white dark:text-gray-900 shadow-lg rounded-xl p-5 flex flex-col md:flex-row gap-4 w-full 
-            opacity-0 translate-y-10 transition-all duration-700 ease-out delay-100">
-              <div class="flex-1">
-                <h4 class="text-xl md:text-2xl font-extrabold">Buku Saku Pelaksanaan KIE</h4>
-                <p class="mt-1">By J. Anderson</p>
-                <div class="mt-3 text-yellow-400 text-lg">
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                  <i class="fa-solid fa-star"></i>
-                </div>
-                <div class="mt-4 flex items-center text-gray-600 text-sm gap-2">
-                  <i class="fa-solid fa-user-group text-lg"></i>
-                  <span>+40</span>
-                </div>
-              </div>
-              <img src="{{asset('assets/buku4.jpg')}}" class="w-full md:w-28 h-40 object-cover rounded-lg" alt="Buku">
-            </div>
-          </div>
-
-        </div>
+<!-- Container Card (grid responsive) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8 items-stretch">
+  <!-- Card contoh 1 -->
+  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
+    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
+      <img src="{{ asset('assets/buku1.jpg') }}" alt="Statistika Peternakan - cover" class="w-full h-full object-cover">
+    </div>
+    <div class="meta flex-1">
+      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Statistika Peternakan</h3>
+      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By Indah Hanaco</p>
+      <div class="mt-3 flex items-center gap-3">
+        <div class="text-yellow-400 text-base">★★★★☆</div>
+        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +20</div>
       </div>
+    </div>
+  </article>
+
+  <!-- Card contoh 2 -->
+  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
+    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
+      <img src="{{ asset('assets/buku2.jpg') }}" alt="Buku Saku Pelaksanaa Kie - cover" class="w-full h-full object-cover">
+    </div>
+    <div class="meta flex-1">
+      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Buku Saku Pelaksanaa Kie</h3>
+      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By J. Anderson</p>
+      <div class="mt-3 flex items-center gap-3">
+        <div class="text-yellow-400 text-base">★★★★☆</div>
+        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +35</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Card contoh 3 -->
+  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
+    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
+      <img src="{{ asset('assets/buku3.jpg') }}" alt="Statistika Peternakan (2) - cover" class="w-full h-full object-cover">
+    </div>
+    <div class="meta flex-1">
+      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Statistika Peternakan</h3>
+      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By Indah Hanaco</p>
+      <div class="mt-3 flex items-center gap-3">
+        <div class="text-yellow-400 text-base">★★★★★</div>
+        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +50</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Card contoh 4 -->
+  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
+    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
+      <img src="{{ asset('assets/buku4.jpg') }}" alt="Budidaya Peternakan - cover" class="w-full h-full object-cover">
+    </div>
+    <div class="meta flex-1">
+      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Budidaya Peternakan</h3>
+      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By J. Anderson</p>
+      <div class="mt-3 flex items-center gap-3">
+        <div class="text-yellow-400 text-base">★★★★☆</div>
+        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +20</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Card contoh 5 -->
+  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
+    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
+      <img src="{{ asset('assets/buku2.jpg') }}" alt="Buku Saku Pelaksanaa Kie (2) - cover" class="w-full h-full object-cover">
+    </div>
+    <div class="meta flex-1">
+      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Buku Saku Pelaksanaa Kie</h3>
+      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By J. Anderson</p>
+      <div class="mt-3 flex items-center gap-3">
+        <div class="text-yellow-400 text-base">★★★★☆</div>
+        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +35</div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Card contoh 6 -->
+  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
+    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
+      <img src="{{ asset('assets/buku3.jpg') }}" alt="Statistika Peternakan (3) - cover" class="w-full h-full object-cover">
+    </div>
+    <div class="meta flex-1">
+      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Statistika Peternakan</h3>
+      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By Indah Hanaco</p>
+      <div class="mt-3 flex items-center gap-3">
+        <div class="text-yellow-400 text-base">★★★★★</div>
+        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +50</div>
+      </div>
+    </div>
+  </article>
+</div>
     </section>
 
     <!-- Footer -->
@@ -558,12 +591,45 @@ window.addEventListener('resize', () => {
 });
 
         
-        // Toggle Tema Gelap/Terang
-        const toggleTheme = document.getElementById('toggle-theme');
-        
-        toggleTheme.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-        });
+        // Toggle Tema Gelap/Terang dengan penyimpanan localStorage
+const toggleTheme = document.getElementById('toggle-theme');
+const darkIcon = toggleTheme.querySelector('.fa-sun');
+const lightIcon = toggleTheme.querySelector('.fa-moon');
+
+// Fungsi untuk apply tema berdasarkan localStorage atau default
+function applyTheme(theme) {
+    if(theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden');
+    } else {
+        document.documentElement.classList.remove('dark');
+        darkIcon.classList.remove('hidden');
+        lightIcon.classList.add('hidden');
+    }
+}
+
+// Ambil tema dari localStorage saat load
+const storedTheme = localStorage.getItem('theme');
+if(storedTheme) {
+    applyTheme(storedTheme);
+} else {
+    // default mode (bisa ganti ke 'dark' kalau mau)
+    applyTheme('light');
+}
+
+// Toggle tema saat klik
+toggleTheme.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.contains('dark');
+    if(isDark) {
+        applyTheme('light');
+        localStorage.setItem('theme', 'light');
+    } else {
+        applyTheme('dark');
+        localStorage.setItem('theme', 'dark');
+    }
+});
+
 
      // animasi header
 document.addEventListener('DOMContentLoaded', () => {
@@ -604,6 +670,25 @@ const observer = new IntersectionObserver((entries) => {
 // Observe semua elemen
 document.querySelectorAll('.quote-box, .card-content, .card-label').forEach(el => observer.observe(el));
 
+//card
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = Array.from(document.querySelectorAll('.recommend-card'));
+  cards.forEach((card, i) => {
+    // set delay per card (bisa atur durasi di sini)
+    card.style.setProperty('--card-delay', `${i * 80}ms`);
+  });
+
+  const io = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target); // hanya sekali
+      }
+    });
+  }, { threshold: 0.12 });
+
+  cards.forEach(card => io.observe(card));
+});
     </script>
 
 </body>

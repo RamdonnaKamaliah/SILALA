@@ -227,6 +227,8 @@
 .recommend-card .meta h3 {
   line-height: 1.05;
 }
+
+
     </style>
 </head>
 <body class="bg-gray-50 font-sans text-slate-700">
@@ -375,141 +377,74 @@
 </section>
 
     <!-- Section Hijau -->
-    <section class="bg-[#F5ECD5] dark:bg-[#A4B465] pt-32 pb-16 px-0 rounded-t-[50px]" id="tentang">
-  <div class="max-w-7xl mx-auto space-y-12">                                                                                                                   
+<section class="bg-[#F5ECD5] dark:bg-[#A4B465] pt-32 pb-16 px-4 md:px-8 rounded-t-[50px]" id="tentang">
+  <div class="max-w-7xl mx-auto space-y-12">
 
-       <!-- Quote Box -->
-<div class="flex justify-center px-4">
-  <div class="quote-box relative bg-white rounded-2xl shadow-xl px-6 md:px-10 py-8 max-w-3xl w-full text-center border-4 border-[#626F47] 
-              opacity-0 translate-y-10 transition-all duration-700 ease-out">
-    <!-- Icon Quote Atas -->
-    <span class="absolute -top-4 right-6 text-black text-3xl">
-      <i class="fa-solid fa-quote-left"></i>
-    </span>
+    <!-- Quote Box -->
+    <div class="flex justify-center px-2">
+      <div class="quote-box relative bg-white rounded-2xl shadow-xl px-6 md:px-10 py-8 max-w-3xl w-full text-center border-4 border-[#626F47]
+                  opacity-0 translate-y-10 transition-all duration-700 ease-out">
+        <span class="absolute -top-4 right-6 text-black text-3xl">
+          <i class="fa-solid fa-quote-left"></i>
+        </span>
 
-    <!-- Text -->
-    <p class="text-gray-700 text-lg leading-relaxed font-medium italic">
-      "Lorem Ipsum is simply dummy text of the printing and typesetting
+        <p class="text-gray-700 text-lg leading-relaxed font-medium italic">
+          "Lorem Ipsum is simply dummy text of the printing and typesetting
       industry. Lorem Ipsum has been the industry's standard dummy text
       ever since the 1500s, when an unknown printer took a galley of type
       and scrambled it to make a type specimen book."
-    </p>
+        </p>
 
-    <!-- Icon Quote Bawah -->
-    <span class="absolute -bottom-4 left-6 text-black text-3xl">
-      <i class="fa-solid fa-quote-right"></i>
-    </span>
+        <span class="absolute -bottom-4 left-6 text-black text-3xl">
+          <i class="fa-solid fa-quote-right"></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- Judul Section -->
+    <div class="text-center" id="rekomendasi">
+      <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white">
+        Rekomendasi Buku Best Seller
+      </h2>
+      <p class="mt-2 text-gray-600 dark:text-white text-base">
+        Pilihan buku terbaik untuk menambah wawasan dan inspirasi
+      </p>
+    </div>
+
+    <!-- Grid Card -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <!-- CARD TEMPLATE -->
+      @foreach ([
+        ['buku1.jpg','Statistika Peternakan','Indah Hanaco','★★★★☆','+20'],
+        ['buku2.jpg','Buku Saku Pelaksanaa Kie','J. Anderson','★★★★☆','+35'],
+        ['buku3.jpg','Statistika Peternakan','Indah Hanaco','★★★★★','+50'],
+        ['buku4.jpg','Budidaya Peternakan','J. Anderson','★★★★☆','+20'],
+        ['buku2.jpg','Buku Saku Pelaksanaa Kie','J. Anderson','★★★★☆','+35'],
+        ['buku3.jpg','Statistika Peternakan','Indah Hanaco','★★★★★','+50'],
+      ] as [$img,$title,$author,$rating,$users])
+      <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-5 md:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-5 w-full h-full
+                      opacity-0 translate-y-10 transition-all duration-700 ease-out">
+        <div class="cover w-28 h-40 md:w-32 md:h-44 flex-shrink-0">
+          <img src="{{ asset('assets/'.$img) }}" alt="{{ $title }} - cover" class="w-full h-full object-cover rounded-lg shadow-md">
+        </div>
+        <div class="meta text-center sm:text-left">
+          <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">{{ $title }}</h3>
+          <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By {{ $author }}</p>
+          <div class="mt-3 flex justify-center sm:justify-start items-center gap-2">
+            <div class="text-yellow-400 text-base">{{ $rating }}</div>
+            <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i>{{ $users }}</div>
+          </div>
+        </div>
+      </article>
+      @endforeach
+    </div>
   </div>
-</div>
+</section>
 
-<!-- Judul Section -->
-<div class="px-4 md:px-8 mb-8 text-center" id="rekomendasi">
-  <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white">
-    Rekomendasi Buku Best Seller
-  </h2>
-  <p class="mt-2 text-gray-600 dark:text-white text-base">
-    Pilihan buku terbaik untuk menambah wawasan dan inspirasi
-  </p>
-</div>
-
-<!-- Container Card (grid responsive) -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-4 md:px-8 items-stretch">
-  <!-- Card contoh 1 -->
-  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
-    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
-      <img src="{{ asset('assets/buku1.jpg') }}" alt="Statistika Peternakan - cover" class="w-full h-full object-cover">
-    </div>
-    <div class="meta flex-1">
-      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Statistika Peternakan</h3>
-      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By Indah Hanaco</p>
-      <div class="mt-3 flex items-center gap-3">
-        <div class="text-yellow-400 text-base">★★★★☆</div>
-        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +20</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- Card contoh 2 -->
-  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
-    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
-      <img src="{{ asset('assets/buku2.jpg') }}" alt="Buku Saku Pelaksanaa Kie - cover" class="w-full h-full object-cover">
-    </div>
-    <div class="meta flex-1">
-      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Buku Saku Pelaksanaa Kie</h3>
-      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By J. Anderson</p>
-      <div class="mt-3 flex items-center gap-3">
-        <div class="text-yellow-400 text-base">★★★★☆</div>
-        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +35</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- Card contoh 3 -->
-  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
-    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
-      <img src="{{ asset('assets/buku3.jpg') }}" alt="Statistika Peternakan (2) - cover" class="w-full h-full object-cover">
-    </div>
-    <div class="meta flex-1">
-      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Statistika Peternakan</h3>
-      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By Indah Hanaco</p>
-      <div class="mt-3 flex items-center gap-3">
-        <div class="text-yellow-400 text-base">★★★★★</div>
-        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +50</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- Card contoh 4 -->
-  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
-    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
-      <img src="{{ asset('assets/buku4.jpg') }}" alt="Budidaya Peternakan - cover" class="w-full h-full object-cover">
-    </div>
-    <div class="meta flex-1">
-      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Budidaya Peternakan</h3>
-      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By J. Anderson</p>
-      <div class="mt-3 flex items-center gap-3">
-        <div class="text-yellow-400 text-base">★★★★☆</div>
-        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +20</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- Card contoh 5 -->
-  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
-    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
-      <img src="{{ asset('assets/buku2.jpg') }}" alt="Buku Saku Pelaksanaa Kie (2) - cover" class="w-full h-full object-cover">
-    </div>
-    <div class="meta flex-1">
-      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Buku Saku Pelaksanaa Kie</h3>
-      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By J. Anderson</p>
-      <div class="mt-3 flex items-center gap-3">
-        <div class="text-yellow-400 text-base">★★★★☆</div>
-        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +35</div>
-      </div>
-    </div>
-  </article>
-
-  <!-- Card contoh 6 -->
-  <article class="recommend-card bg-[#A4B465] dark:bg-white rounded-xl p-6 md:p-8 flex items-center gap-5 w-full h-full">
-    <div class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0">
-      <img src="{{ asset('assets/buku3.jpg') }}" alt="Statistika Peternakan (3) - cover" class="w-full h-full object-cover">
-    </div>
-    <div class="meta flex-1">
-      <h3 class="text-lg md:text-xl font-semibold text-white dark:text-gray-900">Statistika Peternakan</h3>
-      <p class="text-sm md:text-base text-gray-100 dark:text-gray-900 mt-1">By Indah Hanaco</p>
-      <div class="mt-3 flex items-center gap-3">
-        <div class="text-yellow-400 text-base">★★★★★</div>
-        <div class="text-sm text-gray-200 dark:text-gray-900 flex items-center"><i class="fa fa-user mr-1"></i> +50</div>
-      </div>
-    </div>
-  </article>
-</div>
-    </section>
-
-    <!-- Footer -->
+      <!-- Footer -->
 <footer class="dark:bg-white bg-[#A4B465] dark:text-gray-900 text-white border-t border-gray-200">
-  <div class="max-w-7xl mx-auto px-8 py-16 grid grid-cols-1 md:grid-cols-3 gap-20"> 
-    
+  <div class="max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-3 gap-10 footer-grid">
+
     <!-- Logo + Deskripsi -->
     <div class="flex flex-col space-y-5">
       <div class="flex items-center space-x-4">
@@ -529,8 +464,7 @@
     <!-- Layanan -->
     <div class="relative">
   <h4 class="text-xl font-semibold mb-5">Layanan</h4>
-
-  <ul class="space-y-3 text-base">
+        <ul class="space-y-3 text-base">
     <!-- Link langsung -->
     <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/magangpklbimbingan-teknis" class="transition-colors duration-300 hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Magang/PKL/Bimbingan Teknis</a></li>
     <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/uji-profisiensi" class="transition-colors duration-300 hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Uji Profisiensi</a></li>
@@ -545,7 +479,7 @@
       </button>
       <ul id="mutuDropdown" class="hidden ml-4 mt-2 space-y-2 text-sm">
         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/pelayanan-pengujian-keamanan-dan-mutu-produk-hewan" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Pelayanan Pengujian Keamanan dan Mutu Produk Hewan</a></li>
-        <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/ivlab--indonesian-veterinary-lab-information-system" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">IVLAB</a></li>
+         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/ivlab--indonesian-veterinary-lab-information-system" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">IVLAB</a></li>
         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/tarif-uji" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Tarif Uji</a></li>
       </ul>
     </li>
@@ -561,7 +495,7 @@
       <ul id="pmkDropdown" class="hidden ml-4 mt-2 space-y-2 text-sm">
         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/sebaran-pmk" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Sebaran PMK</a></li>
         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/regulasi-dan-pedoman-pmk" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Regulasi dan Pedoman PMK</a></li>
-        <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/materi-kie-pmk" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Materi KIE PMK</a></li>
+         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/materi-kie-pmk" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Materi KIE PMK</a></li>
         <li><a href="https://ditjenpkh.pertanian.go.id/" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Info Terkait PMK</a></li>
         <li><a href="https://ditjenpkh.pertanian.go.id/" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Pekembangan Kasus PMK</a></li>
         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/buku-saku-pencegahan-dan-pengendalian-pmk" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Buku Saku dan Pengendalian PMK</a></li>
@@ -571,8 +505,7 @@
     <!-- Link langsung -->
     <li><a href="https://ppid.pertanian.go.id/" class="transition-colors duration-300 hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Permohonan Informasi Publik</a></li>
     <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/sewa-fasilitas-dan-aset" class="transition-colors duration-300 hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Sewa Fasilitas dan Aset</a></li>
-
-    <!-- Dropdown 3 -->
+      <!-- Dropdown 3 -->
     <li class="relative">
       <button class="flex items-center justify-between w-full transition-colors duration-300 hover:text-[#F5ECD5] dark:hover:text-[#A4B465]" onclick="toggleDropdown('konsulDropdown', this)">
         Konsultasi dan Pengaduan
@@ -589,7 +522,7 @@
       </ul>
     </li>
 
-    <!-- Dropdown 4 -->
+ <!-- Dropdown 4 -->
     <li class="relative">
       <button class="flex items-center justify-between w-full transition-colors duration-300 hover:text-[#F5ECD5] dark:hover:text-[#A4B465]" onclick="toggleDropdown('internalDropdown', this)">
         Layanan Internal
@@ -604,7 +537,7 @@
         <li><a href="https://srikandi.arsip.go.id/" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">SRIKANDI</a></li>
         <li><a href="https://epersonal.pertanian.go.id/login" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">SINERGI</a></li>
         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/waktu-pelayanan" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Waktu Pelayanan</a></li>
-        <li><a href="https://repository.pertanian.go.id/home" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Repositori Publikasi</a></li>
+   <li><a href="https://repository.pertanian.go.id/home" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Repositori Publikasi</a></li>
         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/kritik-dan-saran" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Kritik dan Saran</a></li>
         <li><a href="https://bpmsph.ditjenpkh.pertanian.go.id/layanan/perpustakaan-digital-kementan" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Perpustakaan Kementan</a></li>
         <li><a href="https://katalog.inaproc.id/" class="block hover:text-[#F5ECD5] dark:hover:text-[#A4B465]">Katalog Elektronik</a></li>
@@ -620,7 +553,7 @@
   </ul>
 </div>
 
-    <!-- Tautan -->
+ <!-- Tautan -->
     <div>
       <h4 class="text-xl font-semibold mb-5">Tautan</h4>
       <ul class="space-y-3 text-base">
@@ -674,8 +607,8 @@ window.addEventListener('resize', () => {
 });
 
         
-        // Toggle Tema Gelap/Terang dengan penyimpanan localStorage
-const toggleTheme = document.getElementById('toggle-theme');
+        // Toggle Tema Gelap/Terang
+        const toggleTheme = document.getElementById('toggle-theme');
 const darkIcon = toggleTheme.querySelector('.fa-sun');
 const lightIcon = toggleTheme.querySelector('.fa-moon');
 
@@ -712,6 +645,8 @@ toggleTheme.addEventListener('click', () => {
         localStorage.setItem('theme', 'dark');
     }
 });
+
+
 
 
      // animasi header
@@ -780,6 +715,7 @@ function toggleDropdown(id, btn) {
     dropdown.classList.toggle('hidden');
     icon.classList.toggle('rotate-180');
   }
+
     </script>
 
 </body>

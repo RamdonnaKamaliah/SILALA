@@ -1,19 +1,180 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('User Dashboard') }}
-        </h2>
-    </x-slot>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidebar Fixed</title>
+  <style>
+    /* Reset dasar */
+    * {
+      font-family: "Ubuntu", sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <p>Welcome to User Dashboard!</p>
-                    <p>User Type: {{ Auth::user()->user_type }}</p>
-                    <p>Membership Type: {{ Auth::user()->membership_type }}</p>
-                </div>
-            </div>
-        </div>
+    :root {
+      --green: #A4B465;
+      --white: #fff;
+      --gray: #f9f9f9;
+      --black: #222;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+    }
+
+    /* Navigation */
+    .navigation {
+      position: fixed;
+      width: 300px;
+      height: 100%;
+      background: var(--green);
+      border-left: 10px solid var(--green);
+      transition: 0.5s;
+      overflow: hidden;
+    }
+
+    .navigation ul {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+
+    .navigation ul li {
+      position: relative;
+      width: 100%;
+      list-style: none;
+      border-top-left-radius: 30px;
+      border-bottom-left-radius: 30px;
+    }
+
+    .navigation ul li:nth-child(1) {
+      margin-bottom: 40px;
+      pointer-events: none;
+    }
+
+    .navigation ul li:hover {
+      background-color: var(--white);
+    }
+
+    .navigation ul li a {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      color: var(--white);
+      transition: 0.3s;
+    }
+
+    .navigation ul li:hover a {
+      color: var(--green);
+    }
+
+    .navigation ul li a .icon {
+      position: relative;
+      display: block;
+      min-width: 60px;
+      height: 60px;
+      line-height: 60px;
+      text-align: center;
+    }
+
+    .navigation ul li .title {
+      position: relative;
+      display: block;
+      padding: 0 10px;
+      height: 60px;
+      line-height: 60px;
+      text-align: start;
+      white-space: nowrap;
+    }
+
+    /* Outside curve effect */
+    .navigation ul li:hover a::before {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: -50px;
+      width: 50px;
+      height: 50px;
+      background-color: var(--green);
+      border-radius: 50%;
+      box-shadow: 35px 35px 0 10px var(--white);
+      pointer-events: none;
+    }
+
+    .navigation ul li:hover a::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: -50px;
+      width: 50px;
+      height: 50px;
+      background-color: var(--green);
+      border-radius: 50%;
+      box-shadow: 35px -35px 0 10px var(--white);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="#">
+            <span class="icon">🏠</span>
+            <span class="title">BPMSPH</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">🏠</span>
+            <span class="title">Profile</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">🏠</span>
+            <span class="title">Dashboard</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">📦</span>
+            <span class="title">Orders</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">🛍️</span>
+            <span class="title">Products</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">👥</span>
+            <span class="title">Customers</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon">⚙️</span>
+            <span class="title">Settings</span>
+          </a>
+        </li>
+      </ul>
     </div>
-</x-app-layout>
+  </div>
+</body>
+</html>

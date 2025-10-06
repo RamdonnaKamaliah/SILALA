@@ -1,3 +1,7 @@
+ @extends('layout_admin.admin')
+ @section('pageTitle', 'Data Arsip - Admin')
+ @section('content')
+    
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -27,3 +31,6 @@
     </div>
 </body>
 </html>
+
+ @endsection
+ 

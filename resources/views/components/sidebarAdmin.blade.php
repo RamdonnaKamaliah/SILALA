@@ -1,3 +1,6 @@
+ <aside class="fixed top-0 left-0 h-screen w-64 bg-white shadow-lg z-50 overflow-y-auto">
+    <ul class="mt-4 space-y-1">
+
  <li class="mt-0.5 w-full">
                  <a class="py-2.7 shadow-soft-xl text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap rounded-lg bg-white px-4 font-semibold text-slate-700 transition-colors"
                      href="">
@@ -226,7 +229,7 @@
                                          </g>
                                      </g>
                                  </g>
-                             </g>
+                             </g>a
                          </svg>
                      </div>
                      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Arship</span>
@@ -267,3 +270,6 @@
                      <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">Data Buku</span>
                  </a>
              </li>
+
+            </ul>
+        </aside>

@@ -10,19 +10,21 @@
 
 <body class="m-0 font-sans text-base antialiased font-normal leading-default bg-gray-50 text-slate-500">
 
-    {{-- Header (sidebar + navbar + buka <main>) --}}
+    {{-- Header (sidebar + navbar) --}}
     @include('layout_admin.partial_admin.header')
 
-    {{-- Main Content --}}
-    <div class="p-6">
-        @yield('content')
-    </div>
+    {{-- Main Wrapper --}}
+    <main class="ml-64 flex flex-col min-h-screen">
+        
+        {{-- Main Content --}}
+        <div class="flex-1 p-6">
+            @yield('content')
+        </div>
 
-    {{-- Tutup main disini --}}
+        {{-- Footer --}}
+        @include('layout_admin.partial_admin.footer')
+
     </main>
-
-    {{-- Footer --}}
-    @include('layout_admin.partial_admin.footer')
 
     <!-- plugin for charts  -->
     <script src="{{ asset('assets/js/plugins/chartjs.min.js') }}" async></script>

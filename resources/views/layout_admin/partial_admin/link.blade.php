@@ -8,9 +8,11 @@
  <link href="./assets_admin/css/nucleo-icons.css" rel="stylesheet" />
  <link href="./assets_admin/css/nucleo-svg.css" rel="stylesheet" />
  <!-- Popper -->
- <script src="https://unpkg.com/@popperjs/core@2"></script>
+ {{-- <script src="https://unpkg.com/@popperjs/core@2"></script> --}}
  <!-- Main Styling -->
  <link href="{{ asset('assets_admin/css/soft-ui-dashboard-tailwind.css?v=1.0.5') }}" rel="stylesheet" />
  <!-- Nepcha Analytics (nepcha.com) -->
  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+

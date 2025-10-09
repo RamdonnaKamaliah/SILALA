@@ -15,6 +15,9 @@ darkMode: 'class',
             fontFamily: {
                 sans: ['Inknut Antiqua','Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                primary: '#A4B465',
+            }
         },
     },
 

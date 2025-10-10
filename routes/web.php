@@ -85,7 +85,13 @@ Route::get('/auth/google/callback', function () {
     return redirect('/dashboard');
 });
 
-
+//logout dasboard user
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    return redirect('/');
+})->name('logout');
 
 // Auth routes (dari breeze) - letakkan di atas
 require __DIR__.'/auth.php';

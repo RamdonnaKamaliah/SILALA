@@ -175,13 +175,20 @@
       <li><div class="h-[1px] bg-gray-300 mx-2 rounded"></div></li>
 
       <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
-        <a href="#" class="relative flex items-center w-full text-red-600 hover:text-[var(--green)] transition-colors duration-300">
-          <span class="block min-w-[60px] h-[60px] leading-[60px] text-center text-xl">
-            <i class="fa-solid fa-gear"></i>
-          </span>
-          <span class="block px-[10px] h-[60px] leading-[60px] whitespace-nowrap">Logout</span>
-        </a>
-      </li>
+    <form method="POST" action="{{ route('logout') }}" class="w-full">
+        @csrf
+        <button type="submit"
+            class="relative flex items-center w-full text-red-600 hover:text-[var(--green)] transition-colors duration-300">
+            <span class="block min-w-[60px] h-[60px] leading-[60px] text-center text-xl">
+                <i class="fa-solid fa-gear"></i>
+            </span>
+            <span class="block px-[10px] h-[60px] leading-[60px] whitespace-nowrap">
+                Logout
+            </span>
+        </button>
+    </form>
+</li>
+
     </ul>
   </div>
 

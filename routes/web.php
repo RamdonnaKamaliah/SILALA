@@ -10,6 +10,7 @@ use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataBukuController;
+use App\Http\Controllers\Admin\DataKategoriController;
 use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPeminjamController;
 use App\Http\Controllers\Admin\DataDendaController;
@@ -32,6 +33,7 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
      // Route resource favorit yang disederhanakan
      Route::resource('/admin/data_buku', DataBukuController::class)->names('admin.data_buku');
+     Route::resource('/admin/data_kategori', DataKategoriController::class)->names('admin.data_kategori');
     Route::resource('/admin/data_arsip', DataArsipController::class)->names('admin.data_arsip');
     Route::resource('/admin/data_pengguna', DataPenggunaController::class)->names('admin.data_pengguna');
     Route::resource('/admin/data_peminjam', DataPeminjamController::class)->names('admin.data_peminjam');

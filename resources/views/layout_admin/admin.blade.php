@@ -1,53 +1,43 @@
-<!--
-=========================================================
-* Soft UI Dashboard Tailwind - v1.0.5
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard-tailwind
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-* Licensed under MIT (https://www.creative-tim.com/license)
-* Coded by Creative Tim
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
--->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SILALA ADMIN</title>
     @include('layout_admin.partial_admin.link')
+    @vite('resources/css/app.css')
+    <title>Admin Dashboard</title>
+    @stack('styles')
+
 </head>
 
 <body class="m-0 font-sans text-base antialiased font-normal leading-default bg-gray-50 text-slate-500">
-    <!-- sidenav  -->
-    @include('layout_admin.partial_admin.sidenav')
 
-    <!-- end sidenav -->
+    {{-- Header (sidebar + navbar) --}}
+    @include('layout_admin.partial_admin.header')
 
-    <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
-        <!-- Navbar -->
-        {{-- @include('layout_admin.partial_admin.navbar') --}}
+    {{-- Main Wrapper --}}
+    <main class="ml-64 flex flex-col min-h-screen">
 
-        <!-- end Navbar -->
+        {{-- Main Content --}}
+        <div class="flex-1 p-6">
+            @yield('content')
+        </div>
 
-        <!-- cards -->
+        {{-- Footer --}}
+        @include('layout_admin.partial_admin.footer')
 
-        {{-- @include('layout_admin.partial_admin.card') --}}
-
-        <!-- end cards -->
     </main>
+
+    <!-- plugin for charts  -->
+    {{-- <script src="{{ asset('/assets_admin/js/plugins/chartjs.min.js') }}" async></script>
+    <!-- plugin for scrollbar  -->
+    <script src="{{ asset('/assets_admin/js/plugins/perfect-scrollbar.min.js') }}" async></script>
+    <!-- github button -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script> --}}
+    <!-- main script file  -->
+    @stack('scripts')
+
 </body>
-<!-- plugin for charts  -->
-<script src="./assets/js/plugins/chartjs.min.js" async></script>
-<!-- plugin for scrollbar  -->
-<script src="./assets/js/plugins/perfect-scrollbar.min.js" async></script>
-<!-- github button -->
-<script async defer src="https://buttons.github.io/buttons.js"></script>
-<!-- main script file  -->
-<script src="./assets/js/soft-ui-dashboard-tailwind.js?v=1.0.5" async></script>
 
 </html>

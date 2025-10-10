@@ -18,6 +18,9 @@ darkMode: 'class',
                 Irish: ['Irish Grover'],
                 mochiy: ['"Mochiy Pop One"', 'sans-serif'],
             },
+            colors: {
+                primary: '#A4B465',
+            }
         },
     },
 

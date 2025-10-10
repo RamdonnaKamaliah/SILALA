@@ -1,8 +1,7 @@
 @extends('layout_admin.admin')
-
 @section('pageTitle', 'Admin Dashboard - Data Buku')
-
 @section('content')
+
 <div class="p-4 md:p-6 overflow-x-auto">
     <!-- Judul Halaman -->
     <div class="text-left mb-6">

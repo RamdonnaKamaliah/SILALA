@@ -28,16 +28,19 @@ class DataKategoriController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-        ]);
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'nama_kategori' => 'required|string|max:255|unique:data_kategoris,nama_kategori',
+    ], [
+        'nama_kategori.unique' => 'Kategori sudah ada.',
+        'nama_kategori.required' => 'Nama kategori harus diisi.',
+    ]);
 
-        DataKategori::create($validated);
+    DataKategori::create($validated);
 
-        return redirect()->route('admin.data_kategori.index')->with('success', 'Kategori berhasil ditambahkan.');
-    }
+    return redirect()->route('admin.data_kategori.index')->with('success', 'Kategori berhasil ditambahkan.');
+}
 
     /**
      * Display the specified resource.

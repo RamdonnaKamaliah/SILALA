@@ -1,25 +1,32 @@
 @extends('layout_admin.admin')
-
-@section('pageTitle', 'Data Buku')
-
+@section('pageTitle', 'Admin Dashboard - Data Buku')
 @section('content')
-    <div class="p-4 md:p-6 overflow-x-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-[#A4B465]">Data Buku</h1>
 
-            {{-- Tombol Tambah Buku --}}
+    <div class="p-4 md:p-6 overflow-x-auto">
+        <!-- Judul Halaman -->
+        <div class="text-left mb-6">
+            <h1 class="text-3xl lg:text-4xl font-bold text-slate-800 mb-2">
+                Selamat datang di Dashboard Data Buku 🎉
+            </h1>
+            <p class="text-gray-600">
+                Kelola dan pantau seluruh data buku yang tersedia di perpustakaan.
+            </p>
+        </div>
+
+        <!-- Tombol Tambah Buku -->
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-[#A4B465]">Data Buku</h2>
             <a href="{{ route('admin.data_buku.create') }}"
                 class="bg-blue-500 text-black px-4 py-2 rounded-lg hover:bg-[#8AA24F] transition duration-200">
                 + Tambah Buku
             </a>
         </div>
 
-        {{-- Tabel Data Buku --}}
-        <div class="overflow-x-auto mt-4">
+        <!-- Tabel Data Buku -->
+        <div class="overflow-x-auto">
             <table id="dataTable" class="w-full border border-gray-300 rounded-lg text-sm">
                 <thead class="bg-gray-100 text-gray-700">
                     <tr>
-
                         <th class="px-4 py-2 border-b border-gray-300 text-left">Foto Buku</th>
                         <th class="px-4 py-2 border-b border-gray-300 text-left">Judul Buku</th>
                         <th class="px-4 py-2 border-b border-gray-300 text-left">Penulis</th>
@@ -71,23 +78,19 @@
                                     <span class="text-gray-400 italic">Tidak ada file</span>
                                 @endif
                             </td>
-
                             <td>
-                                <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST">
+                                <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST"
+                                    class="inline-block">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-800">Hapus</button>
                                 </form>
-
                                 <a href="{{ route('admin.data_buku.show', $buku->id) }}">
-                                    <button class="text-green-600 hover:text-green-800">Detail</button>
+                                    <button class="text-green-600 hover:text-green-800 ml-2">Detail</button>
                                 </a>
-
                                 <a href="{{ route('admin.data_buku.edit', $buku->id) }}">
-                                    <button class="text-blue-600 hover:text-blue-800">Edit</button>
+                                    <button class="text-blue-600 hover:text-blue-800 ml-2">Edit</button>
                                 </a>
-                            </td>
-
                             </td>
                         </tr>
                     @endforeach

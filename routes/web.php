@@ -20,7 +20,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landingpage');
 });
 
 // User routes - gunakan class langsung
@@ -31,9 +31,10 @@ Route::middleware(['auth', UserMiddleware::class])->group(function () {
 // Admin routes - gunakan class langsung
 Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-     // Route resource favorit yang disederhanakan
-     Route::resource('/admin/data_buku', DataBukuController::class)->names('admin.data_buku');
-     Route::resource('/admin/data_kategori', DataKategoriController::class)->names('admin.data_kategori');
+    Route::resource('/admin/data_buku', DataBukuController::class)->names('admin.data_buku');
+    Route::get('/admin/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('admin.data_buku.template');
+    Route::post('/admin/data_buku/import', [DataBukuController::class, 'import'])->name('admin.data_buku.import');
+    Route::resource('/admin/data_kategori', DataKategoriController::class)->names('admin.data_kategori');
     Route::resource('/admin/data_arsip', DataArsipController::class)->names('admin.data_arsip');
     Route::resource('/admin/data_pengguna', DataPenggunaController::class)->names('admin.data_pengguna');
     Route::resource('/admin/data_peminjam', DataPeminjamController::class)->names('admin.data_peminjam');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('data_kategoris', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_kategori');
+            $table->string('nama_kategori')->unique();
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('datakategoris');
+        Schema::dropIfExists('data_kategoris');
     }
 };

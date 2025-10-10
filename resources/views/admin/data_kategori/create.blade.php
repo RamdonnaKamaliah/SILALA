@@ -2,11 +2,19 @@
 @section('pageTitle', 'Tambah Kategori')
 @section('content')
 
+@error('nama_kategori')
+    <div class="text-danger">{{ $message }}</div>
+@enderror
+
     <div class="w-fullflex justify-center">
         <div class="max-w-3xl w-full bg-white rounded-2xl shadow-lg p-8 mt-10 border border-gray-200">
             <a href="{{ route('admin.data_buku.index') }}" class="text-blue-600 hover:text-blue-800">
                 <i class="fas fa-arrow-left"></i>
             </a>
+
+
+
+
 
             <h2 class="text-3xl font-bold text-primary mb-8 text-center tracking-wide">
                 📚 Tambah Kategori Baru

@@ -14,6 +14,41 @@
             </a>
         </div>
 
+        <!-- Tombol di halaman utama -->
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importModal">
+            Import Excel
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content p-3">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="importModalLabel">Upload Excel Buku</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Silakan upload file Excel buku pada field di bawah ini.</p>
+
+                        <a href="{{ asset('uploads/template/template_buku/TEMPLATE_INPUT_DATA_BUKU_SILALA.xlsx') }}"
+                            class="btn btn-danger w-full" download>
+                            Download Template
+                        </a>
+
+
+                        <form action="{{ route('admin.data_buku.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" accept=".xlsx,.xls" class="form-control mb-3" required>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         {{-- Tabel Data Buku --}}
         <div class="overflow-x-auto mt-4">
             <table id="dataTable" class="w-full border border-gray-300 rounded-lg text-sm">

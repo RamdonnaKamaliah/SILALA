@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DataBuku;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\DataBukuImport; 
 
 class DataBukuController extends Controller
 {
@@ -144,5 +146,21 @@ class DataBukuController extends Controller
         $buku->delete();
         return redirect()->route('admin.data_buku.index')
             ->with('success', 'Data buku berhasil dihapus!');
+    }
+
+    public function downloadTemplate()
+    {
+        return response()->download(public_path('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA.xlsx'));
+
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        Excel::import(new DataBukuImport, $request->file('file'));
+        return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diimpor!');
     }
 }

@@ -19,7 +19,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landingpage');
 });
 
 // User routes - gunakan class langsung

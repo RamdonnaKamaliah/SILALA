@@ -1,29 +1,35 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Peminjam - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
-    <div class="container mx-auto px-4 py-8">
-        <div class="bg-white rounded-lg shadow-md p-6">
-            <h1 class="text-2xl font-bold text-gray-800 mb-6">DATA PEMINJAM</h1>
-            <div class="mb-4">
-                <p class="text-gray-600">Ini adalah halaman data peminjam (untuk percobaan).</p>
-            </div>
-            <div class="mt-6">
-                <h3 class="text-lg font-semibold mb-2">Menu:</h3>
-                 <div class="space-x-2">
-                    <a href="{{ route('admin.data_buku.index') }}" class="bg-yellow-500 text-white px-4 py-2 rounded">DATA BUKU</a>
-                    <a href="{{ route('admin.data_arsip.index') }}" class="bg-green-500 text-white px-4 py-2 rounded">DATA ARSIP</a>
-                    <a href="{{ route('admin.data_pengguna.index') }}" class="bg-blue-500 text-white px-4 py-2 rounded">DATA PENGGUNA</a>
-                    <a href="{{ route('admin.data_peminjam.index') }}" class="bg-yellow-900  text-white px-4 py-2 rounded">DATA PEMINJAM</a>
-                    <a href="{{ route('admin.data_denda.index') }}" class="bg-red-500 text-white px-4 py-2 rounded">DATA DENDA</a>
-                </div>
-            </div>
+@extends('layout_admin.admin')
+@section('pageTitle', 'Admin Dashboard - Data Peminjam')
+
+@section('content')
+<div class="text-left">
+    <!-- Judul Dashboard -->
+    <h1 class="text-3xl lg:text-4xl font-bold text-slate-800 mb-3">
+        Selamat datang di Dashboard Data Peminjam 🎉
+    </h1>
+    <p class="text-gray-600 mb-6">
+        Ini isi konten halaman Data Peminjam
+    </p>
+
+    <!-- Statistik Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white shadow rounded-xl p-6 border border-gray-100 hover:shadow-md transition">
+            <h3 class="font-semibold text-lg text-slate-700">Total Buku</h3>
+            <p class="text-3xl font-bold text-purple-600 mt-2">1.234</p>
+            <p class="text-sm text-gray-500 mt-1">Jumlah keseluruhan buku di perpustakaan</p>
+        </div>
+
+        <div class="bg-white shadow rounded-xl p-6 border border-gray-100 hover:shadow-md transition">
+            <h3 class="font-semibold text-lg text-slate-700">Peminjaman Hari Ini</h3>
+            <p class="text-3xl font-bold text-pink-600 mt-2">42</p>
+            <p class="text-sm text-gray-500 mt-1">Jumlah transaksi peminjaman aktif</p>
+        </div>
+
+        <div class="bg-white shadow rounded-xl p-6 border border-gray-100 hover:shadow-md transition">
+            <h3 class="font-semibold text-lg text-slate-700">Anggota Aktif</h3>
+            <p class="text-3xl font-bold text-indigo-600 mt-2">3.210</p>
+            <p class="text-sm text-gray-500 mt-1">Jumlah anggota yang masih aktif</p>
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

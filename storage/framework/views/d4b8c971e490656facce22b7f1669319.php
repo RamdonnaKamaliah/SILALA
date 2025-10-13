@@ -1,9 +1,8 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Admin Dashboard')
+<?php $__env->startSection('pageTitle', 'Admin Dashboard'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container mx-auto px-4 space-y-8">
-    <!--HERO SECTION -->
+    <!-- 🎉 HERO SECTION -->
     <div class="max-w-5xl mx-auto">
         <div class="relative rounded-2xl overflow-hidden shadow-2xl">
             <!-- Background -->
@@ -40,7 +39,7 @@
 
                 <!-- Gambar -->
                 <div class="w-1/3 flex items-center justify-center">
-                    <img src="{{ asset('/assets_admin/image/sapa.png') }}" alt="Sapaan Admin" 
+                    <img src="<?php echo e(asset('/assets_admin/image/sapa.png')); ?>" alt="Sapaan Admin" 
                          class="max-w-full h-auto floating pulse-glow"
                          style="max-height: 180px;">
                 </div>
@@ -48,4 +47,6 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

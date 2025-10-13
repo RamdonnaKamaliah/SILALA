@@ -5,6 +5,20 @@
     <div class="container mt-4">
         <h2 class="text-xl font-semibold mb-4 text-[#A4B465]">Edit Kategori</h2>
 
+
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        {{ $errors->first() }}
+    </div>
+@endif
+
+@if (session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+
         <form action="{{ route('admin.data_kategori.update', $kategori->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')

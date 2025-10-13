@@ -4,11 +4,12 @@
 
 @section('content')
     <div class="max-w-5xl mx-auto bg-white p-8 rounded-2xl shadow-lg mt-8">
-        <!-- Judul Halaman -->
         <!-- Tombol Kembali -->
-         <a href="{{ route('admin.data_buku.index') }}" class="text-blue-600 hover:text-blue-800">
-                <i class="fas fa-arrow-left"></i>
+        <div class="mb-6">
+            <a href="{{ route('admin.data_buku.index') }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4">
+                <i class="fas fa-arrow-left mr-2"></i> Kembali ke Data Buku
             </a>
+        </div>
 
         <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
             📚 Detail Buku
@@ -22,7 +23,7 @@
                     <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku"
                         class="w-60 h-80 object-cover rounded-xl shadow-md border border-gray-200 transition-transform hover:scale-105 duration-300">
                 @else
-                    <div class="w-60 h-80 flex items-center justify-center bg-gray-100 text-gray-400 italic rounded-xl">
+                    <div class="w-60 h-80 flex items-center justify-center bg-gray-100 text-gray-400 italic rounded-xl border border-gray-200">
                         Tidak ada foto
                     </div>
                 @endif
@@ -39,13 +40,20 @@
 
             <!-- Kolom Detail -->
             <div class="space-y-4 text-gray-700">
-                <div class="border-l-4 border-blue-600 pl-4">
+                <div class="border-l-4 border-blue-600 pl-4 space-y-3">
                     <p><span class="font-semibold text-gray-900">Judul:</span> {{ $buku->judul_buku }}</p>
                     <p><span class="font-semibold text-gray-900">Penulis:</span> {{ $buku->penulis }}</p>
                     <p><span class="font-semibold text-gray-900">Penerbit:</span> {{ $buku->penerbit }}</p>
                     <p><span class="font-semibold text-gray-900">Tahun Terbit:</span> {{ $buku->tahun_terbit }}</p>
                     <p><span class="font-semibold text-gray-900">Bahasa:</span> {{ $buku->bahasa }}</p>
-                    <p><span class="font-semibold text-gray-900">Kategori:</span> {{ $buku->kategori }}</p>
+                    <p>
+                        <span class="font-semibold text-gray-900">Kategori:</span>
+                        @if($buku->kategoris->isNotEmpty())
+                            {{ $buku->kategoris->pluck('nama_kategori')->join(', ') }}
+                        @else
+                            <span class="text-gray-500 italic">Tidak ada kategori</span>
+                        @endif
+                    </p>
                     <p><span class="font-semibold text-gray-900">Jumlah Halaman:</span> {{ $buku->jumlah_halaman }}</p>
                     <p><span class="font-semibold text-gray-900">Edisi:</span> {{ $buku->edisi }}</p>
                     <p><span class="font-semibold text-gray-900">Stok:</span> {{ $buku->stok }}</p>
@@ -55,9 +63,24 @@
                     <p class="font-semibold text-gray-900 mb-2">Deskripsi:</p>
                     <p class="text-sm leading-relaxed">{{ $buku->deskripsi }}</p>
                 </div>
+
+                <!-- Tombol Aksi -->
+                <div class="flex space-x-3 pt-4">
+                    <a href="{{ route('admin.data_buku.edit', $buku->id) }}" 
+                       class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all">
+                        Edit Buku
+                    </a>
+                    <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" 
+                            class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-all"
+                            onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
+                            Hapus Buku
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
-
-
     </div>
 @endsection

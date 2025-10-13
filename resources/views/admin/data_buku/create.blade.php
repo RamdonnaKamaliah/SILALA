@@ -71,13 +71,18 @@
 
                 <!-- Kategori -->
                 <div>
-                    <label for="kategori" class="block text-gray-700 font-semibold mb-2">Kategori</label>
-                    <input type="text" id="kategori" name="kategori"
-                        placeholder="Masukkan kategori buku (contoh: Fiksi, Edukasi)"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
+    <label for="kategori" class="block text-gray-700 font-semibold mb-2">Kategori</label>
+    <select name="kategori_id[]" id="kategori_id" multiple
+        class="form-control w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
+        focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200" required>
+        @foreach ($kategoris as $kategori)
+            <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+        @endforeach
+    </select>
+    <small class="text-gray-500">Tekan Ctrl (Windows) atau Cmd (Mac) untuk memilih lebih dari satu.</small>
+</div>
+    
+            
 
                 <!-- Jumlah Halaman -->
                 <div>

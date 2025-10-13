@@ -1,94 +1,71 @@
 <?php
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use function Laravel\Prompts\password;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Controllers\Admin\DataPenggunaController;
-use App\Http\Controllers\Admin\DataBukuController;
-use App\Http\Controllers\Admin\DataKategoriController;
-use App\Http\Controllers\Admin\DataArsipController;
-use App\Http\Controllers\Admin\DataPeminjamController;
-use App\Http\Controllers\Admin\DataDendaController;
-use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\GoogleLoginController;
+use App\Http\Controllers\Admin\DataBukuController;
+use App\Http\Controllers\Admin\DataKategoriController;
+use App\Http\Controllers\Admin\DataArsipController;
+use App\Http\Controllers\Admin\DataPenggunaController;
+use App\Http\Controllers\Admin\DataPeminjamController;
+use App\Http\Controllers\Admin\DataDendaController;
 
+// Public Routes
 Route::get('/', function () {
     return view('landingpage');
 });
 
-// User routes - gunakan class langsung
-Route::middleware(['auth', UserMiddleware::class])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
+// Authentication Routes
+require __DIR__.'/auth.php';
 
-// Admin routes - gunakan class langsung
-Route::middleware(['auth', AdminMiddleware::class])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-    Route::resource('/admin/data_buku', DataBukuController::class)->names('admin.data_buku');
-    Route::get('/admin/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('admin.data_buku.template');
-    Route::post('/admin/data_buku/import', [DataBukuController::class, 'import'])->name('admin.data_buku.import');
-    Route::resource('/admin/data_kategori', DataKategoriController::class)->names('admin.data_kategori');
-    Route::resource('/admin/data_arsip', DataArsipController::class)->names('admin.data_arsip');
-    Route::resource('/admin/data_pengguna', DataPenggunaController::class)->names('admin.data_pengguna');
-    Route::resource('/admin/data_peminjam', DataPeminjamController::class)->names('admin.data_peminjam');
-    Route::resource('/admin/data_denda', DataDendaController::class)->names('admin.data_denda');
-});
+// Google OAuth Routes
+Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGoogle'])
+    ->name('google.redirect');
 
-// Fallback untuk redirect berdasarkan user type
-Route::get('/home', function () {
-    if (Auth::check()) {
-        if (Auth::user()->user_type === 'admin') {
-            return redirect()->route('admin.dashboard');
-        } else {
-            return redirect()->route('dashboard');
-        }
-    }
-    return redirect()->route('login');
-})->name('home');
+Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])
+    ->name('google.callback');
 
+// Authenticated Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/auth/google/redirect', function () {
-    return Socialite::driver('google')->redirect();
+// User Routes
+Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-Route::get('/auth/google/callback', function () {
-    $googleUser = Socialite::driver('google')->user();
+// Admin Routes
+Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
+    Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
+    Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
+    Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');
+    Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
+    Route::delete('/data-kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
+    Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');
+    Route::resource('/data_pengguna', DataPenggunaController::class)->names('data_pengguna');
+    Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
+    Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
+});
 
-    $user = User::where('email', $googleUser->email)->first();
-
-    if (!$user) {
-        // Jika user belum ada, buat baru
-        $user = User::create([
-            'name' => $googleUser->name,
-            'email' => $googleUser->email,
-            'password' => Hash::make(Str::random(24)),
-        ]);
+// Home Redirect Route
+Route::get('/home', function () {
+    if (Auth::guard('admin')->check()) {
+        return redirect()->route('admin.dashboard');
+    } 
+    
+    if (Auth::guard('web')->check()) {
+        return redirect()->route('dashboard');
     }
-
-    // Update/google_id dan token (baik user baru maupun existing)
-    $user->update([
-        'google_id' => $googleUser->id,
-        'google_token' => $googleUser->token,
-        'google_refresh_token' => $googleUser->refreshToken,
-    ]);
-
-    Auth::login($user);
-    return redirect('/dashboard');
-});
-
-
-
-// Auth routes (dari breeze) - letakkan di atas
-require __DIR__.'/auth.php';
+    
+    return redirect()->route('login');
+})->name('home');

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\datakategori;
+use App\Models\DataKategori;
 
 class DataKategoriController extends Controller
 {
@@ -64,16 +64,24 @@ public function store(Request $request)
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        $validated = $request->validate([
-            'nama_kategori' => 'required|string|max:255',
-        ]);
+{
+    // Validasi data
+    $validated = $request->validate([
+        'nama_kategori' => 'required|string|max:255|unique:data_kategoris,nama_kategori,' . $id,
+    ]);
 
-        $kategori = DataKategori::findOrFail($id);
-        $kategori->update($validated);
+    // Cari data kategori
+    $kategori = DataKategori::findOrFail($id);
 
-        return redirect()->route('admin.data_kategori.index')->with('success', 'Kategori berhasil diperbarui.');
-    }
+    // Update data
+    $kategori->update($validated);
+
+    // Notifikasi berhasil
+    return redirect()
+        ->route('admin.data_kategori.index')
+        ->with('success', 'Kategori berhasil diperbarui.');
+}
+
 
     /**
      * Remove the specified resource from storage.
@@ -84,5 +92,22 @@ public function store(Request $request)
         $kategori->delete();
 
         return redirect()->route('admin.data_kategori.index')->with('success', 'Kategori berhasil dihapus.');
+    }
+
+     /**
+     * Bulk delete categories
+     */
+    public function bulkDelete(Request $request)
+    {
+        $selectedIds = $request->selected_ids;
+
+        if (empty($selectedIds)) {
+            return redirect()->back()->with('error', 'Tidak ada kategori yang dipilih.');
+        }
+
+        DataKategori::whereIn('id', $selectedIds)->delete();
+
+        return redirect()->route('admin.data_kategori.index')
+            ->with('success', count($selectedIds) . ' kategori berhasil dihapus.');
     }
 }

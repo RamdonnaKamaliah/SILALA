@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\DataBuku;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataBukuImport; 
+use App\Models\DataKategori;
 
 class DataBukuController extends Controller
 {
@@ -23,9 +24,11 @@ class DataBukuController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('admin.data_buku.create', ['title' => 'Tambah Buku']);
-    }
+{
+    $kategoris = DataKategori::all();
+    return view('admin.data_buku.create', compact('kategoris'));
+}
+
 
     /**
      * Store a newly created resource in storage.
@@ -40,7 +43,8 @@ class DataBukuController extends Controller
             'penerbit' => 'required|string|max:255',
             'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . (date('Y') + 1),
             'bahasa' => 'required|string|max:100',
-            'kategori' => 'required|string|max:100',
+            'kategori_id' => 'required|array',
+            'kategori_id.*' => 'exists:data_kategoris,id',
             'jumlah_halaman' => 'required|integer|min:1',
             'edisi' => 'required|string|max:100',
             'deskripsi' => 'required|string',
@@ -62,7 +66,13 @@ class DataBukuController extends Controller
         }
         // Simpan data ke database
         
-        DataBuku::create($validated);
+        // Simpan data buku
+$buku = DataBuku::create($validated);
+
+// Hubungkan kategori
+$buku->kategoris()->attach($request->kategori_id);
+
+
          return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil ditambahkan!');
     }
 
@@ -78,11 +88,13 @@ class DataBukuController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        $buku = DataBuku::findOrFail($id);
-        return view('admin.data_buku.edit', compact('buku'));
-    }
+  public function edit(string $id)
+{
+    $buku = DataBuku::findOrFail($id);
+    $kategoris = DataKategori::all();
+    return view('admin.data_buku.edit', compact('buku', 'kategoris'));
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -96,7 +108,8 @@ class DataBukuController extends Controller
             'penerbit' => 'required|string|max:255',
             'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . (date('Y') + 1),
             'bahasa' => 'required|string|max:100',
-            'kategori' => 'required|string|max:100',
+            'kategori_id' => 'required|array',
+        'kategori_id.*' => 'exists:data_kategoris,id',
             'jumlah_halaman' => 'required|integer|min:1',
             'edisi' => 'required|string|max:100',
             'deskripsi' => 'required|string',
@@ -130,6 +143,10 @@ class DataBukuController extends Controller
 
     // Update data buku
     $buku->update($validated);
+
+     // Update kategori
+    $buku->kategoris()->sync($request->kategori_id);
+
        return redirect()->route('admin.data_buku.index')
                  ->with('success', 'Data buku berhasil diperbarui!');
     }
@@ -148,6 +165,20 @@ class DataBukuController extends Controller
             ->with('success', 'Data buku berhasil dihapus!');
     }
 
+       public function bulkDelete(Request $request)
+    {
+        $selectedIds = $request->selected_ids;
+
+        if (empty($selectedIds)) {
+            return redirect()->back()->with('error', 'Tidak ada kategori yang dipilih.');
+        }
+
+        DataBuku::whereIn('id', $selectedIds)->delete();
+
+        return redirect()->route('admin.data_buku.index')
+            ->with('success', count($selectedIds) . ' buku berhasil dihapus.');
+    }
+
     public function downloadTemplate()
     {
         return response()->download(public_path('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA.xlsx'));
@@ -163,4 +194,5 @@ class DataBukuController extends Controller
         Excel::import(new DataBukuImport, $request->file('file'));
         return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diimpor!');
     }
+    
 }

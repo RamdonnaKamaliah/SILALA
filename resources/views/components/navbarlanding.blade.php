@@ -9,20 +9,22 @@
 
     <!-- Navbar desktop -->
     <nav class="relative hidden md:flex items-center space-x-8 text-base font-semibold 
-       bg-[#A4B465] text-white dark:bg-white dark:text-slate-700 
-       shadow-md rounded-full px-8 py-4 transition-colors duration-300">
-      <a href="/" class="nav-link text-green-600">Beranda</a>
-      <a href="#tentang" class="nav-link">Tentang</a>
-      <a href="#rekomendasi" class="nav-link">Rekomendasi</a>
-      <a href="#panduan" class="nav-link">Panduan</a>
+    bg-[#A4B465] text-white dark:bg-white dark:text-slate-700 
+    shadow-md rounded-full px-8 py-4 transition-colors duration-300">
+    <a href="/" class="nav-link text-green-600">Beranda</a>
+    <a href="#tentang" class="nav-link">Tentang</a>
+    <a href="#rekomendasi" class="nav-link">Rekomendasi</a>
+    <a href="#panduan" class="nav-link">Panduan</a>
 
-      @auth
-        <a href="{{ url('/dashboard') }}" class="nav-link">Dashboard</a>
-      @else
-        <a href="{{ route('register') }}" class="nav-link">Register</a>
-        <a href="{{ route('login') }}" class="nav-link text-blue-500">Login</a>
-      @endauth
-    </nav>
+    @auth('admin')
+      <a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard Admin</a>
+    @elseauth('web')
+      <a href="{{ url('/dashboard') }}" class="nav-link">Dashboard</a>
+    @else
+      <a href="{{ route('register') }}" class="nav-link">Register</a>
+      <a href="{{ route('login') }}" class="nav-link text-blue-500">Login</a>
+    @endauth
+  </nav>
 
     <!-- Theme toggle -->
     <button id="toggle-theme" class="w-10 h-10 ml-4 flex items-center justify-center bg-gray-100 rounded-full shadow hover:bg-gray-200 transition-colors duration-200">

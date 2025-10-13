@@ -1,125 +1,136 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Edit Data Buku')
-@section('content')
+    @extends('layout_admin.admin')
+    @section('pageTitle', 'Edit Data Buku')
+    @section('content')
 
-    <div class="container mt-4">
-        <h2 class="text-xl font-semibold mb-4 text-[#A4B465]">Edit Buku</h2>
+        <div class="container mt-4">
+            <h2 class="text-xl font-semibold mb-4 text-[#A4B465]">Edit Buku</h2>
 
-        <form action="{{ route('admin.data_buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+            <form action="{{ route('admin.data_buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
 
-            {{-- Foto Buku --}}
-            <div class="mb-4">
-                <label for="foto_buku" class="block text-gray-700 font-semibold mb-2">Foto Buku</label>
-                @if ($buku->foto_buku)
-                    <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku" class="w-24 h-32 object-cover rounded mb-2">
-                @endif
-                <input type="file" name="foto_buku" id="foto_buku"
-                    class="border border-gray-300 rounded-xl px-4 py-2 w-full">
-            </div>
+                {{-- Foto Buku --}}
+                <div class="mb-4">
+                    <label for="foto_buku" class="block text-gray-700 font-semibold mb-2">Foto Buku</label>
+                    @if ($buku->foto_buku)
+                        <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku" class="w-24 h-32 object-cover rounded mb-2">
+                    @endif
+                    <input type="file" name="foto_buku" id="foto_buku"
+                        class="border border-gray-300 rounded-xl px-4 py-2 w-full">
+                </div>
 
-            {{-- Judul Buku --}}
-            <div class="mb-4">
-                <label for="judul_buku" class="block text-gray-700 font-semibold mb-2">Judul Buku</label>
-                <input type="text" name="judul_buku" id="judul_buku" value="{{ old('judul_buku', $buku->judul_buku) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
-            </div>
+                {{-- Judul Buku --}}
+                <div class="mb-4">
+                    <label for="judul_buku" class="block text-gray-700 font-semibold mb-2">Judul Buku</label>
+                    <input type="text" name="judul_buku" id="judul_buku" value="{{ old('judul_buku', $buku->judul_buku) }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
+                        required>
+                </div>
 
-            {{-- Penulis --}}
-            <div class="mb-4">
-                <label for="penulis" class="block text-gray-700 font-semibold mb-2">Penulis</label>
-                <input type="text" name="penulis" id="penulis" value="{{ old('penulis', $buku->penulis) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
-            </div>
+                {{-- Penulis --}}
+                <div class="mb-4">
+                    <label for="penulis" class="block text-gray-700 font-semibold mb-2">Penulis</label>
+                    <input type="text" name="penulis" id="penulis" value="{{ old('penulis', $buku->penulis) }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
+                        required>
+                </div>
 
-            {{-- Penerbit --}}
-            <div class="mb-4">
-                <label for="penerbit" class="block text-gray-700 font-semibold mb-2">Penerbit</label>
-                <input type="text" name="penerbit" id="penerbit" value="{{ old('penerbit', $buku->penerbit) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
-            </div>
+                {{-- Penerbit --}}
+                <div class="mb-4">
+                    <label for="penerbit" class="block text-gray-700 font-semibold mb-2">Penerbit</label>
+                    <input type="text" name="penerbit" id="penerbit" value="{{ old('penerbit', $buku->penerbit) }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
+                        required>
+                </div>
 
-            {{-- Tahun Terbit --}}
-            <div class="mb-4">
-                <label for="tahun_terbit" class="block text-gray-700 font-semibold mb-2">Tahun Terbit</label>
-                <input type="number" name="tahun_terbit" id="tahun_terbit"
-                    value="{{ old('tahun_terbit', $buku->tahun_terbit) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
-            </div>
+                {{-- Tahun Terbit --}}
+                <div class="mb-4">
+                    <label for="tahun_terbit" class="block text-gray-700 font-semibold mb-2">Tahun Terbit</label>
+                    <input type="number" name="tahun_terbit" id="tahun_terbit"
+                        value="{{ old('tahun_terbit', $buku->tahun_terbit) }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
+                        required>
+                </div>
 
-            {{-- Bahasa --}}
-            <div class="mb-4">
-                <label for="bahasa" class="block text-gray-700 font-semibold mb-2">Bahasa</label>
-                <input type="text" name="bahasa" id="bahasa" value="{{ old('bahasa', $buku->bahasa) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
-            </div>
+                {{-- Bahasa --}}
+                <div class="mb-4">
+                    <label for="bahasa" class="block text-gray-700 font-semibold mb-2">Bahasa</label>
+                    <input type="text" name="bahasa" id="bahasa" value="{{ old('bahasa', $buku->bahasa) }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
+                        required>
+                </div>
 
-            {{-- Kategori --}}
+            {{-- Kategori (bisa pilih lebih dari satu) --}}
             <div class="mb-4">
                 <label for="kategori" class="block text-gray-700 font-semibold mb-2">Kategori</label>
-                <input type="text" name="kategori" id="kategori" value="{{ old('kategori', $buku->kategori) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
+                <select name="kategori_id[]" id="kategori" multiple
+                    class="form-control w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]">
+                    @foreach($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}"
+                            {{ in_array($kategori->id, old('kategori_id', $buku->kategoris->pluck('id')->toArray())) ? 'selected' : '' }}>
+                            {{ $kategori->nama_kategori }}
+                        </option>
+                    @endforeach
+                </select>
+                <p class="text-sm text-gray-500 mt-1">Tekan Ctrl (atau Command di Mac) untuk pilih lebih dari satu kategori.</p>
             </div>
 
-            {{-- Jumlah Halaman --}}
-            <div class="mb-4">
-                <label for="jumlah_halaman" class="block text-gray-700 font-semibold mb-2">Jumlah Halaman</label>
-                <input type="number" name="jumlah_halaman" id="jumlah_halaman"
-                    value="{{ old('jumlah_halaman', $buku->jumlah_halaman) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
-            </div>
 
-            {{-- Edisi --}}
-            <div class="mb-4">
-                <label for="edisi" class="block text-gray-700 font-semibold mb-2">Edisi</label>
-                <input type="text" name="edisi" id="edisi" value="{{ old('edisi', $buku->edisi) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
-            </div>
+                
 
-            {{-- Stok --}}
-            <div class="mb-4">
-                <label for="stok" class="block text-gray-700 font-semibold mb-2">Stok</label>
-                <input type="number" name="stok" id="stok" value="{{ old('stok', $buku->stok) }}"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
-                    required>
-            </div>
 
-            {{-- File Buku --}}
-            <div class="mb-4">
-                <label for="file_buku" class="block text-gray-700 font-semibold mb-2">File Buku (PDF)</label>
-                @if ($buku->file_buku)
-                    <a href="{{ asset($buku->file_buku) }}" target="_blank"
-                        class="text-blue-500 underline mb-2 inline-block">Lihat File Saat Ini</a>
-                @endif
-                <input type="file" name="file_buku" id="file_buku" accept=".pdf"
-                    class="border border-gray-300 rounded-xl px-4 py-2 w-full">
-                <p class="text-sm text-gray-500 mt-1">Unggah file PDF jika ingin mengganti file buku.</p>
+                {{-- Jumlah Halaman --}}
+                <div class="mb-4">
+                    <label for="jumlah_halaman" class="block text-gray-700 font-semibold mb-2">Jumlah Halaman</label>
+                    <input type="number" name="jumlah_halaman" id="jumlah_halaman"
+                        value="{{ old('jumlah_halaman', $buku->jumlah_halaman) }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
+                        required>
+                </div>
 
-            </div>
+                {{-- Edisi --}}
+                <div class="mb-4">
+                    <label for="edisi" class="block text-gray-700 font-semibold mb-2">Edisi</label>
+                    <input type="text" name="edisi" id="edisi" value="{{ old('edisi', $buku->edisi) }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
+                        required>
+                </div>
 
-            {{-- Deskripsi --}}
-            <div class="mb-4">
-                <label for="deskripsi" class="block text-gray-700 font-semibold mb-2">Deskripsi</label>
-                <textarea name="deskripsi" id="deskripsi" rows="4"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]">{{ old('deskripsi', $buku->deskripsi) }}</textarea>
-            </div>
+                {{-- Stok --}}
+                <div class="mb-4">
+                    <label for="stok" class="block text-gray-700 font-semibold mb-2">Stok</label>
+                    <input type="number" name="stok" id="stok" value="{{ old('stok', $buku->stok) }}"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]"
+                        required>
+                </div>
 
-            <div class="mt-6">
-                <button type="submit"
-                    class="bg-[#A4B465] hover:bg-[#8EA05C] text-white font-semibold px-6 py-2 rounded-xl transition duration-200">
-                    Simpan Perubahan
-                </button>
-            </div>
-        </form>
-    </div>
+                {{-- File Buku --}}
+                <div class="mb-4">
+                    <label for="file_buku" class="block text-gray-700 font-semibold mb-2">File Buku (PDF)</label>
+                    @if ($buku->file_buku)
+                        <a href="{{ asset($buku->file_buku) }}" target="_blank"
+                            class="text-blue-500 underline mb-2 inline-block">Lihat File Saat Ini</a>
+                    @endif
+                    <input type="file" name="file_buku" id="file_buku" accept=".pdf"
+                        class="border border-gray-300 rounded-xl px-4 py-2 w-full">
+                    <p class="text-sm text-gray-500 mt-1">Unggah file PDF jika ingin mengganti file buku.</p>
 
-@endsection
+                </div>
+
+                {{-- Deskripsi --}}
+                <div class="mb-4">
+                    <label for="deskripsi" class="block text-gray-700 font-semibold mb-2">Deskripsi</label>
+                    <textarea name="deskripsi" id="deskripsi" rows="4"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#A4B465]">{{ old('deskripsi', $buku->deskripsi) }}</textarea>
+                </div>
+
+                <div class="mt-6">
+                    <button type="submit"
+                        class="bg-[#A4B465] hover:bg-[#8EA05C] text-white font-semibold px-6 py-2 rounded-xl transition duration-200">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    @endsection

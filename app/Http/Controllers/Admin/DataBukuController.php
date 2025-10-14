@@ -34,47 +34,50 @@ class DataBukuController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-    
-        $validated = $request->validate([
-            'foto_buku' => 'nullable|image|max:2048', // Maksimal 2MB
-            'judul_buku' => 'required|string|max:255',
-            'penulis' => 'required|string|max:255',
-            'penerbit' => 'required|string|max:255',
-            'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . (date('Y') + 1),
-            'bahasa' => 'required|string|max:100',
-            'kategori_id' => 'required|array',
-            'kategori_id.*' => 'exists:data_kategoris,id',
-            'jumlah_halaman' => 'required|integer|min:1',
-            'edisi' => 'required|string|max:100',
-            'deskripsi' => 'required|string',
-            'stok' => 'required|integer|min:0',
-            'file_buku' => 'nullable|mimes:pdf|max:255',
-        ]);
+{
+    $validated = $request->validate([
+        'foto_buku' => 'nullable|image|max:2048',
+        'judul_buku' => 'required|string|max:255',
+        'penulis' => 'required|string|max:255',
+        'penerbit' => 'required|string|max:255',
+        'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . (date('Y') + 1),
+        'bahasa' => 'required|string|max:100',
+        'kategori_id' => 'required|array',
+        'kategori_id.*' => 'exists:data_kategoris,id',
+        'jumlah_halaman' => 'required|integer|min:1',
+        'edisi' => 'required|string|max:100',
+        'deskripsi' => 'required|string',
+        'stok' => 'required|integer|min:0',
+        'file_buku' => 'nullable|mimes:pdf|max:255',
+    ]);
 
-      
-        if ($request->hasFile('foto_buku')) {
-            $imageName = time() . '.' . $request->foto_buku->extension();
-            $request->foto_buku->move(public_path('uploads/buku'), $imageName);
-            $validated['foto_buku'] = 'uploads/buku/' . $imageName;
-        }
-
-        if ($request->hasfile('file_buku')){
-            $fileName = time() . '.' . $request->file_buku->extension();
-            $request->file_buku->move(public_path('uploads/file_buku'), $fileName);
-            $validated['file_buku'] = 'uploads/file_buku/' . $fileName;
-        }
-        // Simpan data ke database
-        
-        // Simpan data buku
-$buku = DataBuku::create($validated);
-
-// Hubungkan kategori
-$buku->kategoris()->attach($request->kategori_id);
-
-
-         return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil ditambahkan!');
+    // Upload file foto
+    if ($request->hasFile('foto_buku')) {
+        $imageName = time() . '.' . $request->foto_buku->extension();
+        $request->foto_buku->move(public_path('uploads/buku'), $imageName);
+        $validated['foto_buku'] = 'uploads/buku/' . $imageName;
     }
+
+    // Upload file PDF
+    if ($request->hasFile('file_buku')) {
+        $fileName = time() . '.' . $request->file_buku->extension();
+        $request->file_buku->move(public_path('uploads/file_buku'), $fileName);
+        $validated['file_buku'] = 'uploads/file_buku/' . $fileName;
+    }
+
+    // Simpan id kategori dalam bentuk string (contoh: "1,2,3")
+    $validated['kategori_ids'] = implode(',', $request->kategori_id);
+
+    // Simpan buku
+    $dataBuku = collect($validated)->except('kategori_id')->toArray();
+    $buku = DataBuku::create($dataBuku);
+
+    // Simpan relasi di pivot
+    $buku->kategoris()->attach($request->kategori_id);
+
+    return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil ditambahkan!');
+}
+
 
     /**
      * Display the specified resource.
@@ -100,56 +103,56 @@ $buku->kategoris()->attach($request->kategori_id);
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-      $validated = $request->validate([
-            'foto_buku' => 'nullable|image|max:2048', // Maksimal 2MB
-            'judul_buku' => 'required|string|max:255',
-            'penulis' => 'required|string|max:255',
-            'penerbit' => 'required|string|max:255',
-            'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . (date('Y') + 1),
-            'bahasa' => 'required|string|max:100',
-            'kategori_id' => 'required|array',
+{
+    $validated = $request->validate([
+        'foto_buku' => 'nullable|image|max:2048',
+        'judul_buku' => 'required|string|max:255',
+        'penulis' => 'required|string|max:255',
+        'penerbit' => 'required|string|max:255',
+        'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . (date('Y') + 1),
+        'bahasa' => 'required|string|max:100',
+        'kategori_id' => 'required|array',
         'kategori_id.*' => 'exists:data_kategoris,id',
-            'jumlah_halaman' => 'required|integer|min:1',
-            'edisi' => 'required|string|max:100',
-            'deskripsi' => 'required|string',
-            'stok' => 'required|integer|min:0',
-            'file_buku' => 'nullable|mimes:pdf|max:255',
-        ]);
+        'jumlah_halaman' => 'required|integer|min:1',
+        'edisi' => 'required|string|max:100',
+        'deskripsi' => 'required|string',
+        'stok' => 'required|integer|min:0',
+        'file_buku' => 'nullable|mimes:pdf|max:255',
+    ]);
 
-       $buku = DataBuku::findOrFail($id);
+    $buku = DataBuku::findOrFail($id);
 
-         // Update foto jika ada
     if ($request->hasFile('foto_buku')) {
-        if (!empty($buku->foto_buku) && file_exists(public_path($buku->foto_buku))) {
+        if ($buku->foto_buku && file_exists(public_path($buku->foto_buku))) {
             unlink(public_path($buku->foto_buku));
         }
-
         $imageName = time() . '.' . $request->foto_buku->extension();
         $request->foto_buku->move(public_path('uploads/buku'), $imageName);
         $validated['foto_buku'] = 'uploads/buku/' . $imageName;
     }
 
-    // Update file buku jika ada
     if ($request->hasFile('file_buku')) {
-        if (!empty($buku->file_buku) && file_exists(public_path($buku->file_buku))) {
+        if ($buku->file_buku && file_exists(public_path($buku->file_buku))) {
             unlink(public_path($buku->file_buku));
         }
-
         $fileName = time() . '.' . $request->file_buku->extension();
         $request->file_buku->move(public_path('uploads/file_buku'), $fileName);
         $validated['file_buku'] = 'uploads/file_buku/' . $fileName;
     }
 
-    // Update data buku
-    $buku->update($validated);
+    // Simpan ulang kategori_ids dalam bentuk string
+    $validated['kategori_ids'] = implode(',', $request->kategori_id);
 
-     // Update kategori
+    $dataBuku = collect($validated)->except('kategori_id')->toArray();
+    $buku->update($dataBuku);
+
+    // Update pivot
     $buku->kategoris()->sync($request->kategori_id);
 
-       return redirect()->route('admin.data_buku.index')
-                 ->with('success', 'Data buku berhasil diperbarui!');
-    }
+    return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diperbarui!');
+}
+
+
     /**
      * Remove the specified resource from storage.
      */

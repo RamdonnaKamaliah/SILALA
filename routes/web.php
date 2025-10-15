@@ -17,6 +17,7 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LandingpageController;
 
 Route::get('/', function () {
     return view('landingpage');
@@ -84,6 +85,9 @@ Route::get('/auth/google/callback', function () {
     Auth::login($user);
     return redirect('/dashboard');
 });
+
+//route landingpage data buku
+    Route::get('/', [LandingpageController::class, 'index'])->name('landing.index');
 
 //logout dasboard user
 Route::post('/logout', function (Request $request) {

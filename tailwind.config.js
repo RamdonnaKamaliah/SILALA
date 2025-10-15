@@ -20,6 +20,7 @@ darkMode: 'class',
             },
             colors: {
                 primary: '#A4B465',
+                green: ' #626F47',
             }
         },
     },

@@ -14,10 +14,16 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->user_type === 'admin') {
-            return $next($request);
+        // Jika user adalah user biasa, redirect ke user dashboard
+        if (Auth::guard('web')->check()) {
+            return redirect()->route('dashboard');
         }
 
-        return redirect()->route('dashboard')->with('error', 'You do not have permission to access this page.');
+        // Jika bukan admin, redirect ke login
+        if (!Auth::guard('admin')->check()) {
+            return redirect('/login')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
+        }
+
+        return $next($request);
     }
 }

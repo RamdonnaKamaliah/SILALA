@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +10,8 @@
   @include('layout_admin.partial_admin.link')
 
   <style>
-    html, body {
+    html,
+    body {
       max-width: 100%;
       overflow-x: hidden;
     }
@@ -30,7 +32,11 @@
       }
     }
   </style>
+
+  {{-- Tambahan CSS khusus halaman --}}
+  @stack('styles')
 </head>
+
 <body class="overflow-x-hidden bg-gray-50 min-h-screen">
 
   {{-- HEADER: sidebar + navbar --}}
@@ -54,6 +60,6 @@
 
   {{-- Tambahan script per halaman --}}
   @stack('scripts')
-
 </body>
+
 </html>

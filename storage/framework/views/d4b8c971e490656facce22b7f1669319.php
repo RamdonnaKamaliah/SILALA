@@ -2,7 +2,7 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="container mx-auto px-4 space-y-8">
-    <!-- 🎉 HERO SECTION -->
+    <!--HERO SECTION -->
     <div class="max-w-5xl mx-auto">
         <div class="relative rounded-2xl overflow-hidden shadow-2xl">
             <!-- Background -->

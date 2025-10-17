@@ -1,4 +1,8 @@
 @extends('layout_admin.admin')
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 @section('pageTitle', 'Admin Dashboard - Data Buku')
 @section('content')
 
@@ -16,40 +20,65 @@
 
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-semibold text-[#A4B465]">Data Buku</h2>
-            <!-- Tombol di halaman utama -->
-            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#importModal">
-                Import Excel
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content p-3">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="importModalLabel">Upload Excel Buku</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div x-data="{ open: false }" class="flex justify-between items-center mb-6">
+                <!-- Tombol Import Excel -->
+                <button @click="open = true"
+                    class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition ml-20">
+                    📥 Import Excel
+                </button>
+
+                <!-- Modal Import -->
+                <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div @click.away="open = false"
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-6 relative">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-bold text-gray-800 dark:text-white">Upload Excel Buku</h2>
+                            <button @click="open = false"
+                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                ✖
+                            </button>
                         </div>
 
-                        <div class="modal-body">
-                            <p>Silakan upload file Excel buku pada field di bawah ini.</p>
+                        <!-- Body -->
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Silakan upload file Excel buku pada field di bawah ini.
+                        </p>
 
-                            <a href="{{ asset('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx') }}"
-                                class="btn btn-danger w-full" download>
-                                Download Template
-                            </a>
+                        <!-- Tombol Download Template -->
+                        <a href="{{ asset('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx') }}"
+                            class="block w-full bg-red-500 hover:bg-red-600 text-white text-center py-2 rounded-lg mb-4 transition"
+                            download>
+                            ⬇️ Download Template
+                        </a>
 
+                        <!-- Form Upload -->
+                        <form action="{{ route('admin.data_buku.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" accept=".xlsx,.xls" required
+                                class="block w-full text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4
+                           file:rounded-l-lg file:border-0 file:text-sm file:font-semibold
+                           file:bg-gray-200 file:text-gray-700
+                           hover:file:bg-gray-300 dark:file:bg-gray-700 dark:file:text-white
+                           mb-4 rounded-lg border border-gray-300 dark:border-gray-600">
 
-                            <form action="{{ route('admin.data_buku.import') }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
-                                <input type="file" name="file" accept=".xlsx,.xls" class="form-control mb-3" required>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            </form>
-                        </div>
+                            <!-- Tombol Aksi -->
+                            <div class="flex justify-end gap-2">
+                                <button type="button" @click="open = false"
+                                    class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg transition">
+                                    Close
+                                </button>
+                                <button type="submit"
+                                    class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+
             <div class="flex items-center space-x-2">
                 <a href="{{ route('admin.data_buku.create') }}"
                     class="bg-blue-500 text-black px-4 py-2 rounded-lg hover:bg-[#8AA24F] transition duration-200">
@@ -102,8 +131,8 @@
                                 <td class="px-4 py-2 border-b border-gray-300">
                                     @if ($buku->foto_buku)
                                         <div class="w-10 h-12 overflow-hidden rounded-lg border border-gray-200">
-                                            <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku"
-                                                class="w-full h-full object-cover">
+                                            <img src="{{ Str::startsWith($buku->foto_buku, ['http', 'https']) ? $buku->foto_buku : asset($buku->foto_buku) }}"
+                                                alt="Foto Buku" class="w-full h-full object-cover">
                                         </div>
                                     @else
                                         <div
@@ -112,6 +141,8 @@
                                         </div>
                                     @endif
                                 </td>
+
+
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->judul_buku }}</td>
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->penulis }}</td>
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->penerbit }}</td>

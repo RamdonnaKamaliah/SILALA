@@ -17,7 +17,7 @@ class DataBukuImport implements ToModel, WithStartRow
     public function model(array $row)
     {
         return new DataBuku([
-            'judul'            => $row[0],
+            'judul_buku'            => $row[0],
             'penulis'          => $row[1],
             'penerbit'         => $row[2],
             'tahun_terbit'     => (int) $row[3],  // pastikan ini angka
@@ -25,10 +25,22 @@ class DataBukuImport implements ToModel, WithStartRow
             'data_kategori'      => $row[5],
             'jumlah_halaman'   => $row[6],
             'edisi'            => $row[7],
-            'stok_buku'        => $row[8],
+            'stok_buku'        => (int) $row[8],
             'deskripsi'        => $row[9],
             'foto_buku'        => $row[10],
             'file_buku'        => $row[11],
         ]);
+
+        
+    $buku->save();
+
+    // Hubungkan kategori
+    $kategoriNama = trim($row[5]);
+    if ($kategoriNama) {
+        $kategori = DataKategori::firstOrCreate(['nama_kategori' => $kategoriNama]);
+        $buku->kategoris()->attach($kategori->id);
     }
+
+    return $buku;
+}
 }

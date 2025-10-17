@@ -20,7 +20,9 @@ darkMode: 'class',
             },
             colors: {
                 primary: '#A4B465',
-                green: ' #626F47',
+                green: '#626F47', // warna hijau daun tua kamu
+                cream: '#F5ECD5', // warna krem lembut kamu
+                white: '#ffffff'
             }
         },
     },

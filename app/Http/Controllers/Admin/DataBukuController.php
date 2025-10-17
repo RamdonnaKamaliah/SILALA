@@ -181,7 +181,7 @@ $buku->kategoris()->attach($request->kategori_id);
 
     public function downloadTemplate()
     {
-        return response()->download(public_path('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA.xlsx'));
+        return response()->download(public_path('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx'));
 
     }
 

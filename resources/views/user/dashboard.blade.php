@@ -15,7 +15,7 @@
   @include('layout_dashboard.partial_dashboard.header')
 <!-- Konten Utama Dashboard -->
 <main
-  class="pt-8 pb-14 px-6 bg-[#F5ECD5]
+  class="pt-8 pb-14 px-6 bg-cream
   absolute top-[90px] left-0 right-0 bottom-3 md:left-[320px] md:right-3
   md:rounded-3xl transition-all duration-300 z-30
   flex flex-col overflow-y-visible shadow-inner">

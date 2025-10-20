@@ -8,7 +8,7 @@
   <h1
     class="absolute left-1/2 transform -translate-x-1/2 text-lg md:text-xl font-semibold text-[#626F47]
     md:static md:transform-none md:translate-x-0">
-    Dashboard
+    {{ $title ?? 'Dashboard' }}
   </h1>
 
   <div class="flex items-center gap-4 ml-auto relative">

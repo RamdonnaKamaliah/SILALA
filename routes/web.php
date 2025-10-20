@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
 use App\Http\Controllers\Admin\DataDendaController;
+use App\Http\Controllers\LandingpageController;
+use App\Http\Controllers\user\DaftarBukuController;
 
 // Public Routes
 Route::get('/', function () {
@@ -40,6 +42,7 @@ Route::middleware('auth')->group(function () {
 // User Routes
 Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
 });
 
 // Admin Routes
@@ -56,6 +59,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
     Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
 });
+
+//route landingpage data buku
+    Route::get('/', [LandingpageController::class, 'index'])->name('landing.index');
 
 // Home Redirect Route
 Route::get('/home', function () {

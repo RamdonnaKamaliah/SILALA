@@ -8,6 +8,8 @@ use App\Models\DataBuku;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataBukuImport; 
 use App\Models\DataKategori;
+use App\Helpers\ImageHelper;
+
 
 class DataBukuController extends Controller
 {
@@ -194,7 +196,8 @@ class DataBukuController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new DataBukuImport, $request->file('file'));
+       Excel::import(new DataBukuImport, $request->file('file'));
+
         return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diimpor!');
     }
     

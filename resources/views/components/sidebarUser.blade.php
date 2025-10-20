@@ -37,7 +37,7 @@
     <!-- Menu -->
     <ul id="sidebar-menu" class="space-y-3">
   <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
-    <a href="#" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
+    <a href="{{ route('dashboard') }}" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
       <div
         class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start shadow-md transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
@@ -48,7 +48,7 @@
   </li>
 
   <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
-    <a href="#" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
+    <a href="{{ route('user.daftarbuku') }}" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
       <div
         class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start shadow-md transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">

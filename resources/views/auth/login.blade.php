@@ -87,7 +87,7 @@
 
       <!-- Google Login -->
       <div class="mb-4">
-        <a href="/auth/google/redirect" 
+       <a href="{{ route('google.redirect') }}"  
           class="flex items-center justify-center gap-3 w-full py-2 px-4 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="w-5 h-5">
           <span class="font-semibold text-black text-sm">Login dengan Google</span>

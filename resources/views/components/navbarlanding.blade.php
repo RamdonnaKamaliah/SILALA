@@ -9,9 +9,8 @@
         <span class="block w-5 h-0.5 bg-gray-800 dark:bg-white rounded transition-all"></span>
       </button>
 
-      <!-- Navbar desktop -->
-      <nav
-        class="relative hidden md:flex items-center space-x-8 text-base font-semibold
+    <!-- Navbar desktop -->
+    <nav class="relative hidden md:flex items-center space-x-8 text-base font-semibold
                bg-white text-gray-800 
                shadow-md rounded-full px-10 py-4 border border-gray-200 dark:border-gray-700
                backdrop-blur-md transition-all duration-300 ease-in-out">
@@ -21,13 +20,13 @@
         <a href="#rekomendasi" class="nav-link hover:text-green-500 transition-colors">Rekomendasi</a>
         <a href="#panduan" class="nav-link hover:text-green-500 transition-colors">Panduan</a>
 
-        @auth
-        <a href="{{ url('/dashboard') }}" class="nav-link hover:text-green-500">Dashboard</a>
-        @else
-        <a href="{{ route('register') }}" class="nav-link hover:text-green-500">Register</a>
-        <a href="{{ route('login') }}" class="nav-link text-blue-500 dark:text-[#1DA1F2] hover:text-green-500">Login</a>
-        @endauth
-      </nav>
+      @auth
+        <a href="{{ url('/dashboard') }}" class="nav-link">Dashboard</a>
+      @else
+        <a href="{{ route('register') }}" class="nav-link">Register</a>
+        <a href="{{ route('login') }}" class="nav-link text-blue-500">Login</a>
+      @endauth
+    </nav>
 
       <!-- Theme toggle -->
       <button id="toggle-theme"

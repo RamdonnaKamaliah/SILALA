@@ -16,6 +16,10 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
+        // Clear any existing auth session
+        Auth::guard('web')->logout();
+        Auth::guard('admin')->logout();
+        
         return view('auth.login');
     }
 
@@ -24,18 +28,30 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $credentials = $request->only('email', 'password');
+        $remember = $request->boolean('remember');
 
-        $request->session()->regenerate();
+        // Clear any existing session first
+        Auth::guard('web')->logout();
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        $user = Auth::user();
-        
-        // Redirect based on user type - gunakan properti langsung
-        if ($user->user_type === 'admin') {
+        // Coba login sebagai admin terlebih dahulu
+        if (Auth::guard('admin')->attempt($credentials, $remember)) {
+            $request->session()->regenerate();
             return redirect()->intended(route('admin.dashboard'));
-        } else {
+        }
+
+        // Jika bukan admin, coba sebagai user
+        if (Auth::guard('web')->attempt($credentials, $remember)) {
+            $request->session()->regenerate();
             return redirect()->intended(route('dashboard'));
         }
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
     }
 
     /**
@@ -43,10 +59,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $wasAdmin = Auth::guard('admin')->check();
+
+        // Logout dari semua guard
         Auth::guard('web')->logout();
+        Auth::guard('admin')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

@@ -2,4 +2,4 @@
 <x-sidebarUser></x-sidebarUser>
 
 <!-- navbar -->
- <x-navbarUser></x-navbarUser>
+ <x-navbarUser :title="$title ?? 'Dashboard'"/>

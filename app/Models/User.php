@@ -10,36 +10,20 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'phone',
         'email',
         'password',
-        'user_type',
         'membership_type',
         'gender',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -49,18 +33,33 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is admin
+     * Scope untuk user karyawan
      */
-    public function isAdmin()
+    public function scopeKaryawan($query)
     {
-        return $this->user_type === 'admin';
+        return $query->where('membership_type', 'karyawan');
     }
 
     /**
-     * Check if user is regular user
+     * Scope untuk user magang/pkl
      */
-    public function isUser()
+    public function scopeMagang($query)
     {
-        return $this->user_type === 'user';
+        return $query->where('membership_type', 'magang');
     }
+
+    /**
+     * Accessor untuk label membership type
+     */
+    public function getMembershipTypeLabelAttribute()
+    {
+        $labels = [
+            'karyawan' => 'Karyawan',
+            'magang' => 'Magang/PKL',
+        ];
+
+        return $labels[$this->membership_type] ?? 'Tidak Diketahui';
+    }
+
+    
 }

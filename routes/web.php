@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\DataPeminjamController;
 use App\Http\Controllers\Admin\DataDendaController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\user\DaftarBukuController;
+use App\Http\Controllers\Auth\SetupPasswordController;
 
 // Public Routes
 Route::get('/', function () {
@@ -31,6 +32,14 @@ Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGo
 
 Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])
     ->name('google.callback');
+
+    
+
+Route::middleware('auth:web')->group(function () {
+    Route::get('/setup-password', [SetupPasswordController::class, 'index'])->name('setup.password');
+    Route::post('/setup-password', [SetupPasswordController::class, 'store'])->name('setup.password.store');
+});
+
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {

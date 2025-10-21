@@ -11,13 +11,18 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name',
-        'phone',
-        'email',
-        'password',
-        'membership_type',
-        'gender',
-    ];
+    'name',
+    'phone',
+    'email',
+    'password',
+    'membership_type',
+    'gender',
+    'google_id',
+    'google_token',
+    'google_refresh_token',
+    'password_setup',
+];
+
 
     protected $hidden = [
         'password',

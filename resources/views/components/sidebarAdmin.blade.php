@@ -363,6 +363,7 @@
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
+            
             <span class="ml-1 duration-300 ease-soft">Logout</span>
         </a>
     </li>

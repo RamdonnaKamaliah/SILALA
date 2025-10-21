@@ -55,7 +55,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::resource('/data_pengguna', DataPenggunaController::class)->names('data_pengguna');
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
     Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
+    
+    //arship routes
+    // 🗂️ Arsipkan buku
+    Route::get('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])->name('admin.data_buku.archive');
+
+    // 🔁 Pulihkan buku dari arsip
+    Route::get('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])->name('admin.data_buku.restore');
+
+   
 });
+
+
 
 // Home Redirect Route
 Route::get('/home', function () {

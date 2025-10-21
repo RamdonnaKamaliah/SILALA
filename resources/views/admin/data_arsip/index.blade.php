@@ -2,34 +2,56 @@
 @section('pageTitle', 'Admin Dashboard - Data Arsip')
 
 @section('content')
-<div class="text-left">
-    <!-- Judul Dashboard -->
-    <h1 class="text-3xl lg:text-4xl font-bold text-slate-800 mb-3">
-        Selamat datang di Dashboard Data Arsip 🎉
-    </h1>
-    <p class="text-gray-600 mb-6">
-        Ini isi konten halaman Data Arsip
-    </p>
+    <h2 class="text-primary font-bold text-center mb-4">Data Buku Terarsip</h2>
 
-    <!-- Statistik Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-white shadow rounded-xl p-6 border border-gray-100 hover:shadow-md transition">
-            <h3 class="font-semibold text-lg text-slate-700">Total Buku</h3>
-            <p class="text-3xl font-bold text-purple-600 mt-2">1.234</p>
-            <p class="text-sm text-gray-500 mt-1">Jumlah keseluruhan buku di perpustakaan</p>
-        </div>
-
-        <div class="bg-white shadow rounded-xl p-6 border border-gray-100 hover:shadow-md transition">
-            <h3 class="font-semibold text-lg text-slate-700">Peminjaman Hari Ini</h3>
-            <p class="text-3xl font-bold text-pink-600 mt-2">42</p>
-            <p class="text-sm text-gray-500 mt-1">Jumlah transaksi peminjaman aktif</p>
-        </div>
-
-        <div class="bg-white shadow rounded-xl p-6 border border-gray-100 hover:shadow-md transition">
-            <h3 class="font-semibold text-lg text-slate-700">Anggota Aktif</h3>
-            <p class="text-3xl font-bold text-indigo-600 mt-2">3.210</p>
-            <p class="text-sm text-gray-500 mt-1">Jumlah anggota yang masih aktif</p>
-        </div>
-    </div>
-</div>
+    <table class="min-w-full border border-gray-300 text-sm text-gray-800">
+        <thead class="bg-gray-100 text-gray-700">
+            <tr>
+                <th class="px-4 py-2 border-b">No</th>
+                <th class="px-4 py-2 border-b">Foto Buku</th>
+                <th class="px-4 py-2 border-b">Judul</th>
+                <th class="px-4 py-2 border-b">Penulis</th>
+                <th class="px-4 py-2 border-b">Penerbit</th>
+                <th class="px-4 py-2 border-b">Tahun Terbit</th>
+                <th class="px-4 py-2 border-b">Kategori</th>
+                <th class="px-4 py-2 border-b">Edisi</th>
+                <th class="px-4 py-2 border-b">Stok</th>
+                <th class="px-4 py-2 border-b">File Buku</th>
+                <th class="px-4 py-2 border-b">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($buku_arsip as $index => $buku)
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-2 text-center">{{ $index + 1 }}</td>
+                    <td class="px-4 py-2 text-center">
+                        @if ($buku->foto_buku)
+                            <img src="{{ asset('storage/foto_buku/' . $buku->foto_buku) }}" alt="Foto Buku"
+                                class="w-16 h-16 object-cover rounded">
+                        @else
+                            <span class="text-gray-400 italic">Tidak ada</span>
+                        @endif
+                    </td>
+                    <td class="px-4 py-2">{{ $buku->judul }}</td>
+                    <td class="px-4 py-2">{{ $buku->penulis }}</td>
+                    <td class="px-4 py-2">{{ $buku->penerbit }}</td>
+                    <td class="px-4 py-2">{{ $buku->tahun_terbit }}</td>
+                    <td class="px-4 py-2">{{ $buku->kategori }}</td>
+                    <td class="px-4 py-2">{{ $buku->edisi }}</td>
+                    <td class="px-4 py-2 text-center">{{ $buku->stok }}</td>
+                    <td class="px-4 py-2">{{ $buku->file_buku }}</td>
+                    <td class="px-4 py-2 text-center">
+                        <a href="{{ route('admin.data_buku.restore', $buku->id) }}"
+                            class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-1 rounded-lg">
+                            Restore
+                        </a>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="11" class="text-center py-3 text-gray-500">Belum ada buku terarsip</td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
 @endsection

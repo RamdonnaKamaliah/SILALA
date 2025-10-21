@@ -200,5 +200,26 @@ class DataBukuController extends Controller
 
         return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diimpor!');
     }
-    
+
+    //arsipkan buku
+    public function archive($id)
+    {
+
+        $buku = DataBuku::findOrFail($id);
+        $buku->status = 'arsip';
+        $buku->save();
+
+        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil diarsipkan!');
+    }
+
+    //pulihkan buku dari arsip 
+    public function restore ($id)
+    {
+        $buku = DataBuku::findOrFail($id);
+        $buku->status = 'aktif';
+        $buku->save();
+
+        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
+    }
+
 }

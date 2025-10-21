@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\DataBuku;
 
 class DataArsipController extends Controller
 {
@@ -12,7 +13,8 @@ class DataArsipController extends Controller
      */
     public function index()
     {
-        return view('admin.data_arsip.index', ['title' => 'Data Arsip Buku']);
+       $buku_arsip = DataBuku::where('status', 'arsip')->get();
+         return view('admin.data_arsip.index', compact('buku_arsip'));
     }
 
     /**

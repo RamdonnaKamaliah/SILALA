@@ -179,23 +179,28 @@
                                             class="text-blue-600 hover:text-blue-800 hover:underline">
                                             Edit
                                         </a>
-                                        <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST"
-                                            class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800 hover:underline"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    </div>
+                                <td>
+                                    <a href="{{ route('admin.data_arsip.index') }}"
+                                        class="bg-yellow-500 text-white px-3 py-1 rounded-lg shadow hover:bg-yellow-600 focus:ring-2 focus:ring-yellow-400 transition text-xs"
+                                        onclick="return confirm('Arsipkan buku ini?')">Arsipkan</a>
                                 </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST"
+                                    class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800 hover:underline"
+                                        onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
+                                        Hapus
+                                    </button>
+                                </form>
             </div>
-        </form>
+            </td>
+            </tr>
+            @endforeach
+            </tbody>
+            </table>
+    </div>
+    </form>
     </div>
 @endsection
 

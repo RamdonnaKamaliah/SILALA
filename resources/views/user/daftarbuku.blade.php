@@ -54,302 +54,47 @@
   <!-- Area scroll untuk daftar buku -->
   <div class="flex-1 overflow-y-auto px-2 md:px-4 pt-4 pb-6">
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+      @foreach ($data_bukus as $buku)
+      <!-- Card Buku 8 -->
+      <div class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
+            transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
 
-  <!-- Card Buku -->
-  <div
-    class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-          transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
-
-    <!-- Cover Buku -->
-    <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-      <img src="{{ asset('assets/buku1.jpg') }}" alt="Buku 1"
-          class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
-      <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
-    </div>
-
-    <!-- Detail Buku -->
-    <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
-      <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">Budidaya Peternakan</h3>
-      <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-        <p class="text-xs md:text-sm text-gray-600">By Indah Hanaco</p>
-        <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star-half-stroke"></i>
-          <i class="fa-regular fa-star"></i>
+        <!-- Cover Buku -->
+        <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
+          @if ($buku->foto_buku)
+          <img src="{{ asset($buku->foto_buku) }}" alt="Buku 1" class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
+          @else
+          <img src="{{ asset('assets/default-cover.jpg') }}" alt="Default Cover" class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
+          <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
+          @endif
+        </div>
+      
+        <!-- Detail Buku -->
+        <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
+          <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">{{ $buku->judul_buku }}</h3>
+          <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
+            <p class="text-xs md:text-sm text-gray-600">{{ $buku->penulis }}</p>
+            <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star-half-stroke"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+          </div>
+          <a href="{{ route('user.detailbuku') }}">
+            <button
+              class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
+                    transition-all duration-700 ease-in-out delay-200 
+                    bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
+                    hover:bg-[#6e8a50] hover:scale-105 mt-2">
+              Lihat Detail
+            </button>
+          </a>
         </div>
       </div>
-      <a href="{{ route('user.detailbuku') }}">
-      <button
-        class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-              transition-all duration-700 ease-in-out delay-200 
-              bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-              hover:bg-[#6e8a50] hover:scale-105 mt-2">
-        Lihat Detail
-      </button>
-      </a>
+      @endforeach
     </div>
-  </div>
-
-    <!-- Card Buku 2-->
-<div
-  class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-         transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
-
-  <!-- Cover Buku -->
-  <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-    <img src="{{ asset('assets/buku2.jpg') }}" alt="Buku 1"
-         class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
-    <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
-  </div>
-
-  <!-- Detail Buku -->
-  <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
-    <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">Budidaya Peternakan</h3>
-    <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-      <p class="text-xs md:text-sm text-gray-600">By Indah Hanaco</p>
-      <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star-half-stroke"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-    </div>
-    <a href="{{ route('user.detailbuku') }}">
-    <button
-      class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-             transition-all duration-700 ease-in-out delay-200 
-             bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-             hover:bg-[#6e8a50] hover:scale-105 mt-2">
-      Lihat Detail
-    </button>
-</a>
-  </div>
-</div>
-
-  <!-- Card Buku 3 -->
-<div
-  class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-         transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
-
-  <!-- Cover Buku -->
-  <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-    <img src="{{ asset('assets/buku3.jpg') }}" alt="Buku 1"
-         class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
-    <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
-  </div>
-
-  <!-- Detail Buku -->
-  <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
-    <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">Budidaya Peternakan</h3>
-    <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-      <p class="text-xs md:text-sm text-gray-600">By Indah Hanaco</p>
-      <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star-half-stroke"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-    </div>
-    <a href="{{ route('user.detailbuku') }}">
-    <button
-      class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-             transition-all duration-700 ease-in-out delay-200 
-             bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-             hover:bg-[#6e8a50] hover:scale-105 mt-2">
-      Lihat Detail
-    </button>
-</a>
-  </div>
-</div>
-
-  <!-- Card Buku 4 -->
-<div
-  class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-         transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
-
-  <!-- Cover Buku -->
-  <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-    <img src="{{ asset('assets/buku4.jpg') }}" alt="Buku 1"
-         class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
-    <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
-  </div>
-
-  <!-- Detail Buku -->
-  <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
-    <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">Budidaya Peternakan</h3>
-    <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-      <p class="text-xs md:text-sm text-gray-600">By Indah Hanaco</p>
-      <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star-half-stroke"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-    </div>
-    <a href="{{ route('user.detailbuku') }}">
-    <button
-      class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-             transition-all duration-700 ease-in-out delay-200 
-             bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-             hover:bg-[#6e8a50] hover:scale-105 mt-2">
-      Lihat Detail
-    </button>
-</a>
-  </div>
-</div>
-
-  <!-- Card Buku 5 -->
-<div
-  class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-         transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
-
-  <!-- Cover Buku -->
-  <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-    <img src="{{ asset('assets/buku2.jpg') }}" alt="Buku 1"
-         class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
-    <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
-  </div>
-
-  <!-- Detail Buku -->
-  <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
-    <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">Budidaya Peternakan</h3>
-    <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-      <p class="text-xs md:text-sm text-gray-600">By Indah Hanaco</p>
-      <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star-half-stroke"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-    </div>
-    <a href="{{ route('user.detailbuku') }}">
-    <button
-      class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-             transition-all duration-700 ease-in-out delay-200 
-             bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-             hover:bg-[#6e8a50] hover:scale-105 mt-2">
-      Lihat Detail
-    </button>
-</a>
-  </div>
-</div>
-
-  <!-- Card Buku 6 -->
-<div
-  class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-         transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
-
-  <!-- Cover Buku -->
-  <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-    <img src="{{ asset('assets/buku1.jpg') }}" alt="Buku 1"
-         class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
-    <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
-  </div>
-
-  <!-- Detail Buku -->
-  <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
-    <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">Budidaya Peternakan</h3>
-    <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-      <p class="text-xs md:text-sm text-gray-600">By Indah Hanaco</p>
-      <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star-half-stroke"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-    </div>
-    <button
-      class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-             transition-all duration-700 ease-in-out delay-200 
-             bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-             hover:bg-[#6e8a50] hover:scale-105 mt-2">
-      Lihat Detail
-    </button>
-</a>
-  </div>
-</div>
-
-  <!-- Card Buku 7 -->
-<div
-  class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-         transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
-
-  <!-- Cover Buku -->
-  <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-    <img src="{{ asset('assets/buku4.jpg') }}" alt="Buku 1"
-         class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
-    <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
-  </div>
-
-  <!-- Detail Buku -->
-  <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
-    <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">Budidaya Peternakan</h3>
-    <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-      <p class="text-xs md:text-sm text-gray-600">By Indah Hanaco</p>
-      <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star-half-stroke"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-    </div>
-    <a href="{{ route('user.detailbuku') }}">
-    <button
-      class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-             transition-all duration-700 ease-in-out delay-200 
-             bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-             hover:bg-[#6e8a50] hover:scale-105 mt-2">
-      Lihat Detail
-    </button>
-</a>
-  </div>
-</div>
-
-  <!-- Card Buku 8 -->
-<div
-  class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-         transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
-
-  <!-- Cover Buku -->
-  <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-    <img src="{{ asset('assets/buku3.jpg') }}" alt="Buku 1"
-         class="w-full h-full object-cover rounded-lg transition-transform duration-700 ease-in-out">
-    <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
-  </div>
-
-  <!-- Detail Buku -->
-  <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
-    <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug">Budidaya Peternakan</h3>
-    <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-      <p class="text-xs md:text-sm text-gray-600">By Indah Hanaco</p>
-      <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star"></i>
-        <i class="fa-solid fa-star-half-stroke"></i>
-        <i class="fa-regular fa-star"></i>
-      </div>
-    </div>
-    <a href="{{ route('user.detailbuku') }}">
-    <button
-      class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-             transition-all duration-700 ease-in-out delay-200 
-             bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-             hover:bg-[#6e8a50] hover:scale-105 mt-2">
-      Lihat Detail
-    </button>
-</a>
-  </div>
-</div>
- 
 </div>
 </main>
 

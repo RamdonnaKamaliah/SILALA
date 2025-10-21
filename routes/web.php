@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\DataPeminjamController;
 use App\Http\Controllers\Admin\DataDendaController;
 use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\user\DaftarBukuController;
+use App\Http\Controllers\user\DetailBukuController;
 
 // Public Routes
 Route::get('/', function () {
@@ -43,6 +44,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
+    Route::get('/detailbuku', [DetailBukuController::class, 'index'])->name('user.detailbuku');
 });
 
 // Admin Routes

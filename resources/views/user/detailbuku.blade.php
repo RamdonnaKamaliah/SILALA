@@ -11,93 +11,130 @@
   <!-- Custom Style -->
   <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
 </head>
+<body class="min-h-screen font-[Ubuntu,sans-serif] bg-white flex">
 
-<body class="min-h-screen overflow-hidden font-[Ubuntu,sans-serif] bg-white">
-<x-sidebarUser></x-sidebarUser>
-<nav id="navbar"
-  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-40 bg-[#f7edd6]
-  rounded-b-3xl shadow-sm flex justify-between items-start
-  px-4 md:px-6 py-4 md:py-6 transition-all duration-300 h-[50vh]">
+  <!-- Sidebar -->
+  <x-sidebarUser></x-sidebarUser>
 
-  <!-- Judul -->
-  <h1
-    class="absolute left-1/2 transform -translate-x-1/2 text-lg md:text-xl font-semibold text-[#626F47]
-    md:static md:transform-none md:translate-x-0">
-    {{ $title ?? 'Dashboard' }}
-  </h1>
+  <!-- ====== KONTEN UTAMA ====== -->
+  <div class="flex-1 ml-0 md:ml-[320px] mr-0 md:mr-3 transition-all duration-300 relative overflow-x-hidden">
 
-  <div class="flex items-center gap-4 ml-auto relative">
-<!-- Notifikasi -->
-<div class="relative">
-  <button id="notifBtn" class="text-[#626F47] text-lg focus:outline-none">
-    <i class="fa-solid fa-bell"></i>
-  </button>
+    <!-- ====== Navbar ====== -->
+    <nav id="navbar"
+      class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-40 
+      bg-[#f7edd6] rounded-b-3xl shadow-sm flex flex-col justify-between
+      px-4 md:px-6 pt-5 pb-10 transition-all duration-300 h-[50vh]">
 
-  <!-- Popup Notifikasi -->
-  <div id="notifBox"
-       class="absolute right-0 mt-3 w-72 sm:w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50
-              opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300">
+      <!-- Bagian Atas: Judul & Icon -->
+      <div class="flex justify-between items-center w-full">
+        <h1 class="flex items-center gap-3 text-lg md:text-xl font-semibold text-[#626F47]">
+          <a href="{{ route('user.daftarbuku') }}" 
+            class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
+            <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
+          </a>
+          <span>{{ $title ?? 'Detail Buku' }}</span>
+        </h1>
 
-    <!-- Header -->
-    <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100">
-      <div class="flex items-center gap-2">
-        <i class="fa-solid fa-bell text-[#A4B465]"></i>
-        <h3 class="font-semibold text-gray-700 text-sm">Notifikasi</h3>
-      </div>
-      <button id="closeNotif" class="text-gray-400 hover:text-gray-600 transition-colors">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <!-- Daftar Notifikasi -->
-    <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
-      <!-- Item Notifikasi -->
-      <div class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
-        <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
-        <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full flex-shrink-0"></div>
-        <div class="flex-1">
-          <p class="text-sm font-semibold text-[#626F47]">Admin</p>
-          <p class="text-xs text-gray-600">Buku <b>Buku Saku</b> berhasil disimpan oleh Wildan.</p>
+        <!-- Ikon kanan -->
+        <div class="flex items-center gap-5">
+          <button id="notifBtn" class="text-[#626F47] text-lg focus:outline-none">
+            <i class="fa-solid fa-bell"></i>
+          </button>
+          <button class="text-[#626F47] text-lg">
+            <i class="fa-solid fa-gear"></i>
+          </button>
         </div>
-        <span class="text-[10px] text-gray-400 whitespace-nowrap">1m</span>
       </div>
 
-      <div class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
-        <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
-        <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full flex-shrink-0"></div>
-        <div class="flex-1">
-          <p class="text-sm font-semibold text-[#626F47]">Sistem</p>
-          <p class="text-xs text-gray-600">Perpustakaan diperbarui ke versi terbaru.</p>
+      <!-- Bagian Tengah: Cover & Info Buku -->
+      <div class="flex flex-col md:flex-row items-center md:items-end justify-center 
+                  gap-8 w-full max-w-4xl mx-auto relative mt-8">
+
+        <!-- Cover Buku -->
+        <div class="relative -mb-24 md:-mb-20 w-36 md:w-44 flex-shrink-0">
+          <img src="{{ asset('assets/buku3.jpg') }}" 
+              alt="Cover Buku"
+              class="w-full h-auto rounded-10 shadow-lg border-4 border-white">
         </div>
-        <span class="text-[10px] text-gray-400 whitespace-nowrap">10m</span>
-      </div>
 
-      <div class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
-        <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
-        <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full flex-shrink-0"></div>
-        <div class="flex-1">
-          <p class="text-sm font-semibold text-[#626F47]">Admin</p>
-          <p class="text-xs text-gray-600">Notifikasi tambahan untuk testing scroll.</p>
+        <!-- Info Buku -->
+        <div class="flex flex-col justify-between text-left w-[85%] md:w-[60%]">
+          <h2 class="text-lg md:text-xl font-semibold text-[#2E2E2E] leading-snug">
+            Bioteknologi Manajemen Kesehatan Sapi
+          </h2>
+          <p class="text-sm text-[#626F47] mt-1">Penulis</p>
+          <div class="flex items-center text-[#FACC15] text-sm mt-1">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-regular fa-star"></i>
+          </div>
         </div>
-        <span class="text-[10px] text-gray-400 whitespace-nowrap">15m</span>
       </div>
-    </div>
+    </nav>
 
-    <!-- Footer -->
-    <div class="text-center py-3 border-t border-gray-100">
-      <a href="#" class="text-[#626F47] text-sm font-medium hover:text-[#A4B465]">
-        Lihat semua aktivitas
-      </a>
-    </div>
+    <!-- ====== Konten Detail Buku ====== -->
+    <main class="relative mt-[50vh] px-4 md:px-6 pb-20 text-[#2E2E2E] transition-all duration-300">
+
+      <div class="bg-white rounded-3xl pt-10 pb-12 px-4 md:px-10">
+
+        <!-- Tombol Baca & Pinjam -->
+        <div class="flex justify-end gap-4 mb-10">
+          <button class="bg-[#C9DABF] hover:bg-[#B7CBA8] text-[#2E2E2E] font-semibold px-8 py-2 rounded-full shadow-sm transition">
+            Baca
+          </button>
+          <button class="bg-[#F5C37D] hover:bg-[#E8B463] text-[#2E2E2E] font-semibold px-8 py-2 rounded-full shadow-sm transition">
+            Pinjam
+          </button>
+        </div>
+
+        <!-- Informasi Buku -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-12 border-t border-gray-200 pt-8">
+
+          <!-- Deskripsi -->
+          <div>
+            <h3 class="text-lg font-semibold mb-3">Deskripsi</h3>
+            <p class="text-sm leading-relaxed text-[#626F47]">
+              Lorem ipsum is simply dummy text of the printing and typesetting industry. 
+              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+              when an unknown printer took a galley of type and scrambled it to make a type.
+            </p>
+          </div>
+
+          <!-- Detail Buku -->
+          <div class="grid grid-cols-2 gap-y-4 text-sm text-[#626F47]">
+            <div>
+              <p class="font-semibold text-[#2E2E2E]">Penerbit</p>
+              <p>Lorem Ipsum</p>
+            </div>
+            <div>
+              <p class="font-semibold text-[#2E2E2E]">Tahun Terbit</p>
+              <p>Lorem Ipsum</p>
+            </div>
+            <div>
+              <p class="font-semibold text-[#2E2E2E]">Bahasa</p>
+              <p>Lorem Ipsum</p>
+            </div>
+            <div>
+              <p class="font-semibold text-[#2E2E2E]">Kategori</p>
+              <p>Lorem Ipsum</p>
+            </div>
+            <div>
+              <p class="font-semibold text-[#2E2E2E]">Jumlah Halaman</p>
+              <p>Lorem Ipsum</p>
+            </div>
+            <div>
+              <p class="font-semibold text-[#2E2E2E]">Edisi</p>
+              <p>Lorem Ipsum</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
   </div>
-</div>
-
-<!-- Pengaturan -->
-    <button class="text-[#626F47] text-lg">
-      <i class="fa-solid fa-gear"></i>
-    </button>
-  </div>
-</nav>
 
 
   <!-- Script -->

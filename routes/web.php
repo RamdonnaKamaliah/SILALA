@@ -45,6 +45,15 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+       
+   // 🗂️ Arsipkan buku
+Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
+    ->name('data_buku.archive');
+    
+// 🔁 Pulihkan buku dari arsip
+Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
+    ->name('data_buku.restore');
+
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
@@ -55,15 +64,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::resource('/data_pengguna', DataPenggunaController::class)->names('data_pengguna');
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
     Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
-    
-    //arship routes
-    // 🗂️ Arsipkan buku
-    Route::get('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])->name('admin.data_buku.archive');
-
-    // 🔁 Pulihkan buku dari arsip
-    Route::get('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])->name('admin.data_buku.restore');
-
-   
+ 
 });
 
 

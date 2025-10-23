@@ -13,8 +13,10 @@ class DataArsipController extends Controller
      */
     public function index()
     {
-       $buku_arsip = DataBuku::where('status', 'arsip')->get();
-         return view('admin.data_arsip.index', compact('buku_arsip'));
+       // hanya tampilkan buku yang statusnya arsip
+    $buku_arsip = DataBuku::where('status', 'arsip')->get();
+
+    return view('admin.data_arsip.index', compact('buku_arsip'));
     }
 
     /**

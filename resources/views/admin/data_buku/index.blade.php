@@ -115,11 +115,11 @@
                             <th class="px-4 py-2 border-b border-gray-300 text-left">Edisi</th>
                             <th class="px-4 py-2 border-b border-gray-300 text-left">Stok</th>
                             <th class="px-4 py-2 border-b border-gray-300 text-left">File Buku</th>
-                            <th class="px-4 py-2 border-b border-gray-300 text-left">Aksi</th>
+                            <th class="px-4 py-2 border-b border-gray-300 text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($data_buku as $buku)
+                        @foreach ($data_buku->where('status', 'aktif') as $buku)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-2 py-2 border-b border-gray-300 text-center">
                                     <input type="checkbox" name="selected_ids[]" value="{{ $buku->id }}"
@@ -143,8 +143,6 @@
                                         </div>
                                     @endif
                                 </td>
-
-
 
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->judul_buku }}</td>
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->penulis }}</td>
@@ -179,28 +177,30 @@
                                             class="text-blue-600 hover:text-blue-800 hover:underline">
                                             Edit
                                         </a>
-                                <td>
-                                    <a href="{{ route('admin.data_arsip.index') }}"
-                                        class="bg-yellow-500 text-white px-3 py-1 rounded-lg shadow hover:bg-yellow-600 focus:ring-2 focus:ring-yellow-400 transition text-xs"
-                                        onclick="return confirm('Arsipkan buku ini?')">Arsipkan</a>
+                                        <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-800 hover:underline"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.data_buku.archive', ['id' => $buku->id]) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit"
+                                                onclick="return confirm('Arsipkan buku ini?')">Arsipkan</button>
+                                        </form>
+
+
                                 </td>
-                                <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST"
-                                    class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800 hover:underline"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
-                                        Hapus
-                                    </button>
-                                </form>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            </td>
-            </tr>
-            @endforeach
-            </tbody>
-            </table>
-    </div>
-    </form>
+        </form>
     </div>
 @endsection
 

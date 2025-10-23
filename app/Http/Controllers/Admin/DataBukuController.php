@@ -209,7 +209,7 @@ class DataBukuController extends Controller
         $buku->status = 'arsip';
         $buku->save();
 
-        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil diarsipkan!');
+        return redirect()->route('admin.data_arsip.index')->with('success', 'Buku berhasil diarsipkan!');
     }
 
     //pulihkan buku dari arsip 

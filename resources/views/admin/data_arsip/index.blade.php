@@ -41,10 +41,14 @@
                     <td class="px-4 py-2 text-center">{{ $buku->stok }}</td>
                     <td class="px-4 py-2">{{ $buku->file_buku }}</td>
                     <td class="px-4 py-2 text-center">
-                        <a href="{{ route('admin.data_buku.restore', $buku->id) }}"
-                            class="bg-blue-600 text-white hover:bg-blue-700 px-3 py-1 rounded-lg">
-                            Restore
-                        </a>
+                        <form action="{{ route('admin.data_buku.restore', ['id' => $buku->id]) }}" method="POST"
+                            style="display:inline;">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="bg-green-600 hover:bg-green-700 px-3 py-1 rounded-lg text-white">
+                                Pulihkan
+                            </button>
+                        </form>
                     </td>
                 </tr>
             @empty

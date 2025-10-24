@@ -40,7 +40,7 @@ class DataArsipController extends Controller
      */
     public function show(string $id)
     {
-        return "Detail Favorit ID: $id (Percobaan)";
+        return view('admin.data_arsip.show', ['buku' => DataBuku::findOrFail($id)]);
     }
 
     /**

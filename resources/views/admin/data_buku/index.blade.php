@@ -205,7 +205,6 @@
 @endsection
 
 @push('styles')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
         #bulkDeleteBtn:enabled {
             background-color: #ef4444;
@@ -220,77 +219,56 @@
 @endpush
 
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Initialize DataTable
-            var table = $('#dataTable').DataTable({
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
-                },
-                "pageLength": 5,
-                "columnDefs": [{
-                        "orderable": false,
-                        "targets": [0, 1, 9, 10]
-                    }, // Kolom checkbox, foto, file, aksi
-                    {
-                        "searchable": false,
-                        "targets": [0, 1, 9]
-                    } // Kolom checkbox, foto, file
-                ]
+        // Select All functionality
+        $('#selectAll').on('click', function() {
+            var isChecked = this.checked;
+            $('.row-checkbox').each(function() {
+                $(this).prop('checked', isChecked);
             });
+            updateBulkDeleteButton();
+        })
 
-            // Select All functionality
-            $('#selectAll').on('click', function() {
-                var isChecked = this.checked;
-                $('.row-checkbox').each(function() {
-                    $(this).prop('checked', isChecked);
-                });
-                updateBulkDeleteButton();
-            });
+        // Individual checkbox change
+        $(document).on('change', '.row-checkbox', function() {
+            var totalCheckboxes = $('.row-checkbox').length;
+            var checkedCheckboxes = $('.row-checkbox:checked').length;
 
-            // Individual checkbox change
-            $(document).on('change', '.row-checkbox', function() {
-                var totalCheckboxes = $('.row-checkbox').length;
-                var checkedCheckboxes = $('.row-checkbox:checked').length;
-
-                $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
-                updateBulkDeleteButton();
-            });
-
-            // Update bulk delete button state
-            function updateBulkDeleteButton() {
-                var checkedCount = $('.row-checkbox:checked').length;
-                var bulkDeleteBtn = $('#bulkDeleteBtn');
-
-                if (checkedCount > 0) {
-                    bulkDeleteBtn.prop('disabled', false);
-                    bulkDeleteBtn.text('Hapus (' + checkedCount + ') Data Terpilih');
-                } else {
-                    bulkDeleteBtn.prop('disabled', true);
-                    bulkDeleteBtn.text('Hapus Data Terpilih');
-                }
-            }
-
-            // Bulk delete form submission
-            $('#bulkDeleteBtn').on('click', function(e) {
-                e.preventDefault();
-
-                var selectedIds = $('.row-checkbox:checked').map(function() {
-                    return this.value;
-                }).get();
-
-                if (selectedIds.length > 0) {
-                    if (confirm('Apakah Anda yakin ingin menghapus ' + selectedIds.length +
-                            ' buku yang dipilih?')) {
-                        $('#bulkDeleteForm').submit();
-                    }
-                }
-            });
-
-            // Update button state on page load
+            $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
             updateBulkDeleteButton();
         });
+
+        // Update bulk delete button state
+        function updateBulkDeleteButton() {
+            var checkedCount = $('.row-checkbox:checked').length;
+            var bulkDeleteBtn = $('#bulkDeleteBtn');
+
+            if (checkedCount > 0) {
+                bulkDeleteBtn.prop('disabled', false);
+                bulkDeleteBtn.text('Hapus (' + checkedCount + ') Data Terpilih');
+            } else {
+                bulkDeleteBtn.prop('disabled', true);
+                bulkDeleteBtn.text('Hapus Data Terpilih');
+            }
+        }
+
+        // Bulk delete form submission
+        $('#bulkDeleteBtn').on('click', function(e) {
+            e.preventDefault();
+
+            var selectedIds = $('.row-checkbox:checked').map(function() {
+                return this.value;
+            }).get();
+
+            if (selectedIds.length > 0) {
+                if (confirm('Apakah Anda yakin ingin menghapus ' + selectedIds.length +
+                        ' buku yang dipilih?')) {
+                    $('#bulkDeleteForm').submit();
+                }
+            }
+        });
+
+        // Update button state on page load
+        updateBulkDeleteButton();
     </script>
 @endpush

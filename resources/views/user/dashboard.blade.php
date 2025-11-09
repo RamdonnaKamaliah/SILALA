@@ -62,31 +62,42 @@
 <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-6 px-2">
 
   <!-- Sedang Dipinjam -->
-  <div class="bg-green py-4 px-6 rounded-2xl shadow-md flex items-center gap-4 relative overflow-hidden">
-    <span class="iconify absolute left-2 opacity-40 text-[60px] text-white" data-icon="mdi:book-plus"></span>
-    <div class="ml-16">
-      <p class="text-sm text-white font-medium leading-tight">Sedang dipinjam</p>
+  <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
+
+    <!-- ICON BESAR NEMPEL ATAS -->
+    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
+      data-icon="mdi:book-plus"></span>
+
+    <div class="ml-[78px] mt-[4px] leading-tight">
+      <p class="text-sm text-white font-medium">Sedang dipinjam</p>
       <h3 class="text-lg font-mochiy text-white">3 Buku</h3>
     </div>
   </div>
 
   <!-- Denda -->
-  <div class="bg-green py-4 px-6 rounded-2xl shadow-md flex items-center gap-4 relative overflow-hidden">
-    <span class="iconify absolute left-2 opacity-40 text-[60px] text-white" data-icon="mdi:book-alert"></span>
-    <div class="ml-16">
-      <p class="text-sm text-white font-medium leading-tight">Denda</p>
+  <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
+
+    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
+      data-icon="mdi:book-alert"></span>
+
+    <div class="ml-[78px] mt-[4px] leading-tight">
+      <p class="text-sm text-white font-medium">Denda</p>
       <h3 class="text-lg font-mochiy text-white">1 Buku</h3>
     </div>
   </div>
 
   <!-- Favorit -->
-  <div class="bg-green py-4 px-6 rounded-2xl shadow-md flex items-center gap-4 relative overflow-hidden">
-    <span class="iconify absolute left-2 opacity-40 text-[60px] text-white" data-icon="mdi:book-heart"></span>
-    <div class="ml-16">
-      <p class="text-sm text-white font-medium leading-tight">Favorit</p>
+  <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
+
+    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
+      data-icon="mdi:book-heart"></span>
+
+    <div class="ml-[78px] mt-[4px] leading-tight">
+      <p class="text-sm text-white font-medium">Favorit</p>
       <h3 class="text-lg font-mochiy text-white">12 Buku</h3>
     </div>
   </div>
+
 </section>
 
 <!-- BAGIAN KONTEN YANG SCROLL -->

@@ -58,10 +58,12 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])->name('user.detailbuku');
      Route::get('/riwayatbuku', [RiwayatBukuController::class, 'index'])->name('user.riwayatbuku');
     Route::post('/riwayatbuku/store', [RiwayatBukuController::class, 'store'])->name('user.riwayatbuku.store');
+    
     // User - Riwayat Buku
 Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalikanBuku'])
     ->name('user.riwayat.kembalikan');
-
+Route::get('/check-borrow-status/{bookId}', [RiwayatBukuController::class, 'checkBookBorrowStatus'])->name('user.check.borrow.status');
+Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBorrow'])->name('user.check.active.borrow');
 });
 
 

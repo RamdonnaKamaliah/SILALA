@@ -23,21 +23,31 @@
   <div class="bg-cream px-4 md:px-6 py-3 sticky top-0 z-40">
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
 
-      <!-- Tombol Filter -->
-    <div class="flex justify-center md:justify-start flex-wrap md:flex-nowrap gap-2 md:gap-3 w-full md:w-auto">
-      <button class="px-2.5 py-1 text-xs md:px-6 md:py-2 md:text-base bg-primary text-white rounded-xl shadow-md font-semibold transition-all duration-300 hover:bg-kuning hover:text-gray-700 hover:scale-105">
-        Semua
-      </button>
-      <button class="px-2.5 py-1 text-xs md:px-4 md:py-2 md:text-base bg-primary text-white rounded-xl shadow-md font-semibold transition-all duration-300 hover:bg-kuning hover:text-gray-700 hover:scale-105">
-        Kimia
-      </button>
-      <button class="px-2.5 py-1 text-xs md:px-4 md:py-2 md:text-base bg-primary text-white rounded-xl shadow-md font-semibold transition-all duration-300 hover:bg-kuning hover:text-gray-700 hover:scale-105">
-        Kesehatan
-      </button>
-      <button class="px-2.5 py-1 text-xs md:px-4 md:py-2 md:text-base bg-primary text-white rounded-xl shadow-md font-semibold transition-all duration-300 hover:bg-kuning hover:text-gray-700 hover:scale-105">
-        Peternakan
-      </button>
-    </div>
+<div class="relative w-full md:w-auto" id="kategoriDropdown">
+  <!-- Tombol -->
+  <button class="w-full md:w-48 px-4 py-2 bg-primary text-white rounded-xl shadow-md font-semibold flex justify-between items-center hover:bg-kuning hover:text-gray-700 transition-all duration-300">
+    <span id="kategoriText">Semua Kategori</span>
+    <svg class="w-4 h-4 transition-transform duration-200" id="kategoriIcon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  <!-- List Kategori (FANCY COLOR) -->
+ <div id="kategoriMenu" class="hidden absolute w-full md:w-48 mt-2 bg-primary rounded-xl shadow-xl p-2 z-50 border border-[#E2DAC3]">
+<button class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all duration-200 rounded-lg">
+  Kimia
+</button>
+
+<button class="block w-full text-left px-4 py-2 text-white  hover:bg-kuning hover:text-gray-900 transition-all duration-200 rounded-lg">
+  Kesehatan
+</button>
+
+<button class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all duration-200 rounded-lg">
+  Peternakan
+</button>
+
+  </div>
+</div>
 
       <!-- Pencarian -->
       <div class="relative w-full sm:w-auto flex justify-center md:justify-end">
@@ -355,6 +365,6 @@
 
 <!-- script -->
 <script src="{{asset('assets_user/js/dashboard.js')}}"></script>
-
+<script src="{{asset('assets_user/js/daftarbuku.js')}}"></script>
 </body>
 </html>

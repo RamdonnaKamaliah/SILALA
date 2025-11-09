@@ -82,7 +82,7 @@
               <i class="fa-regular fa-star"></i>
             </div>
           </div>
-          <a href="{{ route('user.detailbuku') }}">
+          <a href="{{ route('user.detailbuku', $buku->id) }}">
             <button
               class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
                     transition-all duration-700 ease-in-out delay-200 

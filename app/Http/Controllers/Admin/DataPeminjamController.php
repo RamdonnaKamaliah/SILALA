@@ -10,26 +10,31 @@ class DataPeminjamController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        return view('admin.data_peminjam.index', ['title' => 'Data Peminjam']);
+public function index()
+{
+    $data_peminjam = \App\Models\DataPeminjam::with(['user', 'buku'])->get();
+    return view('admin.data_peminjam.index', compact('data_peminjam'));
+}
+
+public function kembalikan($id)
+{
+    $peminjam = \App\Models\DataPeminjam::findOrFail($id);
+
+    // Ubah status menjadi dikembalikan
+    $peminjam->status = 'dikembalikan';
+
+    // Hitung denda jika lewat tanggal kembali
+    if (now()->gt($peminjam->tanggal_kembali)) {
+        $hariTerlambat = now()->diffInDays($peminjam->tanggal_kembali);
+        $peminjam->denda = $hariTerlambat * 1000; // contoh: Rp1000 per hari
+    } else {
+        $peminjam->denda = 0;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return "Halaman Tambah Favorit (Percobaan)";
-    }
+    $peminjam->save();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        return "Proses Simpan Favorit (Percobaan)";
-    }
+    return redirect()->back()->with('success', 'Buku berhasil dikonfirmasi dikembalikan.');
+}
 
     /**
      * Display the specified resource.
@@ -39,27 +44,15 @@ class DataPeminjamController extends Controller
         return "Detail Favorit ID: $id (Percobaan)";
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        return "Halaman Edit Favorit ID: $id (Percobaan)";
-    }
+    public function masalah($id)
+{
+    $peminjam = \App\Models\DataPeminjam::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        return "Proses Update Favorit ID: $id (Percobaan)";
-    }
+    $peminjam->status = 'bermasalah';
+    $peminjam->denda = 50000; // contoh nominal default
+    $peminjam->save();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        return "Proses Hapus Favorit ID: $id (Percobaan)";
-    }
+    return redirect()->back()->with('error', 'Buku dilaporkan bermasalah.');
+}
+
 }

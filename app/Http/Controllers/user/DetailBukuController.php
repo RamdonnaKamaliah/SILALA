@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataBuku;
 use Illuminate\Http\Request;
 
 class DetailBukuController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        return view('user.detailbuku' , ['title' => 'Detail Buku']);
+        $buku = DataBuku::findOrFail($id);
+        return view('user.detailbuku', compact('buku'));
     }
 }

@@ -69,15 +69,29 @@ class DataArsipController extends Controller
 
     public function bulkDeleteArchive(Request $request)
     {
-       $ids = $request->input('ids', []);
+       $selectedIds = $request->selected_ids;
 
-    if (count($ids) === 0) {
-        return redirect()->back()->with('error', 'Tidak ada buku yang dipilih untuk dihapus dari arsip.');
+    if (empty($selectedIds)) {
+        return redirect()->back()->with('error', 'Tidak ada buku yang dipilih untuk dihapus.');
     }
 
-    DataBuku::onlyTrashed()->whereIn('id', $ids)->forceDelete();
+    DataBuku::whereIn('id', $selectedIds)->delete();
 
     return redirect()->route('admin.data_arsip.index')
-        ->with('success', count($ids) . ' buku arsip berhasil dihapus permanen.');
+        ->with('success', count($selectedIds) . ' buku arsip berhasil dihapus permanen.');
+    }
+
+    public function bulkRestore(Request $request)
+    {
+        $selectedIds = explode(',', $request->input('selected_ids', ''));
+
+        if (empty($selectedIds)) {
+            return back()->with('error', 'Tidak ada buku yang dipilih untuk dipulihkan.');
+        }
+
+        DataBuku::whereIn('id', $selectedIds)->update(['status' => 'aktif']);
+
+        return redirect()->route('admin.data_buku.index')
+            ->with('success', count($selectedIds) . ' buku berhasil dipulihkan.');
     }
 }

@@ -240,21 +240,4 @@ public function bulkArchive(Request $request) {
 
         return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
     }
-
-    public function bulkRestore(Request $request)
-    {
-        $selectedIds = explode(',', $request->input('selected_ids', ''));
-
-        if (empty($selectedIds)) {
-            return back()->with('error', 'Tidak ada buku yang dipilih untuk dipulihkan.');
-        }
-
-        DataBuku::whereIn('id', $selectedIds)->update(['status' => 'aktif']);
-
-        return redirect()->route('admin.data_buku.index')
-            ->with('success', count($selectedIds) . ' buku berhasil dipulihkan.');
-    }
-
-        
-    
 }

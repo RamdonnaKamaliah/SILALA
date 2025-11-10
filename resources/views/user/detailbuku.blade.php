@@ -184,11 +184,24 @@
     
     <!-- Tombol kiri (Baca & Pinjam) -->
 <div class="flex items-center gap-3 md:ml-[350px]">
-  <button
-    class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
-           rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
-    Baca
-  </button>
+  <!-- Tombol Baca -->
+@if($buku->file_pdf) {{-- cek kalau PDF ada --}}
+    <a href="{{ asset($buku->file_pdf) }}" target="_blank">
+        <button
+            class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
+                   rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+            Baca
+        </button>
+    </a>
+@else
+    <button
+        class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
+               rounded-full shadow-md cursor-not-allowed">
+        Baca
+    </button>
+@endif
+
+
   
   <!-- Tombol Pinjam -->
   @php
@@ -379,92 +392,6 @@
   <!-- Script -->
   <script src="{{ asset('assets_user/js/dashboard.js')}}"></script>
   <script src="{{ asset('assets_user/js/detailbuku.js')}}"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const tglPinjamInput = document.getElementById("tglPinjamInput");
-  const tglKembaliInput = document.getElementById("tglKembaliInput");
-  const konfirmasiBtn = document.getElementById("konfirmasiPinjam");
-
-  // Waktu lokal (Asia/Jakarta)
-  const now = new Date();
-  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000); 
-  const maxDate = new Date(today);
-  maxDate.setDate(today.getDate() + 7);
-
-  const formatDate = d => d.toISOString().split("T")[0];
-
-  // Set tanggal pinjam dan batas kembali
-  tglPinjamInput.value = formatDate(today);
-  tglKembaliInput.min = formatDate(today);
-  tglKembaliInput.max = formatDate(maxDate);
-
-  // Saat klik konfirmasi
-  konfirmasiBtn.addEventListener("click", async () => {
-    const tanggalKembali = tglKembaliInput.value;
-
-    if (!tanggalKembali) {
-      Swal.fire({
-        icon: "warning",
-        title: "Tanggal kembali belum diisi",
-        confirmButtonColor: "#A4B465"
-      });
-      return;
-    }
-
-    const selectedDate = new Date(tanggalKembali);
-    const daysDifference = Math.ceil((selectedDate - today) / (1000 * 60 * 60 * 24));
-    if (daysDifference > 7) {
-      Swal.fire({
-        icon: "warning",
-        title: "Maksimal peminjaman 7 hari",
-        confirmButtonColor: "#A4B465"
-      });
-      return;
-    }
-
-    const data = {
-      buku_id: "{{ $buku->id }}",
-      tanggal_kembali: tanggalKembali,
-      _token: "{{ csrf_token() }}"
-    };
-
-    try {
-      const response = await fetch("{{ route('user.riwayatbuku.store') }}", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        Swal.fire({
-          icon: "success",
-          title: result.message,
-          showConfirmButton: false,
-          timer: 1500
-        });
-        setTimeout(() => {
-          window.location.href = "{{ route('user.riwayatbuku') }}";
-        }, 1500);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: result.message || "Gagal menyimpan data",
-          confirmButtonColor: "#A4B465"
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Terjadi kesalahan sistem",
-        confirmButtonColor: "#A4B465"
-      });
-    }
-  });
-});
-
-</script>
 </body>
 </html>
 

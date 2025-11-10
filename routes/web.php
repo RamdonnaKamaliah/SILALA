@@ -19,6 +19,7 @@ use App\Http\Controllers\user\DaftarBukuController;
 use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
 use App\Http\Controllers\user\RiwayatBukuController;
+use App\Http\Controllers\user\RiwayatBacaController;
 
 
 // Public Routes
@@ -58,6 +59,7 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])->name('user.detailbuku');
      Route::get('/riwayatbuku', [RiwayatBukuController::class, 'index'])->name('user.riwayatbuku');
     Route::post('/riwayatbuku/store', [RiwayatBukuController::class, 'store'])->name('user.riwayatbuku.store');
+    Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
     
     // User - Riwayat Buku
 Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalikanBuku'])

@@ -30,7 +30,7 @@
           </div>
           <div class="flex items-center gap-2">
             <input type="radio" name="riwayat" id="baca" class="accent-[#626F47]"
-                   onclick="window.location.href='/riwayat-baca'">
+                   onclick="window.location.href='/riwayatbaca'">
             <label for="baca" class="text-[#626F47] font-semibold text-sm">Riwayat Baca</label>
           </div>
         </div>

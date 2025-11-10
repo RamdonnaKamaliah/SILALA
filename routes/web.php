@@ -49,10 +49,27 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
    // 🗂️ Arsipkan buku
 Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
     ->name('data_buku.archive');
+// Route untuk arsipkan banyak buku
+Route::post('/data-buku/bulk-archive', [DataBukuController::class, 'bulkArchive'])
+    ->name('data_buku.bulkArchive');
+
+
     
 // 🔁 Pulihkan buku dari arsip
 Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
     ->name('data_buku.restore');
+// Route untuk pulihkan banyak buku
+Route::post('/data_buku/bulk-restore', [DataBukuController::class, 'bulkRestore'])
+    ->name('data_buku.bulkRestore');
+
+// Route untuk halaman arsip
+Route::post('/data-arsip/bulk-restore', [DataArsipController::class, 'bulkRestore'])
+    ->name('admin.data_arsip.bulkRestore');
+
+Route::post('/data-arsip/bulk-delete', [DataArsipController::class, 'bulkDeleteArchive'])
+    ->name('admin.data_arsip.bulkDeleteArchive');
+
+
 
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');

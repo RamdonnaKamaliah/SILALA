@@ -20,6 +20,8 @@
  {{-- link data table --}}
  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
- <script src="{{ asset('assets_admin/js/data table/dataTable.js') }}"></script>
  {{-- end link data table --}}
 
+ {{-- delete & arsip --}}
+ <link rel="stylesheet" href="{{ asset('assets_admin/css/dataBuku/deleteArsip.css') }}">
+ <script src="{{ asset('assets_admin/js/data table/dataTable.js') }}"></script>

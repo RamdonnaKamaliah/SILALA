@@ -89,14 +89,24 @@
                     disabled>
                     Hapus Data Terpilih
                 </button>
+                {{-- Tombol Arsipkan --}}
+                <form id="bulkArchiveForm" action="{{ route('admin.data_buku.bulkArchive') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="selected_ids" id="selectedIdsArchive">
+                    <button type="submit" id="bulkArchiveBtn" disabled
+                        class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">Arsipkan Data
+                        Terpilih</button>
+                </form>
+
+
             </div>
         </div>
 
 
         <!-- Tabel Data Buku -->
         {{-- Form untuk Bulk Delete --}}
-        <form id="bulkDeleteForm" action="{{ route('admin.data_buku.bulk-delete') }}" method="POST">
-            @csrf
+       
+       <form id="bulkDeleteForm" action="{{ route('admin.data_buku.bulk-delete') }}" method="POST">      @csrf
             @method('DELETE')
             <div class="overflow-x-auto">
                 <table id="dataTable" class="w-full border border-gray-300 rounded-lg text-sm">
@@ -205,71 +215,7 @@
     </div>
 @endsection
 
-@push('styles')
-    <style>
-        #bulkDeleteBtn:enabled {
-            background-color: #ef4444;
-            cursor: pointer;
-            opacity: 1;
-        }
 
-        #bulkDeleteBtn:enabled:hover {
-            background-color: #dc2626;
-        }
-    </style>
-@endpush
 
-@push('scripts')
-    <script>
-        // Select All functionality
-        $('#selectAll').on('click', function() {
-            var isChecked = this.checked;
-            $('.row-checkbox').each(function() {
-                $(this).prop('checked', isChecked);
-            });
-            updateBulkDeleteButton();
-        })
 
-        // Individual checkbox change
-        $(document).on('change', '.row-checkbox', function() {
-            var totalCheckboxes = $('.row-checkbox').length;
-            var checkedCheckboxes = $('.row-checkbox:checked').length;
 
-            $('#selectAll').prop('checked', totalCheckboxes === checkedCheckboxes);
-            updateBulkDeleteButton();
-        });
-
-        // Update bulk delete button state
-        function updateBulkDeleteButton() {
-            var checkedCount = $('.row-checkbox:checked').length;
-            var bulkDeleteBtn = $('#bulkDeleteBtn');
-
-            if (checkedCount > 0) {
-                bulkDeleteBtn.prop('disabled', false);
-                bulkDeleteBtn.text('Hapus (' + checkedCount + ') Data Terpilih');
-            } else {
-                bulkDeleteBtn.prop('disabled', true);
-                bulkDeleteBtn.text('Hapus Data Terpilih');
-            }
-        }
-
-        // Bulk delete form submission
-        $('#bulkDeleteBtn').on('click', function(e) {
-            e.preventDefault();
-
-            var selectedIds = $('.row-checkbox:checked').map(function() {
-                return this.value;
-            }).get();
-
-            if (selectedIds.length > 0) {
-                if (confirm('Apakah Anda yakin ingin menghapus ' + selectedIds.length +
-                        ' buku yang dipilih?')) {
-                    $('#bulkDeleteForm').submit();
-                }
-            }
-        });
-
-        // Update button state on page load
-        updateBulkDeleteButton();
-    </script>
-@endpush

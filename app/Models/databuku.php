@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class DataBuku extends Model
 {
@@ -34,37 +36,38 @@ class DataBuku extends Model
 
     public function getFotoUrlAttribute()
     {
-       
-        // Jika foto yg di input adalah URL
-        if (filter_var($this->foto_buku, FILTER_VALIDATE_URL)) {
+        $fotoUrl = $this->foto_buku; // ambil dari kolom model
+        $localPath = null;
 
-            // Kalau link Google Drive
-            if (str_contains($this->foto_buku, 'drive.google.com')) {
-
-                // Ambil ID file dari URL
-                if (preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $this->foto_buku, $matches)) {
+        if ($fotoUrl) {
+            if (str_contains($fotoUrl, 'drive.google.com')) {
+                if (preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $fotoUrl, $matches)) {
                     $fileId = $matches[1];
-                } elseif (preg_match('/id=([a-zA-Z0-9_-]+)/', $this->foto_buku, $matches)) {
+                } elseif (preg_match('/id=([a-zA-Z0-9_-]+)/', $fotoUrl, $matches)) {
                     $fileId = $matches[1];
                 } else {
                     $fileId = null;
                 }
 
-                // Kalau ID ketemu → ubah jadi direct link
                 if ($fileId) {
                     $directUrl = "https://drive.google.com/uc?export=view&id={$fileId}";
-                    Log::info("Converted Google Drive URL: " . $directUrl);
-                    return $directUrl;
+
+                    try {
+                        $response = Http::get($directUrl);
+
+                        if ($response->ok()) {
+                            $fileName = time() . '_' . uniqid() . '.jpg';
+                            $path = 'photos/' . $fileName;
+                            Storage::disk('public')->put($path, $response->body());
+                            $localPath = 'storage/' . $path;
+                        }
+                    } catch (\Exception $e) {
+                        Log::error('Gagal download foto: ' . $e->getMessage());
+                    }
                 }
             }
-
-            // Kalau bukan link Google Drive, tampilkan apa adanya
-            return $this->foto_buku;
         }
 
-        // Kalau path lokal (misal dari storage atau upload)
-        if (str_contains($this->foto_buku, 'uploads/buku')) {
-            return asset($this->foto_buku);
-        }
+        return $localPath ?? null;
     }
 }

@@ -22,6 +22,7 @@ use App\Http\Controllers\user\RiwayatBukuController;
 use App\Http\Controllers\user\RiwayatBacaController;
 use App\Http\Controllers\user\FavoritController;
 use App\Http\Controllers\user\ProfilController;
+use App\Http\Controllers\user\EditProfilController;
 
 
 
@@ -65,6 +66,7 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
     Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');
     Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
+    Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
     
     // User - Riwayat Buku
 Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalikanBuku'])

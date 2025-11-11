@@ -46,35 +46,38 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
        
-   // 🗂️ Arsipkan buku
-Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
-    ->name('data_buku.archive');
-// Route untuk arsipkan banyak buku
-Route::post('/data-buku/bulk-archive', [DataBukuController::class, 'bulkArchive'])
-    ->name('data_buku.bulkArchive');
-
-
-Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
-    ->name('data_buku.restore');
-
-
-// ✅ Pulihkan banyak buku dari arsip
-    Route::post('/data_arsip/bulk-restore', [DataArsipController::class, 'bulkRestore'])
-        ->name('data_arsip.bulkRestore');
-
-    // ✅ Hapus banyak buku dari arsip
-    Route::post('/data_arsip/bulk-delete', [DataArsipController::class, 'bulkDeleteArchive'])
-        ->name('data_arsip.bulkDeleteArchive');
-
+    // Data Buku Routes
+        
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
     Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');
+    Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
+    ->name('data_buku.archive'); // 🗂️ Arsipkan buku
+    Route::post('/data-buku/bulk-archive', [DataBukuController::class, 'bulkArchive'])
+    ->name('data_buku.bulkArchive'); // 🗂️ Arsipkan banyak buku
+    Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
+    ->name('data_buku.restore');
+
+
+    // Data Kategori Routes
     Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
     Route::delete('/data-kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
+
+    // Data Arsip Routes
     Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');
+    Route::post('/data_arsip/bulk-restore', [DataArsipController::class, 'bulkRestore'])
+        ->name('data_arsip.bulkRestore');   //Pulihkan banyak buku dari arsip
+    Route::post('/data_arsip/bulk-delete', [DataArsipController::class, 'bulkDeleteArchive'])
+        ->name('data_arsip.bulkDeleteArchive');  // Hapus banyak buku dari arsip
+
+    // Data Pengguna Routes
     Route::resource('/data_pengguna', DataPenggunaController::class)->names('data_pengguna');
+
+    // Data Peminjam Routes
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
+
+    // Data Denda Routes
     Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
  
 });

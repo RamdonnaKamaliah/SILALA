@@ -64,12 +64,19 @@ class DataArsipController extends Controller
      */
     public function destroy(string $id)
     {
-        return "Proses Hapus Favorit ID: $id (Percobaan)";
+        $buku = DataBuku::findOrFail($id);
+        // Hapus foto buku jika ada
+        if ($buku->foto_buku && file_exists(public_path($buku->foto_buku))) {
+            unlink(public_path($buku->foto_buku));
+        }
+        $buku->delete();
+        return redirect()->route('admin.data_arsip.index')
+            ->with('success', 'Data buku berhasil dihapus!');
     }
 
     public function bulkDeleteArchive(Request $request)
     {
-       $selectedIds = $request->selected_ids;
+       $selectedIds = explode(',', $request->selected_ids);
 
     if (empty($selectedIds)) {
         return redirect()->back()->with('error', 'Tidak ada buku yang dipilih untuk dihapus.');

@@ -1,10 +1,9 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Tambah Buku')
-@section('content')
+<?php $__env->startSection('pageTitle', 'Tambah Buku'); ?>
+<?php $__env->startSection('content'); ?>
 
     <div class="w-fullflex justify-center">
         <div class="max-w-3xl w-full bg-white rounded-2xl shadow-lg p-8 mt-10 border border-gray-200">
-            <a href="{{ route('admin.data_buku.index') }}" class="text-blue-600 hover:text-blue-800">
+            <a href="<?php echo e(route('admin.data_buku.index')); ?>" class="text-blue-600 hover:text-blue-800">
                 <i class="fas fa-arrow-left"></i>
             </a>
 
@@ -12,8 +11,8 @@
                 📚 Tambah Buku Baru
             </h2>
 
-            <form action="{{ route('admin.data_buku.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                @csrf
+            <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <?php echo csrf_field(); ?>
 
 
                 <!-- Foto Buku -->
@@ -77,9 +76,9 @@
     focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200"
                         required>
                         <option value="" disabled>Pilih kategori</option>
-                        @foreach ($kategoris as $kategori)
-                            <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($kategori->id); ?>"><?php echo e($kategori->nama_kategori); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
 
                 </div>
@@ -141,17 +140,19 @@
                     </button>
                 </div>
 
-                @if ($errors->any())
+                <?php if($errors->any()): ?>
                     <div class="text-red-500">
                         <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
+                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><?php echo e($error); ?></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </ul>
                     </div>
-                @endif
+                <?php endif; ?>
 
             </form>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/data_buku/create.blade.php ENDPATH**/ ?>

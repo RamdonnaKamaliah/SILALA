@@ -113,8 +113,7 @@
                     <thead class="bg-gray-100 text-gray-700">
                         <tr>
                             <th class="w-12 px-2 py-2 border-b border-gray-300 text-center">
-                                <input type="checkbox" id="selectAll" name="selected_ids[]" class="w-4 h-4 row-checkbox"
-                                    class="row-checkbox>
+                                <input type="checkbox" id="selectAll" name="selected_ids[]" class="w-4 h-4 row-checkbox">
                             </th>
                             <th class="px-4
                                     py-2 border-b border-gray-300 text-left">No

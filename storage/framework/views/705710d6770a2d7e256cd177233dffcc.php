@@ -7,12 +7,13 @@
     <div class="mb-4 flex gap-2">
         <form id="bulkDeleteArchiveForm" action="<?php echo e(route('admin.data_arsip.bulkDeleteArchive')); ?>" method="POST">
             <?php echo csrf_field(); ?>
-            <input type="hidden" name="selected_ids" id="bulkDeleteArchiveBtn">
+            <input type="hidden" name="selected_ids" id="selectedIds">
             <button type="submit" id="bulkDeleteBtn" disabled
                 class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">
                 Hapus Data Terpilih
             </button>
         </form>
+
 
 
         <form action="<?php echo e(route('admin.data_arsip.bulkRestore')); ?>" method="POST" id="bulkRestoreForm">
@@ -101,11 +102,19 @@
                             class="bg-yellow-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg">
                             Detail
                         </a>
+                        <form action="<?php echo e(route('admin.data_arsip.destroy', $buku->id)); ?>" method="POST"
+                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini secara permanen?');">
+                            <?php echo csrf_field(); ?>
+                            <?php echo method_field('DELETE'); ?>
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
+                                Hapus
+                            </button>
+                        </form>
                     </td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
-                    <td colspan="11" class="text-center py-3 text-gray-500">Belum ada buku terarsip</td>
+                    <td colspan="12" class="text-center py-3 text-gray-500">Belum ada buku terarsip</td>
                 </tr>
             <?php endif; ?>
         </tbody>

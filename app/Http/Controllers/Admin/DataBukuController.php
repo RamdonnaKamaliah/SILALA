@@ -50,7 +50,7 @@ class DataBukuController extends Controller
         'edisi' => 'required|string|max:100',
         'deskripsi' => 'required|string',
         'stok' => 'required|integer|min:0',
-        'file_buku' => 'nullable|mimes:pdf|max:255',
+        'file_buku' => 'nullable|mimes:pdf|max:5120',
     ]);
 
     // Upload file foto

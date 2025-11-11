@@ -114,7 +114,9 @@
                             <th class="w-12 px-2 py-2 border-b border-gray-300 text-center">
                                 <input type="checkbox" id="selectAll" name="selected_ids[]" class="w-4 h-4 row-checkbox">
                             </th>
-                            <th class="px-4 py-2 border-b border-gray-300 text-left">No</th>
+                            <th class="px-4
+                                    py-2 border-b border-gray-300 text-left">No
+                            </th>
                             <th class="px-4 py-2 border-b border-gray-300 text-left">Foto Buku</th>
                             <th class="px-4 py-2 border-b border-gray-300 text-left">Judul Buku</th>
                             <th class="px-4 py-2 border-b border-gray-300 text-left">Penulis</th>

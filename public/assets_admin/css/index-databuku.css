@@ -28,18 +28,16 @@ tbody tr:last-child td:last-child { border-bottom-right-radius: 12px; }
 
 .dataTables_length, .dataTables_filter { display: none !important; }
 
-/* Warna hijau army untuk hover dan aksi */
-.bg-green-700 { background-color: #4a7c59 !important; }
-.bg-green-800 { background-color: #3d6549 !important; }
-.text-green-700 { color: #4a7c59 !important; }
-.text-green-800 { color: #3d6549 !important; }
-.text-green-900 { color: #2f4d38 !important; }
-.hover\:bg-green-800:hover { background-color: #3d6549 !important; }
-.hover\:text-green-800:hover { color: #3d6549 !important; }
-.hover\:text-green-900:hover { color: #2f4d38 !important; }
-.focus\:ring-green-500:focus { --tw-ring-color: #4a7c59 !important; }
-.bg-green-50 { background-color: #f0f7f2 !important; }
-.hover\:bg-green-50:hover { background-color: #f0f7f2 !important; }
+/* Warna primary #A4B465 untuk semua elemen */
+.bg-\[\#A4B465\] { background-color: #A4B465 !important; }
+.bg-\[\#8A9A55\] { background-color: #8A9A55 !important; }
+.text-\[\#A4B465\] { color: #A4B465 !important; }
+.text-\[\#8A9A55\] { color: #8A9A55 !important; }
+.hover\:bg-\[\#8A9A55\]:hover { background-color: #8A9A55 !important; }
+.hover\:text-\[\#8A9A55\]:hover { color: #8A9A55 !important; }
+.focus\:ring-\[\#A4B465\]:focus { --tw-ring-color: #A4B465 !important; }
+.bg-\[\#F5F7ED\] { background-color: #F5F7ED !important; }
+.hover\:bg-\[\#F5F7ED\]:hover { background-color: #F5F7ED !important; }
 
 @media (max-width: 768px) {
     table { font-size: 0.8rem; }

@@ -18,7 +18,7 @@
             
             <div class="text-center">
                 <h1 class="page-title flex items-center justify-center gap-3 sm:gap-4 mb-3 flex-wrap">
-                    <i class="fas fa-book-medical"></i>
+                    <i class="fas fa-book-medical text-primary"></i>
                     <span>Tambah Buku Baru</span>
                 </h1>
                 <p class="page-subtitle px-4">Lengkapi formulir di bawah untuk menambahkan buku ke perpustakaan digital</p>
@@ -33,7 +33,7 @@
             <!-- Upload Section -->
             <div data-aos="fade-up" data-aos-duration="800">
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
-                    <i class="fas fa-cloud-upload-alt text-blue-600"></i>
+                    <i class="fas fa-cloud-upload-alt text-primary"></i>
                     <span>Upload File Buku</span>
                 </h2>
                 
@@ -41,7 +41,7 @@
                     <!-- Foto Buku -->
                     <div>
                         <label class="form-label">
-                            <i class="fas fa-image text-blue-600"></i>
+                            <i class="fas fa-image text-primary"></i>
                             <span>Foto Cover Buku</span>
                         </label>
                         
@@ -54,14 +54,14 @@
                         
                         <div id="imagePreviewContainer" class="preview-box mt-4 hidden">
                             <img id="imagePreview" class="preview-image" alt="Preview Cover">
-                            <p id="imageName" class="text-xs font-medium text-blue-900 break-all px-2 line-clamp-2"></p>
+                            <p id="imageName" class="text-xs font-medium text-primary-dark break-all px-2 line-clamp-2"></p>
                         </div>
                     </div>
 
                     <!-- File Buku PDF -->
                     <div>
                         <label class="form-label">
-                            <i class="fas fa-file-pdf text-blue-600"></i>
+                            <i class="fas fa-file-pdf text-primary"></i>
                             <span>File Buku (PDF)</span>
                         </label>
                         
@@ -75,8 +75,8 @@
                         <div id="pdfPreviewContainer" class="preview-box mt-4 hidden">
                             <canvas id="pdfPreview" class="preview-pdf-canvas"></canvas>
                             <div class="mt-2">
-                                <p id="pdfName" class="text-xs font-medium text-blue-900 break-all px-2 line-clamp-1"></p>
-                                <p id="pdfSize" class="text-xs text-blue-700 mt-1"></p>
+                                <p id="pdfName" class="text-xs font-medium text-primary-dark break-all px-2 line-clamp-1"></p>
+                                <p id="pdfSize" class="text-xs text-primary-medium mt-1"></p>
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
             <!-- Informasi Buku -->
             <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
-                    <i class="fas fa-info-circle text-blue-600"></i>
+                    <i class="fas fa-info-circle text-primary"></i>
                     <span>Informasi Buku</span>
                 </h2>
                 
@@ -94,7 +94,7 @@
                     <!-- Judul Buku -->
                     <div>
                         <label for="judul_buku" class="form-label">
-                            <i class="fas fa-heading text-blue-600"></i>
+                            <i class="fas fa-heading text-primary"></i>
                             <span>Judul Buku</span>
                         </label>
                         <input type="text" id="judul_buku" name="judul_buku" 
@@ -105,7 +105,7 @@
                     <!-- Penulis -->
                     <div>
                         <label for="penulis" class="form-label">
-                            <i class="fas fa-user-edit text-blue-600"></i>
+                            <i class="fas fa-user-edit text-primary"></i>
                             <span>Penulis</span>
                         </label>
                         <input type="text" id="penulis" name="penulis" 
@@ -116,7 +116,7 @@
                     <!-- Penerbit -->
                     <div>
                         <label for="penerbit" class="form-label">
-                            <i class="fas fa-building text-blue-600"></i>
+                            <i class="fas fa-building text-primary"></i>
                             <span>Penerbit</span>
                         </label>
                         <input type="text" id="penerbit" name="penerbit" 
@@ -127,7 +127,7 @@
                     <!-- Tahun Terbit -->
                     <div>
                         <label for="tahun_terbit" class="form-label">
-                            <i class="fas fa-calendar-alt text-blue-600"></i>
+                            <i class="fas fa-calendar-alt text-primary"></i>
                             <span>Tahun Terbit</span>
                         </label>
                         <input type="text" id="tahun_terbit" name="tahun_terbit" 
@@ -138,7 +138,7 @@
                     <!-- Bahasa -->
                     <div>
                         <label for="bahasa" class="form-label">
-                            <i class="fas fa-language text-blue-600"></i>
+                            <i class="fas fa-language text-primary"></i>
                             <span>Bahasa</span>
                         </label>
                         <input type="text" id="bahasa" name="bahasa" 
@@ -149,7 +149,7 @@
                     <!-- Kategori -->
                     <div>
                         <label for="kategori_id" class="form-label">
-                            <i class="fas fa-tags text-blue-600"></i>
+                            <i class="fas fa-tags text-primary"></i>
                             <span>Kategori</span>
                         </label>
                         <select name="kategori_id[]" id="kategori_id" multiple
@@ -169,7 +169,7 @@
             <!-- Detail Publikasi -->
             <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
-                    <i class="fas fa-book-open text-blue-600"></i>
+                    <i class="fas fa-book-open text-primary"></i>
                     <span>Detail Publikasi</span>
                 </h2>
                 
@@ -177,7 +177,7 @@
                     <!-- Jumlah Halaman -->
                     <div>
                         <label for="jumlah_halaman" class="form-label">
-                            <i class="fas fa-file-alt text-blue-600"></i>
+                            <i class="fas fa-file-alt text-primary"></i>
                             <span>Jumlah Halaman</span>
                         </label>
                         <input type="number" id="jumlah_halaman" name="jumlah_halaman" 
@@ -188,7 +188,7 @@
                     <!-- Edisi -->
                     <div>
                         <label for="edisi" class="form-label">
-                            <i class="fas fa-bookmark text-blue-600"></i>
+                            <i class="fas fa-bookmark text-primary"></i>
                             <span>Edisi</span>
                         </label>
                         <input type="text" id="edisi" name="edisi" 
@@ -199,7 +199,7 @@
                     <!-- Stok -->
                     <div>
                         <label for="stok" class="form-label">
-                            <i class="fas fa-boxes text-blue-600"></i>
+                            <i class="fas fa-boxes text-primary"></i>
                             <span>Stok Tersedia</span>
                         </label>
                         <input type="number" id="stok" name="stok" 
@@ -212,13 +212,13 @@
             <!-- Deskripsi -->
             <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
-                    <i class="fas fa-align-left text-blue-600"></i>
+                    <i class="fas fa-align-left text-primary"></i>
                     <span>Deskripsi Buku</span>
                 </h2>
                 
                 <div>
                     <label for="deskripsi" class="form-label">
-                        <i class="fas fa-paragraph text-blue-600"></i>
+                        <i class="fas fa-paragraph text-primary"></i>
                         <span>Deskripsi Lengkap</span>
                     </label>
                     <textarea id="deskripsi" name="deskripsi" rows="6" 

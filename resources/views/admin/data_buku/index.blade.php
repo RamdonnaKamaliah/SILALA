@@ -8,7 +8,7 @@
     <!-- HEADER -->
     <div class="text-center mb-8">
         <h1 class="text-2xl md:text-4xl font-bold text-slate-800 mb-2 flex items-center justify-center gap-2 flex-wrap">
-            <i class="fa-solid fa-book text-blue-600"></i>
+            <i class="fa-solid fa-book text-green-700"></i>
             Data Buku Perpustakaan
         </h1>
         <p class="text-gray-500 text-sm md:text-base">
@@ -18,7 +18,7 @@
 
     <!-- TOMBOL AKSI -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h2 class="text-lg md:text-xl font-semibold text-blue-700 flex items-center gap-2">
+        <h2 class="text-lg md:text-xl font-semibold text-green-700 flex items-center gap-2">
             <i class="fa-solid fa-list"></i> Daftar Buku
         </h2>
         <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -26,7 +26,7 @@
                 <i class="fa-solid fa-file-import mr-1"></i> Import
             </a>
             <a href="{{ route('admin.data_buku.create') }}"
-               class="bg-blue-600 text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition w-full sm:w-auto text-center">
+               class="bg-green-700 text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-green-800 transition w-full sm:w-auto text-center">
                 <i class="fa-solid fa-plus mr-1"></i> Tambah Buku
             </a>
             <button id="bulkDeleteBtn"
@@ -42,7 +42,7 @@
         class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white border border-gray-200 rounded-2xl shadow p-4 mb-4 gap-3">
         <div class="flex items-center gap-2 text-sm">
             <label for="entries" class="text-gray-700">Show</label>
-            <select id="entries" class="border rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500">
+            <select id="entries" class="border rounded-lg px-2 py-1 focus:ring-2 focus:ring-green-500">
                 <option>5</option>
                 <option selected>10</option>
                 <option>25</option>
@@ -53,7 +53,7 @@
         <div class="flex items-center gap-2 text-sm w-full sm:w-auto">
             <label for="search" class="text-gray-700">Search:</label>
             <input type="text" id="search"
-                class="border rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 w-full sm:w-auto"
+                class="border rounded-lg px-3 py-1 focus:ring-2 focus:ring-green-500 w-full sm:w-auto"
                 placeholder="Cari buku...">
         </div>
     </div>
@@ -68,7 +68,7 @@
             <div class="rounded-2xl overflow-hidden">
                 <div class="overflow-x-auto p-4 md:p-6">
                     <table id="dataTable" class="w-full text-sm divide-y divide-gray-200 min-w-[1000px]">
-                        <thead class="bg-blue-600 text-white">
+                        <thead class="bg-green-700 text-white">
                             <tr>
                                 <th class="px-3 py-3 text-center"><input type="checkbox" id="selectAll" class="w-4 h-4"></th>
                                 <th class="px-4 py-3 text-center font-semibold">No</th>
@@ -89,7 +89,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-100 text-gray-700">
                             @foreach ($data_buku as $buku)
-                            <tr class="hover:bg-blue-50 transition">
+                            <tr class="hover:bg-green-50 transition">
                                 <td class="px-3 py-3 text-center">
                                     <input type="checkbox" name="selected_ids[]" value="{{ $buku->id }}" class="row-checkbox w-4 h-4">
                                 </td>
@@ -122,7 +122,7 @@
                                 <td class="px-4 py-3 text-gray-600">{{ $buku->stok }}</td>
                                 <td class="px-4 py-3 text-gray-600">
                                     @if ($buku->file_buku)
-                                        <a href="{{ asset($buku->file_buku) }}" target="_blank" class="text-blue-600 hover:underline">Lihat</a>
+                                        <a href="{{ asset($buku->file_buku) }}" target="_blank" class="text-green-700 hover:underline">Lihat</a>
                                     @else
                                         <span class="text-gray-400 italic">Tidak ada</span>
                                     @endif
@@ -130,10 +130,10 @@
                                 <td class="px-4 py-3 text-gray-600 max-w-xs truncate">{{ $buku->deskripsi }}</td>
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex justify-center gap-3">
-                                        <a href="{{ route('admin.data_buku.show', $buku->id) }}" class="text-green-600 hover:text-green-800" title="Detail">
+                                        <a href="{{ route('admin.data_buku.show', $buku->id) }}" class="text-green-700 hover:text-green-900" title="Detail">
                                             <i class="fa-solid fa-circle-info"></i>
                                         </a>
-                                        <a href="{{ route('admin.data_buku.edit', $buku->id) }}" class="text-blue-600 hover:text-blue-800" title="Edit">
+                                        <a href="{{ route('admin.data_buku.edit', $buku->id) }}" class="text-green-600 hover:text-green-800" title="Edit">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <button type="button" class="text-red-600 hover:text-red-800 delete-btn" data-id="{{ $buku->id }}" title="Hapus">

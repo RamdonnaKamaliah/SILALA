@@ -1,7 +1,6 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Data Buku')
+<?php $__env->startSection('pageTitle', 'Data Buku'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <!-- FONT & ICON -->
 <div class="p-4 md:p-8 font-[Inter] text-slate-800 bg-gray-50 min-h-screen">
 
@@ -25,7 +24,7 @@
             <a href="#" class="bg-yellow-400 text-black font-medium px-4 py-2 rounded-lg shadow hover:bg-yellow-500 transition w-full sm:w-auto text-center">
                 <i class="fa-solid fa-file-import mr-1"></i> Import
             </a>
-            <a href="{{ route('admin.data_buku.create') }}"
+            <a href="<?php echo e(route('admin.data_buku.create')); ?>"
                class="bg-blue-600 text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition w-full sm:w-auto text-center">
                 <i class="fa-solid fa-plus mr-1"></i> Tambah Buku
             </a>
@@ -59,10 +58,10 @@
     </div>
 
     <!-- TABLE -->
-    <form id="bulkDeleteForm" method="POST" action="{{ route('admin.data_buku.bulk-delete') }}">
-        @csrf
+    <form id="bulkDeleteForm" method="POST" action="<?php echo e(route('admin.data_buku.bulk-delete')); ?>">
+        <?php echo csrf_field(); ?>
         <!-- 🔥 GANTI INI KE POST SESUAI ROUTE -->
-        {{-- @method('DELETE') --}}
+        
 
         <div class="bg-white border border-gray-200 rounded-2xl shadow-xl p-0 overflow-hidden">
             <div class="rounded-2xl overflow-hidden">
@@ -88,61 +87,62 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 text-gray-700">
-                            @foreach ($data_buku as $buku)
+                            <?php $__currentLoopData = $data_buku; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr class="hover:bg-blue-50 transition">
                                 <td class="px-3 py-3 text-center">
-                                    <input type="checkbox" name="selected_ids[]" value="{{ $buku->id }}" class="row-checkbox w-4 h-4">
+                                    <input type="checkbox" name="selected_ids[]" value="<?php echo e($buku->id); ?>" class="row-checkbox w-4 h-4">
                                 </td>
-                                <td class="px-4 py-3 text-center">{{ $loop->iteration }}</td>
+                                <td class="px-4 py-3 text-center"><?php echo e($loop->iteration); ?></td>
                                 <td class="px-4 py-3 text-center">
                                     <div class="w-14 h-14 rounded-lg overflow-hidden mx-auto shadow-sm">
-                                        @if ($buku->foto_buku)
-                                            <img src="{{ asset($buku->foto_buku) }}" class="w-full h-full object-cover hover:scale-110 transition">
-                                        @else
+                                        <?php if($buku->foto_buku): ?>
+                                            <img src="<?php echo e(asset($buku->foto_buku)); ?>" class="w-full h-full object-cover hover:scale-110 transition">
+                                        <?php else: ?>
                                             <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
                                                 <i class="fa-solid fa-image text-xl"></i>
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </td>
-                                <td class="px-4 py-3 font-medium text-slate-800">{{ $buku->judul_buku }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->penulis }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->penerbit }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->tahun_terbit }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->bahasa }}</td>
+                                <td class="px-4 py-3 font-medium text-slate-800"><?php echo e($buku->judul_buku); ?></td>
+                                <td class="px-4 py-3 text-gray-600"><?php echo e($buku->penulis); ?></td>
+                                <td class="px-4 py-3 text-gray-600"><?php echo e($buku->penerbit); ?></td>
+                                <td class="px-4 py-3 text-gray-600"><?php echo e($buku->tahun_terbit); ?></td>
+                                <td class="px-4 py-3 text-gray-600"><?php echo e($buku->bahasa); ?></td>
                                 <td class="px-4 py-3 text-gray-600">
-                                    @if ($buku->kategoris->count())
-                                        {{ $buku->kategoris->pluck('nama_kategori')->join(', ') }}
-                                    @else
+                                    <?php if($buku->kategoris->count()): ?>
+                                        <?php echo e($buku->kategoris->pluck('nama_kategori')->join(', ')); ?>
+
+                                    <?php else: ?>
                                         <span class="italic text-gray-400">Tidak Ada</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->jumlah_halaman }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->edisi }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->stok }}</td>
+                                <td class="px-4 py-3 text-gray-600"><?php echo e($buku->jumlah_halaman); ?></td>
+                                <td class="px-4 py-3 text-gray-600"><?php echo e($buku->edisi); ?></td>
+                                <td class="px-4 py-3 text-gray-600"><?php echo e($buku->stok); ?></td>
                                 <td class="px-4 py-3 text-gray-600">
-                                    @if ($buku->file_buku)
-                                        <a href="{{ asset($buku->file_buku) }}" target="_blank" class="text-blue-600 hover:underline">Lihat</a>
-                                    @else
+                                    <?php if($buku->file_buku): ?>
+                                        <a href="<?php echo e(asset($buku->file_buku)); ?>" target="_blank" class="text-blue-600 hover:underline">Lihat</a>
+                                    <?php else: ?>
                                         <span class="text-gray-400 italic">Tidak ada</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
-                                <td class="px-4 py-3 text-gray-600 max-w-xs truncate">{{ $buku->deskripsi }}</td>
+                                <td class="px-4 py-3 text-gray-600 max-w-xs truncate"><?php echo e($buku->deskripsi); ?></td>
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex justify-center gap-3">
-                                        <a href="{{ route('admin.data_buku.show', $buku->id) }}" class="text-green-600 hover:text-green-800" title="Detail">
+                                        <a href="<?php echo e(route('admin.data_buku.show', $buku->id)); ?>" class="text-green-600 hover:text-green-800" title="Detail">
                                             <i class="fa-solid fa-circle-info"></i>
                                         </a>
-                                        <a href="{{ route('admin.data_buku.edit', $buku->id) }}" class="text-blue-600 hover:text-blue-800" title="Edit">
+                                        <a href="<?php echo e(route('admin.data_buku.edit', $buku->id)); ?>" class="text-blue-600 hover:text-blue-800" title="Edit">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <button type="button" class="text-red-600 hover:text-red-800 delete-btn" data-id="{{ $buku->id }}" title="Hapus">
+                                        <button type="button" class="text-red-600 hover:text-red-800 delete-btn" data-id="<?php echo e($buku->id); ?>" title="Hapus">
                                             <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </div>
                                 </td>
                             </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
@@ -151,16 +151,18 @@
     </form>
 </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
-@include('layout_admin.partial_admin.link')
-@endpush
+<?php $__env->startPush('styles'); ?>
+<?php echo $__env->make('layout_admin.partial_admin.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php $__env->stopPush(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="{{asset('/assets_admin/js/index-databuku.js')}}"></script>
+<script src="<?php echo e(asset('/assets_admin/js/index-databuku.js')); ?>"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_buku/index.blade.php ENDPATH**/ ?>

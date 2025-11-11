@@ -209,7 +209,7 @@
 <body class="bg-gray-50">
     <!-- Navbar -->
     <nav class="bg-gradient-to-r from-army-dark to-army-medium fixed top-0 right-0 left-0 w-full z-30 
-        lg:left-64 lg:w-[calc(100%-16rem)] shadow-lg transition-all duration-300 border-b border-army-light/20">
+    lg:left-72 lg:w-[calc(100%-18rem)] shadow-lg transition-all duration-300 border-b border-army-light/20">
         
         <div class="navbar-padding">
             <div class="flex justify-between h-16">
@@ -593,4 +593,4 @@
         });
     </script>
 </body>
-</html> 
+</html> <?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/components/navbarAdmin.blade.php ENDPATH**/ ?>

@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
+
+use App\Models\User;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
@@ -15,57 +21,126 @@ use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
 use App\Http\Controllers\Admin\DataDendaController;
 
+// -----------------------------------------------------------------------------
 // Public Routes
+// -----------------------------------------------------------------------------
 Route::get('/', function () {
     return view('landingpage');
 });
 
-// Authentication Routes
-require __DIR__.'/auth.php';
+// -----------------------------------------------------------------------------
+// Authentication Routes (Laravel Breeze)
+// -----------------------------------------------------------------------------
+require __DIR__ . '/auth.php';
 
+// -----------------------------------------------------------------------------
 // Google OAuth Routes
+// -----------------------------------------------------------------------------
 Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGoogle'])
     ->name('google.redirect');
 
-Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])
-    ->name('google.callback');
+Route::get('/auth/google/callback', function () {
+    $googleUser = Socialite::driver('google')->user();
 
+    $user = User::where('email', $googleUser->email)->first();
+
+    if (!$user) {
+        // Jika user belum ada, buat baru
+        $user = User::create([
+            'name' => $googleUser->name,
+            'email' => $googleUser->email,
+            'password' => Hash::make(Str::random(24)),
+        ]);
+    }
+
+    // Update google_id dan token
+    $user->update([
+        'google_id' => $googleUser->id,
+        'google_token' => $googleUser->token,
+        'google_refresh_token' => $googleUser->refreshToken,
+    ]);
+
+    Auth::login($user);
+    return redirect('/dashboard');
+})->name('google.callback');
+
+// -----------------------------------------------------------------------------
 // Authenticated Routes
+// -----------------------------------------------------------------------------
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Logout Dashboard User
+    Route::post('/logout', function (Request $request) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    })->name('logout');
 });
 
+// -----------------------------------------------------------------------------
 // User Routes
+// -----------------------------------------------------------------------------
 Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
+// -----------------------------------------------------------------------------
 // Admin Routes
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
-    Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
-    Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
-    Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');
-    Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
-    Route::delete('/data-kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
-    Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');
-    Route::resource('/data_pengguna', DataPenggunaController::class)->names('data_pengguna');
-    Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
-    Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
-});
+// -----------------------------------------------------------------------------
+Route::middleware(['auth:admin', AdminMiddleware::class])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
-// Home Redirect Route
-Route::get('/home', function () {
-    if (Auth::guard('admin')->check()) {
-        return redirect()->route('admin.dashboard');
-    } 
-    
-    if (Auth::guard('web')->check()) {
-        return redirect()->route('dashboard');
-    }
-    
-    return redirect()->route('login');
-})->name('home');
+        // --- Data Buku ---
+        Route::resource('data_buku', DataBukuController::class);
+        Route::post('/data_buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])
+            ->name('data_buku.bulk-delete');
+
+        // --- Data Kategori ---
+        Route::resource('data_kategori', DataKategoriController::class);
+        Route::post('/data_kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])
+            ->name('data_kategori.bulk-delete');
+
+        // --- Data Arsip ---
+        Route::resource('data_arsip', DataArsipController::class);
+        Route::post('/data_arsip/bulk-delete', [DataArsipController::class, 'bulkDelete'])
+            ->name('data_arsip.bulk-delete');
+
+        // --- Data Pengguna ---
+        Route::resource('data_pengguna', DataPenggunaController::class);
+        Route::post('/data_pengguna/bulk-delete', [DataPenggunaController::class, 'bulkDelete'])
+            ->name('data_pengguna.bulk-delete');
+
+        // --- Data Peminjam ---
+        Route::resource('data_peminjam', DataPeminjamController::class);
+        Route::post('/data_peminjam/bulk-delete', [DataPeminjamController::class, 'bulkDelete'])
+            ->name('data_peminjam.bulk-delete');
+
+        // --- Data Denda ---
+        Route::resource('data_denda', DataDendaController::class);
+        Route::post('/data_denda/bulk-delete', [DataDendaController::class, 'bulkDelete'])
+            ->name('data_denda.bulk-delete');
+    });
+
+// -----------------------------------------------------------------------------
+// Admin Authentication Routes
+// -----------------------------------------------------------------------------
+Route::get('/admin/login', [AdminController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.submit');
+Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+
+// Reset password admin
+Route::get('/admin/password/reset', [AdminController::class, 'showLinkRequestForm'])->name('admin.password.request');
+Route::post('/admin/password/email', [AdminController::class, 'sendResetLinkEmail'])->name('admin.password.email');
+Route::get('/admin/password/reset/{token}', [AdminController::class, 'showResetForm'])->name('admin.password.reset');
+Route::post('/admin/password/reset', [AdminController::class, 'reset'])->name('admin.password.update');
+
+// -----------------------------------------------------------------------------
+// End of File
+// -----------------------------------------------------------------------------

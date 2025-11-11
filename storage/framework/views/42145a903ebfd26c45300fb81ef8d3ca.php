@@ -8,9 +8,9 @@
  <link href="./assets_admin/css/nucleo-icons.css" rel="stylesheet" />
  <link href="./assets_admin/css/nucleo-svg.css" rel="stylesheet" />
  <!-- Popper -->
- {{-- <script src="https://unpkg.com/@popperjs/core@2"></script> --}}
+ 
  <!-- Main Styling -->
- <link href="{{ asset('assets_admin/css/soft-ui-dashboard-tailwind.css?v=1.0.5') }}" rel="stylesheet" />
+ <link href="<?php echo e(asset('assets_admin/css/soft-ui-dashboard-tailwind.css?v=1.0.5')); ?>" rel="stylesheet" />
  <!-- Nepcha Analytics (nepcha.com) -->
  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -18,10 +18,10 @@
 
  <!-- Databuku link CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="{{ asset('/assets_admin/css/index-databuku.css') }}">
+<link rel="stylesheet" href="<?php echo e(asset('/assets_admin/css/index-databuku.css')); ?>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  {{-- ====== GLOBAL STYLES ====== --}}
-  <link rel="stylesheet" href="{{ asset('assets_admin/css/layout-admin.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets_admin/css/sidebar-admin.css') }}">
+  
+  <link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/layout-admin.css')); ?>">
+  <link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/sidebar-admin.css')); ?>"><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/layout_admin/partial_admin/link.blade.php ENDPATH**/ ?>

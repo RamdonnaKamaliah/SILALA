@@ -42,10 +42,10 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'phone' => $request->phone,
             'email' => $request->email,
-            'user_type' => 'user', // Default user type
             'membership_type' => $request->membership_type,
             'gender' => $request->gender,
             'password' => Hash::make($request->password),
+            'password_setup' => true,
         ]);
 
         event(new Registered($user));

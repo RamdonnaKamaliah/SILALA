@@ -20,6 +20,13 @@ darkMode: 'class',
             },
             colors: {
                 primary: '#A4B465',
+                green: '#626F47', 
+                cream: '#F5ECD5', 
+                white: '#ffffff',
+                kuning: '#F0BB78',
+                cream_muda: '#F5ECD5',
+                black: '#000000',
+                pearl: '#F8F8F8'
             }
         },
     },

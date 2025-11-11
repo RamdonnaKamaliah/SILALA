@@ -87,11 +87,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
   // 🗂️ Arsipkan buku
 Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
     ->name('data_buku.archive');
-    
-// 🔁 Pulihkan buku dari arsip
 Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
     ->name('data_buku.restore');
-
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');

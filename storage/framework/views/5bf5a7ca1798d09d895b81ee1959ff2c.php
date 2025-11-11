@@ -284,7 +284,7 @@
         
         <!-- Sidebar Header dengan Logo (Fixed) -->
         <div class="logo-container">
-            <img src="{{ asset('/assets_admin/image/BPMSPH-logo.png')}}" alt="BPMS Logo" class="logo-img">
+            <img src="<?php echo e(asset('/assets_admin/image/BPMSPH-logo.png')); ?>" alt="BPMS Logo" class="logo-img">
         </div>
         
         <!-- Sidebar Content (Scrollable) -->
@@ -293,7 +293,7 @@
                 <!-- Dashboard -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="{{ route('admin.dashboard') }}">
+                        href="<?php echo e(route('admin.dashboard')); ?>">
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>shop</title>
@@ -316,7 +316,7 @@
                 <!-- Akun Pengguna -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="{{ route('admin.data_pengguna.index') }}">
+                        href="<?php echo e(route('admin.data_pengguna.index')); ?>">
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>Akun Pengguna</title>
@@ -339,7 +339,7 @@
                 <!-- Data Buku -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="{{ route('admin.data_buku.index') }}">
+                        href="<?php echo e(route('admin.data_buku.index')); ?>">
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>Data Buku</title>
@@ -362,7 +362,7 @@
                 <!-- Data Kategori -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="{{ route('admin.data_kategori.index') }}">
+                        href="<?php echo e(route('admin.data_kategori.index')); ?>">
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>Data Kategori</title>
@@ -385,7 +385,7 @@
                 <!-- Data Arsip -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="{{ route('admin.data_arsip.index') }}">
+                        href="<?php echo e(route('admin.data_arsip.index')); ?>">
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>Favorit</title>
@@ -408,7 +408,7 @@
                 <!-- Data Peminjam -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="{{ route('admin.data_peminjam.index') }}">
+                        href="<?php echo e(route('admin.data_peminjam.index')); ?>">
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>settings</title>
@@ -432,7 +432,7 @@
                 <!-- Data Denda -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="{{ route('admin.data_denda.index') }}">
+                        href="<?php echo e(route('admin.data_denda.index')); ?>">
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>settings</title>
@@ -551,8 +551,8 @@
     </aside>
     
     <!-- Logout Form (Hidden) -->
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
+    <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+        <?php echo csrf_field(); ?>
     </form>
 
     <!-- SweetAlert2 CDN - Minimal untuk loading lebih cepat -->
@@ -742,4 +742,4 @@
         }
     </script>
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/components/sidebarAdmin.blade.php ENDPATH**/ ?>

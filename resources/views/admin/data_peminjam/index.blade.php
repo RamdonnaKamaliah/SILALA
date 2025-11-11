@@ -105,15 +105,15 @@
                                     @if ($peminjam->status == 'dipinjam')
                                         <!-- Konfirmasi Kembali -->
                                         <form action="{{ route('admin.data_peminjam.kembalikan', $peminjam->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit"
-                                                class="bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 text-xs font-medium transition-colors flex items-center gap-1"
-                                                title="Konfirmasi Pengembalian">
-                                                <i class="fas fa-undo text-xs"></i>
-                                                Kembalikan
-                                            </button>
-                                        </form>
+    @csrf
+    @method('PUT')
+    <button type="submit" 
+        class="bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 text-xs font-medium transition-colors flex items-center gap-1"
+        onclick="return confirm('Konfirmasi pengembalian buku?')">
+        <i class="fas fa-undo text-xs"></i>
+        Kembalikan
+    </button>
+</form>
                                         
                                         <!-- Laporkan Masalah -->
                                         <form action="{{ route('admin.data_peminjam.masalah', $peminjam->id) }}" method="POST" class="inline">

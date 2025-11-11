@@ -150,14 +150,9 @@
       </div>
     </div>
 
-    <!-- Status Peminjaman User -->
-    @php
-        $userId = Auth::id();
-        $userBorrow = \App\Models\DataPeminjam::where('user_id', $userId)
-            ->where('buku_id', $buku->id)
-            ->where('status', 'dipinjam')
-            ->first();
-    @endphp
+
+
+
 
     @if($userBorrow)
     <div class="mt-2">
@@ -182,64 +177,45 @@
   <!-- Tombol Baca, Pinjam, dan Like -->
   <div class="flex items-center justify-between mb-2 px-4 md:px-0 relative">
     
-    <!-- Tombol kiri (Baca & Pinjam) -->
-<div class="flex items-center gap-3 md:ml-[350px]">
-  <button
-    class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
-           rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
-    Baca
-  </button>
-  
-  <!-- Tombol Pinjam -->
-  @php
-      $userId = Auth::id();
-      $isBorrowingThisBook = \App\Models\DataPeminjam::where('user_id', $userId)
-          ->where('buku_id', $buku->id)
-          ->where('status', 'dipinjam')
-          ->exists();
-      
-      $activeBorrowCount = \App\Models\DataPeminjam::where('user_id', $userId)
-          ->where('status', 'dipinjam')
-          ->count();
-  @endphp
+      <!-- Tombol kiri (Baca & Pinjam) -->
+  <div class="flex items-center gap-3 md:ml-[350px]">
+    <button
+      class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
+            rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+      Baca
+    </button>
+    
+    <div class="mt-4">
+      @if($userBorrow)
+        <div class="flex flex-col items-start">
+          <button class="bg-gray-400 text-white px-8 py-1.5 rounded-full cursor-not-allowed opacity-70">
+            Sedang Dipinjam
+          </button>
+          <p class="text-xs text-gray-600 mt-2">
+            Batas pengembalian: 
+            {{ \Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
+          </p>
+        </div>
 
-  @if($isBorrowingThisBook)
-    <!-- Tombol disabled jika sedang meminjam buku ini -->
-    <button 
-      class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
-             rounded-full shadow-md cursor-not-allowed opacity-70"
-      disabled
-      title="Anda sedang meminjam buku ini">
-      Sedang Dipinjam
-    </button>
-  @elseif($activeBorrowCount >= 3)
-    <!-- Tombol disabled jika sudah meminjam 3 buku -->
-    <button 
-      class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
-             rounded-full shadow-md cursor-not-allowed opacity-70"
-      disabled
-      title="Anda sudah meminjam 3 buku. Kembalikan salah satu untuk meminjam lagi.">
-      Batas Pinjam
-    </button>
-  @elseif($buku->stok <= 0)
-    <!-- Tombol disabled jika stok habis -->
-    <button 
-      class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
-             rounded-full shadow-md cursor-not-allowed opacity-70"
-      disabled
-      title="Stok buku habis">
-      Stok Habis
-    </button>
-  @else
-    <!-- Tombol aktif jika bisa meminjam -->
-    <button 
-      id="openModalBtn"
-      class="bg-kuning text-[#2E2E2E] hover:bg-[#F6D776] font-semibold text-sm px-8 py-1.5 
-             rounded-full shadow-md transition-all duration-300 transform 
-             hover:-translate-y-0.5 hover:shadow-lg">
-      Pinjam
-    </button>
-  @endif
+      @elseif($stokHabis)
+          <button class="bg-gray-400 text-white px-8 py-1.5 rounded-full cursor-not-allowed opacity-70">
+            Stok Habis
+          </button>
+
+      @else
+          <!-- Tombol Pinjam hanya untuk membuka modal - HAPUS FORM -->
+          <button id="openPinjamModal" 
+                  class="bg-kuning hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
+              rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+            Pinjam
+          </button>
+        @endif
+  
+  </div>
+  
+
+
+
 
 <!-- ====== Popup Modal Pinjam Buku ====== -->
 <div id="pinjamModal" 
@@ -381,89 +357,201 @@
   <script src="{{ asset('assets_user/js/detailbuku.js')}}"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+  const openPinjamModal = document.getElementById("openPinjamModal");
+  const pinjamModal = document.getElementById("pinjamModal");
+  const closeModalBtn = document.getElementById("closeModalBtn");
   const tglPinjamInput = document.getElementById("tglPinjamInput");
   const tglKembaliInput = document.getElementById("tglKembaliInput");
   const konfirmasiBtn = document.getElementById("konfirmasiPinjam");
+  const closeKosong = document.getElementById("closeKosong");
+  const popupStokKosong = document.getElementById("popupStokKosong");
+
+  // Event untuk membuka modal
+  if (openPinjamModal) {
+    openPinjamModal.addEventListener("click", () => {
+      pinjamModal.classList.remove("hidden");
+      resetModal(); // Reset form ketika modal dibuka
+    });
+  }
+
+  // Event untuk menutup modal
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener("click", () => {
+      pinjamModal.classList.add("hidden");
+    });
+  }
+
+  // Event untuk menutup popup stok kosong
+  if (closeKosong) {
+    closeKosong.addEventListener("click", () => {
+      popupStokKosong.classList.add("hidden");
+    });
+  }
+
+  // Tutup modal ketika klik di luar
+  if (pinjamModal) {
+    pinjamModal.addEventListener("click", (e) => {
+      if (e.target === pinjamModal) {
+        pinjamModal.classList.add("hidden");
+      }
+    });
+  }
 
   // Waktu lokal (Asia/Jakarta)
   const now = new Date();
-  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000); 
+  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000);  
   const maxDate = new Date(today);
   maxDate.setDate(today.getDate() + 7);
 
   const formatDate = d => d.toISOString().split("T")[0];
 
-  // Set tanggal pinjam dan batas kembali
-  tglPinjamInput.value = formatDate(today);
-  tglKembaliInput.min = formatDate(today);
-  tglKembaliInput.max = formatDate(maxDate);
+  // Set tanggal pinjam
+  if (tglPinjamInput) {
+    tglPinjamInput.value = formatDate(today);
+  }
+  
+  // Set batas tanggal kembali (TANPA nilai default)
+  if (tglKembaliInput) {
+    tglKembaliInput.min = formatDate(today);
+    tglKembaliInput.max = formatDate(maxDate);
+    // JANGAN set value default - biarkan kosong
+    tglKembaliInput.value = '';
+  }
 
-  // Saat klik konfirmasi
+  // Fungsi untuk reset modal
+  function resetModal() {
+    if (tglKembaliInput) {
+      tglKembaliInput.value = '';
+    }
+  }
+
+  // Event untuk konfirmasi peminjaman
+if (konfirmasiBtn) {
   konfirmasiBtn.addEventListener("click", async () => {
-    const tanggalKembali = tglKembaliInput.value;
+    const tanggalKembali = tglKembaliInput ? tglKembaliInput.value : '';
 
     if (!tanggalKembali) {
-      Swal.fire({
-        icon: "warning",
-        title: "Tanggal kembali belum diisi",
-        confirmButtonColor: "#A4B465"
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Tanggal kembali belum diisi" 
       });
       return;
     }
 
-    const selectedDate = new Date(tanggalKembali);
-    const daysDifference = Math.ceil((selectedDate - today) / (1000 * 60 * 60 * 24));
-    if (daysDifference > 7) {
-      Swal.fire({
-        icon: "warning",
-        title: "Maksimal peminjaman 7 hari",
-        confirmButtonColor: "#A4B465"
+    // Validasi tanggal
+    const selectedReturnDate = new Date(tanggalKembali);
+    if (selectedReturnDate < today) {
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Tanggal kembali tidak boleh kurang dari tanggal pinjam" 
       });
       return;
     }
 
-    const data = {
-      buku_id: "{{ $buku->id }}",
-      tanggal_kembali: tanggalKembali,
-      _token: "{{ csrf_token() }}"
-    };
+    const diffTime = selectedReturnDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays > 7) {
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Maksimal peminjaman adalah 7 hari" 
+      });
+      return;
+    }
 
     try {
-      const response = await fetch("{{ route('user.riwayatbuku.store') }}", {
+      // Tampilkan loading
+      konfirmasiBtn.disabled = true;
+      konfirmasiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+
+      console.log('🔄 Mengirim request peminjaman...');
+
+      // Kirim request peminjaman
+      const response = await fetch("{{ route('pinjam.store') }}", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        headers: { 
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": "{{ csrf_token() }}",
+          "Accept": "application/json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify({
+          buku_id: "{{ $buku->id }}",
+          tanggal_kembali: tanggalKembali
+        })
       });
 
-      const result = await response.json();
+      console.log('✅ Response Status:', response.status);
 
-      if (response.ok && result.success) {
-        Swal.fire({
-          icon: "success",
-          title: result.message,
-          showConfirmButton: false,
-          timer: 1500
-        });
-        setTimeout(() => {
-          window.location.href = "{{ route('user.riwayatbuku') }}";
-        }, 1500);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: result.message || "Gagal menyimpan data",
-          confirmButtonColor: "#A4B465"
-        });
+      // Baca response sebagai text dulu untuk debugging
+      const responseText = await response.text();
+      console.log('📨 Raw Response:', responseText);
+
+      let result;
+      try {
+        // Coba parse sebagai JSON
+        result = JSON.parse(responseText);
+        console.log('📊 Parsed JSON:', result);
+      } catch (parseError) {
+        console.error('❌ JSON Parse Error:', parseError);
+        throw new Error('Response tidak valid dari server');
       }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Terjadi kesalahan sistem",
-        confirmButtonColor: "#A4B465"
-      });
+
+      
+
+// Handle result berdasarkan success status
+if (result.success) {
+  console.log('🎉 Peminjaman berhasil!');
+  
+  // Tutup modal
+  pinjamModal.classList.add("hidden");
+  
+  // Tampilkan SweetAlert sukses dengan countdown 2 detik
+  Swal.fire({
+    icon: "success",
+    title: "Berhasil!",
+    text: result.message,
+    timer: 2000,
+    timerProgressBar: true,
+    showConfirmButton: false
+  }).then((result) => {
+    // Redirect ke halaman riwayat setelah timer selesai
+    if (result.dismiss === Swal.DismissReason.timer) {
+      window.location.href = "{{ route('user.riwayatbuku') }}";
     }
   });
-});
 
+} else {
+  console.log('❌ Peminjaman gagal:', result.message);
+  
+  // Handle error dari server
+  Swal.fire({ 
+    icon: "error", 
+    title: "Gagal",
+    text: result.message || "Terjadi kesalahan saat meminjam buku" 
+  });
+}
+
+    } catch (error) {
+      console.error("💥 Error:", error);
+      
+      Swal.fire({ 
+        icon: "error", 
+        title: "Error",
+        text: "Terjadi kesalahan sistem: " + error.message
+      });
+    } finally {
+      // Reset tombol
+      if (konfirmasiBtn) {
+        konfirmasiBtn.disabled = false;
+        konfirmasiBtn.innerHTML = '<i class="fa-solid fa-check text-[#2E2E2E]"></i> Konfirmasi';
+      }
+    }
+  });
+}
+});
 </script>
 </body>
 </html>

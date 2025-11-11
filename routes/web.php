@@ -21,6 +21,8 @@ use App\Http\Controllers\user\DetailBukuController;
 use App\Http\Controllers\user\RiwayatBukuController;
 
 
+
+
 // Public Routes
 Route::get('/', function () {
     return view('landingpage');
@@ -64,6 +66,10 @@ Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalika
     ->name('user.riwayat.kembalikan');
 Route::get('/check-borrow-status/{bookId}', [RiwayatBukuController::class, 'checkBookBorrowStatus'])->name('user.check.borrow.status');
 Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBorrow'])->name('user.check.active.borrow');
+// routes/web.php
+Route::post('/pinjam', [App\Http\Controllers\Admin\DataPeminjamController::class, 'store'])
+    ->name('pinjam.store')
+    ->middleware('auth'); // Hanya auth, tanpa admin middleware
 });
 
 

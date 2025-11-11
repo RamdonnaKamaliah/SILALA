@@ -21,13 +21,19 @@ class DataPeminjam extends Model
         'keterangan'
     ];
 
+    protected $dates = [
+        'tanggal_pinjam',
+        'tanggal_kembali'
+    ];
+
     // Hitung denda otomatis
     public function hitungDenda()
     {
-        if ($this->status === 'belum dikembalikan') {
+        if ($this->status === 'dipinjam') {
             $hariTelat = Carbon::now()->diffInDays(Carbon::parse($this->tanggal_kembali), false);
             if ($hariTelat > 0) {
                 $this->denda = $hariTelat * 1000;
+                $this->save();
             }
         }
     }
@@ -40,5 +46,18 @@ class DataPeminjam extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Scope untuk peminjaman aktif
+    public function scopeActive($query)
+    {
+        return $query->where('status', 'dipinjam');
+    }
+
+    // Scope untuk peminjaman terlambat
+    public function scopeLate($query)
+    {
+        return $query->where('status', 'dipinjam')
+                    ->where('tanggal_kembali', '<', now());
     }
 }

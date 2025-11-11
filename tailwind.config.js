@@ -25,7 +25,8 @@ darkMode: 'class',
                 white: '#ffffff',
                 kuning: '#F0BB78',
                 cream_muda: '#F5ECD5',
-                black: '#000000'
+                black: '#000000',
+                pearl: '#F8F8F8'
             }
         },
     },

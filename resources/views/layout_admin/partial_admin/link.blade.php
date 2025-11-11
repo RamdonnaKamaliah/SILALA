@@ -1,5 +1,5 @@
- <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png" />
- <link rel="icon" type="image/png" href="./assets/img/favicon.png" />
+ {{-- <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png" />
+ <link rel="icon" type="image/png" href="./assets/img/favicon.png" /> --}}
  <!--     Fonts and icons     -->
  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
  <!-- Font Awesome Icons -->
@@ -15,4 +15,11 @@
  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+ {{-- link data table --}}
+ <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+ <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+ <script src="{{ asset('assets_admin/js/data table/dataTable.js') }}"></script>
+ {{-- end link data table --}}
 

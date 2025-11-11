@@ -8,6 +8,8 @@ use App\Models\DataBuku;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataBukuImport; 
 use App\Models\DataKategori;
+use App\Helpers\ImageHelper;
+
 
 class DataBukuController extends Controller
 {
@@ -30,13 +32,14 @@ class DataBukuController extends Controller
 }
 
 
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
 {
     $validated = $request->validate([
-        'foto_buku' => 'nullable|image|max:2048',
+        'foto_buku' => 'nullable|image|mimes:png,jpg|max:2048',
         'judul_buku' => 'required|string|max:255',
         'penulis' => 'required|string|max:255',
         'penerbit' => 'required|string|max:255',
@@ -105,7 +108,7 @@ class DataBukuController extends Controller
     public function update(Request $request, string $id)
 {
     $validated = $request->validate([
-        'foto_buku' => 'nullable|image|max:2048',
+        'foto_buku' => 'nullable|image|mimes:png,jpg|max:2048',
         'judul_buku' => 'required|string|max:255',
         'penulis' => 'required|string|max:255',
         'penerbit' => 'required|string|max:255',
@@ -184,7 +187,7 @@ class DataBukuController extends Controller
 
     public function downloadTemplate()
     {
-        return response()->download(public_path('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA.xlsx'));
+        return response()->download(public_path('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx'));
 
     }
 
@@ -194,8 +197,30 @@ class DataBukuController extends Controller
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new DataBukuImport, $request->file('file'));
+       Excel::import(new DataBukuImport, $request->file('file'));
+
         return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diimpor!');
     }
-    
+
+    //arsipkan buku
+    public function archive($id)
+    {
+
+        $buku = DataBuku::findOrFail($id);
+        $buku->status = 'arsip';
+        $buku->save();
+
+        return redirect()->route('admin.data_arsip.index')->with('success', 'Buku berhasil diarsipkan!');
+    }
+
+    //pulihkan buku dari arsip 
+    public function restore ($id)
+    {
+        $buku = DataBuku::findOrFail($id);
+        $buku->status = 'aktif';
+        $buku->save();
+
+        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
+    }
+
 }

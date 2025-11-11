@@ -71,6 +71,13 @@ Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBo
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+  // 🗂️ Arsipkan buku
+Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
+    ->name('data_buku.archive');
+    
+// 🔁 Pulihkan buku dari arsip
+Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
+    ->name('data_buku.restore');
 
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');

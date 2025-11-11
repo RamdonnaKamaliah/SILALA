@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\DataBuku;
 
 class DataArsipController extends Controller
 {
@@ -12,7 +13,10 @@ class DataArsipController extends Controller
      */
     public function index()
     {
-        return view('admin.data_arsip.index', ['title' => 'Data Arsip Buku']);
+       // hanya tampilkan buku yang statusnya arsip
+    $buku_arsip = DataBuku::where('status', 'arsip')->get();
+
+    return view('admin.data_arsip.index', compact('buku_arsip'));
     }
 
     /**
@@ -36,7 +40,7 @@ class DataArsipController extends Controller
      */
     public function show(string $id)
     {
-        return "Detail Favorit ID: $id (Percobaan)";
+        return view('admin.data_arsip.show', ['buku' => DataBuku::findOrFail($id)]);
     }
 
     /**

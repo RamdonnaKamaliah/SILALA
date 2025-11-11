@@ -40,7 +40,7 @@ class RiwayatBukuController extends Controller
         $riwayat = $query->get();
 
         return view('user.riwayatbuku', [
-            'title' => 'Riwayat Buku',
+            'title' => 'RIWAYAT PINJAM & BACA',
             'riwayat' => $riwayat
         ]);
     }

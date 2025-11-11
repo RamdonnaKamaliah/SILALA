@@ -150,9 +150,14 @@
       </div>
     </div>
 
-
-
-
+    <!-- Status Peminjaman User -->
+    @php
+        $userId = Auth::id();
+        $userBorrow = \App\Models\DataPeminjam::where('user_id', $userId)
+            ->where('buku_id', $buku->id)
+            ->where('status', 'dipinjam')
+            ->first();
+    @endphp
 
     @if($userBorrow)
     <div class="mt-2">
@@ -166,6 +171,7 @@
 
     </div>
     @endif
+
   </div>
 </div>
   </nav>
@@ -177,44 +183,58 @@
   <!-- Tombol Baca, Pinjam, dan Like -->
   <div class="flex items-center justify-between mb-2 px-4 md:px-0 relative">
     
-      <!-- Tombol kiri (Baca & Pinjam) -->
-  <div class="flex items-center gap-3 md:ml-[350px]">
+    <!-- Tombol kiri (Baca & Pinjam) -->
+<div class="flex items-center gap-3 md:ml-[350px]">
+  <!-- Tombol Baca -->
+@if($buku->file_pdf) {{-- cek kalau PDF ada --}}
+    <a href="{{ asset($buku->file_pdf) }}" target="_blank">
+        <button
+            class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
+                   rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+            Baca
+        </button>
+    </a>
+@else
     <button
-      class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
-            rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
-      Baca
+        class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
+               rounded-full shadow-md cursor-not-allowed">
+        Baca
     </button>
-    
-    <div class="mt-4">
-      @if($userBorrow)
-        <div class="flex flex-col items-start">
-          <button class="bg-gray-400 text-white px-8 py-1.5 rounded-full cursor-not-allowed opacity-70">
-            Sedang Dipinjam
-          </button>
-          <p class="text-xs text-gray-600 mt-2">
+@endif
+
+
+  @if($userBorrow)
+    <!-- Tombol disabled jika sedang meminjam buku ini -->
+    <button 
+      class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
+             rounded-full shadow-md cursor-not-allowed opacity-70"
+      disabled
+      title="Anda sedang meminjam buku ini">
+      Sedang Dipinjam
+    </button>
+     <p class="text-xs text-gray-600 mt-2">
             Batas pengembalian: 
             {{ \Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
           </p>
-        </div>
-
-      @elseif($stokHabis)
-          <button class="bg-gray-400 text-white px-8 py-1.5 rounded-full cursor-not-allowed opacity-70">
-            Stok Habis
-          </button>
-
-      @else
-          <!-- Tombol Pinjam hanya untuk membuka modal - HAPUS FORM -->
-          <button id="openPinjamModal" 
-                  class="bg-kuning hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
-              rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
-            Pinjam
-          </button>
-        @endif
-  
-  </div>
-  
-
-
+   @elseif($stokHabis)
+    <!-- Tombol disabled jika stok habis -->
+    <button 
+      class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
+             rounded-full shadow-md cursor-not-allowed opacity-70"
+      disabled
+      title="Stok buku habis">
+      Stok Habis
+    </button>
+  @else
+    <!-- Tombol aktif jika bisa meminjam -->
+    <button 
+      id="openPinjamModal"
+      class="bg-kuning text-[#2E2E2E] hover:bg-[#F6D776] font-semibold text-sm px-8 py-1.5 
+             rounded-full shadow-md transition-all duration-300 transform 
+             hover:-translate-y-0.5 hover:shadow-lg">
+      Pinjam
+    </button>
+  @endif
 
 
 <!-- ====== Popup Modal Pinjam Buku ====== -->
@@ -353,9 +373,9 @@
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Script -->
-  <script src="{{ asset('assets_user/js/dashboard.js')}}"></script>
-  <script src="{{ asset('assets_user/js/detailbuku.js')}}"></script>
+<script src="{{ asset('assets_user/js/dashboard.js') }}"></script>
 <script>
+  // Debug: Cek apakah file terload
 document.addEventListener("DOMContentLoaded", () => {
   const openPinjamModal = document.getElementById("openPinjamModal");
   const pinjamModal = document.getElementById("pinjamModal");
@@ -553,5 +573,9 @@ if (result.success) {
 }
 });
 </script>
+
+
 </body>
 </html>
+
+

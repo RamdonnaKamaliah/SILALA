@@ -32,21 +32,23 @@
     </svg>
   </button>
 
-  <!-- List Kategori (FANCY COLOR) -->
- <div id="kategoriMenu" class="hidden absolute w-full md:w-48 mt-2 bg-primary rounded-xl shadow-xl p-2 z-50 border border-[#E2DAC3]">
-<button class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all duration-200 rounded-lg">
-  Kimia
-</button>
+ <!-- List Kategori -->
+<div id="kategoriMenu" class="hidden absolute w-full md:w-48 mt-2 bg-primary rounded-xl shadow-xl p-2 z-50 border border-[#E2DAC3]">
 
-<button class="block w-full text-left px-4 py-2 text-white  hover:bg-kuning hover:text-gray-900 transition-all duration-200 rounded-lg">
-  Kesehatan
-</button>
+  <!-- Tombol Semua Kategori di atas -->
+  <button data-kategori="Semua" 
+    class="kategori-btn block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
+    Semua Kategori
+  </button>
 
-<button class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all duration-200 rounded-lg">
-  Peternakan
-</button>
-
-  </div>
+  <!-- List Kategori dari database -->
+  @foreach($data_kategori as $kat)
+  <button data-kategori="{{ $kat->nama_kategori }}" 
+          class="kategori-btn block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all rounded-lg">
+      {{ $kat->nama_kategori }}
+  </button>
+  @endforeach
+</div>
 </div>
 
       <!-- Pencarian -->
@@ -68,7 +70,9 @@
       @foreach ($data_bukus as $buku)
       <!-- Card Buku 8 -->
       <div class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-            transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4">
+      transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4"
+     data-kategori-buku="{{ $buku->nama_kategori }}"
+     data-judul="{{ strtolower($buku->judul_buku) }}">
 
         <!-- Cover Buku -->
         <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
@@ -112,5 +116,56 @@
 <!-- script -->
 <script src="{{asset('assets_user/js/dashboard.js')}}"></script>
 <script src="{{asset('assets_user/js/daftarbuku.js')}}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.querySelector('input[placeholder="Cari Buku..."]');
+  const kategoriButtons = document.querySelectorAll('.kategori-btn');
+  const kategoriText = document.getElementById('kategoriText');
+  const cards = document.querySelectorAll('[data-judul]');
+
+  let kategoriDipilih = "Semua";
+
+  // FILTER KATEGORI
+  kategoriButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+      kategoriDipilih = this.getAttribute('data-kategori');
+      kategoriText.textContent = kategoriDipilih;
+
+      cards.forEach(card => {
+        const kategoriBuku = card.getAttribute('data-kategori-buku');
+        const judul = card.getAttribute('data-judul');
+
+        if ((kategoriDipilih === "Semua" || kategoriBuku === kategoriDipilih) &&
+            (judul.includes(searchInput.value.toLowerCase()))) {
+          card.classList.remove('hidden');
+          card.classList.add('flex');
+        } else {
+          card.classList.add('hidden');
+          card.classList.remove('flex');
+        }
+      });
+    });
+  });
+
+  // SEARCH
+  searchInput.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+
+    cards.forEach(card => {
+      const judul = card.getAttribute('data-judul');
+      const kategoriBuku = card.getAttribute('data-kategori-buku');
+
+      if ((kategoriDipilih === "Semua" || kategoriBuku === kategoriDipilih) &&
+          judul.includes(query)) {
+        card.classList.remove('hidden');
+        card.classList.add('flex');
+      } else {
+        card.classList.add('hidden');
+        card.classList.remove('flex');
+      }
+    });
+  });
+});
+</script>
 </body>
 </html>

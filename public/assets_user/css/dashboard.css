@@ -32,7 +32,7 @@
 
    .menu-item.active {
   background-color: #ffffff !important;  /* warna dasar putih */
-  border-color: #ffffff !important;       /* border putih */
+  border-color: #ffffff !important;       border putih
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);  /* sedikit bayangan biar menonjol */
   color: #626F47 !important;              /* warna teks hijau tua */
   transform: scale(1.02);                 /* sedikit efek klik */

@@ -9,7 +9,7 @@ class RiwayatBacaController extends Controller
 {
      public function index()
     {
-        return view('user.riwayatbaca' , ['title' => 'RIWAYAT PINJAM DAN BACA']);
+        return view('user.riwayatbaca' , ['title' => 'RIWAYAT PINJAM & BACA']);
     }
 
 }

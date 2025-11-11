@@ -25,21 +25,27 @@
     </div>
 
     <!-- Profil -->
-    <div class="mx-3 mb-8 border rounded-full p-2 flex items-center gap-3 bg-[#F5ECD5] profile-card relative z-10 shadow-sm">
+     <ul id="sidebar-menu" class="space-y-3">
+  <li class="relative nav-item rounded-l-[50px] hover:bg-white list-none">
+  <a href="{{ route('user.profil') }}" class="group relative flex items-center w-full text-[#626F47] transition-all duration-300">
+
+    <div class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
+          group-hover:border-transparent group-hover:bg-white">
       <img src="{{ asset('assets/Profile.jpg') }}" alt="Foto Profil"
         class="w-20 h-20 rounded-full border-2 border-[#626F47] object-cover shadow-md" />
-      <div class="text-[#626F47] leading-tight pr-3">
-        <p class="font-semibold text-[#626F47]">Rifdatul Aisya</p>
-        <p class="text-sm opacity-80">Rifdah@gmail.com</p>
+      <div class="leading-tight">
+        <p class="font-bold text-[#626F47] text-sm">Rifdatul Aisya</p>
+        <p class="text-xs opacity-80 -mt-[2px]">Rifdah@gmail.com</p>
       </div>
     </div>
+  </a>
+</li>
 
     <!-- Menu -->
-    <ul id="sidebar-menu" class="space-y-3">
   <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
     <a href="{{ route('dashboard') }}" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
       <div
-        class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start shadow-md transition-all duration-300
+        class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
         <i class="fa-solid fa-chart-line text-xl"></i>
         <span class="whitespace-nowrap text-base font-bold">Dashboard</span>
@@ -50,7 +56,7 @@
   <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
     <a href="{{ route('user.daftarbuku') }}" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
       <div
-        class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start shadow-md transition-all duration-300
+        class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
         <i class="fa-solid fa-book text-xl"></i>
         <span class="whitespace-nowrap text-base font-bold">Buku</span>
@@ -61,7 +67,7 @@
   <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
     <a href="{{ route('user.riwayatbuku')}}" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
       <div
-        class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start shadow-md transition-all duration-300
+        class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
         <i class="fa-solid fa-clock-rotate-left text-xl"></i>
         <span class="whitespace-nowrap text-base font-bold">Riwayat</span>
@@ -70,9 +76,9 @@
   </li>
 
   <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
-    <a href="#" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
+    <a href="{{ route('user.favorit')}}" class="group relative flex items-center w-full text-[#626F47] transition-colors duration-300">
       <div
-        class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start shadow-md transition-all duration-300
+        class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
         <i class="fa-solid fa-bookmark text-xl"></i>
         <span class="whitespace-nowrap text-base font-bold">Favorit</span>

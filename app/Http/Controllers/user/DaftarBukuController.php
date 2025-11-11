@@ -19,7 +19,7 @@ class DaftarBukuController extends Controller
 
         // Kirim ke view
         return view('user.daftarbuku', [
-            'title' => 'Daftar Buku',
+            'title' => 'DAFTAR BUKU',
             'data_bukus' => $data_bukus,
             'data_kategori' => $data_kategori,
         ]);

@@ -20,6 +20,9 @@ use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
 use App\Http\Controllers\user\RiwayatBukuController;
 use App\Http\Controllers\user\RiwayatBacaController;
+use App\Http\Controllers\user\FavoritController;
+use App\Http\Controllers\user\ProfilController;
+
 
 
 // Public Routes
@@ -60,6 +63,8 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
      Route::get('/riwayatbuku', [RiwayatBukuController::class, 'index'])->name('user.riwayatbuku');
     Route::post('/riwayatbuku/store', [RiwayatBukuController::class, 'store'])->name('user.riwayatbuku.store');
     Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
+    Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');
+    Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
     
     // User - Riwayat Buku
 Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalikanBuku'])

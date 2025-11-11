@@ -1,17 +1,16 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Tambah Buku')
-@section('content')
+<?php $__env->startSection('pageTitle', 'Tambah Buku'); ?>
+<?php $__env->startSection('content'); ?>
 
 <!-- AOS CSS -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-<link rel="stylesheet" href="{{ asset('/assets_admin/css/create-databuku.css') }}">
+<link rel="stylesheet" href="<?php echo e(asset('/assets_admin/css/create-databuku.css')); ?>">
 
 <div class="py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         
         <!-- Page Header -->
         <div class="mb-8" data-aos="fade-down" data-aos-duration="800">
-            <a href="{{ route('admin.data_buku.index') }}" 
+            <a href="<?php echo e(route('admin.data_buku.index')); ?>" 
                class="back-link inline-flex items-center mb-4">
                 <i class="fas fa-arrow-left mr-2"></i>
                 <span>Kembali ke Daftar Buku</span>
@@ -27,9 +26,9 @@
         </div>
 
         <!-- Form -->
-        <form action="{{ route('admin.data_buku.store') }}" method="POST" enctype="multipart/form-data" 
+        <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data" 
               class="space-y-8">
-            @csrf
+            <?php echo csrf_field(); ?>
 
             <!-- Upload Section -->
             <div data-aos="fade-up" data-aos-duration="800">
@@ -155,9 +154,9 @@
                         </label>
                         <select name="kategori_id[]" id="kategori_id" multiple
                                 class="form-input w-full rounded-lg px-4 py-3" required>
-                            @foreach ($kategoris as $kategori)
-                                <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($kategori->id); ?>"><?php echo e($kategori->nama_kategori); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                         <small class="text-gray-600 text-xs mt-1 flex items-center gap-1">
                             <i class="fas fa-info-circle"></i>
@@ -231,7 +230,7 @@
             <!-- Action Buttons -->
             <div class="bg-white rounded-lg p-6 shadow-md" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
                 <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                    <a href="{{ route('admin.data_buku.index') }}" 
+                    <a href="<?php echo e(route('admin.data_buku.index')); ?>" 
                        class="btn-secondary text-center inline-flex items-center justify-center gap-2 min-w-[150px]">
                         <i class="fas fa-times"></i>
                         <span>Batal</span>
@@ -251,5 +250,6 @@
 
 <!-- AOS JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-<script src="{{asset('/assets_admin/js/create-databuku.js')}}"></script>
-@endsection
+<script src="<?php echo e(asset('/assets_admin/js/create-databuku.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_buku/create.blade.php ENDPATH**/ ?>

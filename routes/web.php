@@ -31,6 +31,8 @@ use App\Http\Controllers\user\ProfilController;
 
 
 
+
+
 // Public Routes
 // -----------------------------------------------------------------------------
 Route::get('/', function () {
@@ -82,6 +84,10 @@ Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalika
     ->name('user.riwayat.kembalikan');
 Route::get('/check-borrow-status/{bookId}', [RiwayatBukuController::class, 'checkBookBorrowStatus'])->name('user.check.borrow.status');
 Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBorrow'])->name('user.check.active.borrow');
+// routes/web.php
+Route::post('/pinjam', [App\Http\Controllers\Admin\DataPeminjamController::class, 'store'])
+    ->name('pinjam.store')
+    ->middleware('auth'); // Hanya auth, tanpa admin middleware
 });
 
 
@@ -89,6 +95,13 @@ Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBo
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+  // 🗂️ Arsipkan buku
+Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
+    ->name('data_buku.archive');
+    
+// 🔁 Pulihkan buku dari arsip
+Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
+    ->name('data_buku.restore');
 
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');

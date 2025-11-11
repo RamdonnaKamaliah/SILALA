@@ -28,15 +28,13 @@
     </div>
   </main>
 
-  {{-- ====== FOOTER SCRIPT ====== --}}
-  <script src="{{ asset('assets_admin/js/plugins/chartjs.min.js') }}" async></script>
-  <script src="{{ asset('assets_admin/js/plugins/perfect-scrollbar.min.js') }}" async></script>
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="{{ asset('/assets_admin/js/plugins/chartjs.min.js') }}" async></script>
+    <script src="{{ asset('/assets_admin/js/plugins/perfect-scrollbar.min.js') }}" async></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
 
-  {{-- ====== SIDEBAR & LAYOUT SCRIPT ====== --}}
-  <script src="{{ asset('assets_admin/js/sidebar-admin.js') }}"></script>
+    
+    @stack('scripts')
 
-  {{-- ====== PAGE SPECIFIC SCRIPT ====== --}}
-  @stack('scripts')
 </body>
 </html>

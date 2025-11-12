@@ -4,18 +4,18 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataBuku;
-use App\Models\DataKategori; // ✅ kamu lupa import ini
+use App\Models\DataKategori;
 use Illuminate\Http\Request;
 
 class DaftarBukuController extends Controller
 {
     public function index()
     {
-        // Ambil data kategori dari admin
-        $data_kategori = DataKategori::all();
+        // Ambil hanya buku dengan status aktif
+        $data_bukus = DataBuku::where('status', 'aktif')->get();
 
-        // Ambil data buku
-        $data_bukus = DataBuku::all();
+        // Ambil semua kategori
+        $data_kategori = DataKategori::all();
 
         // Kirim ke view
         return view('user.daftarbuku', [

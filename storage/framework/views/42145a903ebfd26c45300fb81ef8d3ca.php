@@ -19,15 +19,9 @@
  
  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
- <script src="<?php echo e(asset('assets_admin/js/data table/dataTable.js')); ?>"></script>
  
 
- <!-- Databuku link CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="<?php echo e(asset('/assets_admin/css/index-databuku.css')); ?>">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-  
-  <link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/layout-admin.css')); ?>">
-  <link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/sidebar-admin.css')); ?>"><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/layout_admin/partial_admin/link.blade.php ENDPATH**/ ?>
+ 
+ <link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/dataBuku/deleteArsip.css')); ?>">
+ <script src="<?php echo e(asset('assets_admin/js/data table/dataTable.js')); ?>"></script>
+<?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/layout_admin/partial_admin/link.blade.php ENDPATH**/ ?>

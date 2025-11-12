@@ -1,0 +1,21 @@
+/* Tombol Hapus */
+#bulkDeleteBtn:enabled {
+    background-color: #ef4444;
+    cursor: pointer;
+    opacity: 1;
+}
+
+#bulkDeleteBtn:enabled:hover {
+    background-color: #dc2626;
+}
+
+/* Tombol Arsipkan */
+#bulkArchiveBtn:enabled {
+    background-color: #f59e0b;
+    cursor: pointer;
+    opacity: 1;
+}
+
+#bulkArchiveBtn:enabled:hover {
+    background-color: #d97706;
+}

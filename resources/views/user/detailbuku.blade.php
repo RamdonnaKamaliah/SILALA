@@ -186,21 +186,19 @@
     <!-- Tombol kiri (Baca & Pinjam) -->
 <div class="flex items-center gap-3 md:ml-[350px]">
   <!-- Tombol Baca -->
-@if($buku->file_pdf) {{-- cek kalau PDF ada --}}
-    <a href="{{ asset($buku->file_pdf) }}" target="_blank">
-        <button
-            class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
-                   rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+<!-- Tombol Baca -->
+@if($buku->file_buku && $buku->id)
+    <a href="{{ route('user.baca', $buku->id) }}" target="_blank">
+        <button class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
             Baca
         </button>
     </a>
 @else
-    <button
-        class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
-               rounded-full shadow-md cursor-not-allowed">
+    <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
         Baca
     </button>
 @endif
+
 
 
   @if($userBorrow)
@@ -338,8 +336,13 @@
   class="group flex items-center justify-center text-[#E76F51] w-9 h-9 shadow-none bg-transparent 
          transition-all duration-300 transform 
          hover:-translate-y-0.5 hover:scale-110 mr-2 md:mr-[60px]">
-  <i id="heartIcon" class="fa-regular fa-heart text-base transition-transform duration-300 group-hover:scale-125"></i>
+  @if($isFavorited)
+    <i id="heartIcon" class="fa-solid fa-heart text-[#E63946] text-base transition-transform duration-300 group-hover:scale-125"></i>
+  @else
+    <i id="heartIcon" class="fa-regular fa-heart text-base transition-transform duration-300 group-hover:scale-125"></i>
+  @endif
 </button>
+
 
 
     <!-- Garis bawah -->
@@ -353,19 +356,27 @@
     <div>
       <h3 class="text-lg font-semibold mb-3">Deskripsi</h3>
       <p class="text-sm leading-relaxed text-[#626F47]">
-        Lorem ipsum is simply dummy text of the printing and typesetting industry. 
-        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        {{ $buku->deskripsi }}
       </p>
     </div>
 
     <!-- Detail Buku -->
     <div class="grid grid-cols-2 gap-y-3 text-sm text-[#626F47]">
-      <div><p class="font-semibold text-[#2E2E2E]">Penerbit</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Tahun Terbit</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Bahasa</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Kategori</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Jumlah Halaman</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Edisi</p><p>Lorem Ipsum</p></div>
+      <div><p class="font-semibold text-[#2E2E2E]">Penerbit</p><p>{{ $buku->penulis }}</p></div>
+      <div><p class="font-semibold text-[#2E2E2E]">Tahun Terbit</p><p>{{ $buku->tahun_terbit }}</p></div>
+      <div><p class="font-semibold text-[#2E2E2E]">Bahasa</p><p>{{ $buku->bahasa }}</p></div>
+      <div>
+        <p class="font-semibold text-[#2E2E2E]">Kategori</p>
+        <p>
+          @if($buku->kategoris->isNotEmpty())
+            {{ $buku->kategoris->pluck('nama_kategori')->join(', ') }}
+          @else
+            -
+          @endif
+        </p>
+      </div>
+      <div><p class="font-semibold text-[#2E2E2E]">Jumlah Halaman</p><p>{{ $buku->jumlah_halaman }}</p></div>
+      <div><p class="font-semibold text-[#2E2E2E]">Edisi</p><p>{{ $buku->edisi }}</p></div>
     </div>
   </div>
 </main>
@@ -572,6 +583,42 @@ if (result.success) {
   });
 }
 });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const loveBtn = document.getElementById('loveBtn');
+  const heartIcon = document.getElementById('heartIcon');
+  const bukuId = "{{ $buku->id }}";
+
+  if (!loveBtn || !heartIcon) return;
+
+  loveBtn.addEventListener('click', async () => {
+    try {
+      const res = await fetch("{{ route('user.favorit.toggle') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({ buku_id: bukuId })
+      });
+
+      const data = await res.json();
+
+      if (data.favorited) {
+        heartIcon.classList.remove('fa-regular');
+        heartIcon.classList.add('fa-solid', 'text-[#E63946]');
+      } else {
+        heartIcon.classList.remove('fa-solid', 'text-[#E63946]');
+        heartIcon.classList.add('fa-regular');
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
+  });
+});
+
 </script>
 
 

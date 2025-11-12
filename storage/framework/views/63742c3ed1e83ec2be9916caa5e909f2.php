@@ -1,14 +1,13 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Admin Dashboard - Data Denda')
+<?php $__env->startSection('pageTitle', 'Admin Dashboard - Data Peminjam'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="text-left">
     <!-- Judul Dashboard -->
     <h1 class="text-3xl lg:text-4xl font-bold text-slate-800 mb-3">
-        Selamat datang di Dashboard Data Denda 🎉
+        Selamat datang di Dashboard Data Peminjam 🎉
     </h1>
     <p class="text-gray-600 mb-6">
-        Ini isi konten halaman Data Denda
+        Ini isi konten halaman Data Peminjam
     </p>
 
     <!-- Statistik Cards -->
@@ -32,4 +31,6 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/data_peminjam/index.blade.php ENDPATH**/ ?>

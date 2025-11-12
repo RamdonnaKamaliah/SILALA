@@ -21,10 +21,62 @@
         <h2 class="text-lg md:text-xl font-semibold text-[#A4B465] flex items-center gap-2">
             <i class="fa-solid fa-list"></i> Daftar Buku
         </h2>
-        <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
-            <a href="#" class="bg-yellow-400 text-black font-medium px-4 py-2 rounded-lg shadow hover:bg-yellow-500 transition w-full sm:w-auto text-center">
-                <i class="fa-solid fa-file-import mr-1"></i> Import
-            </a>
+        <div x-data="{ open: false }" class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+
+            <button @click="open = true"
+                    class="bg-yellow-400 text-black font-medium px-4 py-2 rounded-lg shadow hover:bg-yellow-500 transition w-full sm:w-auto text-center">
+                    Import
+            </button>
+            <!-- Modal Import -->
+                <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div @click.away="open = false"
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-6 relative">
+                        <!-- Header -->
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-lg font-bold text-gray-800 dark:text-white">Upload Excel Buku</h2>
+                            <button @click="open = false"
+                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                ✖
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">
+                            Gunakan template dibawah ini untuk format yang benar
+                        </p>
+
+                        <!-- Tombol Download Template -->
+                        <a href="{{ asset('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx') }}"
+                            class="block w-full bg-red-500 hover:bg-red-600 text-white text-center py-2 rounded-lg mb-4 transition"
+                            download>
+                            ⬇️ Download Template
+                        </a>
+
+                        <!-- Form Upload -->
+                        <form action="{{ route('admin.data_buku.import') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" accept=".xlsx,.xls" required
+                                class="block w-full text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4
+                           file:rounded-l-lg file:border-0 file:text-sm file:font-semibold
+                           file:bg-gray-200 file:text-gray-700
+                           hover:file:bg-gray-300 dark:file:bg-gray-700 dark:file:text-white
+                           mb-4 rounded-lg border border-gray-300 dark:border-gray-600">
+
+                            <!-- Tombol Aksi -->
+                            <div class="flex justify-end gap-2">
+                                <button type="button" @click="open = false"
+                                    class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg transition">
+                                    Close
+                                </button>
+                                <button type="submit"
+                                    class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition">
+                                    Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             <a href="{{ route('admin.data_buku.create') }}"
                class="bg-[#A4B465] text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-[#8A9A55] transition w-full sm:w-auto text-center">
                 <i class="fa-solid fa-plus mr-1"></i> Tambah Buku
@@ -36,6 +88,7 @@
             </button>
         </div>
     </div>
+    
 
     <!-- DATA TABLE CONTROL -->
     <div id="datatable-controls"
@@ -59,8 +112,9 @@
     </div>
 
     <!-- TABLE -->
-    <form id="bulkDeleteForm" method="POST" action="{{ route('admin.data_buku.bulk-delete') }}">
-        @csrf
+    <form id="bulkDeleteForm" action="{{ route('admin.data_buku.bulk-delete') }}" method="POST"> @csrf
+            @method('DELETE')
+
         <!-- 🔥 GANTI INI KE POST SESUAI ROUTE -->
         {{-- @method('DELETE') --}}
 
@@ -70,46 +124,49 @@
                     <table id="dataTable" class="w-full text-sm divide-y divide-gray-200 min-w-[1000px]">
                         <thead class="bg-[#A4B465] text-white">
                             <tr>
-                                <th class="px-3 py-3 text-center"><input type="checkbox" id="selectAll" class="w-4 h-4"></th>
+                                <th class="px-3 py-3 text-center"><input type="checkbox" id="selectAll" name="selected_ids[]" class="w-4 h-4"></th>
                                 <th class="px-4 py-3 text-center font-semibold">No</th>
                                 <th class="px-4 py-3 text-center font-semibold">Foto</th>
                                 <th class="px-4 py-3 text-left font-semibold">Judul</th>
                                 <th class="px-4 py-3 text-left font-semibold">Penulis</th>
                                 <th class="px-4 py-3 text-left font-semibold">Penerbit</th>
                                 <th class="px-4 py-3 text-left font-semibold">Tahun Terbit</th>
-                                <th class="px-4 py-3 text-left font-semibold">Bahasa</th>
                                 <th class="px-4 py-3 text-left font-semibold">Kategori</th>
-                                <th class="px-4 py-3 text-left font-semibold">Jumlah Halaman</th>
+                            
                                 <th class="px-4 py-3 text-left font-semibold">Edisi</th>
                                 <th class="px-4 py-3 text-left font-semibold">Stok</th>
                                 <th class="px-4 py-3 text-left font-semibold">File</th>
-                                <th class="px-4 py-3 text-left font-semibold">Deskripsi</th>
+                            
                                 <th class="px-4 py-3 text-center font-semibold">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100 text-gray-700">
-                            @foreach ($data_buku as $buku)
+                            @foreach ($data_buku->where('status', 'aktif') as $buku)
                             <tr class="hover:bg-[#F5F7ED] transition">
                                 <td class="px-3 py-3 text-center">
                                     <input type="checkbox" name="selected_ids[]" value="{{ $buku->id }}" class="row-checkbox w-4 h-4">
                                 </td>
                                 <td class="px-4 py-3 text-center">{{ $loop->iteration }}</td>
-                                <td class="px-4 py-3 text-center">
-                                    <div class="w-14 h-14 rounded-lg overflow-hidden mx-auto shadow-sm">
-                                        @if ($buku->foto_buku)
-                                            <img src="{{ asset($buku->foto_buku) }}" class="w-full h-full object-cover hover:scale-110 transition">
-                                        @else
-                                            <div class="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
-                                                <i class="fa-solid fa-image text-xl"></i>
-                                            </div>
-                                        @endif
-                                    </div>
+                                <td class="px-4 py-2 border-b border-gray-300">
+                                    @if ($buku->foto_buku)
+                                        <div class="w-16 h-20 overflow-hidden rounded-lg border-2 mx-auto">
+                                            <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku {{ $buku->judul_buku }}"
+                                                class="w-full h-full object-cover"
+                                                onerror="this.onerror=null; this.src='{{ asset('images/default-book.jpg') }}';">
+                                        </div>
+                                    @else
+                                        <div
+                                            class="w-16 h-20 bg-gray-200 flex items-center justify-center text-gray-500 rounded-lg border mx-auto">
+                                            <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
+                                                alt="Foto default buku" class="w-full h-full object-cover">
+                                        </div>
+                                    @endif
                                 </td>
                                 <td class="px-4 py-3 font-medium text-slate-800">{{ $buku->judul_buku }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ $buku->penulis }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ $buku->penerbit }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ $buku->tahun_terbit }}</td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->bahasa }}</td>
+                     
                                 <td class="px-4 py-3 text-gray-600">
                                     @if ($buku->kategoris->count())
                                         {{ $buku->kategoris->pluck('nama_kategori')->join(', ') }}
@@ -117,17 +174,21 @@
                                         <span class="italic text-gray-400">Tidak Ada</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-gray-600">{{ $buku->jumlah_halaman }}</td>
+                        
                                 <td class="px-4 py-3 text-gray-600">{{ $buku->edisi }}</td>
                                 <td class="px-4 py-3 text-gray-600">{{ $buku->stok }}</td>
                                 <td class="px-4 py-3 text-gray-600">
-                                    @if ($buku->file_buku)
-                                        <a href="{{ asset($buku->file_buku) }}" target="_blank" class="text-[#A4B465] hover:underline">Lihat</a>
+                                   @if ($buku->file_buku)
+                                        <a href="{{ asset($buku->file_buku) }}" target="_blank"
+                                            class="inline-block bg-blue-600 text-white px-3 py-1 rounded-lg shadow hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition text-xs">
+                                            Lihat File
+                                        </a>
                                     @else
-                                        <span class="text-gray-400 italic">Tidak ada</span>
+                                        <span class="text-gray-400 italic text-xs">Tidak ada file</span>
                                     @endif
+
                                 </td>
-                                <td class="px-4 py-3 text-gray-600 max-w-xs truncate">{{ $buku->deskripsi }}</td>
+                        
                                 <td class="px-4 py-3 text-center">
                                     <div class="flex justify-center gap-3">
                                         <a href="{{ route('admin.data_buku.show', $buku->id) }}" class="text-[#A4B465] hover:text-[#8A9A55]" title="Detail">
@@ -136,9 +197,25 @@
                                         <a href="{{ route('admin.data_buku.edit', $buku->id) }}" class="text-[#A4B465] hover:text-[#8A9A55]" title="Edit">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
-                                        <button type="button" class="text-red-600 hover:text-red-800 delete-btn" data-id="{{ $buku->id }}" title="Hapus">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
+                        
+                                        <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST"
+                                            class="inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-800 delete-btn"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
+                                                Hapus
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('admin.data_buku.archive', ['id' => $buku->id]) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit"
+                                                onclick="return confirm('Arsipkan buku ini?')">Arsipkan</button>
+                                        </form>
+
                                     </div>
                                 </td>
                             </tr>
@@ -151,12 +228,3 @@
     </form>
 </div>
 @endsection
-
-@push('styles')
-@include('layout_admin.partial_admin.link')
-@endpush
-
-@push('scripts')
-<script src="{{asset('/assets_admin/js/index-databuku.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endpush

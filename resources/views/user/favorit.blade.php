@@ -29,107 +29,41 @@
   </div>
 </div>
 
-<!-- Grid Buku -->
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-
-  <!-- Card 1 -->
-  <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-    <img src="{{ asset('assets/buku1.jpg') }}" class="w-16 h-24 object-cover shadow-md rounded-md flex-shrink-0">
-
+  @foreach($favorites as $fav)
+  <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+    <img src="{{ asset($fav->buku->foto_buku ?? 'assets/default-cover.jpg') }}" class="w-16 h-24 object-cover shadow-md rounded-md flex-shrink-0">
     <div class="flex flex-col justify-between flex-grow">
       <div>
-        <p class="book-title text-[#2E2E2E] text-sm font-semibold leading-tight">Pergi</p>
-        <p class="text-[#626F47] text-xs font-semibold mt-1">Tere Liye</p>
-      </div>
-
-      <div class="border-t border-[#E0D6B8] my-2"></div>
-      <div class="flex items-center justify-between">
-        <button class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</button>
-        <button class="text-red-500 text-lg hover:scale-110 transition"><i class="fa-solid fa-heart"></i></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Copy Card 1 ke bawah lalu ganti isinya sesuai kebutuhan -->
-
-  <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-    <img src="{{ asset('assets/buku1.jpg') }}" class="w-16 h-24 object-cover shadow-md rounded-md flex-shrink-0">
-    <div class="flex flex-col justify-between flex-grow">
-      <div>
-        <p class="book-title text-[#2E2E2E] text-sm font-semibold leading-tight">bulan</p>
-        <p class="text-[#626F47] text-xs font-semibold mt-1">Penulis Buku</p>
+        <p class="book-title text-[#2E2E2E] text-sm font-semibold leading-tight">{{ $fav->buku->judul_buku }}</p>
+        <p class="text-[#626F47] text-xs font-semibold mt-1">{{ $fav->buku->penulis }}</p>
       </div>
       <div class="border-t border-[#E0D6B8] my-2"></div>
       <div class="flex items-center justify-between">
-        <button class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</button>
-        <button class="text-red-500 text-lg hover:scale-110 transition"><i class="fa-solid fa-heart"></i></button>
+        <a href="{{ route('user.baca', $fav->buku->id) }}" class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</a>
+        <button class="text-red-500 text-lg hover:scale-110 transition" onclick="hapusFavorite({{ $fav->buku->id }})">
+          <i class="fa-solid fa-heart"></i>
+        </button>
       </div>
     </div>
   </div>
-
-   <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-    <img src="{{ asset('assets/buku1.jpg') }}" class="w-16 h-24 object-cover shadow-md rounded-md flex-shrink-0">
-    <div class="flex flex-col justify-between flex-grow">
-      <div>
-        <p class="book-title text-[#2E2E2E] text-sm font-semibold leading-tight">bumi</p>
-        <p class="text-[#626F47] text-xs font-semibold mt-1">Penulis Buku</p>
-      </div>
-      <div class="border-t border-[#E0D6B8] my-2"></div>
-      <div class="flex items-center justify-between">
-        
-        <button class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</button>
-        <button class="text-red-500 text-lg hover:scale-110 transition"><i class="fa-solid fa-heart"></i></button>
-      </div>
-    </div>
-  </div>
-
-   <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-    <img src="{{ asset('assets/buku1.jpg') }}" class="w-16 h-24 object-cover shadow-md rounded-md flex-shrink-0">
-    <div class="flex flex-col justify-between flex-grow">
-      <div>
-        <p class="book-title text-[#2E2E2E] text-sm font-semibold leading-tight">kimia</p>
-        <p class="text-[#626F47] text-xs font-semibold mt-1">Penulis Buku</p>
-      </div>
-      <div class="border-t border-[#E0D6B8] my-2"></div>
-      <div class="flex items-center justify-between">
-        
-        <button class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</button>
-        <button class="text-red-500 text-lg hover:scale-110 transition"><i class="fa-solid fa-heart"></i></button>
-      </div>
-    </div>
-  </div>
-
-   <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-    <img src="{{ asset('assets/buku1.jpg') }}" class="w-16 h-24 object-cover shadow-md rounded-md flex-shrink-0">
-    <div class="flex flex-col justify-between flex-grow">
-      <div>
-        <p class="book-title text-[#2E2E2E] text-sm font-semibold leading-tight">fisika</p>
-        <p class="text-[#626F47] text-xs font-semibold mt-1">Penulis Buku</p>
-      </div>
-      <div class="border-t border-[#E0D6B8] my-2"></div>
-      <div class="flex items-center justify-between">
-        <button class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</button>
-        <button class="text-red-500 text-lg hover:scale-110 transition"><i class="fa-solid fa-heart"></i></button>
-      </div>
-    </div>
-  </div>
-
-   <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
-    <img src="{{ asset('assets/buku1.jpg') }}" class="w-16 h-24 object-cover shadow-md rounded-md flex-shrink-0">
-    <div class="flex flex-col justify-between flex-grow">
-      <div>
-        <p class="book-title text-[#2E2E2E] text-sm font-semibold leading-tight">bla</p>
-        <p class="text-[#626F47] text-xs font-semibold mt-1">Penulis Buku</p>
-      </div>
-      <div class="border-t border-[#E0D6B8] my-2"></div>
-      <div class="flex items-center justify-between">
-        <button class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</button>
-        <button class="text-red-500 text-lg hover:scale-110 transition"><i class="fa-solid fa-heart"></i></button>
-      </div>
-    </div>
-  </div>
-
+  @endforeach
 </div>
+
+<script>
+async function hapusFavorite(id) {
+  await fetch("{{ route('user.favorit.toggle') }}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-TOKEN": "{{ csrf_token() }}"
+    },
+    body: JSON.stringify({ buku_id: id })
+  });
+  location.reload();
+}
+</script>
+
 </main>
 @include('layout_dashboard.partial_dashboard.footer')
 <script src="{{asset('assets_user/js/dashboard.js')}}"></script>

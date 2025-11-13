@@ -4,9 +4,34 @@
 @section('content')
     <h1 class="text-primary font-bold text-center mb-4">Data Buku Terarsip</h1>
 
+    {{-- Tombol aksi --}}
+    <div class="mb-4 flex gap-2">
+        <form id="bulkDeleteArchiveForm" action="{{ route('admin.data_arsip.bulkDeleteArchive') }}" method="POST">
+            @csrf
+            <input type="hidden" name="selected_ids" id="selectedIds">
+            <button type="submit" id="bulkDeleteBtn" disabled
+                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">
+                Hapus Data Terpilih
+            </button>
+        </form>
+
+
+
+        <form action="{{ route('admin.data_arsip.bulkRestore') }}" method="POST" id="bulkRestoreForm">
+            @csrf
+            <input type="hidden" name="selected_ids" id="selectedIdsRestore">
+            <button type="submit" id="bulkRestoreBtn" disabled
+                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">
+                Pulihkan Data Terpilih
+            </button>
+        </form>
+    </div>
+
+    {{-- tabel --}}
     <table id="dataTable" class="min-w-full border border-gray-300 text-sm text-gray-800">
         <thead class="bg-gray-100 text-gray-700">
             <tr>
+                <th class="w-12 px-2 py-2 border-b text-center"><input type="checkbox" id="selectAll"></th>
                 <th class="px-4 py-2 border-b">No</th>
                 <th class="px-4 py-2 border-b">Foto Buku</th>
                 <th class="px-4 py-2 border-b">Judul</th>
@@ -23,11 +48,13 @@
         <tbody>
             @forelse ($buku_arsip as $index => $buku)
                 <tr class="border-b hover:bg-gray-50">
+                    <td class="w-12 px-2 py-2 text-center"><input type="checkbox" class="row-checkbox"
+                            value="{{ $buku->id }}"></td>
                     <td class="px-4 py-2 text-center">{{ $index + 1 }}</td>
                     <td class="px-4 py-2 border-b border-gray-300">
                         @if ($buku->foto_buku)
                             <div class="w-16 h-20 overflow-hidden rounded-lg border-2 mx-auto">
-                                <img src="{{ $buku->foto_url }}" alt="Foto Buku {{ $buku->foto_buku }}"
+                                <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku {{ $buku->judul_buku }}"
                                     class="w-full h-full object-cover"
                                     onerror="this.onerror=null; this.src='{{ asset('images/default-book.jpg') }}';">
                             </div>
@@ -75,11 +102,19 @@
                             class="bg-yellow-400 hover:bg-green-700 text-white px-3 py-1 rounded-lg">
                             Detail
                         </a>
+                        <form action="{{ route('admin.data_arsip.destroy', $buku->id) }}" method="POST"
+                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini secara permanen?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg">
+                                Hapus
+                            </button>
+                        </form>
                     </td>
                 </tr>
             @empty
-                <tr>
-                    <td colspan="11" class="text-center py-3 text-gray-500">Belum ada buku terarsip</td>
+                <tr> 
+                    <td colspan="12" class="text-center py-3 text-gray-500">Belum ada buku terarsip</td>
                 </tr>
             @endforelse
         </tbody>

@@ -27,6 +27,7 @@ class DataBuku extends Model
         'stok',
         'file_buku',
         'status',
+        'kategori_ids',
     ];
 
     public function kategoris()

@@ -27,9 +27,9 @@
         </div>
 
         <!-- Form -->
-        <form action="{{ route('admin.data_buku.store') }}" method="POST" enctype="multipart/form-data" 
-              class="space-y-8">
-            @csrf
+        <form action="{{ route('admin.data_buku.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
+
 
             <!-- Upload Section -->
             <div data-aos="fade-up" data-aos-duration="800">
@@ -131,9 +131,8 @@
                             <i class="fas fa-calendar-alt text-primary"></i>
                             <span>Tahun Terbit</span>
                         </label>
-                        <input type="text" id="tahun_terbit" name="tahun_terbit" 
-                               placeholder="Contoh: 2024"
-                               class="form-input w-full rounded-lg px-4 py-3" required>
+                        <input type="number" id="tahun_terbit" name="tahun_terbit" placeholder="Contoh: 2024" class="form-input w-full rounded-lg px-4 py-3" required>
+
                     </div>
 
                     <!-- Bahasa -->
@@ -239,3 +238,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script src="{{asset('/assets_admin/js/create-databuku.js')}}"></script>
 @endsection
+

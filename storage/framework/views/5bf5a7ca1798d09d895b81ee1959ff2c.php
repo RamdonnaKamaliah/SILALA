@@ -499,6 +499,23 @@
                 </li>
             </ul>
         </div>
+    <li class="mt-0.5 w-full">
+        <a id="logout-btn"
+            class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all duration-200 text-slate-700 cursor-pointer group bg-transparent hover:bg-gradient-to-r from-red-500 to-pink-500 hover:text-white shadow-none hover:shadow-lg active:scale-95">
+            <div
+                class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white/40 bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-white/20 transition-all duration-300">
+                <svg class="text-red-600 group-hover:text-white transition-colors duration-200" width="16px" height="16px" viewBox="0 0 24 24"
+                    fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M17 16L21 12M21 12L17 8M21 12H7M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            
+            <span class="ml-1 duration-300 ease-soft">Logout</span>
+        </a>
+    </li>
+    </ul>
     </aside>
     
     <!-- Logout Form (Hidden) -->

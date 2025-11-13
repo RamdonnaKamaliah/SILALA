@@ -51,7 +51,7 @@ class DataBukuController extends Controller
         'edisi' => 'required|string|max:100',
         'deskripsi' => 'required|string',
         'stok' => 'required|integer|min:0',
-        'file_buku' => 'nullable|mimes:pdf|max:255',
+        'file_buku' => 'nullable|mimes:pdf|max:5120',
     ]);
 
     // Upload file foto
@@ -202,16 +202,35 @@ class DataBukuController extends Controller
         return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diimpor!');
     }
 
-    //arsipkan buku
-    public function archive($id)
+    
+    public function archive(Request $request, $id = null)
     {
-
+    if ($id) {
         $buku = DataBuku::findOrFail($id);
         $buku->status = 'arsip';
         $buku->save();
 
-        return redirect()->route('admin.data_arsip.index')->with('success', 'Buku berhasil diarsipkan!');
+        return redirect()->route('admin.data_arsip.index')
+            ->with('success', 'Buku "' . $buku->judul_buku . '" berhasil diarsipkan!');
     }
+
+    return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+}
+
+public function bulkArchive(Request $request) {
+
+    $selectedIds = explode(',', $request->input('selected_ids', ''));
+
+    if (empty($selectedIds)) {
+        return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+    }
+
+    DataBuku::whereIn('id', $selectedIds)->update(['status' => 'arsip']);
+
+    return redirect()->route('admin.data_arsip.index')
+        ->with('success', count($selectedIds) . ' buku berhasil diarsipkan.');
+}
+
 
     //pulihkan buku dari arsip 
     public function restore ($id)
@@ -222,5 +241,4 @@ class DataBukuController extends Controller
 
         return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
     }
-
 }

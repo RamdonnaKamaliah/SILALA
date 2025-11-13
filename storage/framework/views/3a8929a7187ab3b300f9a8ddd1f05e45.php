@@ -26,9 +26,9 @@
         </div>
 
         <!-- Form -->
-        <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data" 
-              class="space-y-8">
-            <?php echo csrf_field(); ?>
+        <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
+                <?php echo csrf_field(); ?>
+
 
             <!-- Upload Section -->
             <div data-aos="fade-up" data-aos-duration="800">
@@ -130,9 +130,8 @@
                             <i class="fas fa-calendar-alt text-primary"></i>
                             <span>Tahun Terbit</span>
                         </label>
-                        <input type="text" id="tahun_terbit" name="tahun_terbit" 
-                               placeholder="Contoh: 2024"
-                               class="form-input w-full rounded-lg px-4 py-3" required>
+                        <input type="number" id="tahun_terbit" name="tahun_terbit" placeholder="Contoh: 2024" class="form-input w-full rounded-lg px-4 py-3" required>
+
                     </div>
 
                     <!-- Bahasa -->
@@ -252,4 +251,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 <script src="<?php echo e(asset('/assets_admin/js/create-databuku.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
+
+
 <?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_buku/create.blade.php ENDPATH**/ ?>

@@ -171,6 +171,7 @@
 
     </div>
     @endif
+
   </div>
 </div>
   </nav>
@@ -185,38 +186,22 @@
     <!-- Tombol kiri (Baca & Pinjam) -->
 <div class="flex items-center gap-3 md:ml-[350px]">
   <!-- Tombol Baca -->
-@if($buku->file_pdf) {{-- cek kalau PDF ada --}}
-    <a href="{{ asset($buku->file_pdf) }}" target="_blank">
-        <button
-            class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 
-                   rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+<!-- Tombol Baca -->
+@if($buku->file_buku && $buku->id)
+    <a href="{{ route('user.baca', $buku->id) }}" target="_blank">
+        <button class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
             Baca
         </button>
     </a>
 @else
-    <button
-        class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
-               rounded-full shadow-md cursor-not-allowed">
+    <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
         Baca
     </button>
 @endif
 
 
-  
-  <!-- Tombol Pinjam -->
-  @php
-      $userId = Auth::id();
-      $isBorrowingThisBook = \App\Models\DataPeminjam::where('user_id', $userId)
-          ->where('buku_id', $buku->id)
-          ->where('status', 'dipinjam')
-          ->exists();
-      
-      $activeBorrowCount = \App\Models\DataPeminjam::where('user_id', $userId)
-          ->where('status', 'dipinjam')
-          ->count();
-  @endphp
 
-  @if($isBorrowingThisBook)
+  @if($userBorrow)
     <!-- Tombol disabled jika sedang meminjam buku ini -->
     <button 
       class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
@@ -225,16 +210,11 @@
       title="Anda sedang meminjam buku ini">
       Sedang Dipinjam
     </button>
-  @elseif($activeBorrowCount >= 3)
-    <!-- Tombol disabled jika sudah meminjam 3 buku -->
-    <button 
-      class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
-             rounded-full shadow-md cursor-not-allowed opacity-70"
-      disabled
-      title="Anda sudah meminjam 3 buku. Kembalikan salah satu untuk meminjam lagi.">
-      Batas Pinjam
-    </button>
-  @elseif($buku->stok <= 0)
+     <p class="text-xs text-gray-600 mt-2">
+            Batas pengembalian: 
+            {{ \Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
+          </p>
+   @elseif($stokHabis)
     <!-- Tombol disabled jika stok habis -->
     <button 
       class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
@@ -246,13 +226,14 @@
   @else
     <!-- Tombol aktif jika bisa meminjam -->
     <button 
-      id="openModalBtn"
+      id="openPinjamModal"
       class="bg-kuning text-[#2E2E2E] hover:bg-[#F6D776] font-semibold text-sm px-8 py-1.5 
              rounded-full shadow-md transition-all duration-300 transform 
              hover:-translate-y-0.5 hover:shadow-lg">
       Pinjam
     </button>
   @endif
+
 
 <!-- ====== Popup Modal Pinjam Buku ====== -->
 <div id="pinjamModal" 
@@ -355,8 +336,13 @@
   class="group flex items-center justify-center text-[#E76F51] w-9 h-9 shadow-none bg-transparent 
          transition-all duration-300 transform 
          hover:-translate-y-0.5 hover:scale-110 mr-2 md:mr-[60px]">
-  <i id="heartIcon" class="fa-regular fa-heart text-base transition-transform duration-300 group-hover:scale-125"></i>
+  @if($isFavorited)
+    <i id="heartIcon" class="fa-solid fa-heart text-[#E63946] text-base transition-transform duration-300 group-hover:scale-125"></i>
+  @else
+    <i id="heartIcon" class="fa-regular fa-heart text-base transition-transform duration-300 group-hover:scale-125"></i>
+  @endif
 </button>
+
 
 
     <!-- Garis bawah -->
@@ -370,19 +356,27 @@
     <div>
       <h3 class="text-lg font-semibold mb-3">Deskripsi</h3>
       <p class="text-sm leading-relaxed text-[#626F47]">
-        Lorem ipsum is simply dummy text of the printing and typesetting industry. 
-        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+        {{ $buku->deskripsi }}
       </p>
     </div>
 
     <!-- Detail Buku -->
     <div class="grid grid-cols-2 gap-y-3 text-sm text-[#626F47]">
-      <div><p class="font-semibold text-[#2E2E2E]">Penerbit</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Tahun Terbit</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Bahasa</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Kategori</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Jumlah Halaman</p><p>Lorem Ipsum</p></div>
-      <div><p class="font-semibold text-[#2E2E2E]">Edisi</p><p>Lorem Ipsum</p></div>
+      <div><p class="font-semibold text-[#2E2E2E]">Penerbit</p><p>{{ $buku->penulis }}</p></div>
+      <div><p class="font-semibold text-[#2E2E2E]">Tahun Terbit</p><p>{{ $buku->tahun_terbit }}</p></div>
+      <div><p class="font-semibold text-[#2E2E2E]">Bahasa</p><p>{{ $buku->bahasa }}</p></div>
+      <div>
+        <p class="font-semibold text-[#2E2E2E]">Kategori</p>
+        <p>
+          @if($buku->kategoris->isNotEmpty())
+            {{ $buku->kategoris->pluck('nama_kategori')->join(', ') }}
+          @else
+            -
+          @endif
+        </p>
+      </div>
+      <div><p class="font-semibold text-[#2E2E2E]">Jumlah Halaman</p><p>{{ $buku->jumlah_halaman }}</p></div>
+      <div><p class="font-semibold text-[#2E2E2E]">Edisi</p><p>{{ $buku->edisi }}</p></div>
     </div>
   </div>
 </main>
@@ -390,8 +384,244 @@
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Script -->
-  <script src="{{ asset('assets_user/js/dashboard.js')}}"></script>
-  <script src="{{ asset('assets_user/js/detailbuku.js')}}"></script>
+<script src="{{ asset('assets_user/js/dashboard.js') }}"></script>
+<script>
+  // Debug: Cek apakah file terload
+document.addEventListener("DOMContentLoaded", () => {
+  const openPinjamModal = document.getElementById("openPinjamModal");
+  const pinjamModal = document.getElementById("pinjamModal");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const tglPinjamInput = document.getElementById("tglPinjamInput");
+  const tglKembaliInput = document.getElementById("tglKembaliInput");
+  const konfirmasiBtn = document.getElementById("konfirmasiPinjam");
+  const closeKosong = document.getElementById("closeKosong");
+  const popupStokKosong = document.getElementById("popupStokKosong");
+
+  // Event untuk membuka modal
+  if (openPinjamModal) {
+    openPinjamModal.addEventListener("click", () => {
+      pinjamModal.classList.remove("hidden");
+      resetModal(); // Reset form ketika modal dibuka
+    });
+  }
+
+  // Event untuk menutup modal
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener("click", () => {
+      pinjamModal.classList.add("hidden");
+    });
+  }
+
+  // Event untuk menutup popup stok kosong
+  if (closeKosong) {
+    closeKosong.addEventListener("click", () => {
+      popupStokKosong.classList.add("hidden");
+    });
+  }
+
+  // Tutup modal ketika klik di luar
+  if (pinjamModal) {
+    pinjamModal.addEventListener("click", (e) => {
+      if (e.target === pinjamModal) {
+        pinjamModal.classList.add("hidden");
+      }
+    });
+  }
+
+  // Waktu lokal (Asia/Jakarta)
+  const now = new Date();
+  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000);  
+  const maxDate = new Date(today);
+  maxDate.setDate(today.getDate() + 7);
+
+  const formatDate = d => d.toISOString().split("T")[0];
+
+  // Set tanggal pinjam
+  if (tglPinjamInput) {
+    tglPinjamInput.value = formatDate(today);
+  }
+  
+  // Set batas tanggal kembali (TANPA nilai default)
+  if (tglKembaliInput) {
+    tglKembaliInput.min = formatDate(today);
+    tglKembaliInput.max = formatDate(maxDate);
+    // JANGAN set value default - biarkan kosong
+    tglKembaliInput.value = '';
+  }
+
+  // Fungsi untuk reset modal
+  function resetModal() {
+    if (tglKembaliInput) {
+      tglKembaliInput.value = '';
+    }
+  }
+
+  // Event untuk konfirmasi peminjaman
+if (konfirmasiBtn) {
+  konfirmasiBtn.addEventListener("click", async () => {
+    const tanggalKembali = tglKembaliInput ? tglKembaliInput.value : '';
+
+    if (!tanggalKembali) {
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Tanggal kembali belum diisi" 
+      });
+      return;
+    }
+
+    // Validasi tanggal
+    const selectedReturnDate = new Date(tanggalKembali);
+    if (selectedReturnDate < today) {
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Tanggal kembali tidak boleh kurang dari tanggal pinjam" 
+      });
+      return;
+    }
+
+    const diffTime = selectedReturnDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays > 7) {
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Maksimal peminjaman adalah 7 hari" 
+      });
+      return;
+    }
+
+    try {
+      // Tampilkan loading
+      konfirmasiBtn.disabled = true;
+      konfirmasiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+
+      console.log('🔄 Mengirim request peminjaman...');
+
+      // Kirim request peminjaman
+      const response = await fetch("{{ route('pinjam.store') }}", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": "{{ csrf_token() }}",
+          "Accept": "application/json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify({
+          buku_id: "{{ $buku->id }}",
+          tanggal_kembali: tanggalKembali
+        })
+      });
+
+      console.log('✅ Response Status:', response.status);
+
+      // Baca response sebagai text dulu untuk debugging
+      const responseText = await response.text();
+      console.log('📨 Raw Response:', responseText);
+
+      let result;
+      try {
+        // Coba parse sebagai JSON
+        result = JSON.parse(responseText);
+        console.log('📊 Parsed JSON:', result);
+      } catch (parseError) {
+        console.error('❌ JSON Parse Error:', parseError);
+        throw new Error('Response tidak valid dari server');
+      }
+
+      
+
+// Handle result berdasarkan success status
+if (result.success) {
+  console.log('🎉 Peminjaman berhasil!');
+  
+  // Tutup modal
+  pinjamModal.classList.add("hidden");
+  
+  // Tampilkan SweetAlert sukses dengan countdown 2 detik
+  Swal.fire({
+    icon: "success",
+    title: "Berhasil!",
+    text: result.message,
+    timer: 2000,
+    timerProgressBar: true,
+    showConfirmButton: false
+  }).then((result) => {
+    // Redirect ke halaman riwayat setelah timer selesai
+    if (result.dismiss === Swal.DismissReason.timer) {
+      window.location.href = "{{ route('user.riwayatbuku') }}";
+    }
+  });
+
+} else {
+  console.log('❌ Peminjaman gagal:', result.message);
+  
+  // Handle error dari server
+  Swal.fire({ 
+    icon: "error", 
+    title: "Gagal",
+    text: result.message || "Terjadi kesalahan saat meminjam buku" 
+  });
+}
+
+    } catch (error) {
+      console.error("💥 Error:", error);
+      
+      Swal.fire({ 
+        icon: "error", 
+        title: "Error",
+        text: "Terjadi kesalahan sistem: " + error.message
+      });
+    } finally {
+      // Reset tombol
+      if (konfirmasiBtn) {
+        konfirmasiBtn.disabled = false;
+        konfirmasiBtn.innerHTML = '<i class="fa-solid fa-check text-[#2E2E2E]"></i> Konfirmasi';
+      }
+    }
+  });
+}
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const loveBtn = document.getElementById('loveBtn');
+  const heartIcon = document.getElementById('heartIcon');
+  const bukuId = "{{ $buku->id }}";
+
+  if (!loveBtn || !heartIcon) return;
+
+  loveBtn.addEventListener('click', async () => {
+    try {
+      const res = await fetch("{{ route('user.favorit.toggle') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({ buku_id: bukuId })
+      });
+
+      const data = await res.json();
+
+      if (data.favorited) {
+        heartIcon.classList.remove('fa-regular');
+        heartIcon.classList.add('fa-solid', 'text-[#E63946]');
+      } else {
+        heartIcon.classList.remove('fa-solid', 'text-[#E63946]');
+        heartIcon.classList.add('fa-regular');
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
+  });
+});
+
+</script>
+
+
 </body>
 </html>
 

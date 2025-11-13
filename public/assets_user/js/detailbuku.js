@@ -1,160 +1,197 @@
- const openModalBtn = document.getElementById('openModalBtn');
-  const closeModalBtn = document.getElementById('closeModalBtn');
-  const confirmBtn = document.getElementById('confirmBtn');
-  const modal = document.getElementById('pinjamModal');
-  const popupStokKosong = document.getElementById('popupStokKosong');
-  const closeKosong = document.getElementById('closeKosong');
-
-  // ==== SIMULASI STOK ====
-  // ubah nilai stok ini buat ngetes (0 = kosong, >0 = ada stok)
-  let stokBuku = 2; // ganti ke 0 buat ngetes popup stok habis
-
-  // ==== Buka modal ====
-  openModalBtn.addEventListener('click', () => {
-    // kalau stok kosong, langsung tampilkan popup stok habis
-    if (stokBuku <= 0) {
-      popupStokKosong.classList.remove('hidden');
-    } else {
-      modal.classList.remove('hidden');
-      document.body.classList.add('overflow-hidden');
-    }
-  });
-
-  // ==== Tutup modal ====
-  closeModalBtn.addEventListener('click', () => {
-    modal.classList.add('hidden');
-    document.body.classList.remove('overflow-hidden');
-  });
-
-  // ==== Tutup popup stok kosong ====
-  closeKosong.addEventListener('click', () => {
-    popupStokKosong.classList.add('hidden');
-  });
-
-  // ==== Tombol Konfirmasi ====
-  confirmBtn.addEventListener('click', () => {
-    modal.classList.add('hidden');
-    document.body.classList.remove('overflow-hidden');
-
-    if (stokBuku > 0) {
-      // === Kondisi stok masih ada ===
-      Swal.fire({
-        title: 'Buku berhasil dipinjam!',
-        text: 'Selamat membaca, jangan lupa kembalikan tepat waktu 📚',
-        icon: 'success',
-        showConfirmButton: false, // gak ada tombol OK
-        timer: 2000,              // otomatis hilang setelah 2 detik
-        timerProgressBar: true
-      });
-    }
-  });
-
-// tanggal pinjam
+// Debug: Cek apakah file terload
 document.addEventListener("DOMContentLoaded", () => {
+  const openPinjamModal = document.getElementById("openPinjamModal");
+  const pinjamModal = document.getElementById("pinjamModal");
+  const closeModalBtn = document.getElementById("closeModalBtn");
   const tglPinjamInput = document.getElementById("tglPinjamInput");
   const tglKembaliInput = document.getElementById("tglKembaliInput");
   const konfirmasiBtn = document.getElementById("konfirmasiPinjam");
+  const closeKosong = document.getElementById("closeKosong");
+  const popupStokKosong = document.getElementById("popupStokKosong");
+
+  // Event untuk membuka modal
+  if (openPinjamModal) {
+    openPinjamModal.addEventListener("click", () => {
+      pinjamModal.classList.remove("hidden");
+      resetModal(); // Reset form ketika modal dibuka
+    });
+  }
+
+  // Event untuk menutup modal
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener("click", () => {
+      pinjamModal.classList.add("hidden");
+    });
+  }
+
+  // Event untuk menutup popup stok kosong
+  if (closeKosong) {
+    closeKosong.addEventListener("click", () => {
+      popupStokKosong.classList.add("hidden");
+    });
+  }
+
+  // Tutup modal ketika klik di luar
+  if (pinjamModal) {
+    pinjamModal.addEventListener("click", (e) => {
+      if (e.target === pinjamModal) {
+        pinjamModal.classList.add("hidden");
+      }
+    });
+  }
 
   // Waktu lokal (Asia/Jakarta)
   const now = new Date();
-  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000); 
+  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000);  
   const maxDate = new Date(today);
   maxDate.setDate(today.getDate() + 7);
 
   const formatDate = d => d.toISOString().split("T")[0];
 
-  // Set tanggal pinjam dan batas kembali
-  tglPinjamInput.value = formatDate(today);
-  tglKembaliInput.min = formatDate(today);
-  tglKembaliInput.max = formatDate(maxDate);
+  // Set tanggal pinjam
+  if (tglPinjamInput) {
+    tglPinjamInput.value = formatDate(today);
+  }
+  
+  // Set batas tanggal kembali (TANPA nilai default)
+  if (tglKembaliInput) {
+    tglKembaliInput.min = formatDate(today);
+    tglKembaliInput.max = formatDate(maxDate);
+    // JANGAN set value default - biarkan kosong
+    tglKembaliInput.value = '';
+  }
 
-  // Saat klik konfirmasi
+  // Fungsi untuk reset modal
+  function resetModal() {
+    if (tglKembaliInput) {
+      tglKembaliInput.value = '';
+    }
+  }
+
+  // Event untuk konfirmasi peminjaman
+if (konfirmasiBtn) {
   konfirmasiBtn.addEventListener("click", async () => {
-    const tanggalKembali = tglKembaliInput.value;
+    const tanggalKembali = tglKembaliInput ? tglKembaliInput.value : '';
 
     if (!tanggalKembali) {
-      Swal.fire({
-        icon: "warning",
-        title: "Tanggal kembali belum diisi",
-        confirmButtonColor: "#A4B465"
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Tanggal kembali belum diisi" 
       });
       return;
     }
 
-    const selectedDate = new Date(tanggalKembali);
-    const daysDifference = Math.ceil((selectedDate - today) / (1000 * 60 * 60 * 24));
-    if (daysDifference > 7) {
-      Swal.fire({
-        icon: "warning",
-        title: "Maksimal peminjaman 7 hari",
-        confirmButtonColor: "#A4B465"
+    // Validasi tanggal
+    const selectedReturnDate = new Date(tanggalKembali);
+    if (selectedReturnDate < today) {
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Tanggal kembali tidak boleh kurang dari tanggal pinjam" 
       });
       return;
     }
 
-    const data = {
-      buku_id: "{{ $buku->id }}",
-      tanggal_kembali: tanggalKembali,
-      _token: "{{ csrf_token() }}"
-    };
+    const diffTime = selectedReturnDate - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays > 7) {
+      Swal.fire({ 
+        icon: "warning", 
+        title: "Peringatan",
+        text: "Maksimal peminjaman adalah 7 hari" 
+      });
+      return;
+    }
 
     try {
-      const response = await fetch("{{ route('user.riwayatbuku.store') }}", {
+      // Tampilkan loading
+      konfirmasiBtn.disabled = true;
+      konfirmasiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+
+      console.log('🔄 Mengirim request peminjaman...');
+
+      // Kirim request peminjaman
+      const response = await fetch("{{ route('pinjam.store') }}", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        headers: { 
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": "{{ csrf_token() }}",
+          "Accept": "application/json",
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        body: JSON.stringify({
+          buku_id: "{{ $buku->id }}",
+          tanggal_kembali: tanggalKembali
+        })
       });
 
-      const result = await response.json();
+      console.log('✅ Response Status:', response.status);
 
-      if (response.ok && result.success) {
-        Swal.fire({
-          icon: "success",
-          title: result.message,
-          showConfirmButton: false,
-          timer: 1500
-        });
-        setTimeout(() => {
-          window.location.href = "{{ route('user.riwayatbuku') }}";
-        }, 1500);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: result.message || "Gagal menyimpan data",
-          confirmButtonColor: "#A4B465"
-        });
+      // Baca response sebagai text dulu untuk debugging
+      const responseText = await response.text();
+      console.log('📨 Raw Response:', responseText);
+
+      let result;
+      try {
+        // Coba parse sebagai JSON
+        result = JSON.parse(responseText);
+        console.log('📊 Parsed JSON:', result);
+      } catch (parseError) {
+        console.error('❌ JSON Parse Error:', parseError);
+        throw new Error('Response tidak valid dari server');
       }
+
+      
+
+// Handle result berdasarkan success status
+if (result.success) {
+  console.log('🎉 Peminjaman berhasil!');
+  
+  // Tutup modal
+  pinjamModal.classList.add("hidden");
+  
+  // Tampilkan SweetAlert sukses dengan countdown 2 detik
+  Swal.fire({
+    icon: "success",
+    title: "Berhasil!",
+    text: result.message,
+    timer: 2000,
+    timerProgressBar: true,
+    showConfirmButton: false
+  }).then((result) => {
+    // Redirect ke halaman riwayat setelah timer selesai
+    if (result.dismiss === Swal.DismissReason.timer) {
+      window.location.href = "{{ route('user.riwayatbuku') }}";
+    }
+  });
+
+} else {
+  console.log('❌ Peminjaman gagal:', result.message);
+  
+  // Handle error dari server
+  Swal.fire({ 
+    icon: "error", 
+    title: "Gagal",
+    text: result.message || "Terjadi kesalahan saat meminjam buku" 
+  });
+}
+
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Terjadi kesalahan sistem",
-        confirmButtonColor: "#A4B465"
+      console.error("💥 Error:", error);
+      
+      Swal.fire({ 
+        icon: "error", 
+        title: "Error",
+        text: "Terjadi kesalahan sistem: " + error.message
       });
+    } finally {
+      // Reset tombol
+      if (konfirmasiBtn) {
+        konfirmasiBtn.disabled = false;
+        konfirmasiBtn.innerHTML = '<i class="fa-solid fa-check text-[#2E2E2E]"></i> Konfirmasi';
+      }
     }
   });
-});
-
-
-//favorite detail buku
- document.addEventListener('DOMContentLoaded', () => {
-  const loveBtn = document.getElementById('loveBtn');
-  const heartIcon = document.getElementById('heartIcon');
-
-  if (!loveBtn || !heartIcon) return; // aman kalau element belum ada
-
-  let loved = false;
-
-  loveBtn.addEventListener('click', () => {
-    loved = !loved;
-
-    if (loved) {
-      heartIcon.classList.remove('fa-regular');
-      heartIcon.classList.add('fa-solid', 'text-[#E63946]');
-      heartIcon.classList.add('scale-125');
-      setTimeout(() => heartIcon.classList.remove('scale-125'), 150);
-    } else {
-      heartIcon.classList.remove('fa-solid', 'text-[#E63946]');
-      heartIcon.classList.add('fa-regular');
-    }
-  });
+}
 });

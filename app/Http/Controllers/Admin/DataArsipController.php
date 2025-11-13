@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\DataBuku;
 
 class DataArsipController extends Controller
 {
@@ -12,7 +13,10 @@ class DataArsipController extends Controller
      */
     public function index()
     {
-        return view('admin.data_arsip.index', ['title' => 'Data Arsip Buku']);
+       // hanya tampilkan buku yang statusnya arsip
+    $buku_arsip = DataBuku::where('status', 'arsip')->get();
+
+    return view('admin.data_arsip.index', compact('buku_arsip'));
     }
 
     /**
@@ -36,7 +40,7 @@ class DataArsipController extends Controller
      */
     public function show(string $id)
     {
-        return "Detail Favorit ID: $id (Percobaan)";
+        return view('admin.data_arsip.show', ['buku' => DataBuku::findOrFail($id)]);
     }
 
     /**
@@ -60,6 +64,41 @@ class DataArsipController extends Controller
      */
     public function destroy(string $id)
     {
-        return "Proses Hapus Favorit ID: $id (Percobaan)";
+        $buku = DataBuku::findOrFail($id);
+        // Hapus foto buku jika ada
+        if ($buku->foto_buku && file_exists(public_path($buku->foto_buku))) {
+            unlink(public_path($buku->foto_buku));
+        }
+        $buku->delete();
+        return redirect()->route('admin.data_arsip.index')
+            ->with('success', 'Data buku berhasil dihapus!');
+    }
+
+    public function bulkDeleteArchive(Request $request)
+    {
+       $selectedIds = explode(',', $request->selected_ids);
+
+    if (empty($selectedIds)) {
+        return redirect()->back()->with('error', 'Tidak ada buku yang dipilih untuk dihapus.');
+    }
+
+    DataBuku::whereIn('id', $selectedIds)->delete();
+
+    return redirect()->route('admin.data_arsip.index')
+        ->with('success', count($selectedIds) . ' buku arsip berhasil dihapus permanen.');
+    }
+
+    public function bulkRestore(Request $request)
+    {
+        $selectedIds = explode(',', $request->input('selected_ids', ''));
+
+        if (empty($selectedIds)) {
+            return back()->with('error', 'Tidak ada buku yang dipilih untuk dipulihkan.');
+        }
+
+        DataBuku::whereIn('id', $selectedIds)->update(['status' => 'aktif']);
+
+        return redirect()->route('admin.data_buku.index')
+            ->with('success', count($selectedIds) . ' buku berhasil dipulihkan.');
     }
 }

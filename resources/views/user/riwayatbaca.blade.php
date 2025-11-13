@@ -4,24 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   @include('layout_dashboard.partial_dashboard.link')
-  <title>SILALA - Riwayat Pinjam</title>
+  <title>SILALA - Riwayat Baca</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
 </head>
-<body class="min-h-screen overflow-x-hidden font-[Ubuntu,sans-serif] bg-white">
+<body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white overflow-x-hidden">
+
   @include('layout_dashboard.partial_dashboard.header')
 
-  <main
-  class="pt-8 pb-6 px-6 bg-cream
-  relative top-[90px] mb-24
-  md:ml-[320px] md:mr-3
-  md:rounded-3xl transition-all duration-300 z-30
-  flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
+  <main class="flex-grow pt-8 pb-6 px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-30 flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
 
     <!-- Filter -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
       <div class="flex flex-col sm:flex-row gap-6">
-
         <div class="flex flex-col gap-2">
           <label class="flex items-center gap-2 cursor-pointer">
             <input type="radio" name="riwayat" id="pinjam"
@@ -49,56 +44,50 @@
       </div>
     </div>
 
+    <!-- Grid Buku -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+      @forelse($riwayat as $data)
+      <div class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm">
+        <div class="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
+          <img src="{{ asset($data->buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
+               alt="{{ $data->buku->judul_buku }}" 
+               class="w-full h-full object-cover">
+        </div>
 
-  @for($i=1; $i<=10; $i++)
-  <div class="transition-transform duration-300 hover:scale-105">
+        <p class="text-[#2E2E2E] text-center font-semibold text-sm mt-2">
+          {{ $data->buku->judul_buku ?? '-' }}
+        </p>
+        <p class="text-[#2E2E2E] text-center text-xs">
+          By {{ $data->buku->penulis ?? '-' }}
+        </p>
 
-    <img src="{{ asset('assets/buku1.jpg') }}" 
-         class="w-[75%] mx-auto rounded-lg transition-all duration-300 object-contain">
+        <div class="flex justify-center mt-1 text-yellow-400">
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star"></i>
+          <i class="fa-solid fa-star-half-stroke"></i>
+          <i class="fa-regular fa-star"></i>
+        </div>
 
-    <p class="text-[#2E2E2E] text-center font-semibold text-sm mt-2">Pulang</p>
-    <p class="text-[#2E2E2E] text-center text-xs">By Tere Liye</p>
+        <p class="text-center text-xs text-gray-500 mt-1">
+          Terakhir dibaca: {{ $data->terakhir_dibaca ? $data->terakhir_dibaca->diffForHumans() : '-' }}
+        </p>
 
-    <div class="flex justify-center mt-1 text-yellow-400">
-      <i class="fa-solid fa-star"></i>
-      <i class="fa-solid fa-star"></i>
-      <i class="fa-solid fa-star"></i>
-      <i class="fa-solid fa-star-half-stroke"></i>
-      <i class="fa-regular fa-star"></i>
+        <a href="{{ asset($data->buku->file_buku) }}" target="_blank">
+          <button class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
+            Lanjutkan Baca
+          </button>
+        </a>
+      </div>
+      @empty
+      <p class="text-gray-500 col-span-full text-center mt-8">Belum ada riwayat baca.</p>
+      @endforelse
     </div>
-
-    <button class="bg-green hover:bg-primary text-white font-semibold text-xs 
-                   px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
-      Baca
-    </button>
-
-  </div>
-  @endfor
-
-</div>
   </main>
 
   @include('layout_dashboard.partial_dashboard.footer')
 
-  <script src="{{asset('assets_user/js/dashboard.js')}}"></script>
+  <script src="{{ asset('assets_user/js/dashboard.js') }}"></script>
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-  <script>
-    const dropdownButton = document.getElementById('dropdownButton');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-
-    dropdownButton.addEventListener('click', function () {
-      dropdownMenu.classList.toggle('hidden');
-      dropdownButton.querySelector('.iconify').classList.toggle('rotate-180');
-    });
-
-    // Klik di luar dropdown → tutup
-    document.addEventListener('click', function (e) {
-      if (!document.getElementById('dropdownWrapper').contains(e.target)) {
-        dropdownMenu.classList.add('hidden');
-        dropdownButton.querySelector('.iconify').classList.remove('rotate-180');
-      }
-    });
-  </script>
 </body>
 </html>

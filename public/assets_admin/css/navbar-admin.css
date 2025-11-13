@@ -1,0 +1,53 @@
+
+        .navbar-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dropdown-transition {
+            transition: all 0.2s ease-in-out;
+        }
+        .popup-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Tambahan untuk responsif */
+        .mobile-search-container {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 40;
+        }
+        @media (max-width: 768px) {
+            .popup-mobile {
+                width: 100vw;
+                position: fixed;
+                top: 4rem;
+                left: 0;
+                right: 0;
+                border-radius: 0;
+                max-height: calc(100vh - 4rem);
+                margin-top: 0;
+            }
+        }
+        @media (max-width: 640px) {
+            .navbar-padding {
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+            }
+        }

@@ -53,6 +53,9 @@
     <script src="{{ asset('/assets_admin/js/plugins/chartjs.min.js') }}" async></script>
     <script src="{{ asset('/assets_admin/js/plugins/perfect-scrollbar.min.js') }}" async></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="{{ asset('assets_admin/js/dataBuku/deleteArsip.js') }}"></script>
+    <script src="{{ asset('assets_admin/js/arsipBuku/deleteArsip.js') }}"></script>
     @stack('scripts')
 
 </body>

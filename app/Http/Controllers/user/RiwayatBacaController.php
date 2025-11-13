@@ -1,15 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\user;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\RiwayatBaca;
+use Illuminate\Support\Facades\Auth;
 
 class RiwayatBacaController extends Controller
 {
-     public function index()
+    public function index()
     {
-        return view('user.riwayatbaca' , ['title' => 'RIWAYAT PINJAM & BACA']);
-    }
+        $user = Auth::user();
 
+        $riwayat = RiwayatBaca::with('buku')
+            ->where('user_id', $user->id)
+            ->orderByDesc('terakhir_dibaca')
+            ->get();
+
+        return view('user.riwayatbaca', [
+            'title' => 'RIWAYAT PINJAM & BACA',
+            'riwayat' => $riwayat
+        ]);
+    }
 }

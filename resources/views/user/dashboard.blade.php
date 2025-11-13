@@ -63,8 +63,8 @@
 
   <!-- Sedang Dipinjam -->
   <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
-    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
-      data-icon="mdi:book-plus"></span>
+    <span class="iconify absolute left-2 -top-2 text-[70px] text-cream"
+      data-icon="mdi:book-plus" ></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
       <p class="text-sm text-white font-medium">Sedang dipinjam</p>
       <h3 class="text-lg font-mochiy text-white">{{ $dipinjam }} Buku</h3>
@@ -73,7 +73,7 @@
 
   <!-- Denda -->
   <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
-    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
+    <span class="iconify absolute left-2 -top-2 text-[70px] text-cream"
       data-icon="mdi:book-alert"></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
       <p class="text-sm text-white font-medium">Denda</p>
@@ -83,7 +83,7 @@
 
   <!-- Favorit -->
   <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
-    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
+    <span class="iconify absolute left-2 -top-2 text-[70px] text-cream"
       data-icon="mdi:book-heart"></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
       <p class="text-sm text-white font-medium">Favorit</p>

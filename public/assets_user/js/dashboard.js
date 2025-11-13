@@ -91,3 +91,23 @@ menuItems.forEach(item => {
       item.querySelector('.notif-line').classList.add('scale-y-100');
     });
   });
+// Aktifkan dark mode dari localStorage
+    document.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("theme") === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    });
+
+    // Fungsi untuk toggle dark mode
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      html.classList.toggle("dark");
+
+      // Simpan status di localStorage
+      if (html.classList.contains("dark")) {
+        localStorage.setItem("theme", "dark");
+      } else {
+        localStorage.setItem("theme", "light");
+      }
+    }
+  

@@ -77,10 +77,12 @@
   </div>
 </div>
 
-<!-- Pengaturan -->
-    <button class="text-[#626F47] text-lg">
-      <i class="fa-solid fa-gear"></i>
-    </button>
+<!-- darkmode -->
+    <button onclick="toggleDarkMode()" class="text-[#626F47] text-lg flex items-center gap-2">
+    <span class="iconify text-2xl dark:hidden" data-icon="mdi:weather-sunny"></span>
+    <span class="iconify text-2xl hidden dark:inline" data-icon="mdi:weather-night"></span>
+  </button>
   </div>
 </nav>
+
 

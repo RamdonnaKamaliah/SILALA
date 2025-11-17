@@ -1,6 +1,5 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Edit Data Buku')
-@section('content')
+<?php $__env->startSection('pageTitle', 'Edit Data Buku'); ?>
+<?php $__env->startSection('content'); ?>
 
 <!-- PDF.js Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -295,7 +294,7 @@
         
         <!-- Page Header -->
         <div class="mb-8">
-            <a href="{{ route('admin.data_buku.index') }}" class="back-link">
+            <a href="<?php echo e(route('admin.data_buku.index')); ?>" class="back-link">
                 <i class="fas fa-arrow-left"></i>
                 <span>Kembali ke Daftar Buku</span>
             </a>
@@ -310,9 +309,9 @@
         </div>
 
         <!-- Form -->
-        <form action="{{ route('admin.data_buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+        <form action="<?php echo e(route('admin.data_buku.update', $buku->id)); ?>" method="POST" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
 
             <!-- Upload Section - Dua kolom sejajar -->
             <div class="mb-8">
@@ -331,19 +330,19 @@
                         <p class="text-sm text-gray-600 mb-4">Format: JPG, PNG, JPEG</p>
                         
                         <!-- Preview Foto Saat Ini -->
-                        @if ($buku->foto_buku)
+                        <?php if($buku->foto_buku): ?>
                         <div class="preview-container">
                             <div class="current-file">
                                 <div class="current-file-label">Foto Saat Ini:</div>
-                                <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku Saat Ini" class="preview-image">
+                                <img src="<?php echo e(asset($buku->foto_buku)); ?>" alt="Foto Buku Saat Ini" class="preview-image">
                             </div>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         
                         <input type="file" id="foto_buku" name="foto_buku" accept="image/*" class="hidden">
                         <label for="foto_buku" class="file-upload-btn">
                             <i class="fas fa-camera"></i>
-                            <span>{{ $buku->foto_buku ? 'Ganti Foto' : 'Pilih Foto' }}</span>
+                            <span><?php echo e($buku->foto_buku ? 'Ganti Foto' : 'Pilih Foto'); ?></span>
                         </label>
                         
                         <div id="imagePreviewContainer" class="preview-container hidden">
@@ -363,7 +362,7 @@
                         <p class="text-sm text-gray-600 mb-4">Format: PDF, maksimal 10MB</p>
                         
                         <!-- Preview File Saat Ini -->
-                        @if ($buku->file_buku)
+                        <?php if($buku->file_buku): ?>
                         <div class="preview-container">
                             <div class="current-file">
                                 <div class="current-file-label">File Saat Ini:</div>
@@ -376,18 +375,18 @@
                                     </div>
                                     <div class="pdf-info">
                                         <p class="text-sm font-medium text-primary-dark">File PDF tersedia</p>
-                                        <a href="{{ asset($buku->file_buku) }}" target="_blank" 
+                                        <a href="<?php echo e(asset($buku->file_buku)); ?>" target="_blank" 
                                            class="pdf-link">Lihat file lengkap</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @endif
+                        <?php endif; ?>
                         
                         <input type="file" id="file_buku" name="file_buku" accept=".pdf" class="hidden">
                         <label for="file_buku" class="file-upload-btn">
                             <i class="fas fa-file-upload"></i>
-                            <span>{{ $buku->file_buku ? 'Ganti File' : 'Pilih File' }}</span>
+                            <span><?php echo e($buku->file_buku ? 'Ganti File' : 'Pilih File'); ?></span>
                         </label>
 
                         <!-- Preview PDF Baru -->
@@ -422,7 +421,7 @@
                             <span>Judul Buku</span>
                         </label>
                         <input type="text" id="judul_buku" name="judul_buku" 
-                               value="{{ old('judul_buku', $buku->judul_buku) }}"
+                               value="<?php echo e(old('judul_buku', $buku->judul_buku)); ?>"
                                placeholder="Masukkan judul buku"
                                class="form-input" required>
                     </div>
@@ -434,7 +433,7 @@
                             <span>Penulis</span>
                         </label>
                         <input type="text" id="penulis" name="penulis" 
-                               value="{{ old('penulis', $buku->penulis) }}"
+                               value="<?php echo e(old('penulis', $buku->penulis)); ?>"
                                placeholder="Masukkan nama penulis"
                                class="form-input" required>
                     </div>
@@ -446,7 +445,7 @@
                             <span>Penerbit</span>
                         </label>
                         <input type="text" id="penerbit" name="penerbit" 
-                               value="{{ old('penerbit', $buku->penerbit) }}"
+                               value="<?php echo e(old('penerbit', $buku->penerbit)); ?>"
                                placeholder="Masukkan nama penerbit"
                                class="form-input" required>
                     </div>
@@ -458,7 +457,7 @@
                             <span>Tahun Terbit</span>
                         </label>
                         <input type="number" id="tahun_terbit" name="tahun_terbit" 
-                               value="{{ old('tahun_terbit', $buku->tahun_terbit) }}"
+                               value="<?php echo e(old('tahun_terbit', $buku->tahun_terbit)); ?>"
                                placeholder="Contoh: 2024" 
                                class="form-input" required>
                     </div>
@@ -470,7 +469,7 @@
                             <span>Bahasa</span>
                         </label>
                         <input type="text" id="bahasa" name="bahasa" 
-                               value="{{ old('bahasa', $buku->bahasa) }}"
+                               value="<?php echo e(old('bahasa', $buku->bahasa)); ?>"
                                placeholder="Contoh: Indonesia"
                                class="form-input" required>
                     </div>
@@ -482,12 +481,13 @@
                             <span>Kategori</span>
                         </label>
                         <select name="kategori_id[]" id="kategori_id" multiple class="form-input" required>
-                            @foreach ($kategoris as $kategori)
-                                <option value="{{ $kategori->id }}"
-                                    {{ in_array($kategori->id, old('kategori_id', $buku->kategoris->pluck('id')->toArray())) ? 'selected' : '' }}>
-                                    {{ $kategori->nama_kategori }}
+                            <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($kategori->id); ?>"
+                                    <?php echo e(in_array($kategori->id, old('kategori_id', $buku->kategoris->pluck('id')->toArray())) ? 'selected' : ''); ?>>
+                                    <?php echo e($kategori->nama_kategori); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                         <small class="text-gray-600 text-xs mt-2 block">
                             <i class="fas fa-info-circle mr-1"></i>
@@ -512,7 +512,7 @@
                             <span>Jumlah Halaman</span>
                         </label>
                         <input type="number" id="jumlah_halaman" name="jumlah_halaman" 
-                               value="{{ old('jumlah_halaman', $buku->jumlah_halaman) }}"
+                               value="<?php echo e(old('jumlah_halaman', $buku->jumlah_halaman)); ?>"
                                placeholder="0"
                                class="form-input" required>
                     </div>
@@ -524,7 +524,7 @@
                             <span>Edisi</span>
                         </label>
                         <input type="text" id="edisi" name="edisi" 
-                               value="{{ old('edisi', $buku->edisi) }}"
+                               value="<?php echo e(old('edisi', $buku->edisi)); ?>"
                                placeholder="Contoh: Edisi 1"
                                class="form-input" required>
                     </div>
@@ -536,7 +536,7 @@
                             <span>Stok Tersedia</span>
                         </label>
                         <input type="number" id="stok" name="stok" 
-                               value="{{ old('stok', $buku->stok) }}"
+                               value="<?php echo e(old('stok', $buku->stok)); ?>"
                                placeholder="0"
                                class="form-input" required>
                     </div>
@@ -557,14 +557,14 @@
                     </label>
                     <textarea id="deskripsi" name="deskripsi" rows="6" 
                               placeholder="Tuliskan deskripsi lengkap mengenai buku, sinopsis, atau ringkasan isi buku..."
-                              class="form-input resize-none" required>{{ old('deskripsi', $buku->deskripsi) }}</textarea>
+                              class="form-input resize-none" required><?php echo e(old('deskripsi', $buku->deskripsi)); ?></textarea>
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="bg-white rounded-lg p-6 border border-gray-200">
                 <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                    <a href="{{ route('admin.data_buku.index') }}" class="btn-secondary">
+                    <a href="<?php echo e(route('admin.data_buku.index')); ?>" class="btn-secondary">
                         <i class="fas fa-times"></i>
                         <span>Batal</span>
                     </a>
@@ -654,10 +654,10 @@
 
     // Generate thumbnail for current PDF file
     function generateCurrentPdfThumbnail() {
-        const pdfUrl = "{{ asset($buku->file_buku) }}";
+        const pdfUrl = "<?php echo e(asset($buku->file_buku)); ?>";
         const container = document.getElementById('currentPdfThumbnail');
         
-        if (!pdfUrl || pdfUrl === "{{ asset('') }}") return;
+        if (!pdfUrl || pdfUrl === "<?php echo e(asset('')); ?>") return;
         
         // Set up PDF.js
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdf) {
@@ -702,9 +702,10 @@
         document.getElementById('file_buku').addEventListener('change', previewPDF);
         
         // Generate thumbnail for current PDF
-        @if($buku->file_buku)
+        <?php if($buku->file_buku): ?>
             generateCurrentPdfThumbnail();
-        @endif
+        <?php endif; ?>
     });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_buku/edit.blade.php ENDPATH**/ ?>

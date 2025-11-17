@@ -1,8 +1,6 @@
-@extends('layout_admin.admin')
+<?php $__env->startSection('pageTitle', 'Detail Data Buku'); ?>
 
-@section('pageTitle', 'Detail Data Buku')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -63,7 +61,7 @@
                     <h1 class="text-2xl md:text-3xl font-bold text-gray-800">
                         <i class="fas fa-book-open text-primary-500 mr-3"></i>Detail Buku
                     </h1>
-                    <a href="{{ route('admin.data_buku.index') }}" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-primary-600 transition-all duration-300 hover:border-primary-300">
+                    <a href="<?php echo e(route('admin.data_buku.index')); ?>" class="mt-4 md:mt-0 inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-primary-600 transition-all duration-300 hover:border-primary-300">
                         <i class="fas fa-arrow-left mr-2"></i> Kembali ke Daftar Buku
                     </a>
                 </div>
@@ -80,18 +78,18 @@
                                 <i class="fas fa-image text-primary-500 mr-2"></i> Foto Buku
                             </h3>
                             <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-4 flex justify-center">
-                                @if ($buku->foto_buku)
+                                <?php if($buku->foto_buku): ?>
                                     <div class="relative">
-                                        <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku {{ $buku->judul_buku }}"
+                                        <img src="<?php echo e(asset($buku->foto_buku)); ?>" alt="Foto Buku <?php echo e($buku->judul_buku); ?>"
                                             class="w-full max-w-xs h-80 object-cover rounded-xl book-cover">
                                         <div class="absolute inset-0 rounded-xl border-2 border-white opacity-20 pointer-events-none"></div>
                                     </div>
-                                @else
+                                <?php else: ?>
                                     <div class="w-full max-w-xs h-80 flex flex-col items-center justify-center bg-gradient-to-br from-green-100 to-emerald-100 text-primary-700 rounded-xl border-2 border-dashed border-primary-300">
                                         <i class="fas fa-image text-5xl mb-3 opacity-70"></i>
                                         <span class="text-sm font-medium">Tidak ada foto</span>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -101,18 +99,18 @@
                                 <i class="fas fa-file-pdf text-primary-500 mr-2"></i> File Buku
                             </h3>
                             <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-4">
-                                @if ($buku->file_buku)
-                                    <a href="{{ asset($buku->file_buku) }}" target="_blank"
+                                <?php if($buku->file_buku): ?>
+                                    <a href="<?php echo e(asset($buku->file_buku)); ?>" target="_blank"
                                         class="inline-flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl shadow-lg hover:from-primary-600 hover:to-primary-700 transition-all duration-300 transform hover:-translate-y-1">
                                         <i class="fas fa-external-link-alt mr-2"></i>
                                         <span>Buka File PDF</span>
                                     </a>
-                                @else
+                                <?php else: ?>
                                     <div class="flex flex-col items-center justify-center text-primary-500 py-4">
                                         <i class="fas fa-file-pdf text-4xl mb-2 opacity-70"></i>
                                         <span class="text-sm font-medium">Tidak ada file PDF</span>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -120,7 +118,7 @@
                     <!-- Kolom Informasi Buku -->
                     <div class="lg:col-span-2">
                         <div class="info-card rounded-2xl p-6 border border-green-100">
-                            <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-3 border-b border-green-200">{{ $buku->judul_buku }}</h2>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-6 pb-3 border-b border-green-200"><?php echo e($buku->judul_buku); ?></h2>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="space-y-4">
@@ -128,7 +126,7 @@
                                         <i class="fas fa-user text-primary-500 mt-1 mr-3 w-5"></i>
                                         <div>
                                             <p class="text-sm font-medium text-gray-500">Penulis</p>
-                                            <p class="font-semibold text-gray-800">{{ $buku->penulis }}</p>
+                                            <p class="font-semibold text-gray-800"><?php echo e($buku->penulis); ?></p>
                                         </div>
                                     </div>
                                     
@@ -136,7 +134,7 @@
                                         <i class="fas fa-building text-primary-500 mt-1 mr-3 w-5"></i>
                                         <div>
                                             <p class="text-sm font-medium text-gray-500">Penerbit</p>
-                                            <p class="font-semibold text-gray-800">{{ $buku->penerbit }}</p>
+                                            <p class="font-semibold text-gray-800"><?php echo e($buku->penerbit); ?></p>
                                         </div>
                                     </div>
                                     
@@ -144,7 +142,7 @@
                                         <i class="fas fa-calendar-alt text-primary-500 mt-1 mr-3 w-5"></i>
                                         <div>
                                             <p class="text-sm font-medium text-gray-500">Tahun Terbit</p>
-                                            <p class="font-semibold text-gray-800">{{ $buku->tahun_terbit }}</p>
+                                            <p class="font-semibold text-gray-800"><?php echo e($buku->tahun_terbit); ?></p>
                                         </div>
                                     </div>
                                     
@@ -152,7 +150,7 @@
                                         <i class="fas fa-language text-primary-500 mt-1 mr-3 w-5"></i>
                                         <div>
                                             <p class="text-sm font-medium text-gray-500">Bahasa</p>
-                                            <p class="font-semibold text-gray-800">{{ $buku->bahasa }}</p>
+                                            <p class="font-semibold text-gray-800"><?php echo e($buku->bahasa); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -163,11 +161,12 @@
                                         <div>
                                             <p class="text-sm font-medium text-gray-500">Kategori</p>
                                             <p class="font-semibold text-gray-800">
-                                                @if($buku->kategoris->isNotEmpty())
-                                                    {{ $buku->kategoris->pluck('nama_kategori')->join(', ') }}
-                                                @else
+                                                <?php if($buku->kategoris->isNotEmpty()): ?>
+                                                    <?php echo e($buku->kategoris->pluck('nama_kategori')->join(', ')); ?>
+
+                                                <?php else: ?>
                                                     <span class="text-gray-500 italic">Tidak ada kategori</span>
-                                                @endif
+                                                <?php endif; ?>
                                             </p>
                                         </div>
                                     </div>
@@ -176,7 +175,7 @@
                                         <i class="fas fa-file-alt text-primary-500 mt-1 mr-3 w-5"></i>
                                         <div>
                                             <p class="text-sm font-medium text-gray-500">Jumlah Halaman</p>
-                                            <p class="font-semibold text-gray-800">{{ $buku->jumlah_halaman }}</p>
+                                            <p class="font-semibold text-gray-800"><?php echo e($buku->jumlah_halaman); ?></p>
                                         </div>
                                     </div>
                                     
@@ -184,7 +183,7 @@
                                         <i class="fas fa-book text-primary-500 mt-1 mr-3 w-5"></i>
                                         <div>
                                             <p class="text-sm font-medium text-gray-500">Edisi</p>
-                                            <p class="font-semibold text-gray-800">{{ $buku->edisi }}</p>
+                                            <p class="font-semibold text-gray-800"><?php echo e($buku->edisi); ?></p>
                                         </div>
                                     </div>
                                     
@@ -192,7 +191,7 @@
                                         <i class="fas fa-boxes text-primary-500 mt-1 mr-3 w-5"></i>
                                         <div>
                                             <p class="text-sm font-medium text-gray-500">Stok</p>
-                                            <p class="font-semibold text-gray-800">{{ $buku->stok }}</p>
+                                            <p class="font-semibold text-gray-800"><?php echo e($buku->stok); ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -204,20 +203,20 @@
                                     <i class="fas fa-align-left text-primary-500 mr-2"></i> Deskripsi
                                 </h3>
                                 <div class="bg-white rounded-xl p-4 shadow-inner border border-green-50">
-                                    <p class="text-gray-700 leading-relaxed">{{ $buku->deskripsi }}</p>
+                                    <p class="text-gray-700 leading-relaxed"><?php echo e($buku->deskripsi); ?></p>
                                 </div>
                             </div>
                             
                             <!-- Tombol Aksi -->
                             <div class="mt-8 pt-6 border-t border-green-200 flex flex-col sm:flex-row gap-3">
-                                <a href="{{ route('admin.data_buku.edit', $buku->id) }}" 
+                                <a href="<?php echo e(route('admin.data_buku.edit', $buku->id)); ?>" 
                                    class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl shadow-lg hover:from-primary-600 hover:to-primary-700 transition-all duration-300 transform hover:-translate-y-1">
                                     <i class="fas fa-edit mr-2"></i>
                                     Edit Buku
                                 </a>
-                                <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST" class="inline w-full sm:w-auto">
-                                    @csrf
-                                    @method('DELETE')
+                                <form action="<?php echo e(route('admin.data_buku.destroy', $buku->id)); ?>" method="POST" class="inline w-full sm:w-auto">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('DELETE'); ?>
                                     <button type="submit" 
                                         class="w-full inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:-translate-y-1"
                                         onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
@@ -234,4 +233,5 @@
     </div>
 </body>
 </html>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_buku/show.blade.php ENDPATH**/ ?>

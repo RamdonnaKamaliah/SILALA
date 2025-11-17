@@ -146,30 +146,44 @@
                                class="form-input w-full rounded-lg px-4 py-3" required>
                     </div>
 
-                <!-- Kategori -->
-                <div>
-                    <label for="kategori_id" class="block text-gray-700 font-semibold mb-2">Kategori</label>
-                    <select name="kategori_id" id="kategori_id"
-                        class="form-control w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-        focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200"
-                        required>
-                        <option value="" disabled selected>Pilih kategori</option>
-                        @foreach ($kategoris as $kategori)
-                            <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                        @endforeach
-                    </select>
+                    <!-- Kategori -->
+                    <div>
+                        <label for="kategori_id" class="form-label">
+                            <i class="fas fa-tags text-primary"></i>
+                            <span>Kategori</span>
+                        </label>
+                        <select name="kategori_id[]" id="kategori_id" multiple
+                                class="form-input w-full rounded-lg px-4 py-3" required>
+                            @foreach ($kategoris as $kategori)
+                                <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-gray-600 text-xs mt-1 flex items-center gap-1">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Tekan Ctrl (Windows) atau Cmd (Mac) untuk pilih lebih dari satu</span>
+                        </small>
+                    </div>
                 </div>
+            </div>
 
-
-
-                <!-- Jumlah Halaman -->
-                <div>
-                    <label for="jumlah_halaman" class="block text-gray-700 font-semibold mb-2">Jumlah Halaman</label>
-                    <input type="number" id="jumlah_halaman" name="jumlah_halaman" placeholder="Masukkan jumlah halaman"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
+            <!-- Detail Publikasi -->
+            <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
+                    <i class="fas fa-book-open text-primary"></i>
+                    <span>Detail Publikasi</span>
+                </h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                    <!-- Jumlah Halaman -->
+                    <div>
+                        <label for="jumlah_halaman" class="form-label">
+                            <i class="fas fa-file-alt text-primary"></i>
+                            <span>Jumlah Halaman</span>
+                        </label>
+                        <input type="number" id="jumlah_halaman" name="jumlah_halaman" 
+                               placeholder="0"
+                               class="form-input w-full rounded-lg px-4 py-3" required>
+                    </div>
 
                     <!-- Edisi -->
                     <div>

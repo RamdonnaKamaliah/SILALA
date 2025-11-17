@@ -629,4 +629,4 @@
         });
     </script>
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/components/navbarAdmin.blade.php ENDPATH**/ ?>

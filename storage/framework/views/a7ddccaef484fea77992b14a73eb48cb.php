@@ -1,8 +1,8 @@
-@extends('layout_user.user')
 
-@section('title', 'Profil User')
 
-@section('content')
+<?php $__env->startSection('title', 'Profil User'); ?>
+
+<?php $__env->startSection('content'); ?>
   <div class="min-h-screen bg-[#F3EED9] py-10 px-6">
 
     <!-- Kartu Header -->
@@ -15,7 +15,7 @@
       <!-- Foto Profile -->
       <div class="w-20 h-20 rounded-full bg-[#F3F7EE] border-2 border-[#C9DABF] overflow-hidden 
                   shadow-[0_6px_12px_rgba(0,0,0,0.12)] flex items-center justify-center">
-        <img src="{{ asset('assets/Profile.jpg') }}" class="w-full h-full object-cover" />
+        <img src="<?php echo e(asset('assets/Profile.jpg')); ?>" class="w-full h-full object-cover" />
       </div>
     </div>
 
@@ -75,9 +75,9 @@
 
        <!-- Kolom Kanan (Gambar + Button) -->
   <div class="flex flex-col items-center gap-4">
-    <img src="{{ asset('assets/logoprofil.png') }}" class="w-48 object-contain" />
+    <img src="<?php echo e(asset('assets/logoprofil.png')); ?>" class="w-48 object-contain" />
 
-    <a href="{{ route('user.editprofil') }}"
+    <a href="<?php echo e(route('user.editprofil')); ?>"
       class="bg-[#A4B465] hover:bg-[#8EA653] text-white font-medium px-8 py-2 rounded-full flex items-center gap-2 transition">
       <span class="iconify" data-icon="fa-solid:pen" style="color:white;" data-width="16" data-height="16"></span>
       Edit
@@ -87,4 +87,5 @@
     </div>
 
   </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/profil.blade.php ENDPATH**/ ?>

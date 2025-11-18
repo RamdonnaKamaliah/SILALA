@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <?php echo $__env->make('layout_dashboard.partial_dashboard.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+  <?php echo $__env->make('layout_user.partial_user.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
   <title>SILALA | Detail Buku</title>
   <!-- Vite -->
   <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
@@ -34,14 +34,11 @@
 <?php unset($__componentOriginalb763922586e375d9f7490769fccbb786); ?>
 <?php endif; ?>
 
-  <!-- ====== KONTEN UTAMA ====== -->
-<div class="flex-1 ml-0 md:ml-[320px] mr-0 md:mr-3 transition-all duration-300 relative overflow-x-hidden">
-
   <!-- ====== Navbar ====== -->
   <nav id="navbar"
-    class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-40 
-           bg-[#f7edd6] rounded-b-3xl shadow-sm flex flex-col justify-between
-           px-4 md:px-6 pt-5 pb-10 transition-all duration-300 h-[50vh]">
+  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-[999]
+         bg-[#f7edd6] rounded-b-3xl shadow-sm flex flex-col justify-between
+         px-4 md:px-6 pt-5 pb-10 transition-all duration-300 h-[50vh]">
 
    <!-- ====== Bagian Atas: Judul & Icon ====== -->
 <div class="flex justify-between items-center w-full relative">
@@ -198,179 +195,69 @@
 </div>
   </nav>
 
- <!-- ====== Konten Detail Buku ====== -->
-<main class="absolute top-[50vh] left-0 right-0 z-50 px-4 md:px-6 pb-8 text-[#2E2E2E] pt-10 overflow-hidden"> 
-  <!-- overflow-hidden = biar ga bisa di-scroll -->
+  <!-- ====== KONTEN UTAMA ====== -->
+<div class="flex-1 ml-0 md:ml-[320px] mr-0 md:mr-3 transition-all duration-300 relative overflow-x-hidden">
+<main class="relative mt-[50vh] px-4 md:px-6 pb-8 text-[#2E2E2E] pt-10 z-10">
 
-  <!-- Tombol Baca, Pinjam, dan Like -->
-  <div class="flex items-center justify-between mb-2 px-4 md:px-0 relative">
-    
-    <!-- Tombol kiri (Baca & Pinjam) -->
-<div class="flex items-center gap-3 md:ml-[350px]">
-  <!-- Tombol Baca -->
-<!-- Tombol Baca -->
-<?php if($buku->file_buku && $buku->id): ?>
-    <a href="<?php echo e(route('user.baca', $buku->id)); ?>" target="_blank">
-        <button class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
+<!-- ====== FIXED TOMBOL (gantikan blok tombol lama dengan ini) ====== -->
+<div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[998] bg-white pointer-events-auto"
+     style="top: calc(50vh - 40px); padding-top: 60px;">
+
+  <div class="max-w-full px-4 md:px-6">
+    <div class="flex items-center justify-between mb-2 md:px-0">
+
+      <div class="flex items-center gap-3 md:ml-[350px]">
+        <?php if($buku->file_buku && $buku->id): ?>
+          <a href="<?php echo e(route('user.baca', $buku->id)); ?>" target="_blank">
+            <button class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
+              Baca
+            </button>
+          </a>
+        <?php else: ?>
+          <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
             Baca
-        </button>
-    </a>
-<?php else: ?>
-    <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
-        Baca
-    </button>
-<?php endif; ?>
+          </button>
+        <?php endif; ?>
 
-
-
-  <?php if($userBorrow): ?>
-    <!-- Tombol disabled jika sedang meminjam buku ini -->
-    <button 
-      class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
-             rounded-full shadow-md cursor-not-allowed opacity-70"
-      disabled
-      title="Anda sedang meminjam buku ini">
-      Sedang Dipinjam
-    </button>
-     <p class="text-xs text-gray-600 mt-2">
-            Batas pengembalian: 
+        <?php if($userBorrow): ?>
+          <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
+            Sedang Dipinjam
+          </button>
+          <p class="text-xs text-gray-600 mt-2">
+            Batas pengembalian:
             <?php echo e(\Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y')); ?>
 
           </p>
-   <?php elseif($stokHabis): ?>
-    <!-- Tombol disabled jika stok habis -->
-    <button 
-      class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 
-             rounded-full shadow-md cursor-not-allowed opacity-70"
-      disabled
-      title="Stok buku habis">
-      Stok Habis
-    </button>
-  <?php else: ?>
-    <!-- Tombol aktif jika bisa meminjam -->
-    <button 
-      id="openPinjamModal"
-      class="bg-kuning text-[#2E2E2E] hover:bg-[#F6D776] font-semibold text-sm px-8 py-1.5 
-             rounded-full shadow-md transition-all duration-300 transform 
-             hover:-translate-y-0.5 hover:shadow-lg">
-      Pinjam
-    </button>
-  <?php endif; ?>
+        <?php elseif($stokHabis): ?>
+          <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
+            Stok Habis
+          </button>
+        <?php else: ?>
+          <button id="openPinjamModal" class="bg-kuning text-[#2E2E2E] hover:bg-[#F6D776] font-semibold text-sm px-8 py-1.5 rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
+            Pinjam
+          </button>
+        <?php endif; ?>
+      </div>
 
+      <button id="loveBtn" class="group flex items-center justify-center text-[#E76F51] w-9 h-9 shadow-none bg-transparent transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-110 mr-2 md:mr-[60px]">
+        <?php if($isFavorited): ?>
+          <i id="heartIcon" class="fa-solid fa-heart text-[#E63946] text-base transition-transform duration-300 group-hover:scale-125"></i>
+        <?php else: ?>
+          <i id="heartIcon" class="fa-regular fa-heart text-base transition-transform duration-300 group-hover:scale-125"></i>
+        <?php endif; ?>
+      </button>
 
-<!-- ====== Popup Modal Pinjam Buku ====== -->
-<div id="pinjamModal" 
-     class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-  <div class="bg-white w-[90%] sm:w-[400px] rounded-2xl shadow-xl overflow-hidden">
-
-    <!-- Header -->
-    <div class="bg-[#4C6444] text-white text-center py-3 font-semibold text-lg">
-      Pinjam Buku
     </div>
 
-    <!-- Isi Modal -->
-    <div class="p-6 space-y-4 text-sm text-[#2E2E2E]">
-      <!-- Judul Buku -->
-      <div>
-        <label class="font-semibold mb-1 block">Judul Buku</label>
-        <input type="text" value="<?php echo e($buku->judul_buku); ?>" readonly
-               class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
-      </div>
-
-      <!-- Penulis Buku -->
-      <div>
-        <label class="font-semibold mb-1 block">Penulis Buku</label>
-        <input type="text" value="<?php echo e($buku->penulis); ?>" readonly
-               class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
-      </div>
-
-      <!-- Stok Buku -->
-      <div>
-        <label class="font-semibold mb-1 block">Stok Buku</label>
-        <input type="text" value="<?php echo e($buku->stok ?? '-'); ?>" readonly
-               class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
-      </div>
-
-        <!-- Tanggal -->
-      <div class="grid grid-cols-2 gap-4">
-        <!-- Tanggal Pinjam -->
-        <div>
-          <label class="font-semibold mb-1 block">Tanggal Pinjam</label>
-          <input type="date" id="tglPinjamInput" readonly
-                class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
-        </div>
-
-        <!-- Tanggal Kembali -->
-        <div>
-          <label for="tglKembaliInput" class="font-semibold mb-1 block">Tanggal Kembali</label>
-          <div class="relative">
-            <input type="date" id="tglKembaliInput"
-                  class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
-          </div>
-        </div>
-      </div>
-
-
-
-      <!-- Peringatan -->
-      <div class="text-[13px] space-y-1">
-        <p class="text-[#DC2626] flex items-center gap-1">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          Maksimal peminjaman <span class="font-semibold">7 hari</span>.
-        </p>
-        <p class="text-[#DC2626] flex items-center gap-1">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          Denda <span class="font-semibold text-[#DC2626]">Rp 1.000/hari</span> jika terlambat.
-        </p>
-        <p class="text-[#DC2626] flex items-center gap-1">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          Maksimal <span class="font-semibold">3 buku</span> yang bisa dipinjam.
-        </p>
-      </div>
-
-      <!-- Tombol Aksi -->
-      <div class="flex justify-end gap-3 pt-4">
-        <button id="closeModalBtn"
-          class="bg-[#DC2626] text-white font-semibold text-sm px-5 py-1.5 rounded-full shadow-md hover:opacity-90 transition">
-          Batal
-        </button>
-        <button id="konfirmasiPinjam"
-          class="bg-[#BFEA7C] text-[#2E2E2E] font-semibold text-sm px-5 py-1.5 rounded-full shadow-md hover:opacity-90 transition flex items-center gap-1">
-          <i class="fa-solid fa-check text-[#2E2E2E]"></i>
-          Konfirmasi
-        </button>
-      </div>
+    <!-- Garis bawah (tetap di bawah tombol) -->
+    <div class="w-full">
+      <div class="mx-auto md:ml-[350px] md:mr-[60px] border-t border-gray-300" style="margin-top:-8px;"></div>
     </div>
   </div>
 </div>
-</div>
-<!-- Popup Stok Kosong -->
-<div id="popupStokKosong" class="hidden fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-  <div class="bg-white p-6 rounded-2xl shadow-lg text-center w-80">
-    <div class="text-5xl mb-3 text-red-500">🚫</div>
-    <h2 class="text-lg font-bold text-red-600 mb-2">Stok Kosong</h2>
-    <p class="text-sm text-gray-600 mb-4">Buku sedang dipinjam semua, cek kembali nanti.</p>
-    <button id="closeKosong" class="bg-red-500 text-white px-4 py-2 rounded-full">Tutup</button>
-  </div>
-</div>
 
-<!-- Tombol kanan (Love) -->
-<button id="loveBtn"
-  class="group flex items-center justify-center text-[#E76F51] w-9 h-9 shadow-none bg-transparent 
-         transition-all duration-300 transform 
-         hover:-translate-y-0.5 hover:scale-110 mr-2 md:mr-[60px]">
-  <?php if($isFavorited): ?>
-    <i id="heartIcon" class="fa-solid fa-heart text-[#E63946] text-base transition-transform duration-300 group-hover:scale-125"></i>
-  <?php else: ?>
-    <i id="heartIcon" class="fa-regular fa-heart text-base transition-transform duration-300 group-hover:scale-125"></i>
-  <?php endif; ?>
-</button>
-
-
-
-    <!-- Garis bawah -->
-    <div class="absolute bottom-[-8px] left-[350px] right-[60px] border-t border-gray-300 md:left-[350px] md:right-[60px]"></div>
-  </div>
+  <!-- WRAPPER SCROLL -->
+  <div class="max-h-[65vh] overflow-y-auto pr-2">
 
   <!-- Deskripsi dan Detail -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 max-w-4xl mx-auto">
@@ -404,6 +291,37 @@
       <div><p class="font-semibold text-[#2E2E2E]">Edisi</p><p><?php echo e($buku->edisi); ?></p></div>
     </div>
   </div>
+  <!-- === RATING SECTION (center + tidak full) === -->
+<div class="w-full flex justify-center mt-10">
+    <div class="bg-[#f7edd6] p-5 rounded-2xl shadow-md border border-[#ebdec8] 
+                w-[320px] md:w-[380px]">
+
+        <!-- Judul -->
+        <p class="text-base font-semibold text-[#2E2E2E] mb-3 text-center">
+            Beri Rating Buku Ini
+        </p>
+
+        <!-- Bintang -->
+        <div class="flex items-center justify-center gap-2 mb-4" id="starContainer">
+            <?php for($i = 1; $i <= 5; $i++): ?>
+                <i class="fa-regular fa-star text-2xl text-[#d1c8ae] cursor-pointer transition-colors duration-200"
+                   data-star="<?php echo e($i); ?>"></i>
+            <?php endfor; ?>
+        </div>
+
+        <!-- Tombol -->
+        <div class="flex justify-center">
+            <button id="submitRating"
+                    class="bg-[#626F47] hover:bg-[#4e5938] active:scale-95 text-white text-sm px-5 py-2 
+                           rounded-xl transition-all duration-200 shadow-sm">
+                Beri Rating
+            </button>
+        </div>
+
+    </div>
+</div>
+
+</div>
 </main>
 
   <!-- SweetAlert2 -->

@@ -195,3 +195,38 @@ if (result.success) {
   });
 }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const loveBtn = document.getElementById('loveBtn');
+  const heartIcon = document.getElementById('heartIcon');
+  const bukuId = "{{ $buku->id }}";
+
+  if (!loveBtn || !heartIcon) return;
+
+  loveBtn.addEventListener('click', async () => {
+    try {
+      const res = await fetch("{{ route('user.favorit.toggle') }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({ buku_id: bukuId })
+      });
+
+      const data = await res.json();
+
+      if (data.favorited) {
+        heartIcon.classList.remove('fa-regular');
+        heartIcon.classList.add('fa-solid', 'text-[#E63946]');
+      } else {
+        heartIcon.classList.remove('fa-solid', 'text-[#E63946]');
+        heartIcon.classList.add('fa-regular');
+      }
+
+    } catch (err) {
+      console.error(err);
+    }
+  });
+});

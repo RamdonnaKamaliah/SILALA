@@ -1,8 +1,8 @@
-@extends('layout_user.user')
 
-@section('title', 'Edit Profil User')
 
-@section('content')
+<?php $__env->startSection('title', 'Edit Profil User'); ?>
+
+<?php $__env->startSection('content'); ?>
    <!-- Card -->
     <div class="bg-white shadow-md rounded-3xl p-8 md:p-10 w-full max-w-5xl">
       <h2 class="text-center text-xl md:text-2xl font-semibold text-[#2E2E2E] mb-8">
@@ -19,7 +19,7 @@
             <div class="relative">
               <div class="w-36 h-36 rounded-full bg-[#F3F7EE] border-2 border-[#C9DABF] overflow-hidden 
                           shadow-[0_6px_12px_rgba(0,0,0,0.12)] flex items-center justify-center">
-                <img src="{{ asset('assets/Profile.jpg') }}" class="w-full h-full object-cover" alt="Foto profil" />
+                <img src="<?php echo e(asset('assets/Profile.jpg')); ?>" class="w-full h-full object-cover" alt="Foto profil" />
               </div>
 
               <button class="absolute bottom-2 right-2 bg-[#8CA47E] hover:bg-[#7c946e] text-white p-2 rounded-full shadow-md transition"
@@ -114,4 +114,5 @@
         </button>
       </div>
     </div>
-  @endsection
+  <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/editprofil.blade.php ENDPATH**/ ?>

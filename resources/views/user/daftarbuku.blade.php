@@ -1,24 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  @include('layout_dashboard.partial_dashboard.link')
-  <title>SILALA</title>
-  <!-- vite -->
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <!-- style -->
- <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
-</head>
-<body class="min-h-screen overflow-hidden font-[Ubuntu,sans-serif] bg-white">
-  @include('layout_dashboard.partial_dashboard.header')
+@extends('layout_user.user')
 
- <main
-  class="pt-4 pb-6 px-4 md:px-6 bg-cream
-    absolute top-[90px] left-0 right-0 bottom-3 md:left-[320px] md:right-3
-    rounded-3xl transition-all duration-300 z-30
-    flex flex-col shadow-inner overflow-hidden">
+@section('title', 'daftar buku User')
 
+@section('content')
   <!-- Filter & Search (tetap di atas, tanpa garis) -->
   <div class="bg-cream px-4 md:px-6 py-3 sticky top-0 z-40">
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -111,61 +95,4 @@
       @endforeach
     </div>
 </div>
-</main>
-
-<!-- script -->
-<script src="{{asset('assets_user/js/dashboard.js')}}"></script>
-<script src="{{asset('assets_user/js/daftarbuku.js')}}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.querySelector('input[placeholder="Cari Buku..."]');
-  const kategoriButtons = document.querySelectorAll('.kategori-btn');
-  const kategoriText = document.getElementById('kategoriText');
-  const cards = document.querySelectorAll('[data-judul]');
-
-  let kategoriDipilih = "Semua";
-
-  // FILTER KATEGORI
-  kategoriButtons.forEach(btn => {
-    btn.addEventListener('click', function() {
-      kategoriDipilih = this.getAttribute('data-kategori');
-      kategoriText.textContent = kategoriDipilih;
-
-      cards.forEach(card => {
-        const kategoriBuku = card.getAttribute('data-kategori-buku');
-        const judul = card.getAttribute('data-judul');
-
-        if ((kategoriDipilih === "Semua" || kategoriBuku === kategoriDipilih) &&
-            (judul.includes(searchInput.value.toLowerCase()))) {
-          card.classList.remove('hidden');
-          card.classList.add('flex');
-        } else {
-          card.classList.add('hidden');
-          card.classList.remove('flex');
-        }
-      });
-    });
-  });
-
-  // SEARCH
-  searchInput.addEventListener('input', function() {
-    const query = this.value.toLowerCase().trim();
-
-    cards.forEach(card => {
-      const judul = card.getAttribute('data-judul');
-      const kategoriBuku = card.getAttribute('data-kategori-buku');
-
-      if ((kategoriDipilih === "Semua" || kategoriBuku === kategoriDipilih) &&
-          judul.includes(query)) {
-        card.classList.remove('hidden');
-        card.classList.add('flex');
-      } else {
-        card.classList.add('hidden');
-        card.classList.remove('flex');
-      }
-    });
-  });
-});
-</script>
-</body>
-</html>
+@endsection

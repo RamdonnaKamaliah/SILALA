@@ -27,7 +27,8 @@ darkMode: 'class',
                 cream_muda: '#F5ECD5',
                 black: '#000000',
                 pearl: '#F8F8F8',
-                twetterdark: '#15202B'
+                twetterdark: '#15202B',
+                netral: '#192734'
             }
         },
     },

@@ -1,19 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <?php echo $__env->make('layout_dashboard.partial_dashboard.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-  <title>SILALA - Riwayat Baca</title>
-  <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
-  <link rel="stylesheet" href="<?php echo e(asset('assets_user/css/dashboard.css')); ?>">
-</head>
-<body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white overflow-x-hidden">
+<?php $__env->startSection('title', 'riwayat baca User'); ?>
 
-  <?php echo $__env->make('layout_dashboard.partial_dashboard.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-
-  <main class="flex-grow pt-8 pb-6 px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-30 flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
-
+<?php $__env->startSection('content'); ?>
     <!-- Filter -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
       <div class="flex flex-col sm:flex-row gap-6">
@@ -86,12 +73,6 @@
       <p class="text-gray-500 col-span-full text-center mt-8">Belum ada riwayat baca.</p>
       <?php endif; ?>
     </div>
-  </main>
+  <?php $__env->stopSection(); ?>
 
-  <?php echo $__env->make('layout_dashboard.partial_dashboard.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-
-  <script src="<?php echo e(asset('assets_user/js/dashboard.js')); ?>"></script>
-  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-</body>
-</html>
-<?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/riwayatbaca.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/riwayatbaca.blade.php ENDPATH**/ ?>

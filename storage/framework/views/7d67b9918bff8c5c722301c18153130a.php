@@ -1,25 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <?php echo $__env->make('layout_dashboard.partial_dashboard.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-  <title>SILALA</title>
-  <!-- vite -->
-  <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
-  <!-- style -->
- <link rel="stylesheet" href="<?php echo e(asset('assets_user/css/dashboard.css')); ?>">
+<?php $__env->startSection('title', 'Beranda User'); ?>
 
-</head>
-<body class="min-h-screen font-[Ubuntu,sans-serif] bg-white">
-  <?php echo $__env->make('layout_dashboard.partial_dashboard.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-<!-- Konten Utama Dashboard -->
-<main
-  class="pt-8 pb-6 px-6 bg-cream
-  relative top-[90px] mb-24
-  md:ml-[320px] md:mr-3
-  md:rounded-3xl transition-all duration-300 z-30
-  flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
+<?php $__env->startSection('content'); ?>
 
   <!-- Kartu Sambutan -->
 <section class="relative bg-gradient-to-r from-green to-[#A4B465] text-white 
@@ -63,8 +44,8 @@
 
   <!-- Sedang Dipinjam -->
   <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
-    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
-      data-icon="mdi:book-plus"></span>
+    <span class="iconify absolute left-2 -top-2 text-[70px] text-cream"
+      data-icon="mdi:book-plus" ></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
       <p class="text-sm text-white font-medium">Sedang dipinjam</p>
       <h3 class="text-lg font-mochiy text-white"><?php echo e($dipinjam); ?> Buku</h3>
@@ -73,17 +54,17 @@
 
   <!-- Denda -->
   <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
-    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
+    <span class="iconify absolute left-2 -top-2 text-[70px] text-cream"
       data-icon="mdi:book-alert"></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
-      <p class="text-sm text-white font-medium">Denda</p>
+      <p class="text-sm text-white font-medium">Peringatan</p>
       <h3 class="text-lg font-mochiy text-white"><?php echo e($denda); ?> Buku</h3>
     </div>
   </div>
 
   <!-- Favorit -->
   <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
-    <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
+    <span class="iconify absolute left-2 -top-2 text-[70px] text-cream"
       data-icon="mdi:book-heart"></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
       <p class="text-sm text-white font-medium">Favorit</p>
@@ -189,11 +170,5 @@
     </div>
   </div>
 </section>
-</main>
-<?php echo $__env->make('layout_dashboard.partial_dashboard.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-<!-- script -->
-<script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-<script src="<?php echo e(asset('assets_user/js/dashboard.js')); ?>"></script>
-
-</body>
-</html><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/dashboard.blade.php ENDPATH**/ ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/dashboard.blade.php ENDPATH**/ ?>

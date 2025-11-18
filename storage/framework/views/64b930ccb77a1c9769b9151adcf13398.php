@@ -1,7 +1,6 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Admin Dashboard - Data Arsip')
+<?php $__env->startSection('pageTitle', 'Admin Dashboard - Data Arsip'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="p-4 md:p-6 overflow-x-auto">
     <!-- Header Section -->
     <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-8 text-white shadow-2xl">
@@ -17,7 +16,7 @@
         <div class="flex items-center space-x-4 mt-4 text-white/80">
             <div class="flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full">
                 <i class="fas fa-books text-sm"></i>
-                <span class="text-sm">Total Arsip: <strong>{{ $buku_arsip->count() }}</strong></span>
+                <span class="text-sm">Total Arsip: <strong><?php echo e($buku_arsip->count()); ?></strong></span>
             </div>
             <div class="flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full">
                 <i class="fas fa-database text-sm"></i>
@@ -39,8 +38,8 @@
                     <p class="text-gray-600 text-sm">Hapus data terpilih secara permanen</p>
                 </div>
             </div>
-            <form id="bulkDeleteArchiveForm" action="{{ route('admin.data_arsip.bulkDeleteArchive') }}" method="POST">
-                @csrf
+            <form id="bulkDeleteArchiveForm" action="<?php echo e(route('admin.data_arsip.bulkDeleteArchive')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="selected_ids" id="selectedIds">
                 <button type="submit" id="bulkDeleteBtn" disabled
                     class="w-full flex items-center justify-center space-x-3 px-6 py-3.5
@@ -66,8 +65,8 @@
                     <p class="text-gray-600 text-sm">Kembalikan data terpilih ke sistem</p>
                 </div>
             </div>
-            <form action="{{ route('admin.data_arsip.bulkRestore') }}" method="POST" id="bulkRestoreForm">
-                @csrf
+            <form action="<?php echo e(route('admin.data_arsip.bulkRestore')); ?>" method="POST" id="bulkRestoreForm">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="selected_ids" id="selectedIdsRestore">
                 <button type="submit" id="bulkRestoreBtn" disabled
                     class="w-full flex items-center justify-center space-x-3 px-6 py-3.5
@@ -95,7 +94,7 @@
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-2 bg-white px-3 py-2 rounded-lg border border-gray-200 shadow-sm">
                         <i class="fas fa-filter text-gray-400 text-sm"></i>
-                        <span class="text-sm text-gray-600">{{ $buku_arsip->count() }} data ditemukan</span>
+                        <span class="text-sm text-gray-600"><?php echo e($buku_arsip->count()); ?> data ditemukan</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-gray-300 text-[#A4B465] focus:ring-[#A4B465]">
@@ -126,96 +125,101 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @forelse ($buku_arsip as $index => $buku)
+                    <?php $__empty_1 = true; $__currentLoopData = $buku_arsip; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <tr class="hover:bg-gradient-to-r hover:from-gray-50/80 hover:to-gray-100/50 transition-all duration-300 group border-b border-gray-100 last:border-b-0">
                             <td class="px-4 py-4 text-center">
-                                <input type="checkbox" name="selected_ids[]" value="{{ $buku->id }}" 
+                                <input type="checkbox" name="selected_ids[]" value="<?php echo e($buku->id); ?>" 
                                        class="row-checkbox w-4 h-4 rounded border-gray-300 text-[#A4B465] focus:ring-[#A4B465] transition-all duration-200">
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-flex items-center justify-center w-8 h-8 bg-gradient-to-br from-gray-100 to-gray-200 text-gray-700 rounded-full text-sm font-bold shadow-sm">
-                                    {{ $index + 1 }}
+                                    <?php echo e($index + 1); ?>
+
                                 </span>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="w-16 h-20 overflow-hidden rounded-xl border-2 border-gray-200/80 mx-auto shadow-sm group-hover:shadow-md transition-all duration-300 bg-white">
-                                    @if ($buku->foto_buku)
-                                        <img src="{{ asset($buku->foto_buku) }}" alt="Cover {{ $buku->judul_buku }}"
+                                    <?php if($buku->foto_buku): ?>
+                                        <img src="<?php echo e(asset($buku->foto_buku)); ?>" alt="Cover <?php echo e($buku->judul_buku); ?>"
                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                            onerror="this.onerror=null; this.src='{{ asset('images/default-book.jpg') }}';">
-                                    @else
-                                        <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
+                                            onerror="this.onerror=null; this.src='<?php echo e(asset('images/default-book.jpg')); ?>';">
+                                    <?php else: ?>
+                                        <img src="<?php echo e(asset('assets/image_default/image_default_book.jpeg')); ?>"
                                             alt="Cover default" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="max-w-xs">
-                                    <p class="font-bold text-gray-900 line-clamp-2 text-base leading-tight group-hover:text-gray-800 transition-colors">{{ $buku->judul_buku }}</p>
-                                    @if($buku->edisi)
-                                        <p class="text-gray-500 text-xs mt-1 font-medium">Edisi: {{ $buku->edisi }}</p>
-                                    @endif
+                                    <p class="font-bold text-gray-900 line-clamp-2 text-base leading-tight group-hover:text-gray-800 transition-colors"><?php echo e($buku->judul_buku); ?></p>
+                                    <?php if($buku->edisi): ?>
+                                        <p class="text-gray-500 text-xs mt-1 font-medium">Edisi: <?php echo e($buku->edisi); ?></p>
+                                    <?php endif; ?>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-2">
                                     <i class="fas fa-user-edit text-gray-400 text-xs"></i>
-                                    <p class="text-gray-700 font-medium line-clamp-1">{{ $buku->penulis }}</p>
+                                    <p class="text-gray-700 font-medium line-clamp-1"><?php echo e($buku->penulis); ?></p>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center space-x-2">
                                     <i class="fas fa-building text-gray-400 text-xs"></i>
-                                    <p class="text-gray-600 line-clamp-1">{{ $buku->penerbit }}</p>
+                                    <p class="text-gray-600 line-clamp-1"><?php echo e($buku->penerbit); ?></p>
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-flex items-center justify-center px-3 py-1 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-800 rounded-full text-xs font-bold shadow-sm">
-                                    {{ $buku->tahun_terbit }}
+                                    <?php echo e($buku->tahun_terbit); ?>
+
                                 </span>
                             </td>
                             <td class="px-6 py-4">
-                                @if ($buku->kategoris->count())
+                                <?php if($buku->kategoris->count()): ?>
                                     <div class="flex flex-wrap gap-1">
-                                        @foreach($buku->kategoris->take(2) as $kategori)
+                                        <?php $__currentLoopData = $buku->kategoris->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <span class="inline-block px-2 py-1 bg-gradient-to-br from-[#A4B465]/20 to-[#8AA24F]/20 text-[#A4B465] rounded-lg text-xs font-semibold border border-[#A4B465]/10">
-                                                {{ $kategori->nama_kategori }}
+                                                <?php echo e($kategori->nama_kategori); ?>
+
                                             </span>
-                                        @endforeach
-                                        @if($buku->kategoris->count() > 2)
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        <?php if($buku->kategoris->count() > 2): ?>
                                             <span class="inline-block px-2 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-medium">
-                                                +{{ $buku->kategoris->count() - 2 }}
+                                                +<?php echo e($buku->kategoris->count() - 2); ?>
+
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
-                                @else
+                                <?php else: ?>
                                     <span class="text-gray-400 italic text-xs">Tidak ada kategori</span>
-                                @endif
+                                <?php endif; ?>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <span class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-green-100 to-green-200 text-green-800 rounded-xl text-sm font-bold shadow-sm group-hover:shadow-md transition-shadow">
-                                    {{ $buku->stok }}
+                                    <?php echo e($buku->stok); ?>
+
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-center">
-                                @if ($buku->file_buku)
-                                    <a href="{{ asset($buku->file_buku) }}" target="_blank"
+                                <?php if($buku->file_buku): ?>
+                                    <a href="<?php echo e(asset($buku->file_buku)); ?>" target="_blank"
                                         class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600 rounded-xl hover:from-purple-200 hover:to-purple-300 transition-all duration-200 shadow-sm hover:shadow-md group-hover:scale-105"
                                         title="Download File PDF">
                                         <i class="fas fa-file-pdf text-sm"></i>
                                     </a>
-                                @else
+                                <?php else: ?>
                                     <div class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 text-gray-400 rounded-xl shadow-sm">
                                         <i class="fas fa-file text-sm"></i>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center space-x-2">
                                     <!-- Pulihkan -->
-                                    <form action="{{ route('admin.data_buku.restore', ['id' => $buku->id]) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('PUT')
+                                    <form action="<?php echo e(route('admin.data_buku.restore', ['id' => $buku->id])); ?>" method="POST" class="inline">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('PUT'); ?>
                                         <button type="submit" 
                                             class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl flex items-center justify-center hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 group/tooltip relative"
                                             title="Pulihkan Buku">
@@ -227,7 +231,7 @@
                                     </form>
                                     
                                     <!-- Detail -->
-                                    <a href="{{ route('admin.data_arsip.show', $buku->id) }}"
+                                    <a href="<?php echo e(route('admin.data_arsip.show', $buku->id)); ?>"
                                         class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl flex items-center justify-center hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 group/tooltip relative"
                                         title="Detail Buku">
                                         <i class="fas fa-eye text-sm"></i>
@@ -237,13 +241,13 @@
                                     </a>
                                     
                                     <!-- Hapus Permanen -->
-                                    <form action="{{ route('admin.data_arsip.destroy', $buku->id) }}" method="POST" class="inline">
-                                        @csrf
-                                        @method('DELETE')
+                                    <form action="<?php echo e(route('admin.data_arsip.destroy', $buku->id)); ?>" method="POST" class="inline">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
                                         <button type="submit" 
                                             class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 text-white rounded-xl flex items-center justify-center hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 group/tooltip relative delete-permanent-btn"
                                             title="Hapus Permanen"
-                                            data-title="{{ $buku->judul_buku }}">
+                                            data-title="<?php echo e($buku->judul_buku); ?>">
                                             <i class="fas fa-trash text-sm"></i>
                                             <div class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 whitespace-nowrap">
                                                 Hapus
@@ -253,7 +257,7 @@
                                 </div>
                             </td>
                         </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
                             <td colspan="11" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center justify-center text-gray-400">
@@ -265,7 +269,7 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -451,8 +455,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_arsip/index.blade.php ENDPATH**/ ?>

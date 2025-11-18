@@ -707,4 +707,4 @@
         @endif
     });
 </script>
-@endsection
+@endsection 

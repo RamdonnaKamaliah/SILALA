@@ -1,6 +1,5 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Detail Data Kategori')
-@section('content')
+<?php $__env->startSection('pageTitle', 'Detail Data Kategori'); ?>
+<?php $__env->startSection('content'); ?>
 
 <div class="p-4 md:p-6">
     <!-- Header -->
@@ -32,7 +31,7 @@
                         <i class="fas fa-tags text-white"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-gray-800">{{ $kategori->nama_kategori }}</h3>
+                        <h3 class="text-xl font-bold text-gray-800"><?php echo e($kategori->nama_kategori); ?></h3>
                         <p class="text-gray-600 text-sm">Kategori Buku Perpustakaan</p>
                     </div>
                 </div>
@@ -44,7 +43,7 @@
                     <i class="fas fa-tag text-[#A4B465]"></i>
                     <div>
                         <p class="text-sm text-gray-600">Nama Kategori</p>
-                        <p class="text-gray-800 font-medium">{{ $kategori->nama_kategori }}</p>
+                        <p class="text-gray-800 font-medium"><?php echo e($kategori->nama_kategori); ?></p>
                     </div>
                 </div>
 
@@ -52,9 +51,10 @@
                     <i class="fas fa-calendar-plus text-[#A4B465]"></i>
                     <div>
                         <p class="text-sm text-gray-600">Dibuat Pada</p>
-                        <p class="text-gray-800 font-medium">{{ $kategori->created_at->format('d F Y') }}</p>
+                        <p class="text-gray-800 font-medium"><?php echo e($kategori->created_at->format('d F Y')); ?></p>
                         <p class="text-gray-500 text-xs" id="createdTime">
-                            {{ $kategori->created_at->format('H:i:s') }}
+                            <?php echo e($kategori->created_at->format('H:i:s')); ?>
+
                         </p>
                     </div>
                 </div>
@@ -63,9 +63,10 @@
                     <i class="fas fa-edit text-[#A4B465]"></i>
                     <div>
                         <p class="text-sm text-gray-600">Terakhir Diupdate</p>
-                        <p class="text-gray-800 font-medium">{{ $kategori->updated_at->format('d F Y') }}</p>
+                        <p class="text-gray-800 font-medium"><?php echo e($kategori->updated_at->format('d F Y')); ?></p>
                         <p class="text-gray-500 text-xs" id="updatedTime">
-                            {{ $kategori->updated_at->format('H:i:s') }}
+                            <?php echo e($kategori->updated_at->format('H:i:s')); ?>
+
                         </p>
                     </div>
                 </div>
@@ -83,7 +84,7 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-                <a href="{{ route('admin.data_kategori.index') }}" 
+                <a href="<?php echo e(route('admin.data_kategori.index')); ?>" 
                    class="flex items-center justify-center space-x-2 px-4 py-2 
                           border border-gray-300 text-gray-700 rounded-lg font-medium
                           hover:bg-gray-50 transition-colors text-sm">
@@ -92,7 +93,7 @@
                 </a>
                 
                 <div class="flex flex-col sm:flex-row gap-2 flex-1 sm:flex-none">
-                    <a href="{{ route('admin.data_kategori.edit', $kategori->id) }}" 
+                    <a href="<?php echo e(route('admin.data_kategori.edit', $kategori->id)); ?>" 
                        class="flex items-center justify-center space-x-2 px-4 py-2
                               bg-blue-600 text-white rounded-lg font-medium
                               hover:bg-blue-700 transition-colors text-sm">
@@ -100,14 +101,14 @@
                         <span>Edit</span>
                     </a>
                     
-                    <form action="{{ route('admin.data_kategori.destroy', $kategori->id) }}" method="POST" class="flex-1">
-                        @csrf
-                        @method('DELETE')
+                    <form action="<?php echo e(route('admin.data_kategori.destroy', $kategori->id)); ?>" method="POST" class="flex-1">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('DELETE'); ?>
                         <button type="submit"
                             class="w-full flex items-center justify-center space-x-2 px-4 py-2
                                    bg-red-600 text-white rounded-lg font-medium
                                    hover:bg-red-700 transition-colors text-sm"
-                            onclick="return confirm('Hapus kategori {{ $kategori->nama_kategori }}?')">
+                            onclick="return confirm('Hapus kategori <?php echo e($kategori->nama_kategori); ?>?')">
                             <i class="fas fa-trash text-xs"></i>
                             <span>Hapus</span>
                         </button>
@@ -150,4 +151,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_kategori/show.blade.php ENDPATH**/ ?>

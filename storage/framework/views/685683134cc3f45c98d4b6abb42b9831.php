@@ -1,6 +1,5 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Tambah Kategori')
-@section('content')
+<?php $__env->startSection('pageTitle', 'Tambah Kategori'); ?>
+<?php $__env->startSection('content'); ?>
 
 <div class="p-4 md:p-6 overflow-x-auto">
     <!-- Header Section -->
@@ -32,20 +31,27 @@
 
         <!-- Form Content -->
         <div class="p-6">
-            @error('nama_kategori')
+            <?php $__errorArgs = ['nama_kategori'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                 <div class="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-start space-x-3">
                     <div class="flex-shrink-0 w-5 h-5 bg-red-100 rounded-full flex items-center justify-center mt-0.5">
                         <i class="fas fa-exclamation-circle text-red-500 text-sm"></i>
                     </div>
                     <div>
                         <p class="text-red-700 font-medium">Terjadi Kesalahan</p>
-                        <p class="text-red-600 text-sm mt-0.5">{{ $message }}</p>
+                        <p class="text-red-600 text-sm mt-0.5"><?php echo e($message); ?></p>
                     </div>
                 </div>
-            @enderror
+            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
 
-            <form action="{{ route('admin.data_kategori.store') }}" method="POST" class="space-y-6">
-                @csrf
+            <form action="<?php echo e(route('admin.data_kategori.store')); ?>" method="POST" class="space-y-6">
+                <?php echo csrf_field(); ?>
 
                 <!-- Nama Kategori Field -->
                 <div class="space-y-2">
@@ -59,7 +65,7 @@
                         <input type="text" 
                                id="nama_kategori" 
                                name="nama_kategori" 
-                               value="{{ old('nama_kategori') }}"
+                               value="<?php echo e(old('nama_kategori')); ?>"
                                placeholder="Contoh: Fiksi, Sains, Sejarah, dll."
                                class="w-full border border-gray-300 rounded-xl px-4 py-3.5 bg-white
                                       focus:outline-none focus:ring-2 focus:ring-[#A4B465] focus:border-transparent
@@ -87,7 +93,7 @@
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4 pt-6 border-t border-gray-100">
-                    <a href="{{ route('admin.data_kategori.index') }}" 
+                    <a href="<?php echo e(route('admin.data_kategori.index')); ?>" 
                        class="w-full md:w-auto flex items-center justify-center space-x-3 px-6 py-3.5 
                               border border-gray-300 text-gray-700 rounded-xl font-medium
                               hover:bg-gray-50 hover:border-gray-400 transition-all duration-200
@@ -227,4 +233,5 @@ document.addEventListener('DOMContentLoaded', function() {
     namaKategoriInput.dispatchEvent(new Event('input'));
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_kategori/create.blade.php ENDPATH**/ ?>

@@ -1,8 +1,6 @@
-@extends('layout_admin.admin')
+<?php $__env->startSection('pageTitle', 'Data Kategori'); ?>
 
-@section('pageTitle', 'Data Kategori')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="p-4 md:p-6 overflow-x-auto">
     <!-- Header Section -->
     <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-lg">
@@ -17,7 +15,7 @@
         </div>
         <div class="flex items-center space-x-2 text-sm text-white">
             <i class="fas fa-chart-line"></i>
-            <span>Total Kategori: <strong>{{ $data_kategori->count() }}</strong></span>
+            <span>Total Kategori: <strong><?php echo e($data_kategori->count()); ?></strong></span>
         </div>
     </div>
 
@@ -28,7 +26,7 @@
             Daftar Kategori Buku
         </h2>
         <div class="flex items-center space-x-3">
-            <a href="{{ route('admin.data_kategori.create') }}"
+            <a href="<?php echo e(route('admin.data_kategori.create')); ?>"
                class="bg-[#A4B465] hover:bg-[#8AA24F] text-white px-5 py-2.5 rounded-xl transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg">
                <i class="fas fa-plus-circle"></i>
                <span>Tambah Kategori</span>
@@ -43,9 +41,9 @@
     </div>
 
     <!-- Bulk Delete Form -->
-    <form id="bulkDeleteForm" action="{{ route('admin.data_kategori.bulk-delete') }}" method="POST">
-        @csrf
-        @method('DELETE')
+    <form id="bulkDeleteForm" action="<?php echo e(route('admin.data_kategori.bulk-delete')); ?>" method="POST">
+        <?php echo csrf_field(); ?>
+        <?php echo method_field('DELETE'); ?>
 
         <!-- Table Container -->
         <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mt-6">
@@ -67,50 +65,51 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @forelse ($data_kategori as $kategori)
+                        <?php $__empty_1 = true; $__currentLoopData = $data_kategori; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr class="hover:bg-gray-50/80 transition-colors duration-150 group">
                                 <td class="px-4 py-4 text-center">
-                                    <input type="checkbox" name="selected_ids[]" value="{{ $kategori->id }}" 
+                                    <input type="checkbox" name="selected_ids[]" value="<?php echo e($kategori->id); ?>" 
                                            class="row-checkbox w-4 h-4 rounded border-gray-300 text-[#A4B465] focus:ring-[#A4B465]">
                                 </td>
                                 <td class="px-4 py-4 text-center text-gray-600 font-medium">
-                                    {{ $loop->iteration }}
+                                    <?php echo e($loop->iteration); ?>
+
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-10 h-10 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] rounded-lg flex items-center justify-center">
                                             <i class="fas fa-folder text-white text-sm"></i>
                                         </div>
-                                        <span class="font-medium text-gray-800">{{ $kategori->nama_kategori }}</span>
+                                        <span class="font-medium text-gray-800"><?php echo e($kategori->nama_kategori); ?></span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center space-x-2">
-                                        <a href="{{ route('admin.data_kategori.show', $kategori->id) }}"
+                                        <a href="<?php echo e(route('admin.data_kategori.show', $kategori->id)); ?>"
                                            class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-3 rounded-xl transition-all duration-200 group relative"
                                            title="Detail Kategori">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="{{ route('admin.data_kategori.edit', $kategori->id) }}"
+                                        <a href="<?php echo e(route('admin.data_kategori.edit', $kategori->id)); ?>"
                                            class="bg-green-50 hover:bg-green-100 text-green-600 p-3 rounded-xl transition-all duration-200 group relative"
                                            title="Edit Kategori">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('admin.data_kategori.destroy', $kategori->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
+                                        <form action="<?php echo e(route('admin.data_kategori.destroy', $kategori->id)); ?>" method="POST" class="inline">
+                                            <?php echo csrf_field(); ?>
+                                            <?php echo method_field('DELETE'); ?>
                                             <button type="button"
                                                 class="bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-xl transition-all duration-200 delete-btn group relative"
                                                 title="Hapus Kategori"
-                                                data-id="{{ $kategori->id }}"
-                                                data-name="{{ $kategori->nama_kategori }}">
+                                                data-id="<?php echo e($kategori->id); ?>"
+                                                data-name="<?php echo e($kategori->nama_kategori); ?>">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
                                     </div>
                                 </td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="4" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center justify-center text-gray-400">
@@ -120,7 +119,7 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -130,12 +129,12 @@
 
 <!-- Delete Confirmation Form -->
 <form id="deleteForm" method="POST" style="display: none;">
-    @csrf
-    @method('DELETE')
+    <?php echo csrf_field(); ?>
+    <?php echo method_field('DELETE'); ?>
 </form>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -191,9 +190,9 @@ table.dataTable tbody tr:hover {
     background-color: #f9fafb !important;
 }
 </style>
-@endpush
+<?php $__env->stopPush(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -278,7 +277,7 @@ $(document).ready(function() {
         e.preventDefault();
         var kategoriId = $(this).data('id');
         var kategoriName = $(this).data('name');
-        var deleteUrl = "{{ route('admin.data_kategori.destroy', ':id') }}".replace(':id', kategoriId);
+        var deleteUrl = "<?php echo e(route('admin.data_kategori.destroy', ':id')); ?>".replace(':id', kategoriId);
         
         Swal.fire({
             title: 'Konfirmasi Hapus',
@@ -301,24 +300,25 @@ $(document).ready(function() {
     });
 
     // Success message for various actions
-    @if(session('success'))
+    <?php if(session('success')): ?>
         Swal.fire({
             title: 'Sukses!',
-            text: '{{ session('success') }}',
+            text: '<?php echo e(session('success')); ?>',
             icon: 'success',
             confirmButtonColor: '#A4B465',
             timer: 3000
         });
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
         Swal.fire({
             title: 'Error!',
-            text: '{{ session('error') }}',
+            text: '<?php echo e(session('error')); ?>',
             icon: 'error',
             confirmButtonColor: '#ef4444'
         });
-    @endif
+    <?php endif; ?>
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_kategori/index.blade.php ENDPATH**/ ?>

@@ -1,6 +1,5 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Edit Data Kategori')
-@section('content')
+<?php $__env->startSection('pageTitle', 'Edit Data Kategori'); ?>
+<?php $__env->startSection('content'); ?>
 
 <div class="p-4 md:p-6 overflow-x-auto">
     <!-- Header Section -->
@@ -11,7 +10,7 @@
             </div>
             <div>
                 <h1 class="text-2xl lg:text-3xl font-bold mb-1 text-white">Edit Data Kategori</h1>
-                <p class="text-white/90 text-sm">Memperbarui kategori: <strong>{{ $kategori->nama_kategori }}</strong></p>
+                <p class="text-white/90 text-sm">Memperbarui kategori: <strong><?php echo e($kategori->nama_kategori); ?></strong></p>
             </div>
         </div>
     </div>
@@ -29,33 +28,33 @@
         <!-- Form Content -->
         <div class="p-6">
             <!-- Alert Messages -->
-            @if ($errors->any())
+            <?php if($errors->any()): ?>
                 <div class="mb-4 bg-red-50 border border-red-200 rounded-lg p-3 flex items-start space-x-2">
                     <div class="flex-shrink-0 w-4 h-4 bg-red-100 rounded-full flex items-center justify-center mt-0.5">
                         <i class="fas fa-exclamation-circle text-red-500 text-xs"></i>
                     </div>
                     <div>
                         <p class="text-red-700 font-medium text-xs">Terjadi Kesalahan</p>
-                        <p class="text-red-600 text-xs mt-0.5">{{ $errors->first() }}</p>
+                        <p class="text-red-600 text-xs mt-0.5"><?php echo e($errors->first()); ?></p>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 <div class="mb-4 bg-green-50 border border-green-200 rounded-lg p-3 flex items-start space-x-2">
                     <div class="flex-shrink-0 w-4 h-4 bg-green-100 rounded-full flex items-center justify-center mt-0.5">
                         <i class="fas fa-check-circle text-green-500 text-xs"></i>
                     </div>
                     <div>
                         <p class="text-green-700 font-medium text-xs">Sukses!</p>
-                        <p class="text-green-600 text-xs mt-0.5">{{ session('success') }}</p>
+                        <p class="text-green-600 text-xs mt-0.5"><?php echo e(session('success')); ?></p>
                     </div>
                 </div>
-            @endif
+            <?php endif; ?>
 
-            <form action="{{ route('admin.data_kategori.update', $kategori->id) }}" method="POST" class="space-y-4">
-                @csrf
-                @method('PUT')
+            <form action="<?php echo e(route('admin.data_kategori.update', $kategori->id)); ?>" method="POST" class="space-y-4">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
 
                 <!-- Nama Kategori Field -->
                 <div class="space-y-2">
@@ -69,7 +68,7 @@
                         <input type="text" 
                                id="nama_kategori" 
                                name="nama_kategori" 
-                               value="{{ old('nama_kategori', $kategori->nama_kategori) }}"
+                               value="<?php echo e(old('nama_kategori', $kategori->nama_kategori)); ?>"
                                placeholder="Contoh: Fiksi, Sains, Sejarah, dll."
                                class="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-white
                                       focus:outline-none focus:ring-2 focus:ring-[#A4B465] focus:border-transparent
@@ -90,7 +89,7 @@
                             Perbarui nama kategori sesuai kebutuhan
                         </p>
                         <div class="text-xs text-gray-500">
-                            <span id="charCount">{{ strlen($kategori->nama_kategori) }}</span>/50 karakter
+                            <span id="charCount"><?php echo e(strlen($kategori->nama_kategori)); ?></span>/50 karakter
                         </div>
                     </div>
                 </div>
@@ -112,7 +111,7 @@
 
                 <!-- Action Buttons -->
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-4 border-t border-gray-100">
-                    <a href="{{ route('admin.data_kategori.index') }}" 
+                    <a href="<?php echo e(route('admin.data_kategori.index')); ?>" 
                        class="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-2.5 
                               border border-gray-300 text-gray-700 rounded-lg font-medium
                               hover:bg-gray-50 hover:border-gray-400 transition-all duration-200
@@ -122,7 +121,7 @@
                     </a>
                     
                     <div class="flex flex-col sm:flex-row gap-2 order-1 sm:order-2 w-full sm:w-auto">
-                        <a href="{{ route('admin.data_kategori.show', $kategori->id) }}" 
+                        <a href="<?php echo e(route('admin.data_kategori.show', $kategori->id)); ?>" 
                            class="w-full sm:w-auto flex items-center justify-center space-x-2 px-4 py-2.5
                                   border border-blue-300 text-blue-700 rounded-lg font-medium
                                   hover:bg-blue-50 hover:border-blue-400 transition-all duration-200
@@ -269,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add confirmation for form submission
     const form = document.querySelector('form');
     form.addEventListener('submit', function(e) {
-        const originalValue = "{{ $kategori->nama_kategori }}";
+        const originalValue = "<?php echo e($kategori->nama_kategori); ?>";
         const currentValue = namaKategoriInput.value;
         
         if (originalValue !== currentValue) {
@@ -280,4 +279,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_kategori/edit.blade.php ENDPATH**/ ?>

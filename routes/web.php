@@ -14,15 +14,6 @@ use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
 use App\Http\Controllers\Admin\DataDendaController;
-use App\Http\Controllers\LandingpageController;
-use App\Http\Controllers\user\DaftarBukuController;
-use App\Http\Controllers\Auth\SetupPasswordController;
-use App\Http\Controllers\user\DetailBukuController;
-use App\Http\Controllers\user\RiwayatBukuController;
-use App\Http\Controllers\user\RiwayatBacaController;
-use App\Http\Controllers\user\FavoritController;
-use App\Http\Controllers\user\ProfilController;
-
 
 // Public Routes
 Route::get('/', function () {
@@ -39,14 +30,6 @@ Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGo
 Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])
     ->name('google.callback');
 
-    
-
-Route::middleware('auth:web')->group(function () {
-    Route::get('/setup-password', [SetupPasswordController::class, 'index'])->name('setup.password');
-    Route::post('/setup-password', [SetupPasswordController::class, 'store'])->name('setup.password.store');
-});
-
-
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -57,35 +40,7 @@ Route::middleware('auth')->group(function () {
 // User Routes
 Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
-    Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])->name('user.detailbuku');
-    Route::get('/riwayatbuku', [RiwayatBukuController::class, 'index'])->name('user.riwayatbuku');
-    Route::post('/riwayatbuku/store', [RiwayatBukuController::class, 'store'])->name('user.riwayatbuku.store');
-    Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
-    Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
-    
-    // Route baca buku - pastikan hanya ada satu deklarasi
-    Route::get('/baca/{id}', [DetailBukuController::class, 'baca'])->name('user.baca');
-
-    // User - Riwayat Buku
-    Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalikanBuku'])
-        ->name('user.riwayat.kembalikan');
-    Route::get('/check-borrow-status/{bookId}', [RiwayatBukuController::class, 'checkBookBorrowStatus'])
-        ->name('user.check.borrow.status');
-    Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBorrow'])
-        ->name('user.check.active.borrow');
-    
-    // Peminjaman buku
-    Route::post('/pinjam', [App\Http\Controllers\Admin\DataPeminjamController::class, 'store'])
-        ->name('pinjam.store')
-        ->middleware('auth');
-    
-    // FAVORIT
-    Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');
-    Route::post('/favorit/toggle', [FavoritController::class, 'toggle'])->name('user.favorit.toggle');
 });
-
-
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
@@ -121,21 +76,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
 
     // Data Peminjam Routes
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
-    Route::put('/data_peminjam/{id}/kembalikan', [DataPeminjamController::class, 'kembalikan'])
-        ->name('data_peminjam.kembalikan');
-    Route::put('/data_peminjam/{id}/masalah', [DataPeminjamController::class, 'masalah'])
-        ->name('data_peminjam.masalah');
-
-
 
     // Data Denda Routes
     Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
  
 });
-
-
-//route landingpage data buku
-    Route::get('/', [LandingpageController::class, 'index'])->name('landing.index');
 
 // Home Redirect Route
 Route::get('/home', function () {

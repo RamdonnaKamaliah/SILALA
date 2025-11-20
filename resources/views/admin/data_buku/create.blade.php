@@ -22,6 +22,48 @@
                     <input type="file" id="foto_buku" name="foto_buku"
                         class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
                            focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200">
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                        data-bs-target="#pilihGambarModal">
+                        Pilih dari Galeri
+                    </button>
+
+                    <input type="hidden" name="selected_gambar" id="selectedGambar">
+                    <p class="mt-2">Selected: <span id="selectedGambarNama">-</span></p>
+
+                    <div class="modal fade" id="pilihGambarModal" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Pilih Gambar</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        @foreach ($gambarList as $g)
+                                            <div class="col-3 mb-3">
+                                                <img src="{{ Storage::url($g->path_file) }}"
+                                                    style="width:100%; height:150px; object-fit:cover; cursor:pointer;"
+                                                    onclick="pilihGambar('{{ $g->id }}', '{{ $g->nama_file }}')">
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function pilihGambar(id, nama) {
+                            document.getElementById('selectedGambar').value = id;
+                            document.getElementById('selectedGambarNama').innerText = nama;
+                            var modal = bootstrap.Modal.getInstance(document.getElementById('pilihGambarModal'));
+                            modal.hide();
+                        }
+                    </script>
+
                 </div>
 
                 <!-- Judul Buku -->

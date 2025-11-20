@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
 use App\Http\Controllers\Admin\DataDendaController;
+use App\Http\Controllers\Admin\MediaBukuController;
 
 // Public Routes
 Route::get('/', function () {
@@ -80,6 +81,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     // Data Denda Routes
     Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
  
+    // Media Buku Routes
+    Route::get('/media-buku', [MediaBukuController::class, 'index'])->name('media.index');
+    Route::delete('/media-buku/{gambar}', [MediaBukuController::class, 'destroy'])->name('media.destroy');
+
 });
 
 // Home Redirect Route

@@ -99,8 +99,6 @@ class DataBukuController extends Controller
     $kategoris = DataKategori::all();
     return view('admin.data_buku.edit', compact('buku', 'kategoris'));
 }
-
-
     /**
      * Update the specified resource in storage.
      */
@@ -200,6 +198,18 @@ class DataBukuController extends Controller
 
         return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diimpor!');
     }
+
+    private function isValidPdf($filePath)
+{
+    if (!Storage::disk('public')->exists($filePath)) {
+        return false;
+    }
+
+    $content = Storage::disk('public')->get($filePath);
+
+    // PDF selalu diawali dengan "%PDF-"
+    return str_starts_with($content, '%PDF-');
+}
 
     
     public function archive(Request $request, $id = null)

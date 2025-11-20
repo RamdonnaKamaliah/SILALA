@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\DataBuku;
 use App\Models\DataKategori;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
@@ -11,30 +12,44 @@ class DataBukuImport implements ToModel, WithStartRow
 {
     public function startRow(): int
     {
-        return 2; // Lewati header
+        return 2; // Lewati header Excel
     }
 
     public function model(array $row)
     {
-        // Simpan data buku terlebih dahulu
-        $buku = new DataBuku([
-            'judul_buku'      => $row[0],
-            'penulis'         => $row[1],
-            'penerbit'        => $row[2],
-            'tahun_terbit'    => (int) $row[3],
-            'bahasa'          => $row[4],
-            'data_kategori'   => $row[5],
-            'jumlah_halaman'  => (int) $row[6],
-            'edisi'           => $row[7],
-            'stok'       => (int) $row[8],
-            'deskripsi'       => $row[9],
-            'foto_buku'       => $row[10],
-            'file_buku'       => $row[11],
+        // Foto buku
+        $foto = trim($row[10]);
+        $localFotoPath = null;
+
+        if ($foto && Storage::disk('public')->exists("uploads/buku/" . $foto)) {
+            $localFotoPath = "uploads/buku/" . $foto;
+        }
+
+        // File PDF
+        $pdf = trim($row[11]);
+        $localPdfPath = null;
+
+        if ($pdf && Storage::disk('public')->exists("uploads/file_buku/" . $pdf)) {
+            $localPdfPath = "uploads/file_buku/" . $pdf;
+        }
+
+        // Simpan data buku
+        $buku = DataBuku::create([
+            'judul_buku'     => $row[0],
+            'penulis'        => $row[1],
+            'penerbit'       => $row[2],
+            'tahun_terbit'   => (int) $row[3],
+            'bahasa'         => $row[4],
+            'jumlah_halaman' => (int) $row[6],
+            'edisi'          => $row[7],
+            'stok'           => (int) $row[8],
+            'deskripsi'      => $row[9],
+            'foto_buku'      => $localFotoPath,
+            'file_buku'      => $localPdfPath,
+            'kategori_ids'   => null,
         ]);
 
-        $buku->save();
-
-        // Hubungkan kategori
+        // Kategori
         $kategoriNama = trim($row[5]);
         if ($kategoriNama) {
             $kategori = DataKategori::firstOrCreate(['nama_kategori' => $kategoriNama]);
@@ -43,4 +58,4 @@ class DataBukuImport implements ToModel, WithStartRow
 
         return $buku;
     }
-} 
+}

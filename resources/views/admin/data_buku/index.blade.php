@@ -171,14 +171,19 @@
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->edisi }}</td>
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->stok }}</td>
                                 <td class="px-4 py-2 border-b border-gray-300 text-center">
-                                    @if ($buku->file_buku)
-                                        <a href="{{ asset($buku->file_buku) }}" target="_blank"
-                                            class="inline-block bg-blue-600 text-white px-3 py-1 rounded-lg shadow hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition text-xs">
-                                            Lihat File
-                                        </a>
-                                    @else
-                                        <span class="text-gray-400 italic text-xs">Tidak ada file</span>
-                                    @endif
+                                    @php
+                                        $path = $buku->file_buku;
+
+                                        // Rapikan jika path lama masih mengandung 'storage/'
+                                        $path = str_replace('storage/', '', $path);
+                                        $path = str_replace('public/', '', $path);
+                                    @endphp
+
+                                    <a href="{{ asset('storage/' . $path) }}" target="_blank"
+                                        class="inline-block bg-blue-600 text-white px-3 py-1 rounded-lg shadow hover:bg-blue-700 text-xs">
+                                        Lihat File
+                                    </a>
+
                                 </td>
                                 <td class="px-4 py-2 border-b border-gray-300">
                                     <div class="flex space-x-2">

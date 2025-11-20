@@ -119,12 +119,13 @@
         </div>
       </div>
 
-      <!-- Tombol Pengaturan -->
-      <button class="text-[#626F47] text-lg">
-        <i class="fa-solid fa-gear"></i>
-      </button>
-    </div>
+      <!-- darkmode -->
+    <button onclick="toggleDarkMode()" class="text-[#626F47] text-lg flex items-center gap-2">
+    <span class="iconify text-2xl dark:hidden" data-icon="mdi:weather-sunny"></span>
+    <span class="iconify text-2xl hidden dark:inline" data-icon="mdi:weather-night"></span>
+  </button>
   </div>
+</div>
 
   <!-- ====== Bagian Tengah: Cover & Info Buku (tetap di dalam nav seperti aslinya) ====== -->
   <div class="flex flex-col md:flex-row items-start justify-center 
@@ -132,13 +133,19 @@
               mt-[80px] md:mt-8 px-4">
 
     <!-- Cover Buku -->
-    <div class="relative w-32 sm:w-36 md:w-52 flex-shrink-0 mx-auto md:mx-0 
-                -mt-4 md:mt-0 z-10">
+<div class="relative w-36 sm:w-40 md:w-52 flex-shrink-0 mx-auto md:mx-0 
+            -mt-4 md:mt-0 z-10">
+
+  <div class="w-full aspect-[3/4] overflow-hidden rounded-xl shadow-xl">
       <img 
         src="<?php echo e(asset($buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
         alt="<?php echo e($buku->judul_buku); ?>"
-        class="w-full h-auto rounded-md shadow-xl border-4 border-white object-cover">
-    </div>
+        class="w-full h-full object-cover"
+      >
+  </div>
+</div>
+
+
 
     <!-- Info Buku -->
     <div class="flex flex-col justify-start text-center md:text-left w-full md:w-[60%] relative z-10">
@@ -188,9 +195,7 @@
   </div>
 </nav>
 
-<!-- ====== KONTEN UTAMA (SCROLLABLE) ======
-     NOTE: beri padding-top minimal sedikit lebih besar dari tinggi navbar (50vh)
-     supaya konten tidak tertutup navbar -->
+<!-- ====== KONTEN UTAMA (SCROLLABLE) ====== -->
 <main class="flex-1 ml-0 md:ml-[320px] mr-0 md:mr-3 transition-all duration-300 relative overflow-y-auto pt-[55vh] pb-20">
 
   <!-- WRAPPER untuk membatasi lebar dan padding -->
@@ -205,10 +210,11 @@
 
           <div class="flex items-center gap-3 md:ml-[350px]">
             <?php if($buku->file_buku && $buku->id): ?>
-              <a href="<?php echo e(route('user.baca', $buku->id)); ?>" target="_blank">
-                <button class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
-                  Baca
-                </button>
+              <button id="openPdfModal"
+        data-url="<?php echo e(route('user.baca', $buku->id)); ?>"
+        class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
+        Baca
+      </button>
               </a>
             <?php else: ?>
               <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
@@ -328,6 +334,64 @@
         </div>
       </div>
     </div>
+    
+    <!-- MODAL PDF -->
+<div id="pdfModal"
+    class="fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] hidden
+           flex items-center justify-center p-4">
+
+    <div class="bg-white w-full max-w-6xl h-[93vh]
+                rounded-[32px] shadow-2xl overflow-hidden
+                border border-gray-300 flex flex-col">
+
+        <!-- HEADER -->
+        <div class="w-full bg-gradient-to-r from-gray-50 to-gray-200
+                    px-6 py-4 border-b flex justify-between items-center shadow-sm">
+
+            <h2 class="text-xl font-bold text-gray-700 flex items-center gap-3">
+                <span class="iconify" data-icon="mdi:file-document-outline" data-width="26"></span>
+                Preview Dokumen
+            </h2>
+
+            <button id="closePdfModal"
+                class="p-2 text-[22px] text-gray-600 hover:text-red-600 transition">
+                <span class="iconify" data-icon="mdi:close" data-width="22"></span>
+            </button>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="w-full bg-white border-b px-6 py-3 flex items-center gap-6 shadow-sm">
+
+            <div class="flex items-center gap-3">
+
+                <button id="zoomOut"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl
+                           bg-gray-200 hover:bg-gray-300 transition shadow-sm text-gray-700">
+                    <span class="iconify" data-icon="mdi:magnify-minus-outline" data-width="22"></span>
+                </button>
+
+                <button id="zoomIn"
+                    class="w-10 h-10 flex items-center justify-center rounded-xl
+                           bg-gray-200 hover:bg-gray-300 transition shadow-sm text-gray-700">
+                    <span class="iconify" data-icon="mdi:magnify-plus-outline" data-width="22"></span>
+                </button>
+
+                <span id="zoomLabel" class="font-semibold text-gray-700 text-sm ml-2">100%</span>
+            </div>
+
+            <span class="ml-auto text-sm text-gray-700 bg-gray-100 px-3 py-1.5 rounded-lg shadow-inner">
+                Halaman: <span id="pageCurrent" class="font-bold">1</span> /
+                <span id="pageTotal" class="font-bold">0</span>
+            </span>
+        </div>
+
+        <!-- VIEWER -->
+        <div id="pdfViewer"
+            class="flex-1 overflow-x-auto overflow-y-auto p-8 bg-gray-50 scroll-smooth">
+        </div>
+
+    </div>
+</div>
 
     <!--      KONTEN DESKRIPSI     -->
 <div class="pt-6">
@@ -418,7 +482,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
 </div>
@@ -427,6 +490,8 @@
 
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
   <!-- Script -->
 <script src="<?php echo e(asset('assets_user/js/dashboard.js')); ?>"></script>
@@ -686,6 +751,107 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 }); // end DOMContentLoaded
+
+// pdf
+let pdfDoc = null;
+let zoom = 1.2;
+let totalPages = 0;
+
+const viewer = document.getElementById("pdfViewer");
+const zoomInBtn = document.getElementById("zoomIn");
+const zoomOutBtn = document.getElementById("zoomOut");
+const zoomLabel = document.getElementById("zoomLabel");
+
+// OPEN PDF
+document.getElementById("openPdfModal").addEventListener("click", function () {
+
+    const url = this.getAttribute("data-url");
+    document.getElementById("pdfModal").classList.remove("hidden");
+
+    viewer.innerHTML = "<p class='text-center mt-5 text-gray-500'>Memuat PDF...</p>";
+
+    pdfjsLib.getDocument(url).promise.then(pdf => {
+        pdfDoc = pdf;
+        totalPages = pdf.numPages;
+
+        document.getElementById("pageTotal").innerText = totalPages; // ⬅️ ini penting
+
+        renderAllPages();
+    });
+});
+
+// RENDER ALL PAGES
+function renderAllPages() {
+    viewer.innerHTML = "";
+
+    for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+        pdfDoc.getPage(pageNum).then(page => {
+
+            const viewport = page.getViewport({ scale: zoom });
+
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            canvas.style.marginBottom = "20px";
+            canvas.style.border = "1px solid #ddd";
+            canvas.style.borderRadius = "10px";
+            canvas.style.background = "white";
+            canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+
+            viewer.appendChild(canvas);
+
+            page.render({
+                canvasContext: ctx,
+                viewport: viewport
+            });
+        });
+    }
+
+    zoomLabel.innerText = Math.round(zoom * 100) + "%";
+}
+
+
+// UPDATE PAGE NUMBER ON SCROLL  ⬅️ TEMPATKAN DI SINI
+viewer.addEventListener("scroll", () => {
+    const canvases = viewer.querySelectorAll("canvas");
+    const scrollTop = viewer.scrollTop;
+
+    let current = 1;
+
+    canvases.forEach((canvas, index) => {
+        if (canvas.offsetTop - 80 <= scrollTop) {
+            current = index + 1;
+        }
+    });
+
+    document.getElementById("pageCurrent").innerText = current;
+});
+
+
+// ZOOM IN
+zoomInBtn.addEventListener("click", () => {
+    zoom += 0.2;
+    renderAllPages();
+});
+
+// ZOOM OUT
+zoomOutBtn.addEventListener("click", () => {
+    if (zoom > 0.4) {
+        zoom -= 0.2;
+        renderAllPages();
+    }
+});
+
+// CLOSE
+document.getElementById("closePdfModal").addEventListener("click", () => {
+    document.getElementById("pdfModal").classList.add("hidden");
+    viewer.innerHTML = "";
+    document.getElementById("pageCurrent").innerText = "1";
+});
+
 </script>
 
   

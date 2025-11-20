@@ -12,12 +12,12 @@ class DataBukuImport implements ToModel, WithStartRow
 {
     public function startRow(): int
     {
-        return 2; // Lewati header Excel
+        return 2;
     }
 
     public function model(array $row)
     {
-        // Foto buku
+        // Foto buku lokal
         $foto = trim($row[10]);
         $localFotoPath = null;
 
@@ -25,7 +25,7 @@ class DataBukuImport implements ToModel, WithStartRow
             $localFotoPath = "uploads/buku/" . $foto;
         }
 
-        // File PDF
+        // File PDF lokal
         $pdf = trim($row[11]);
         $localPdfPath = null;
 
@@ -38,11 +38,11 @@ class DataBukuImport implements ToModel, WithStartRow
             'judul_buku'     => $row[0],
             'penulis'        => $row[1],
             'penerbit'       => $row[2],
-            'tahun_terbit'   => (int) $row[3],
+            'tahun_terbit'   => (int)$row[3],
             'bahasa'         => $row[4],
-            'jumlah_halaman' => (int) $row[6],
+            'jumlah_halaman' => (int)$row[6],
             'edisi'          => $row[7],
-            'stok'           => (int) $row[8],
+            'stok'           => (int)$row[8],
             'deskripsi'      => $row[9],
             'foto_buku'      => $localFotoPath,
             'file_buku'      => $localPdfPath,

@@ -11,13 +11,12 @@
             @forelse ($gambar as $g)
                 <div class="bg-white shadow rounded-xl overflow-hidden border border-gray-200">
 
-                    <img src="{{ asset('storage/' . $g->path_file) }}"
-                        class="w-full h-36 object-cover hover:scale-105 transition" alt="foto buku">
+                    <img src="{{ asset($g->foto_buku) }}" class="w-full h-36 object-cover">
 
                     <div class="p-3">
                         <p class="text-xs text-gray-700 truncate">{{ $g->nama_file }}</p>
 
-                        <form action="{{ route('media.destroy', $g->id) }}" method="POST" class="mt-3">
+                        <form action="{{ route('admin.media.destroy', $g->id) }}" method="POST" class="mt-3">
                             @csrf
                             @method('DELETE')
 

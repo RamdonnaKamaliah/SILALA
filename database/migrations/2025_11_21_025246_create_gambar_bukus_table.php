@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('gambar_bukus', function (Blueprint $table) {
             $table->id();
-        $table->string('nama_file');
-        $table->string('path_file');
-        $table->timestamps();
+            $table->string('nama_file');
+            $table->string('path_file');
+            $table->timestamps();
         });
     }
 

@@ -3,18 +3,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  @include('layout_user.partial_user.link')
+  <?php echo $__env->make('layout_user.partial_user.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
   <title>SILALA | Detail Buku</title>
   <!-- Vite -->
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
   <!-- Custom Style -->
-  <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
+  <link rel="stylesheet" href="<?php echo e(asset('assets_user/css/dashboard.css')); ?>">
 </head>
 <body class="min-h-screen font-[Ubuntu,sans-serif] bg-white flex">
 
   <!-- Sidebar -->
-  <x-sidebarUser></x-sidebarUser>
+  <?php if (isset($component)) { $__componentOriginalb763922586e375d9f7490769fccbb786 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb763922586e375d9f7490769fccbb786 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.sidebarUser','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('sidebarUser'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb763922586e375d9f7490769fccbb786)): ?>
+<?php $attributes = $__attributesOriginalb763922586e375d9f7490769fccbb786; ?>
+<?php unset($__attributesOriginalb763922586e375d9f7490769fccbb786); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb763922586e375d9f7490769fccbb786)): ?>
+<?php $component = $__componentOriginalb763922586e375d9f7490769fccbb786; ?>
+<?php unset($__componentOriginalb763922586e375d9f7490769fccbb786); ?>
+<?php endif; ?>
 
   <!-- ====== NAVBAR ====== -->
 <nav id="navbar"
@@ -28,12 +46,13 @@
 
     <!-- ===== Judul & Panah ===== -->
     <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3 md:static md:transform-none">
-      <a href="{{ route('user.daftarbuku') }}"
+      <a href="<?php echo e(route('user.daftarbuku')); ?>"
          class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
         <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
       </a>
       <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
-        {{ $title ?? 'Detail Buku' }}
+        <?php echo e($title ?? 'Detail Buku'); ?>
+
       </h1>
     </div>
 
@@ -122,8 +141,8 @@
   <div class="w-full aspect-[3/4] overflow-hidden rounded-md 
               shadow-2xl shadow-gray-500/60">
       <img 
-        src="{{ asset($buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
-        alt="{{ $buku->judul_buku }}"
+        src="<?php echo e(asset($buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
+        alt="<?php echo e($buku->judul_buku); ?>"
         class="w-full h-full object-cover"
       >
   </div>
@@ -135,51 +154,54 @@
     <!-- Info Buku -->
     <div class="flex flex-col justify-start text-center md:text-left w-full md:w-[60%] relative z-10">
       <h2 class="block md:hidden text-xl sm:text-2xl font-semibold text-[#2E2E2E] leading-snug mb-2">
-        {{ $buku->judul_buku }}
+        <?php echo e($buku->judul_buku); ?>
+
       </h2>
 
       <h2 class="hidden md:block text-3xl font-semibold text-[#2E2E2E] leading-snug mb-2">
-        {{ $buku->judul_buku }}
+        <?php echo e($buku->judul_buku); ?>
+
       </h2>
 
       <div class="flex flex-col items-center md:items-start -mt-1">
-        <p class="text-sm text-[#626F47] mb-1">{{ $buku->penulis }}</p>
+        <p class="text-sm text-[#626F47] mb-1"><?php echo e($buku->penulis); ?></p>
         <!-- Rating Stars berdasarkan rata-rata semua user -->
         <div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2">
-          @for($i = 1; $i <= 5; $i++)
-            @if($i <= floor($averageRating))
+          <?php for($i = 1; $i <= 5; $i++): ?>
+            <?php if($i <= floor($averageRating)): ?>
               <i class="fa-solid fa-star"></i>
-            @elseif($i - 0.5 <= $averageRating)
+            <?php elseif($i - 0.5 <= $averageRating): ?>
               <i class="fa-solid fa-star-half-stroke"></i>
-            @else
+            <?php else: ?>
               <i class="fa-regular fa-star"></i>
-            @endif
-          @endfor
-          @if($totalRatings > 0)
-            <span class="text-xs text-gray-600 ml-2">({{ number_format($averageRating, 1) }})</span>
-          @endif
+            <?php endif; ?>
+          <?php endfor; ?>
+          <?php if($totalRatings > 0): ?>
+            <span class="text-xs text-gray-600 ml-2">(<?php echo e(number_format($averageRating, 1)); ?>)</span>
+          <?php endif; ?>
         </div>
       </div>
 
-      @php
+      <?php
           $userId = Auth::id();
           $userBorrow = \App\Models\DataPeminjam::where('user_id', $userId)
               ->where('buku_id', $buku->id)
               ->where('status', 'dipinjam')
               ->first();
-      @endphp
+      ?>
 
-      @if($userBorrow)
+      <?php if($userBorrow): ?>
       <div class="mt-2">
         <div class="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold">
           <i class="fa-solid fa-clock"></i>
           Anda sedang meminjam buku ini
         </div>
         <p class="text-xs text-gray-600 mt-1">
-    Batas pengembalian: {{ \Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
+    Batas pengembalian: <?php echo e(\Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y')); ?>
+
     </p>
       </div>
-      @endif
+      <?php endif; ?>
 
     </div>
   </div>
@@ -199,42 +221,42 @@
         <div class="flex items-center justify-between mb-2 md:px-0">
 
           <div class="flex items-center gap-3 md:ml-[350px]">
-            @if($buku->file_buku && $buku->id)
+            <?php if($buku->file_buku && $buku->id): ?>
               <button id="openPdfModal"
-        data-url="{{ route('user.baca', $buku->id) }}"
+        data-url="<?php echo e(route('user.baca', $buku->id)); ?>"
         class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
         Baca
       </button>
               </a>
-            @else
+            <?php else: ?>
               <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
                 Baca
               </button>
-            @endif
+            <?php endif; ?>
 
-            @if($userBorrow)
+            <?php if($userBorrow): ?>
               <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
                 Sedang Dipinjam
               </button>
-            @elseif($stokHabis)
+            <?php elseif($stokHabis): ?>
               <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
                 Sedang Dipinjam
               </button>
-            @else
+            <?php else: ?>
               <button id="openPinjamModal" class="bg-kuning text-[#2E2E2E] hover:bg-[#F6D776] font-semibold text-sm px-8 py-1.5 rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
                 Pinjam
               </button>
-            @endif
+            <?php endif; ?>
           </div>
 
           <!-- Tombol Favorit -->
           <div class="flex items-center">
             <button id="loveBtn" class="group flex items-center justify-center text-[#E76F51] w-9 h-9 shadow-none bg-transparent transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-110 mr-2 md:mr-[60px]">
-              @if($isFavorited)
+              <?php if($isFavorited): ?>
                 <i id="heartIcon" class="fa-solid fa-heart text-[#E63946] text-base transition-transform duration-300 group-hover:scale-125"></i>
-              @else
+              <?php else: ?>
                 <i id="heartIcon" class="fa-regular fa-heart text-base transition-transform duration-300 group-hover:scale-125"></i>
-              @endif
+              <?php endif; ?>
             </button>
           </div>
 
@@ -261,21 +283,21 @@
           <!-- Judul Buku -->
           <div>
             <label class="font-semibold mb-1 block">Judul Buku</label>
-            <input type="text" value="{{ $buku->judul_buku }}" readonly
+            <input type="text" value="<?php echo e($buku->judul_buku); ?>" readonly
                    class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
           </div>
 
           <!-- Penulis Buku -->
           <div>
             <label class="font-semibold mb-1 block">Penulis Buku</label>
-            <input type="text" value="{{ $buku->penulis }}" readonly
+            <input type="text" value="<?php echo e($buku->penulis); ?>" readonly
                    class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
           </div>
 
           <!-- Stok Buku -->
           <div>
             <label class="font-semibold mb-1 block">Stok Buku</label>
-            <input type="text" value="{{ $buku->stok ?? '-' }}" readonly
+            <input type="text" value="<?php echo e($buku->stok ?? '-'); ?>" readonly
                    class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
           </div>
 
@@ -401,7 +423,8 @@
       <div>
         <h3 class="text-lg font-semibold mb-3">Deskripsi</h3>
         <p class="text-sm leading-relaxed text-[#626F47]">
-          {{ $buku->deskripsi }}
+          <?php echo e($buku->deskripsi); ?>
+
         </p>
       </div>
 
@@ -409,54 +432,55 @@
       <div class="grid grid-cols-2 gap-y-3 text-sm text-[#626F47]">
         <div>
           <p class="font-semibold text-[#2E2E2E]">Penerbit</p>
-          <p>{{ $buku->penulis }}</p>
+          <p><?php echo e($buku->penulis); ?></p>
         </div>
 
         <div>
           <p class="font-semibold text-[#2E2E2E]">Tahun Terbit</p>
-          <p>{{ $buku->tahun_terbit }}</p>
+          <p><?php echo e($buku->tahun_terbit); ?></p>
         </div>
 
         <div>
           <p class="font-semibold text-[#2E2E2E]">Bahasa</p>
-          <p>{{ $buku->bahasa }}</p>
+          <p><?php echo e($buku->bahasa); ?></p>
         </div>
 
         <div>
           <p class="font-semibold text-[#2E2E2E]">Kategori</p>
           <p>
-            @if($buku->kategoris->isNotEmpty())
-              {{ $buku->kategoris->pluck('nama_kategori')->join(', ') }}
-            @else
+            <?php if($buku->kategoris->isNotEmpty()): ?>
+              <?php echo e($buku->kategoris->pluck('nama_kategori')->join(', ')); ?>
+
+            <?php else: ?>
               -
-            @endif
+            <?php endif; ?>
           </p>
         </div>
 
         <div>
           <p class="font-semibold text-[#2E2E2E]">Jumlah Halaman</p>
-          <p>{{ $buku->jumlah_halaman }}</p>
+          <p><?php echo e($buku->jumlah_halaman); ?></p>
         </div>
 
         <div>
           <p class="font-semibold text-[#2E2E2E]">Edisi</p>
-          <p>{{ $buku->edisi }}</p>
+          <p><?php echo e($buku->edisi); ?></p>
         </div>
       </div>
     </div>
 
     <!-- === RATING CARD === -->
-@if(($hasRead || $userBorrow) && Schema::hasTable('ratings'))
+<?php if(($hasRead || $userBorrow) && Schema::hasTable('ratings')): ?>
 <div class="w-full flex justify-center mt-8">
   <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
 
     <!-- Judul -->
     <p class="text-xl font-bold text-[#3a3a3a] text-center mb-1">
-      @if($userRating)
+      <?php if($userRating): ?>
         Ubah Rating Buku Ini
-      @else
+      <?php else: ?>
         Beri Rating Buku Ini
-      @endif
+      <?php endif; ?>
     </p>
 
     <p class="text-sm text-[#6b6b6b] text-center mb-4">
@@ -465,10 +489,10 @@
 
     <!-- Bintang -->
     <div id="starContainer" class="flex items-center justify-center gap-3 mb-5">
-      @for ($i = 1; $i <= 5; $i++)
+      <?php for($i = 1; $i <= 5; $i++): ?>
         <i class="fa-regular fa-star text-4xl text-[#d5ccb8] cursor-pointer transition-all rating-star"
-           data-star="{{ $i }}"></i>
-      @endfor
+           data-star="<?php echo e($i); ?>"></i>
+      <?php endfor; ?>
     </div>
 
     <!-- Tombol -->
@@ -476,16 +500,16 @@
       <button id="submitRating" class="bg-[#5c7040] hover:bg-[#4d5e34] active:scale-95 
         text-white text-sm font-medium px-7 py-2.5 rounded-xl transition-all shadow 
         opacity-50 cursor-not-allowed" disabled>
-        @if($userRating)
+        <?php if($userRating): ?>
           Update Rating
-        @else
+        <?php else: ?>
           Kirim Rating
-        @endif
+        <?php endif; ?>
       </button>
     </div>
   </div>
 </div>
-@endif
+<?php endif; ?>
   </div>
 
 </div>
@@ -498,7 +522,7 @@
 
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
   <!-- Script -->
-<script src="{{ asset('assets_user/js/dashboard.js') }}"></script>
+<script src="<?php echo e(asset('assets_user/js/dashboard.js')); ?>"></script>
 <!-- Script Rating System -->
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -511,7 +535,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const stars = starContainer.querySelectorAll(".rating-star");
     let selectedRating = 0;
-    const bukuId = "{{ $buku->id }}";
+    const bukuId = "<?php echo e($buku->id); ?>";
 
     console.log('Rating system initialized'); // Debug
 
@@ -574,11 +598,11 @@ document.addEventListener("DOMContentLoaded", function() {
             submitRatingBtn.disabled = true;
             submitRatingBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
 
-            const response = await fetch("{{ route('user.rating.store') }}", {
+            const response = await fetch("<?php echo e(route('user.rating.store')); ?>", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
                     "Accept": "application/json"
                 },
                 body: JSON.stringify({
@@ -719,15 +743,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 konfirmasiBtn.disabled = true;
                 konfirmasiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
 
-                const response = await fetch("{{ route('pinjam.store') }}", {
+                const response = await fetch("<?php echo e(route('pinjam.store')); ?>", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
                         "Accept": "application/json"
                     },
                     body: JSON.stringify({
-                        buku_id: "{{ $buku->id }}",
+                        buku_id: "<?php echo e($buku->id); ?>",
                         tanggal_kembali: tanggalKembali
                     })
                 });
@@ -743,7 +767,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         timer: 2000,
                         showConfirmButton: false
                     });
-                    window.location.href = "{{ route('user.riwayatbuku') }}";
+                    window.location.href = "<?php echo e(route('user.riwayatbuku')); ?>";
                 } else {
                     Swal.fire({
                         icon: "error",
@@ -772,17 +796,17 @@ document.addEventListener("DOMContentLoaded", function() {
     // ====== FAVORIT SYSTEM ======
     const loveBtn = document.getElementById('loveBtn');
     const heartIcon = document.getElementById('heartIcon');
-    const bukuId = "{{ $buku->id }}";
+    const bukuId = "<?php echo e($buku->id); ?>";
 
     if (!loveBtn || !heartIcon) return;
 
     loveBtn.addEventListener('click', async () => {
         try {
-            const res = await fetch("{{ route('user.favorit.toggle') }}", {
+            const res = await fetch("<?php echo e(route('user.favorit.toggle')); ?>", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>"
                 },
                 body: JSON.stringify({ buku_id: bukuId })
             });
@@ -941,3 +965,4 @@ document.addEventListener("keydown", (e) => {
 </html>
 
 
+<?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/detailbuku.blade.php ENDPATH**/ ?>

@@ -23,7 +23,7 @@ use App\Http\Controllers\user\RiwayatBacaController;
 use App\Http\Controllers\user\FavoritController;
 use App\Http\Controllers\user\ProfilController;
 use App\Http\Controllers\user\EditProfilController;
-
+use App\Http\Controllers\user\RatingController;
 
 // Public Routes
 Route::get('/', function () {
@@ -85,6 +85,10 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     // FAVORIT
     Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');
     Route::post('/favorit/toggle', [FavoritController::class, 'toggle'])->name('user.favorit.toggle');
+
+    Route::post('/rating', [RatingController::class, 'store'])->name('user.rating.store');
+Route::get('/rating/{bukuId}', [RatingController::class, 'getUserRating'])->name('user.rating.get');
+Route::delete('/rating/{bukuId}', [RatingController::class, 'destroy'])->name('user.rating.destroy');
 });
 
 

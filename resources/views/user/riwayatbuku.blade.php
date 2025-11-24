@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  @include('layout_dashboard.partial_dashboard.link')
-  <title>SILALA</title>
-  <!-- vite -->
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <!-- style -->
-  <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
-</head>
-<body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white">
+@extends('layout_user.user')
 
-  @include('layout_dashboard.partial_dashboard.header')
-  
-  <!-- Konten Utama Dashboard -->
-  <main class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-30 flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
+@section('title', 'Beranda User')
 
+@section('content')
     <!-- Filter dan Pencarian -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 w-full md:w-auto">
@@ -229,29 +215,5 @@
         </div>
       @endif
     </div>
-  </main>
-
-  @include('layout_dashboard.partial_dashboard.footer')
-
-  <!-- script -->
-  <script src="{{asset('assets_user/js/dashboard.js')}}"></script>
-  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-  <script>
-    const dropdownButton = document.getElementById('dropdownButton');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-
-    dropdownButton.addEventListener('click', function () {
-      dropdownMenu.classList.toggle('hidden');
-      dropdownButton.querySelector('.iconify').classList.toggle('rotate-180');
-    });
-
-    // Klik di luar dropdown → tutup
-    document.addEventListener('click', function (e) {
-      if (!document.getElementById('dropdownWrapper').contains(e.target)) {
-        dropdownMenu.classList.add('hidden');
-        dropdownButton.querySelector('.iconify').classList.remove('rotate-180');
-      }
-    });
-  </script>
-</body>
-</html>
+  @endsection
+  

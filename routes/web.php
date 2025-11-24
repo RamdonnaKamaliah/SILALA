@@ -22,6 +22,7 @@ use App\Http\Controllers\user\RiwayatBukuController;
 use App\Http\Controllers\user\RiwayatBacaController;
 use App\Http\Controllers\user\FavoritController;
 use App\Http\Controllers\user\ProfilController;
+use App\Http\Controllers\user\EditProfilController;
 
 
 // Public Routes
@@ -63,6 +64,7 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::post('/riwayatbuku/store', [RiwayatBukuController::class, 'store'])->name('user.riwayatbuku.store');
     Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
     Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
+    Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
     
     // Route baca buku - pastikan hanya ada satu deklarasi
     Route::get('/baca/{id}', [DetailBukuController::class, 'baca'])->name('user.baca');

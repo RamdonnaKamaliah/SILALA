@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  @include('layout_dashboard.partial_dashboard.link')
-  <title>SILALA - Riwayat Baca</title>
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
-</head>
-<body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white overflow-x-hidden">
+@extends('layout_user.user')
 
-  @include('layout_dashboard.partial_dashboard.header')
+@section('title', 'riwayat baca User')
 
-  <main class="flex-grow pt-8 pb-6 px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-30 flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
-
+@section('content')
     <!-- Filter -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
       <div class="flex flex-col sm:flex-row gap-6">
@@ -83,11 +72,4 @@
       <p class="text-gray-500 col-span-full text-center mt-8">Belum ada riwayat baca.</p>
       @endforelse
     </div>
-  </main>
-
-  @include('layout_dashboard.partial_dashboard.footer')
-
-  <script src="{{ asset('assets_user/js/dashboard.js') }}"></script>
-  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-</body>
-</html>
+  @endsection

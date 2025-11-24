@@ -28,7 +28,7 @@
 
   {{-- Script tambahan (kalau ada JS per halaman) --}}
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-  <script src="{{asset('assets_user/js/dashboard.js')}}"></script>
+  <script src="{{asset('assets_user/js/sidebarnavbar.js')}}"></script>
   <script src="{{asset('assets_user/js/daftarbuku.js')}}"></script>
   <script src="{{asset('assets_user/js/riwayatbuku.js')}}"></script>
   <script src="{{asset('assets_user/js/favorit.js')}}"></script>

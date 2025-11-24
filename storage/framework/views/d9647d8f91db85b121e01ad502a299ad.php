@@ -35,9 +35,11 @@
 <?php endif; ?>
 
   <!-- ====== NAVBAR ====== -->
-<nav id="navbar" class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-[999]
-         bg-[#f7edd6] rounded-b-3xl shadow-sm flex flex-col justify-between
-         px-4 md:px-6 pt-5 pb-5 transition-all duration-300 h-[50vh]">
+<nav id="navbar"
+  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-40 
+  bg-[#f7edd6] rounded-b-3xl shadow-sm
+  px-4 md:px-6 py-6 transition-all duration-300
+  h-[55vh] flex flex-col justify-start">
 
   <!-- ====== Bagian Atas: Judul & Icon ====== -->
   <div class="flex justify-between items-center w-full relative">
@@ -133,10 +135,11 @@
               mt-[80px] md:mt-8 px-4">
 
     <!-- Cover Buku -->
-<div class="relative w-36 sm:w-40 md:w-52 flex-shrink-0 mx-auto md:mx-0 
+<div class="relative w-36 sm:w-44 md:w-56 flex-shrink-0 mx-auto md:mx-0 
             -mt-4 md:mt-0 z-10">
 
-  <div class="w-full aspect-[3/4] overflow-hidden rounded-xl shadow-xl">
+  <div class="w-full aspect-[3/4] overflow-hidden rounded-md 
+              shadow-2xl shadow-gray-500/60">
       <img 
         src="<?php echo e(asset($buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
         alt="<?php echo e($buku->judul_buku); ?>"
@@ -144,6 +147,7 @@
       >
   </div>
 </div>
+
 
 
 
@@ -202,8 +206,8 @@
   <div class="max-w-4xl mx-auto px-4">
 
     <!-- ====== FIXED TOMBOL BACA/PINJAM/FAVORIT ====== -->
-    <div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[998] bg-white pointer-events-auto"
-         style="top: calc(50vh - 40px); padding-top: 60px;">
+    <div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[20] bg-white pt-3">
+
 
       <div class="max-w-full px-4 md:px-6">
         <div class="flex items-center justify-between mb-2 md:px-0">
@@ -342,7 +346,11 @@
 
     <div class="bg-white w-full max-w-6xl h-[93vh]
                 rounded-[32px] shadow-2xl overflow-hidden
-                border border-gray-300 flex flex-col">
+                border border-gray-300 flex flex-col
+
+                sm:rounded-[32px] rounded-2xl
+                sm:p-0 p-2
+                ">
 
         <!-- HEADER -->
         <div class="w-full bg-gradient-to-r from-gray-50 to-gray-200
@@ -387,9 +395,10 @@
 
         <!-- VIEWER -->
         <div id="pdfViewer"
-            class="flex-1 overflow-x-auto overflow-y-auto p-8 bg-gray-50 scroll-smooth">
-        </div>
-
+    class="flex-1 overflow-y-auto overflow-x-auto bg-gray-50 scroll-smooth
+           p-2 sm:p-8
+           flex sm:justify-center">
+</div>
     </div>
 </div>
 
@@ -752,106 +761,229 @@ document.addEventListener("DOMContentLoaded", () => {
 
 }); // end DOMContentLoaded
 
-// pdf
+
+// ====== Konfigurasi awal ======
 let pdfDoc = null;
-let zoom = 1.2;
+let zoom = 1.0; // ← UKURAN AWAL 100%
 let totalPages = 0;
+const DEFAULT_URL_FALLBACK = "/mnt/data/5e9aa4f2-b5a9-4417-a057-03dd679ca248.png";
 
 const viewer = document.getElementById("pdfViewer");
 const zoomInBtn = document.getElementById("zoomIn");
 const zoomOutBtn = document.getElementById("zoomOut");
 const zoomLabel = document.getElementById("zoomLabel");
+const pageCurrentEl = document.getElementById("pageCurrent");
+const pageTotalEl = document.getElementById("pageTotal");
+const openBtn = document.getElementById("openPdfModal");
+const closeBtn = document.getElementById("closePdfModal");
+const modal = document.getElementById("pdfModal");
 
-// OPEN PDF
-document.getElementById("openPdfModal").addEventListener("click", function () {
-
-    const url = this.getAttribute("data-url");
-    document.getElementById("pdfModal").classList.remove("hidden");
-
-    viewer.innerHTML = "<p class='text-center mt-5 text-gray-500'>Memuat PDF...</p>";
-
-    pdfjsLib.getDocument(url).promise.then(pdf => {
-        pdfDoc = pdf;
-        totalPages = pdf.numPages;
-
-        document.getElementById("pageTotal").innerText = totalPages; // ⬅️ ini penting
-
-        renderAllPages();
-    });
-});
-
-// RENDER ALL PAGES
-function renderAllPages() {
-    viewer.innerHTML = "";
-
-    for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-        pdfDoc.getPage(pageNum).then(page => {
-
-            const viewport = page.getViewport({ scale: zoom });
-
-            const canvas = document.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-
-            canvas.style.marginBottom = "20px";
-            canvas.style.border = "1px solid #ddd";
-            canvas.style.borderRadius = "10px";
-            canvas.style.background = "white";
-            canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
-
-            viewer.appendChild(canvas);
-
-            page.render({
-                canvasContext: ctx,
-                viewport: viewport
-            });
-        });
-    }
-
-    zoomLabel.innerText = Math.round(zoom * 100) + "%";
+// debounce
+function debounce(fn, wait = 120) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), wait);
+  };
 }
 
+// render satu halaman
+function renderPage(pageNum) {
+  return pdfDoc.getPage(pageNum).then(page => {
+    const viewport = page.getViewport({ scale: zoom });
 
-// UPDATE PAGE NUMBER ON SCROLL  ⬅️ TEMPATKAN DI SINI
-viewer.addEventListener("scroll", () => {
-    const canvases = viewer.querySelectorAll("canvas");
-    const scrollTop = viewer.scrollTop;
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-    let current = 1;
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
 
-    canvases.forEach((canvas, index) => {
-        if (canvas.offsetTop - 80 <= scrollTop) {
-            current = index + 1;
-        }
+    canvas.style.marginBottom = "20px";
+    canvas.style.border = "1px solid #ddd";
+    canvas.style.borderRadius = "10px";
+    canvas.style.background = "white";
+    canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+    canvas.style.display = "block";
+    canvas.style.marginLeft = "auto";
+    canvas.style.marginRight = "auto";
+
+    const wrap = document.createElement("div");
+    wrap.appendChild(canvas);
+    viewer.appendChild(wrap);
+
+    return page.render({
+      canvasContext: ctx,
+      viewport: viewport
+    }).promise.then(() => {
+      document.dispatchEvent(new Event("pdf-render-finished"));
+      return canvas;
     });
+  });
+}
 
-    document.getElementById("pageCurrent").innerText = current;
-});
+// render semua halaman
+function renderAllPages() {
+  if (!pdfDoc) return Promise.resolve();
 
+  viewer.innerHTML = "";
+  pageCurrentEl.innerText = "1";
 
-// ZOOM IN
-zoomInBtn.addEventListener("click", () => {
-    zoom += 0.2;
+  const renderPromises = [];
+  for (let i = 1; i <= totalPages; i++) {
+    renderPromises.push(renderPage(i));
+  }
+
+  return Promise.all(renderPromises).then(canvases => {
+    zoomLabel.innerText = Math.round(zoom * 100) + "%";
+    pageTotalEl.innerText = totalPages;
+
+    fixPdfLayout();
+    centerPdfDesktop();
+
+    document.dispatchEvent(new Event("pdf-render-finished-all"));
+
+    return canvases;
+  });
+}
+
+// open PDF
+openBtn.addEventListener("click", function () {
+  const url = this.getAttribute("data-url") || DEFAULT_URL_FALLBACK;
+  modal.classList.remove("hidden");
+
+  viewer.innerHTML = "<p class='text-center mt-5 text-gray-500'>Memuat PDF...</p>";
+
+  pdfjsLib.getDocument(url).promise.then(pdf => {
+    pdfDoc = pdf;
+    totalPages = pdf.numPages;
+    pageTotalEl.innerText = totalPages;
+
+    zoom = 1.0; // ← RESET SELALU 100% SAAT BUKA PDF
+    zoomLabel.innerText = "100%";
+
     renderAllPages();
+  }).catch(err => {
+    viewer.innerHTML = `<p class="text-center text-red-500 mt-6">Gagal memuat PDF: ${err.message}</p>`;
+    console.error("PDF load error:", err);
+  });
 });
 
-// ZOOM OUT
+// close PDF
+closeBtn.addEventListener("click", () => {
+  modal.classList.add("hidden");
+  viewer.innerHTML = "";
+  pageCurrentEl.innerText = "1";
+  pdfDoc = null;
+  totalPages = 0;
+});
+
+// zoom in
+zoomInBtn.addEventListener("click", () => {
+  if (zoom < 3.0) {
+    zoom = +(zoom + 0.2).toFixed(2);
+    renderAllPages();
+    viewer.scrollTop = 0;
+  }
+});
+
+// zoom out
 zoomOutBtn.addEventListener("click", () => {
-    if (zoom > 0.4) {
-        zoom -= 0.2;
-        renderAllPages();
+  if (zoom > 0.4) {
+    zoom = +(zoom - 0.2).toFixed(2);
+    renderAllPages();
+    viewer.scrollTop = 0;
+  }
+});
+
+// update page on scroll
+function updateCurrentPageOnScroll() {
+  const canvases = Array.from(viewer.querySelectorAll("canvas"));
+  if (!canvases.length) return;
+
+  const scrollTop = viewer.scrollTop;
+  const midpoint = scrollTop + (viewer.clientHeight / 2);
+
+  let current = 1;
+  for (let i = 0; i < canvases.length; i++) {
+    const rectTop = canvases[i].offsetTop;
+    const rectBottom = rectTop + canvases[i].offsetHeight;
+    if (midpoint >= rectTop && midpoint <= rectBottom) {
+      current = i + 1;
+      break;
     }
+    if (i === canvases.length - 1 && midpoint > rectTop) {
+      current = canvases.length;
+    }
+  }
+
+  pageCurrentEl.innerText = current;
+}
+viewer.addEventListener("scroll", debounce(updateCurrentPageOnScroll, 60));
+
+// layout fixes
+function fixPdfLayout() {
+  const canvases = viewer.querySelectorAll("canvas");
+  if (!canvases.length) return;
+
+  if (window.innerWidth < 640) {
+    canvases.forEach(c => {
+      c.style.width = "100%";
+      c.style.height = "auto";
+      c.style.maxWidth = "none";
+    });
+    zoomLabel.textContent = "100%";
+  } else {
+    canvases.forEach(c => {
+      c.style.width = "auto";
+      c.style.height = "auto";
+      c.style.maxWidth = "100%";
+    });
+    zoomLabel.textContent = Math.round(zoom * 100) + "%";
+  }
+}
+
+function centerPdfDesktop() {
+  if (window.innerWidth >= 640) {
+    document.querySelectorAll("#pdfViewer canvas").forEach(c => {
+      c.style.marginLeft = "auto";
+      c.style.marginRight = "auto";
+      c.style.display = "block";
+    });
+  } else {
+    document.querySelectorAll("#pdfViewer canvas").forEach(c => {
+      c.style.display = "block";
+      c.style.marginLeft = "";
+      c.style.marginRight = "";
+    });
+  }
+}
+
+// handle resize
+const onResize = debounce(() => {
+  fixPdfLayout();
+  centerPdfDesktop();
+}, 150);
+window.addEventListener("resize", onResize);
+
+// event hooks
+document.addEventListener("pdf-render-finished", () => {
+  fixPdfLayout();
+  centerPdfDesktop();
+  updateCurrentPageOnScroll();
 });
 
-// CLOSE
-document.getElementById("closePdfModal").addEventListener("click", () => {
-    document.getElementById("pdfModal").classList.add("hidden");
-    viewer.innerHTML = "";
-    document.getElementById("pageCurrent").innerText = "1";
+document.addEventListener("pdf-render-finished-all", () => {
+  fixPdfLayout();
+  centerPdfDesktop();
+  updateCurrentPageOnScroll();
 });
 
+// ESC to close
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+    closeBtn.click();
+  }
+});
 </script>
 
   

@@ -1,52 +1,21 @@
-const menuItems = document.querySelectorAll("#sidebar-menu .menu-item");
-
-menuItems.forEach(item => {
-  item.addEventListener("click", () => {
-    // hapus 'active' dari semua menu-item
-    menuItems.forEach(el => el.classList.remove("active"));
-
-    // tambahkan ke menu yang diklik
-    item.classList.add("active");
-  });
-});
-
+document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.getElementById("hamburger");
+  if (!hamburger) return; // Jika halaman tidak ada hamburger, skip
+
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebar-overlay");
-  const navbar = document.getElementById("navbar"); 
 
   hamburger.addEventListener("click", () => {
     const isHidden = sidebar.classList.contains("-translate-x-full");
 
     if (isHidden) {
-      // Buka sidebar
       sidebar.classList.remove("-translate-x-full");
       overlay.classList.remove("hidden");
       setTimeout(() => overlay.classList.add("opacity-100"), 10);
-
-      // Navbar ikut menggelap (khusus mobile)
-      navbar.classList.add("navbar-dim");
-
-      // Ubah jadi X dan posisikan di kanan sidebar
-      hamburger.classList.add("open");
-      hamburger.style.position = "fixed";
-      hamburger.style.left = "295px";
-      hamburger.style.top = "16px";
-      hamburger.style.zIndex = "9999";
     } else {
-      // Tutup sidebar
       sidebar.classList.add("-translate-x-full");
       overlay.classList.remove("opacity-100");
       setTimeout(() => overlay.classList.add("hidden"), 300);
-
-      // Navbar kembali normal
-      navbar.classList.remove("navbar-dim");
-
-      hamburger.classList.remove("open");
-      hamburger.style.position = "";
-      hamburger.style.left = "";
-      hamburger.style.top = "";
-      hamburger.style.zIndex = "";
     }
   });
 
@@ -54,16 +23,8 @@ menuItems.forEach(item => {
     sidebar.classList.add("-translate-x-full");
     overlay.classList.remove("opacity-100");
     setTimeout(() => overlay.classList.add("hidden"), 300);
-
-    navbar.classList.remove("navbar-dim");
-
-    hamburger.classList.remove("open");
-    hamburger.style.position = "";
-    hamburger.style.left = "";
-    hamburger.style.top = "";
-    hamburger.style.zIndex = "";
   });
-
+});
  // Notifikasi
 const notifBtn = document.getElementById('notifBtn');
 const notifBox = document.getElementById('notifBox');

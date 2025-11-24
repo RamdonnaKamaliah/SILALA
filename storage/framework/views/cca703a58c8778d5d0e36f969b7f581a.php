@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <?php echo $__env->make('layout_dashboard.partial_dashboard.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
   <title>SILALA</title>
   <!-- vite -->
   <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
@@ -40,7 +41,7 @@
       </div>
       <div class="border-t border-[#E0D6B8] my-2"></div>
       <div class="flex items-center justify-between">
-        <a href="<?php echo e(route('user.baca', $fav->buku->id)); ?>" class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</a>
+        <a href="<?php echo e(route('user.baca', $fav->buku->id)); ?>" target="_blank" class="bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition">Baca</a>
         <button class="text-red-500 text-lg hover:scale-110 transition" onclick="hapusFavorite(<?php echo e($fav->buku->id); ?>)">
           <i class="fa-solid fa-heart"></i>
         </button>

@@ -131,11 +131,8 @@
                                 <th class="px-4 py-3 text-left font-semibold">Penerbit</th>
                                 <th class="px-4 py-3 text-left font-semibold">Tahun Terbit</th>
                                 <th class="px-4 py-3 text-left font-semibold">Kategori</th>
-                            
-                                <th class="px-4 py-3 text-left font-semibold">Edisi</th>
                                 <th class="px-4 py-3 text-left font-semibold">Stok</th>
                                 <th class="px-4 py-3 text-left font-semibold">File</th>
-                            
                                 <th class="px-4 py-3 text-center font-semibold">Aksi</th>
                             </tr>
                         </thead>
@@ -175,7 +172,6 @@
                                     <?php endif; ?>
                                 </td>
                         
-                                <td class="px-4 py-3 text-gray-600"><?php echo e($buku->edisi); ?></td>
                                 <td class="px-4 py-3 text-gray-600"><?php echo e($buku->stok); ?></td>
                                 <td class="px-4 py-3 text-gray-600">
                                    <?php if($buku->file_buku): ?>

@@ -76,7 +76,7 @@
     <span class="iconify absolute left-2 -top-2 opacity-40 text-[70px] text-white"
       data-icon="mdi:book-alert"></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
-      <p class="text-sm text-white font-medium">Denda</p>
+      <p class="text-sm text-white font-medium">Pelanggaran</p>
       <h3 class="text-lg font-mochiy text-white"><?php echo e($denda); ?> Buku</h3>
     </div>
   </div>
@@ -87,7 +87,7 @@
       data-icon="mdi:book-heart"></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
       <p class="text-sm text-white font-medium">Favorit</p>
-      <h3 class="text-lg font-mochiy text-white">Buku</h3>
+      <h3 class="text-lg font-mochiy text-white"><?php echo e($favorit); ?> Buku</h3>
     </div>
   </div>
 

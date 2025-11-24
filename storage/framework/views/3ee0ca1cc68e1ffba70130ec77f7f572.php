@@ -15,7 +15,7 @@
   </button>
 
  <!-- List Kategori -->
-<div id="kategoriMenu" class="hidden absolute w-full md:w-48 mt-2 bg-primary rounded-xl shadow-xl p-2 z-50 border border-[#E2DAC3]">
+<div id="kategoriMenu" class="hidden absolute mt-2 z-[9999] bg-primary rounded-xl shadow-xl p-2 z-50 border border-[#E2DAC3]">
 
   <!-- Tombol Semua Kategori di atas -->
   <button data-kategori="Semua" 
@@ -70,21 +70,20 @@
         <!-- Detail Buku -->
         <div class="p-4 flex flex-col items-center text-center space-y-1 transition-all duration-700 ease-in-out">
           <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base leading-snug"><?php echo e($buku->judul_buku); ?></h3>
-          <div class="transition-all duration-700 ease-in-out group-hover:opacity-0 group-hover:translate-y-2">
-            <p class="text-xs md:text-sm text-gray-600"><?php echo e($buku->penulis); ?></p>
-            <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-              <i class="fa-regular fa-star"></i>
+            <div class="transition-all duration-700 ease-in-out">
+              <p class="text-xs md:text-sm text-gray-600"><?php echo e($buku->penulis); ?></p>
+              <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star"></i>
+                <i class="fa-solid fa-star-half-stroke"></i>
+                <i class="fa-regular fa-star"></i>
+              </div>
             </div>
-          </div>
           <a href="<?php echo e(route('user.detailbuku', $buku->id)); ?>">
             <button
-              class="opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 
-                    transition-all duration-700 ease-in-out delay-200 
-                    bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
+              class="bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
+                    transition-all duration-300 ease-in-out
                     hover:bg-[#6e8a50] hover:scale-105 mt-2">
               Lihat Detail
             </button>

@@ -503,7 +503,7 @@
 
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
   <!-- Script -->
-<script src="<?php echo e(asset('assets_user/js/dashboard.js')); ?>"></script>
+<script src="<?php echo e(asset('assets_user/js/sidebarnavbar.js')); ?>"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   // ====== SweetAlert default supaya selalu muncul di atas ======

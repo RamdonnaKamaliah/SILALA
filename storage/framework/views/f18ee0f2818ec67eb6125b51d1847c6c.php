@@ -100,9 +100,9 @@
         </div>
 
         <!-- Right Column - Book Details -->
-        <div class="xl:col-span-2 space-y-6">
-            <!-- Basic Information Card -->
-            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <div class="xl:col-span-2 flex flex-col gap-6">
+            <!-- Basic Information Card - FIXED WIDTH -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 w-full">
                 <h2 class="text-lg font-bold text-gray-800 mb-6 flex items-center space-x-3">
                     <div class="w-2 h-2 bg-[#A4B465] rounded-full"></div>
                     <span>Informasi Buku</span>
@@ -238,14 +238,14 @@
                 </div>
             </div>
 
-            <!-- Description Card - Lebar penuh persegi panjang -->
-            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+            <!-- Description Card - FULL WIDTH untuk melebar -->
+            <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 w-full flex-1">
                 <h2 class="text-lg font-bold text-gray-800 mb-4 flex items-center space-x-3">
                     <div class="w-2 h-2 bg-[#A4B465] rounded-full"></div>
                     <span>Deskripsi Buku</span>
                 </h2>
-                <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200">
-                    <p class="text-gray-700 leading-relaxed text-sm font-medium">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200 h-full">
+                    <p class="text-gray-700 leading-relaxed text-sm font-medium whitespace-pre-line">
                         <?php echo e($buku->deskripsi ?: 'Tidak ada deskripsi tersedia untuk buku ini.'); ?>
 
                     </p>
@@ -393,15 +393,20 @@
     border-radius: 10px;
 }
 
-/* Ensure containers align perfectly */
-.xl\:col-span-2 .space-y-6 {
+/* Ensure proper layout for right column */
+.xl\:col-span-2 {
     display: flex;
     flex-direction: column;
-    height: 100%;
 }
 
-.xl\:col-span-2 .space-y-6 > * {
-    flex: 1;
+/* Fix untuk deskripsi agar memanjang ke bawah */
+.whitespace-pre-line {
+    white-space: pre-line;
+}
+
+/* Memastikan card informasi buku tidak melebar berlebihan */
+.bg-white.rounded-xl.shadow-lg.border.border-gray-200.p-6 {
+    min-width: 0; /* Mencegah overflow */
 }
 </style>
 

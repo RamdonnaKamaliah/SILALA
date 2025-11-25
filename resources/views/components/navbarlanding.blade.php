@@ -9,7 +9,7 @@
 
     <!-- Navbar desktop -->
     <nav class="relative hidden md:flex items-center space-x-8 text-base font-semibold 
-    bg-[#A4B465] text-white dark:bg-white dark:text-slate-700 
+  bg-white text-slate-700 
     shadow-md rounded-full px-8 py-4 transition-colors duration-300">
     <a href="/" class="nav-link text-green-600">Beranda</a>
     <a href="#tentang" class="nav-link">Tentang</a>

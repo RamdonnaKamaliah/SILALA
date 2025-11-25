@@ -293,6 +293,7 @@
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="<?php echo e(route('admin.dashboard')); ?>">
+<<<<<<< HEAD
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>shop</title>
@@ -312,10 +313,25 @@
                     </a>
                 </li>
 
+=======
+
+                        <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-house-chimney-window text-lg"></i>
+                        </div>
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                            Dashboard
+                        </span>
+                    </a>
+                </li>
+
+
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                 <!-- Akun Pengguna -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="<?php echo e(route('admin.data_pengguna.index')); ?>">
+<<<<<<< HEAD
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>Akun Pengguna</title>
@@ -332,6 +348,16 @@
                             </svg>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">Akun Pengguna</span>
+=======
+
+                        <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-user-gear text-lg"></i>
+                        </div>
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                            Akun Pengguna
+                        </span>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                     </a>
                 </li>
 
@@ -339,6 +365,7 @@
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="<?php echo e(route('admin.data_buku.index')); ?>">
+<<<<<<< HEAD
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>Data Buku</title>
@@ -355,6 +382,16 @@
                             </svg>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">Data Buku</span>
+=======
+
+                        <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-book-bookmark text-lg"></i>
+                        </div>
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                            Data Buku
+                        </span>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                     </a>
                 </li>
 
@@ -362,6 +399,7 @@
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="<?php echo e(route('admin.data_kategori.index')); ?>">
+<<<<<<< HEAD
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>Data Kategori</title>
@@ -378,6 +416,16 @@
                             </svg>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">Data Kategori</span>
+=======
+
+                        <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-layer-group text-lg"></i>
+                        </div>
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                            Data Kategori
+                        </span>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                     </a>
                 </li>
 
@@ -385,6 +433,7 @@
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="<?php echo e(route('admin.data_arsip.index')); ?>">
+<<<<<<< HEAD
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>Favorit</title>
@@ -401,6 +450,16 @@
                             </svg>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">Data Arsip</span>
+=======
+
+                        <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-box-archive text-lg"></i>
+                        </div>
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                            Data Arsip
+                        </span>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                     </a>
                 </li>
 
@@ -408,6 +467,7 @@
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="<?php echo e(route('admin.data_peminjam.index')); ?>">
+<<<<<<< HEAD
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>settings</title>
@@ -449,6 +509,16 @@
                             </svg>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">Data Denda</span>
+=======
+
+                        <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-id-card text-lg"></i>
+                        </div>
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                            Data Peminjam
+                        </span>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                     </a>
                 </li>
 
@@ -461,6 +531,7 @@
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all"
                         href="#e-book">
+<<<<<<< HEAD
                         <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center stroke-0 text-center xl:p-2.5">
                             <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg">
                                 <title>customer-support</title>
@@ -478,6 +549,16 @@
                             </svg>
                         </div>
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">E-book</span>
+=======
+
+                        <div class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-book-open-reader text-lg"></i>
+                        </div>
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                            E-book
+                        </span>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                     </a>
                 </li>
 
@@ -485,6 +566,7 @@
                 <li class="mt-0.5 w-full">
                     <a id="logout-btn"
                         class="menu-item py-2.7 text-sm my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all duration-200 cursor-pointer group bg-transparent hover:bg-gradient-to-r from-red-500 to-pink-500 hover:text-white shadow-none hover:shadow-lg active:scale-95">
+<<<<<<< HEAD
                         <div
                             class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-white/20 transition-all duration-300">
                             <svg class="text-white group-hover:text-white transition-colors duration-200" width="16px" height="16px" viewBox="0 0 24 24"
@@ -494,6 +576,14 @@
                                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </div>
+=======
+
+                        <div
+                            class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm bg-center text-center xl:p-2.5 group-hover:bg-white/20 transition-all duration-300 text-white">
+                            <i class="fa-solid fa-right-from-bracket text-[15px]"></i>
+                        </div>
+
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                         <span class="ml-1 duration-300 ease-soft">Logout</span>
                     </a>
                 </li>

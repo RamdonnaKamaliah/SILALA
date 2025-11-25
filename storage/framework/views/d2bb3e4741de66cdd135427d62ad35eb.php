@@ -172,6 +172,7 @@
             pointer-events: auto;
         }
         
+<<<<<<< HEAD
         /* Mobile search container */
         .mobile-search-container {
             padding: 12px 16px;
@@ -179,6 +180,8 @@
             border-top: 1px solid #e2e8e0;
         }
         
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
         /* Navbar padding responsive */
         @media (max-width: 639px) {
             .navbar-padding {
@@ -287,6 +290,7 @@
                         </div>
                         <span class="ml-2 text-lg font-bold text-white">Perpustakaan</span>
                     </div>
+<<<<<<< HEAD
 
                     <!-- Search Bar - Desktop Only -->
                     <div class="hidden lg:block relative flex-1 max-w-md ml-4">
@@ -295,15 +299,20 @@
                         </div>
                         <input type="text" class="block w-full pl-10 pr-3 py-2.5 border border-primary-light/30 rounded-xl leading-5 bg-white/10 backdrop-blur-sm placeholder-primary-pale/80 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/30 text-white text-sm transition-all duration-200" placeholder="Cari buku, anggota, atau transaksi...">
                     </div>
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                 </div>
 
                 <!-- Bagian Kanan -->
                 <div class="flex items-center navbar-icon-spacing space-x-1 sm:space-x-2 flex-shrink-0 ml-2">
+<<<<<<< HEAD
                     <!-- Search Mobile -->
                     <button class="lg:hidden p-2 rounded-full text-primary-pale hover:text-white hover:bg-primary-light/30 focus:outline-none transition-all duration-200 touch-target icon-button" id="mobile-search-button">
                         <i class="fas fa-search text-base sm:text-lg"></i>
                     </button>
 
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                     <!-- Notifikasi -->
                     <div class="relative dropdown-container">
                         <button class="p-2 rounded-full text-primary-pale hover:text-white hover:bg-primary-light/30 focus:outline-none focus:ring-2 focus:ring-white/50 relative transition-all duration-200 touch-target icon-button" id="notification-button">
@@ -537,6 +546,7 @@
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
 
             <!-- Pencarian Mobile -->
             <div class="hidden lg:hidden mobile-search-container" id="mobile-search">
@@ -547,6 +557,8 @@
                     <input type="text" class="block w-full pl-10 pr-3 py-2.5 border border-primary-light/30 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-medium focus:border-primary-light text-gray-800 text-sm transition-all duration-200" placeholder="Cari buku, anggota, atau transaksi...">
                 </div>
             </div>
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
         </div>
     </nav>
 
@@ -562,9 +574,12 @@
             const profileDropdown = document.getElementById('dropdown-menu');
             const chevronIcon = document.getElementById('chevron-icon');
             
+<<<<<<< HEAD
             const mobileSearchBtn = document.getElementById('mobile-search-button');
             const mobileSearch = document.getElementById('mobile-search');
             
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
             const sidebarToggle = document.getElementById('navbar-sidebar-toggle');
 
             let currentDropdown = null;
@@ -622,6 +637,7 @@
                 });
             }
 
+<<<<<<< HEAD
             if (mobileSearchBtn && mobileSearch) {
                 mobileSearchBtn.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -631,6 +647,8 @@
                 });
             }
 
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
             if (sidebarToggle) {
                 sidebarToggle.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -650,33 +668,45 @@
                     (messagePopup && messagePopup.contains(e.target)) ||
                     (profileBtn && profileBtn.contains(e.target)) ||
                     (profileDropdown && profileDropdown.contains(e.target)) ||
+<<<<<<< HEAD
                     (mobileSearchBtn && mobileSearchBtn.contains(e.target)) ||
                     (mobileSearch && mobileSearch.contains(e.target)) ||
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                     (sidebarToggle && sidebarToggle.contains(e.target));
                 
                 if (!isClickInside) {
                     closeAllDropdowns();
                 }
+<<<<<<< HEAD
 
                 if (mobileSearch && !mobileSearch.contains(e.target) && !mobileSearchBtn.contains(e.target)) {
                     mobileSearch.classList.add('hidden');
                 }
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
             });
 
             // Close on ESC key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     closeAllDropdowns();
+<<<<<<< HEAD
                     if (mobileSearch) mobileSearch.classList.add('hidden');
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
                 }
             });
 
             // Handle window resize
             window.addEventListener('resize', function() {
                 closeAllDropdowns();
+<<<<<<< HEAD
                 if (window.innerWidth >= 1024) {
                     mobileSearch.classList.add('hidden');
                 }
+=======
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
             });
         });
     </script>

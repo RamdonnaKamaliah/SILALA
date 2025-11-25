@@ -123,12 +123,12 @@ return [
         | Configure e.g. delimiter, enclosure and line ending for CSV imports.
         |
         */
-        'csv'          => [
-            'delimiter'        => null,
-            'enclosure'        => '"',
+        'csv' => [
+            'delimiter' => ',',
+            'enclosure' => '"',
             'escape_character' => '\\',
-            'contiguous'       => false,
-            'input_encoding'   => Csv::GUESS_ENCODING,
+            'contiguous' => false,
+            'input_encoding' => 'UTF-8',
         ],
 
         /*
@@ -161,8 +161,8 @@ return [
        */
         'cells'        => [
             'middleware' => [
-                //\Maatwebsite\Excel\Middleware\TrimCellValue::class,
-                //\Maatwebsite\Excel\Middleware\ConvertEmptyCellValuesToNull::class,
+                // \Maatwebsite\Excel\Middleware\TrimCellValue::class,
+                // \Maatwebsite\Excel\Middleware\ConvertEmptyCellValuesToNull::class,
             ],
         ],
 
@@ -193,16 +193,6 @@ return [
         'html'     => Excel::HTML,
         'csv'      => Excel::CSV,
         'tsv'      => Excel::TSV,
-
-        /*
-        |--------------------------------------------------------------------------
-        | PDF Extension
-        |--------------------------------------------------------------------------
-        |
-        | Configure here which Pdf driver should be used by default.
-        | Available options: Excel::MPDF | Excel::TCPDF | Excel::DOMPDF
-        |
-        */
         'pdf'      => Excel::DOMPDF,
     ],
 

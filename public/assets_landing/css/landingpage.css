@@ -1,4 +1,4 @@
-.nav-link{
+ .nav-link{
   position: relative;
   display: inline-block;    /* penting supaya ::after ukurannya akurat */
   padding-bottom: 6px;      /* beri ruang untuk garis */

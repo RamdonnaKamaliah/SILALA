@@ -11,17 +11,12 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
+
     public function create(): View
-    {
-        // Clear any existing auth session
-        Auth::guard('web')->logout();
-        Auth::guard('admin')->logout();
-        
-        return view('auth.login');
-    }
+{
+    return view('auth.login');
+}
+
 
     /**
      * Handle an incoming authentication request.
@@ -58,16 +53,16 @@ class AuthenticatedSessionController extends Controller
      * Destroy an authenticated session.
      */
     public function destroy(Request $request): RedirectResponse
-    {
-        $wasAdmin = Auth::guard('admin')->check();
+{
+    // Logout dari semua guard
+    Auth::guard('web')->logout();
+    Auth::guard('admin')->logout();
 
-        // Logout dari semua guard
-        Auth::guard('web')->logout();
-        Auth::guard('admin')->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    // Arahkan ke landing page
+    return redirect('/');
+}
 
-        return redirect('/');
-    }
 }

@@ -5,438 +5,628 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Admin Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'purple-dark': '#4c1d95',
-                        'blue-dark': '#1e3a8a',
-                        'pink-dark': '#9d174d',
+                        // Warna Primary - Hijau Muda dengan gradasi
+                        'primary-dark': '#8a9a55',
+                        'primary-medium': '#A4B465',
+                        'primary-light': '#b8c685',
+                        'primary-pale': '#f0f4e0',
+                        'primary-bg': '#f8faf0',
+                        'primary-text': '#5a6d3a'
                     }
                 }
             }
         }
     </script>
     <style>
-        .navbar-shadow {
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-        }
         .notification-badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            border-radius: 50%;
             width: 18px;
             height: 18px;
-            border-radius: 50%;
-            background: #ef4444;
-            color: white;
             font-size: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: bold;
+            border: 2px solid #8a9a55;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .dropdown-transition {
-            transition: all 0.2s ease-in-out;
-        }
-        .popup-shadow {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        /* Tambahan untuk responsif */
-        .mobile-search-container {
+        
+        .message-badge {
             position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            padding: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            z-index: 40;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #4dabf7 0%, #339af0 100%);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #8a9a55;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        @media (max-width: 768px) {
-            .popup-mobile {
-                width: 100vw;
-                position: fixed;
-                top: 4rem;
-                left: 0;
+        
+        .popup-shadow {
+            box-shadow: 0 20px 40px rgba(138, 154, 85, 0.15);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #8a9a55, #A4B465);
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #A4B465, #b8c685);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 154, 85, 0.15);
+        }
+        
+        @keyframes subtle-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .pulse-subtle {
+            animation: subtle-pulse 2s infinite;
+        }
+        
+        /* Dropdown Styles - MOBILE OPTIMIZED */
+        .dropdown-container {
+            position: relative;
+        }
+        
+        .dropdown-menu {
+            position: fixed;
+            z-index: 9999;
+            background-color: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        /* Mobile: Full width dropdown */
+        @media (max-width: 639px) {
+            .dropdown-menu {
+                left: 0.5rem !important;
+                right: 0.5rem !important;
+                width: calc(100vw - 1rem) !important;
+                max-width: none !important;
+                top: 5.5rem !important;
+            }
+            
+            .dropdown-menu.show {
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Tablet */
+        @media (min-width: 640px) and (max-width: 1023px) {
+            .dropdown-menu {
+                position: absolute;
+                top: calc(100% + 0.5rem);
                 right: 0;
-                border-radius: 0;
-                max-height: calc(100vh - 4rem);
-                margin-top: 0;
+                left: auto;
+                width: 350px;
+                max-width: 90vw;
             }
         }
-        @media (max-width: 640px) {
-            .navbar-padding {
-                padding-left: 0.5rem;
-                padding-right: 0.5rem;
+        
+        /* Desktop */
+        @media (min-width: 1024px) {
+            .dropdown-menu {
+                position: absolute;
+                top: calc(100% + 0.5rem);
+                right: 0;
+                left: auto;
+                width: 380px;
+                max-width: 90vw;
             }
+        }
+        
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        
+        /* Navbar padding responsive */
+        @media (max-width: 639px) {
+            .navbar-padding {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            
+            .navbar-icon-spacing {
+                gap: 0.25rem;
+            }
+            
+            .navbar-height {
+                height: 70px;
+            }
+        }
+        
+        @media (min-width: 640px) and (max-width: 1023px) {
+            .navbar-padding {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .navbar-height {
+                height: 80px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .navbar-padding {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+            
+            .navbar-height {
+                height: 85px;
+            }
+        }
+        
+        /* Optimize dropdown content for mobile */
+        @media (max-width: 639px) {
+            .dropdown-content {
+                max-height: 60vh;
+            }
+            
+            .notification-item,
+            .message-item,
+            .profile-item {
+                padding: 0.875rem 1rem;
+            }
+            
+            .mobile-only {
+                display: block;
+            }
+            
+            .desktop-only {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 640px) {
+            .mobile-only {
+                display: none;
+            }
+            
+            .desktop-only {
+                display: block;
+            }
+        }
+        
+        /* Improve touch targets for mobile */
+        @media (max-width: 639px) {
+            .touch-target {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .icon-button {
+                padding: 10px;
+            }
+        }
+        
+        /* Smooth animations */
+        .smooth-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Navbar -->
-        <nav class="bg-white fixed top-0 right-0 left-0 w-full z-30 
-            lg:left-64 lg:w-[calc(100%-16rem)] shadow-md transition-all duration-300">
-            
-        <div class="navbar-padding px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <!-- Bagian Kiri: Menu Toggle (Mobile) & Pencarian -->
+    <nav class="bg-gradient-to-r from-primary-dark to-primary-medium fixed top-0 right-0 left-0 w-full z-30 
+        lg:left-64 lg:w-[calc(100%-16rem)] shadow-lg transition-all duration-300 border-b border-primary-light/20">
+        
+        <div class="navbar-padding">
+            <div class="flex justify-between items-center navbar-height">
+                <!-- Bagian Kiri -->
                 <div class="flex items-center flex-1 min-w-0">
-                    <!-- Menu Toggle untuk Mobile -->
-                    <button id="navbar-sidebar-toggle" class="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 focus:outline-none mr-1">
+                    <!-- Hamburger Menu - Mobile Only -->
+                    <button id="navbar-sidebar-toggle" class="lg:hidden p-2 rounded-lg text-primary-pale hover:text-white hover:bg-primary-light/30 focus:outline-none transition-all duration-200 touch-target icon-button">
                         <i class="fas fa-bars text-lg"></i>
                     </button>
-                    
-                   <!-- Logo -->
-                    <div class="hidden sm:flex items-center flex-shrink-0 ml-2 lg:ml-4 mr-3 lg:mr-4">
-                        <div class="bg-gradient-to-tl from-purple-dark to-pink-dark h-8 w-8 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-book text-white text-sm"></i>
-                        </div>
-                        <span class="ml-2 text-lg font-bold text-purple-dark">Perpustakaan</span>
-                    </div>
 
-                    <!-- Pencarian Desktop -->
-                    <div class="hidden lg:block ml-2 relative flex-1 max-w-md">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400"></i>
+                    <!-- Logo & Brand - Desktop Only -->
+                    <div class="hidden lg:flex items-center flex-shrink-0 ml-2 mr-6">
+                        <div class="bg-white/20 h-8 w-8 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book-open text-white text-sm"></i>
                         </div>
-                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm" placeholder="Cari buku, anggota, atau transaksi...">
+                        <span class="ml-2 text-lg font-bold text-white">Perpustakaan</span>
                     </div>
-                    
-                    <!-- Ikon Pencarian Mobile -->
-                    <button class="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 focus:outline-none ml-auto" id="mobile-search-button">
-                        <i class="fas fa-search text-lg"></i>
-                    </button>
                 </div>
 
-                <!-- Bagian Kanan: Notifikasi & Profil -->
-                <div class="flex items-center space-x-1 sm:space-x-2 lg:space-x-4 flex-shrink-0">
+                <!-- Bagian Kanan -->
+                <div class="flex items-center navbar-icon-spacing space-x-1 sm:space-x-2 flex-shrink-0 ml-2">
                     <!-- Notifikasi -->
-                    <div class="relative" id="notification-container">
-                        <button class="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 relative" id="notification-button">
-                            <i class="fas fa-bell text-lg"></i>
+                    <div class="relative dropdown-container">
+                        <button class="p-2 rounded-full text-primary-pale hover:text-white hover:bg-primary-light/30 focus:outline-none focus:ring-2 focus:ring-white/50 relative transition-all duration-200 touch-target icon-button" id="notification-button">
+                            <i class="fas fa-bell text-base sm:text-lg"></i>
                             <span class="notification-badge">3</span>
                         </button>
                         
-                        <!-- Popup Notifikasi -->
-                        <div class="hidden absolute right-0 mt-2 w-80 bg-white rounded-md popup-shadow border border-gray-200 dropdown-transition transform opacity-0 scale-95 popup-mobile lg:popup-normal" id="notification-popup">
-                            <div class="p-4 border-b border-gray-200">
+                        <div class="dropdown-menu popup-shadow border border-primary-pale/50 glass-effect" id="notification-popup">
+                            <div class="p-4 border-b border-primary-pale/30 bg-gradient-to-r from-primary-pale to-white rounded-t-xl">
                                 <div class="flex justify-between items-center">
-                                    <h3 class="text-lg font-semibold text-gray-800">Notifikasi</h3>
-                                    <span class="text-xs text-purple-dark cursor-pointer hover:underline">Tandai semua sudah dibaca</span>
+                                    <h3 class="text-base sm:text-lg font-bold text-primary-text flex items-center">
+                                        <i class="fas fa-bell mr-2 text-primary-medium"></i>
+                                        Notifikasi
+                                    </h3>
+                                    <span class="text-xs text-primary-medium cursor-pointer hover:underline font-medium flex items-center">
+                                        <i class="fas fa-check-double mr-1"></i>
+                                        <span class="hidden sm:inline">Tandai semua</span>
+                                        <span class="sm:hidden">Semua</span>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="max-h-80 overflow-y-auto">
-                                <!-- Item Notifikasi 1 -->
-                                <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-                                                <i class="fas fa-book text-blue-500"></i>
+                            <div class="dropdown-content overflow-y-auto custom-scrollbar">
+                                <div class="notification-item p-3 sm:p-4 border-b border-primary-pale/30 hover:bg-primary-pale/50 cursor-pointer transition-all duration-200 group">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                <i class="fas fa-book text-blue-500 text-sm"></i>
                                             </div>
                                         </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">Peminjaman buku baru</p>
-                                            <p class="text-sm text-gray-500">Anggota "Ahmad" meminjam "Laskar Pelangi"</p>
-                                            <p class="text-xs text-gray-400 mt-1">5 menit yang lalu</p>
+                                        <div class="ml-3 flex-1 min-w-0">
+                                            <div class="flex justify-between items-start gap-2">
+                                                <p class="text-sm font-semibold text-gray-900 truncate">Peminjaman buku baru</p>
+                                                <span class="text-xs text-primary-medium bg-primary-pale/50 px-2 py-1 rounded-full font-medium whitespace-nowrap">Baru</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1">Anggota "Ahmad" meminjam "Laskar Pelangi"</p>
+                                            <p class="text-xs text-gray-400 mt-2 flex items-center">
+                                                <i class="fas fa-clock mr-1"></i> 5 menit yang lalu
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <!-- Item Notifikasi 2 -->
-                                <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
-                                                <i class="fas fa-exclamation-triangle text-yellow-500"></i>
+                                <div class="notification-item p-3 sm:p-4 border-b border-primary-pale/30 hover:bg-primary-pale/50 cursor-pointer transition-all duration-200 group">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-yellow-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                <i class="fas fa-exclamation-triangle text-yellow-500 text-sm"></i>
                                             </div>
                                         </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">Buku terlambat</p>
-                                            <p class="text-sm text-gray-500">"Siti" terlambat mengembalikan "Bumi Manusia"</p>
-                                            <p class="text-xs text-gray-400 mt-1">1 jam yang lalu</p>
+                                        <div class="ml-3 flex-1 min-w-0">
+                                            <p class="text-sm font-semibold text-gray-900">Buku terlambat</p>
+                                            <p class="text-sm text-gray-600 mt-1">"Siti" terlambat mengembalikan "Bumi Manusia"</p>
+                                            <p class="text-xs text-gray-400 mt-2 flex items-center">
+                                                <i class="fas fa-clock mr-1"></i> 1 jam yang lalu
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <!-- Item Notifikasi 3 -->
-                                <div class="p-4 hover:bg-gray-50 cursor-pointer">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-                                                <i class="fas fa-user-plus text-green-500"></i>
+                                <div class="notification-item p-3 sm:p-4 hover:bg-primary-pale/50 cursor-pointer transition-all duration-200 group">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-green-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                                <i class="fas fa-user-plus text-green-500 text-sm"></i>
                                             </div>
                                         </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">Anggota baru</p>
-                                            <p class="text-sm text-gray-500">"Rina" telah terdaftar sebagai anggota baru</p>
-                                            <p class="text-xs text-gray-400 mt-1">2 jam yang lalu</p>
+                                        <div class="ml-3 flex-1 min-w-0">
+                                            <p class="text-sm font-semibold text-gray-900">Anggota baru</p>
+                                            <p class="text-sm text-gray-600 mt-1">"Rina" telah terdaftar sebagai anggota baru</p>
+                                            <p class="text-xs text-gray-400 mt-2 flex items-center">
+                                                <i class="fas fa-clock mr-1"></i> 2 jam yang lalu
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-3 border-t border-gray-200 text-center">
-                                <a href="#" class="text-sm text-purple-dark font-medium hover:underline">Lihat semua notifikasi</a>
+                            <div class="p-3 border-t border-primary-pale/30 bg-white rounded-b-xl">
+                                <a href="#" class="flex items-center justify-center text-sm font-semibold text-primary-medium hover:text-primary-dark transition-colors duration-200 py-2 rounded-lg hover:bg-primary-pale/50">
+                                    <i class="fas fa-list mr-2"></i>
+                                    Lihat semua notifikasi
+                                </a>
                             </div>
                         </div>
                     </div>
 
                     <!-- Pesan -->
-                    <div class="relative" id="message-container">
-                        <button class="p-2 rounded-full text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 relative" id="message-button">
-                            <i class="fas fa-envelope text-lg"></i>
-                            <span class="notification-badge">5</span>
+                    <div class="relative dropdown-container">
+                        <button class="p-2 rounded-full text-primary-pale hover:text-white hover:bg-primary-light/30 focus:outline-none focus:ring-2 focus:ring-white/50 relative transition-all duration-200 touch-target icon-button" id="message-button">
+                            <i class="fas fa-envelope text-base sm:text-lg"></i>
+                            <span class="message-badge">5</span>
                         </button>
                         
-                        <!-- Popup Pesan -->
-                        <div class="hidden absolute right-0 mt-2 w-80 bg-white rounded-md popup-shadow border border-gray-200 dropdown-transition transform opacity-0 scale-95 popup-mobile lg:popup-normal" id="message-popup">
-                            <div class="p-4 border-b border-gray-200">
+                        <div class="dropdown-menu popup-shadow border border-primary-pale/50 glass-effect" id="message-popup">
+                            <div class="p-4 border-b border-primary-pale/30 bg-gradient-to-r from-primary-pale to-white rounded-t-xl">
                                 <div class="flex justify-between items-center">
-                                    <h3 class="text-lg font-semibold text-gray-800">Pesan</h3>
-                                    <span class="text-xs text-purple-dark cursor-pointer hover:underline">Tandai semua sudah dibaca</span>
+                                    <h3 class="text-base sm:text-lg font-bold text-primary-text flex items-center">
+                                        <i class="fas fa-envelope mr-2 text-primary-medium"></i>
+                                        Pesan
+                                    </h3>
+                                    <span class="text-xs text-primary-medium cursor-pointer hover:underline font-medium flex items-center">
+                                        <i class="fas fa-check-double mr-1"></i>
+                                        <span class="hidden sm:inline">Tandai semua</span>
+                                        <span class="sm:hidden">Semua</span>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="max-h-80 overflow-y-auto">
-                                <!-- Item Pesan 1 -->
-                                <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center">
-                                                <i class="fas fa-user text-purple-500"></i>
+                            <div class="dropdown-content overflow-y-auto custom-scrollbar">
+                                <div class="message-item p-3 sm:p-4 border-b border-primary-pale/30 hover:bg-primary-pale/50 cursor-pointer transition-all duration-200 group">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-200 text-white font-semibold text-sm">
+                                                BS
                                             </div>
                                         </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">Budi Santoso</p>
-                                            <p class="text-sm text-gray-500">Apakah buku "Pulang" sudah tersedia?</p>
-                                            <p class="text-xs text-gray-400 mt-1">10 menit yang lalu</p>
+                                        <div class="ml-3 flex-1 min-w-0">
+                                            <div class="flex justify-between items-start gap-2">
+                                                <p class="text-sm font-semibold text-gray-900 truncate">Budi Santoso</p>
+                                                <span class="text-xs text-primary-medium bg-primary-pale/50 px-2 py-1 rounded-full font-medium whitespace-nowrap">Baru</span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">Apakah buku "Pulang" sudah tersedia?</p>
+                                            <p class="text-xs text-gray-400 mt-2 flex items-center">
+                                                <i class="fas fa-clock mr-1"></i> 10 menit yang lalu
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <!-- Item Pesan 2 -->
-                                <div class="p-4 border-b border-gray-100 hover:bg-gray-50 cursor-pointer">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-10 w-10 rounded-full bg-pink-100 flex items-center justify-center">
-                                                <i class="fas fa-user text-pink-500"></i>
+                                <div class="message-item p-3 sm:p-4 border-b border-primary-pale/30 hover:bg-primary-pale/50 cursor-pointer transition-all duration-200 group">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-200 text-white font-semibold text-sm">
+                                                SI
                                             </div>
                                         </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">Sari Indah</p>
-                                            <p class="text-sm text-gray-500">Saya ingin memperpanjang peminjaman buku</p>
-                                            <p class="text-xs text-gray-400 mt-1">1 jam yang lalu</p>
+                                        <div class="ml-3 flex-1 min-w-0">
+                                            <p class="text-sm font-semibold text-gray-900 truncate">Sari Indah</p>
+                                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">Saya ingin memperpanjang peminjaman buku</p>
+                                            <p class="text-xs text-gray-400 mt-2 flex items-center">
+                                                <i class="fas fa-clock mr-1"></i> 1 jam yang lalu
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <!-- Item Pesan 3 -->
-                                <div class="p-4 hover:bg-gray-50 cursor-pointer">
-                                    <div class="flex">
-                                        <div class="flex-shrink-0">
-                                            <div class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                                                <i class="fas fa-user text-indigo-500"></i>
+                                <div class="message-item p-3 sm:p-4 hover:bg-primary-pale/50 cursor-pointer transition-all duration-200 group">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 mt-1">
+                                            <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-200 text-white font-semibold text-sm">
+                                                RP
                                             </div>
                                         </div>
-                                        <div class="ml-3">
-                                            <p class="text-sm font-medium text-gray-900">Rizky Pratama</p>
-                                            <p class="text-sm text-gray-500">Terima kasih, pelayanan perpustakaan sangat baik</p>
-                                            <p class="text-xs text-gray-400 mt-1">3 jam yang lalu</p>
+                                        <div class="ml-3 flex-1 min-w-0">
+                                            <p class="text-sm font-semibold text-gray-900 truncate">Rizky Pratama</p>
+                                            <p class="text-sm text-gray-600 mt-1 line-clamp-2">Terima kasih, pelayanan perpustakaan sangat baik</p>
+                                            <p class="text-xs text-gray-400 mt-2 flex items-center">
+                                                <i class="fas fa-clock mr-1"></i> 3 jam yang lalu
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-3 border-t border-gray-200 text-center">
-                                <a href="#" class="text-sm text-purple-dark font-medium hover:underline">Lihat semua pesan</a>
+                            <div class="p-3 border-t border-primary-pale/30 bg-white rounded-b-xl">
+                                <a href="#" class="flex items-center justify-center text-sm font-semibold text-primary-medium hover:text-primary-dark transition-colors duration-200 py-2 rounded-lg hover:bg-primary-pale/50">
+                                    <i class="fas fa-list mr-2"></i>
+                                    Lihat semua pesan
+                                </a>
                             </div>
                         </div>
                     </div>
 
                     <!-- Profil Dropdown -->
-<div class="relative" id="profile-dropdown">
-    <button class="flex items-center text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/50 hover:bg-white/80 px-3 py-2 transition-all duration-200 hover:shadow-md border border-transparent hover:border-purple-100" id="user-menu-button">
-        <div class="h-9 w-9 rounded-full bg-gradient-to-tl from-purple-dark to-pink-dark flex items-center justify-center text-white font-semibold shadow-lg">
-            <i class="fas fa-user text-sm"></i>
-        </div>
-        <span class="ml-3 text-gray-800 font-medium hidden lg:block">Admin User</span>
-        <i class="fas fa-chevron-down ml-2 text-gray-500 text-xs hidden lg:block transition-transform duration-200" id="chevron-icon"></i>
-    </button>
-    
-    <!-- Dropdown Menu -->
-    <div class="hidden origin-top-right absolute right-0 mt-3 w-56 rounded-xl shadow-2xl bg-white/95 backdrop-blur-lg border border-gray-100 focus:outline-none dropdown-transition transform opacity-0 scale-95 popup-mobile lg:popup-normal z-50" id="dropdown-menu">
-        <div class="py-2" role="none">
-            <!-- Header Profil -->
-            <div class="px-4 py-3 border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50 rounded-t-xl">
-                <p class="text-sm font-semibold text-gray-900">Admin User</p>
-                <p class="text-xs text-gray-600 mt-1">admin@perpustakaan.com</p>
-            </div>
-            
-            <!-- Menu Items -->
-            <div class="py-2 space-y-1">
-                <a href="#" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-all duration-200 group border-l-4 border-transparent hover:border-purple-500">
-                    <div class="w-6 h-6 flex items-center justify-center mr-3">
-                        <i class="fas fa-user-circle text-purple-500"></i>
+                    <div class="relative dropdown-container">
+                        <button class="flex items-center text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 hover:bg-primary-light/30 px-2 sm:px-3 py-2 transition-all duration-200 group touch-target" id="user-menu-button">
+                            <div class="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-gradient-to-tl from-white/20 to-white/10 border border-white/30 flex items-center justify-center text-white font-semibold shadow-lg group-hover:scale-105 transition-transform duration-200">
+                                <i class="fas fa-user text-xs sm:text-sm"></i>
+                            </div>
+                            <div class="ml-2 sm:ml-3 text-left hidden lg:block">
+                                <p class="text-white font-semibold text-sm">Admin User</p>
+                                <p class="text-primary-pale/80 text-xs">Administrator</p>
+                            </div>
+                            <i class="fas fa-chevron-down ml-2 text-primary-pale/80 text-xs hidden lg:block transition-transform duration-200" id="chevron-icon"></i>
+                        </button>
+                        
+                        <div class="dropdown-menu shadow-2xl border border-primary-pale/30 glass-effect" id="dropdown-menu">
+                            <div class="p-4 sm:p-6 bg-gradient-to-br from-primary-dark to-primary-medium rounded-t-2xl text-white">
+                                <div class="flex items-center">
+                                    <div class="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-white text-lg sm:text-xl font-bold shadow-lg">
+                                        <i class="fas fa-user-crown"></i>
+                                    </div>
+                                    <div class="ml-3 sm:ml-4 min-w-0 flex-1">
+                                        <h3 class="font-bold text-base sm:text-lg truncate text-white">Admin User</h3>
+                                        <p class="text-white/80 text-xs sm:text-sm truncate">admin@perpustakaan.com</p>
+                                    </div>
+                                </div>
+                                <div class="mt-3 sm:mt-4 flex items-center justify-between">
+                                    <span class="text-white/80 text-sm flex items-center">
+                                        <i class="fas fa-circle text-green-300 mr-2 text-xs"></i>
+                                        Status:
+                                    </span>
+                                    <span class="bg-white/20 px-3 py-1 rounded-full text-xs font-semibold flex items-center pulse-subtle">
+                                        Aktif
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="p-3 sm:p-4 space-y-2">
+                                <a href="#" class="profile-item flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 text-sm text-gray-700 hover:bg-primary-pale/50 hover:text-primary-dark rounded-xl transition-all duration-200 group">
+                                    <div class="flex items-center min-w-0 flex-1">
+                                        <div class="w-8 h-8 flex items-center justify-center mr-3 bg-primary-pale rounded-lg group-hover:bg-primary-medium group-hover:text-white transition-all duration-200 flex-shrink-0">
+                                            <i class="fas fa-question-circle text-primary-medium group-hover:text-white text-sm"></i>
+                                        </div>
+                                        <div class="min-w-0">
+                                            <span class="font-semibold block truncate">Bantuan & Dukungan</span>
+                                            <p class="text-xs text-gray-500 hidden sm:block truncate">Pusat bantuan</p>
+                                        </div>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-gray-400 group-hover:text-primary-dark text-xs ml-2 flex-shrink-0"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="border-t border-primary-pale/30 mx-4"></div>
+                            
+                            <div class="p-4">
+                                <p class="text-center text-xs text-gray-500 flex items-center justify-center">
+                                    <i class="fas fa-clock mr-1"></i>
+                                    <span class="hidden sm:inline">Terakhir login: Hari ini, 14:30</span>
+                                    <span class="sm:hidden">Login: Hari ini</span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <span class="font-medium">Profile</span>
-                </a>
-                
-                <a href="#" class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-all duration-200 group border-l-4 border-transparent hover:border-blue-500">
-                    <div class="w-6 h-6 flex items-center justify-center mr-3">
-                        <i class="fas fa-cog text-blue-500"></i>
-                    </div>
-                    <span class="font-medium">Settings</span>
-                </a>
-            </div>
-            
-            <!-- Divider -->
-            <div class="border-t border-gray-100 my-1"></div>
-            
-            <!-- Footer -->
-            <div class="px-4 py-2 text-xs text-gray-500 text-center">
-                Status: <span class="text-green-600 font-medium">Aktif</span>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-</div>
-</div>
+    </nav>
 
-<!-- Pencarian Mobile (Tersembunyi secara default) -->
-<div class="hidden lg:hidden mobile-search-container" id="mobile-search">
-    <div class="relative">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <i class="fas fa-search text-gray-400"></i>
-        </div>
-        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-sm transition-all duration-200" placeholder="Cari buku, anggota, atau transaksi...">
-    </div>
-</div>
-</div>
-</nav>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationBtn = document.getElementById('notification-button');
+            const notificationPopup = document.getElementById('notification-popup');
+            
+            const messageBtn = document.getElementById('message-button');
+            const messagePopup = document.getElementById('message-popup');
+            
+            const profileBtn = document.getElementById('user-menu-button');
+            const profileDropdown = document.getElementById('dropdown-menu');
+            const chevronIcon = document.getElementById('chevron-icon');
+            
+            const sidebarToggle = document.getElementById('navbar-sidebar-toggle');
 
-<script>
-    // Toggle dropdown profil dengan animasi chevron
-    const profileButton = document.getElementById('user-menu-button');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-    const chevronIcon = document.getElementById('chevron-icon');
-    
-    profileButton.addEventListener('click', function() {
-        const isHidden = dropdownMenu.classList.contains('hidden');
-        
-        // Tutup notifikasi dan pesan jika terbuka
-        closeAllPopupsExcept('dropdown-menu');
-        
-        if (isHidden) {
-            dropdownMenu.classList.remove('hidden', 'opacity-0', 'scale-95');
-            dropdownMenu.classList.add('opacity-100', 'scale-100');
-            chevronIcon.classList.add('rotate-180');
-        } else {
-            dropdownMenu.classList.add('hidden', 'opacity-0', 'scale-95');
-            dropdownMenu.classList.remove('opacity-100', 'scale-100');
-            chevronIcon.classList.remove('rotate-180');
-        }
-    });
+            let currentDropdown = null;
 
-    // Toggle popup notifikasi
-    const notificationButton = document.getElementById('notification-button');
-    const notificationPopup = document.getElementById('notification-popup');
-    
-    notificationButton.addEventListener('click', function() {
-        const isHidden = notificationPopup.classList.contains('hidden');
-        
-        // Tutup profil dan pesan jika terbuka
-        closeAllPopupsExcept('notification-popup');
-        
-        if (isHidden) {
-            notificationPopup.classList.remove('hidden', 'opacity-0', 'scale-95');
-            notificationPopup.classList.add('opacity-100', 'scale-100');
-        } else {
-            notificationPopup.classList.add('hidden', 'opacity-0', 'scale-95');
-            notificationPopup.classList.remove('opacity-100', 'scale-100');
-        }
-    });
+            function closeAllDropdowns() {
+                if (notificationPopup) notificationPopup.classList.remove('show');
+                if (messagePopup) messagePopup.classList.remove('show');
+                if (profileDropdown) {
+                    profileDropdown.classList.remove('show');
+                    if (chevronIcon) chevronIcon.style.transform = 'rotate(0deg)';
+                }
+                currentDropdown = null;
+            }
 
-    // Toggle popup pesan
-    const messageButton = document.getElementById('message-button');
-    const messagePopup = document.getElementById('message-popup');
-    
-    messageButton.addEventListener('click', function() {
-        const isHidden = messagePopup.classList.contains('hidden');
-        
-        // Tutup profil dan notifikasi jika terbuka
-        closeAllPopupsExcept('message-popup');
-        
-        if (isHidden) {
-            messagePopup.classList.remove('hidden', 'opacity-0', 'scale-95');
-            messagePopup.classList.add('opacity-100', 'scale-100');
-        } else {
-            messagePopup.classList.add('hidden', 'opacity-0', 'scale-95');
-            messagePopup.classList.remove('opacity-100', 'scale-100');
-        }
-    });
-
-    // Toggle pencarian mobile
-    const mobileSearchButton = document.getElementById('mobile-search-button');
-    const mobileSearch = document.getElementById('mobile-search');
-    
-    mobileSearchButton.addEventListener('click', function() {
-        const isHidden = mobileSearch.classList.contains('hidden');
-        
-        if (isHidden) {
-            mobileSearch.classList.remove('hidden');
-        } else {
-            mobileSearch.classList.add('hidden');
-        }
-    });
-
-    // Fungsi untuk menutup semua popup kecuali yang ditentukan
-    function closeAllPopupsExcept(exception) {
-        const popups = [
-            {id: 'dropdown-menu', element: dropdownMenu},
-            {id: 'notification-popup', element: notificationPopup},
-            {id: 'message-popup', element: messagePopup}
-        ];
-        
-        popups.forEach(popup => {
-            if (popup.id !== exception) {
-                popup.element.classList.add('hidden', 'opacity-0', 'scale-95');
-                popup.element.classList.remove('opacity-100', 'scale-100');
+            function toggleDropdown(dropdown, isProfile = false) {
+                if (currentDropdown === dropdown) {
+                    closeAllDropdowns();
+                    return;
+                }
                 
-                // Reset chevron jika dropdown ditutup
-                if (popup.id === 'dropdown-menu') {
-                    chevronIcon.classList.remove('rotate-180');
+                closeAllDropdowns();
+                
+                if (dropdown) {
+                    dropdown.classList.add('show');
+                    currentDropdown = dropdown;
+                    
+                    if (isProfile && chevronIcon) {
+                        chevronIcon.style.transform = 'rotate(180deg)';
+                    }
                 }
             }
-        });
-    }
 
-    // Tutup semua popup ketika klik di luar
-    document.addEventListener('click', function(event) {
-        const isClickInsideProfile = profileButton.contains(event.target) || dropdownMenu.contains(event.target);
-        const isClickInsideNotification = notificationButton.contains(event.target) || notificationPopup.contains(event.target);
-        const isClickInsideMessage = messageButton.contains(event.target) || messagePopup.contains(event.target);
-        
-        if (!isClickInsideProfile) {
-            dropdownMenu.classList.add('hidden', 'opacity-0', 'scale-95');
-            dropdownMenu.classList.remove('opacity-100', 'scale-100');
-            chevronIcon.classList.remove('rotate-180');
-        }
-        
-        if (!isClickInsideNotification) {
-            notificationPopup.classList.add('hidden', 'opacity-0', 'scale-95');
-            notificationPopup.classList.remove('opacity-100', 'scale-100');
-        }
-        
-        if (!isClickInsideMessage) {
-            messagePopup.classList.add('hidden', 'opacity-0', 'scale-95');
-            messagePopup.classList.remove('opacity-100', 'scale-100');
-        }
-        
-        // Tutup pencarian mobile jika klik di luar
-        const isClickInsideMobileSearch = mobileSearchButton.contains(event.target) || mobileSearch.contains(event.target);
-        if (!isClickInsideMobileSearch) {
-            mobileSearch.classList.add('hidden');
-        }
-    });
-</script>
+            // Event Listeners
+            if (notificationBtn && notificationPopup) {
+                notificationBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleDropdown(notificationPopup);
+                });
+            }
+
+            if (messageBtn && messagePopup) {
+                messageBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleDropdown(messagePopup);
+                });
+            }
+
+            if (profileBtn && profileDropdown) {
+                profileBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleDropdown(profileDropdown, true);
+                });
+            }
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // Add your sidebar toggle logic here
+                    console.log('Sidebar toggle clicked');
+                    closeAllDropdowns();
+                });
+            }
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                const isClickInside = 
+                    (notificationBtn && notificationBtn.contains(e.target)) ||
+                    (notificationPopup && notificationPopup.contains(e.target)) ||
+                    (messageBtn && messageBtn.contains(e.target)) ||
+                    (messagePopup && messagePopup.contains(e.target)) ||
+                    (profileBtn && profileBtn.contains(e.target)) ||
+                    (profileDropdown && profileDropdown.contains(e.target)) ||
+                    (sidebarToggle && sidebarToggle.contains(e.target));
+                
+                if (!isClickInside) {
+                    closeAllDropdowns();
+                }
+            });
+
+            // Close on ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAllDropdowns();
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                closeAllDropdowns();
+            });
+        });
+    </script>
 </body>
 </html>

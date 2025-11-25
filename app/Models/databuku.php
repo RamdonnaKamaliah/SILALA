@@ -16,6 +16,7 @@ class DataBuku extends Model
 
     protected $fillable = [
         'foto_buku',
+        'foto_id',
         'judul_buku',
         'penulis',
         'penerbit',

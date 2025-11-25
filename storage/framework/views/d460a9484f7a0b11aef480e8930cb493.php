@@ -1,16 +1,14 @@
 <?php $__env->startSection('pageTitle', 'Tambah Buku'); ?>
 <?php $__env->startSection('content'); ?>
 
-    <div class="w-fullflex justify-center">
-        <div class="max-w-3xl w-full bg-white rounded-2xl shadow-lg p-8 mt-10 border border-gray-200">
-            <a href="<?php echo e(route('admin.data_buku.index')); ?>" class="text-blue-600 hover:text-blue-800">
-                <i class="fas fa-arrow-left"></i>
-            </a>
+    <!-- AOS CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <link rel="stylesheet" href="<?php echo e(asset('/assets_admin/css/create-databuku.css')); ?>">
 
-            <h2 class="text-3xl font-bold text-primary mb-8 text-center tracking-wide">
-                📚 Tambah Buku Baru
-            </h2>
+    <div class="py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
 
+            <!-- Page Header -->
             <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
                 <?php echo csrf_field(); ?>
 
@@ -59,148 +57,239 @@
                         </div>
                     </div>
 
-                    <script>
-                        function pilihGambar(id, nama) {
-                            document.getElementById('selectedGambar').value = id;
-                            document.getElementById('selectedGambarNama').innerText = nama;
 
-                            const modal = bootstrap.Modal.getInstance(document.getElementById('pilihGambarModal'));
-                            modal.hide();
-                        }
-                    </script>
+                    <!-- Form -->
+                    <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data"
+                        class="space-y-6">
+                        <?php echo csrf_field(); ?>
+
+
+                        <!-- Upload Section -->
+                        <div data-aos="fade-up" data-aos-duration="800">
+                            <h2 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
+                                <i class="fas fa-cloud-upload-alt text-primary"></i>
+                                <span>Upload File Buku</span>
+                            </h2>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                                <!-- Foto Buku -->
+                                <div>
+                                    <label class="form-label">
+                                        <i class="fas fa-image text-primary"></i>
+                                        <span>Foto Cover Buku</span>
+                                    </label>
+
+                                    <input type="file" id="foto_buku" name="foto_buku" accept="image/*"
+                                        onchange="previewImage(event)" class="hidden">
+                                    <label for="foto_buku" class="file-upload-btn">
+                                        <i class="fas fa-camera"></i>
+                                        <span>Pilih Foto Cover</span>
+                                    </label>
+
+                                    <div id="imagePreviewContainer" class="preview-box mt-4 hidden">
+                                        <img id="imagePreview" class="preview-image" alt="Preview Cover">
+                                        <p id="imageName"
+                                            class="text-xs font-medium text-primary-dark break-all px-2 line-clamp-2">
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- File Buku PDF -->
+                                <div>
+                                    <label class="form-label">
+                                        <i class="fas fa-file-pdf text-primary"></i>
+                                        <span>File Buku (PDF)</span>
+                                    </label>
+
+                                    <input type="file" id="file_buku" name="file_buku" accept=".pdf"
+                                        onchange="previewPDF(event)" class="hidden">
+                                    <label for="file_buku" class="file-upload-btn">
+                                        <i class="fas fa-file-upload"></i>
+                                        <span>Pilih File PDF</span>
+                                    </label>
+
+                                    <div id="pdfPreviewContainer" class="preview-box mt-4 hidden">
+                                        <canvas id="pdfPreview" class="preview-pdf-canvas"></canvas>
+                                        <div class="mt-2">
+                                            <p id="pdfName"
+                                                class="text-xs font-medium text-primary-dark break-all px-2 line-clamp-1">
+                                            </p>
+                                            <p id="pdfSize" class="text-xs text-primary-medium mt-1"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Informasi Buku -->
+                        <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+                            <h2 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
+                                <i class="fas fa-info-circle text-primary"></i>
+                                <span>Informasi Buku</span>
+                            </h2>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                                <!-- Judul Buku -->
+                                <div>
+                                    <label for="judul_buku" class="form-label">
+                                        <i class="fas fa-heading text-primary"></i>
+                                        <span>Judul Buku</span>
+                                    </label>
+                                    <input type="text" id="judul_buku" name="judul_buku"
+                                        placeholder="Masukkan judul buku" class="form-input w-full rounded-lg px-4 py-3"
+                                        required>
+                                </div>
+
+                                <!-- Penulis -->
+                                <div>
+                                    <label for="penulis" class="form-label">
+                                        <i class="fas fa-user-edit text-primary"></i>
+                                        <span>Penulis</span>
+                                    </label>
+                                    <input type="text" id="penulis" name="penulis"
+                                        placeholder="Masukkan nama penulis" class="form-input w-full rounded-lg px-4 py-3"
+                                        required>
+                                </div>
+
+                                <!-- Penerbit -->
+                                <div>
+                                    <label for="penerbit" class="form-label">
+                                        <i class="fas fa-building text-primary"></i>
+                                        <span>Penerbit</span>
+                                    </label>
+                                    <input type="text" id="penerbit" name="penerbit"
+                                        placeholder="Masukkan nama penerbit"
+                                        class="form-input w-full rounded-lg px-4 py-3" required>
+                                </div>
+
+                                <!-- Tahun Terbit -->
+                                <div>
+                                    <label for="tahun_terbit" class="form-label">
+                                        <i class="fas fa-calendar-alt text-primary"></i>
+                                        <span>Tahun Terbit</span>
+                                    </label>
+                                    <input type="number" id="tahun_terbit" name="tahun_terbit"
+                                        placeholder="Contoh: 2024" class="form-input w-full rounded-lg px-4 py-3"
+                                        required>
+
+                                </div>
+
+                                <!-- Bahasa -->
+                                <div>
+                                    <label for="bahasa" class="form-label">
+                                        <i class="fas fa-language text-primary"></i>
+                                        <span>Bahasa</span>
+                                    </label>
+                                    <input type="text" id="bahasa" name="bahasa" placeholder="Contoh: Indonesia"
+                                        class="form-input w-full rounded-lg px-4 py-3" required>
+                                </div>
+
+                                <!-- Kategori -->
+                                <div>
+                                    <label for="kategori_id" class="form-label">
+                                        <i class="fas fa-tags text-primary"></i>
+                                        <span>Kategori</span>
+                                    </label>
+                                    <select name="kategori_id[]" id="kategori_id" multiple
+                                        class="form-input w-full rounded-lg px-4 py-3" required>
+                                        <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($kategori->id); ?>"><?php echo e($kategori->nama_kategori); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    </select>
+                                    <small class="text-gray-600 text-xs mt-1 flex items-center gap-1">
+                                        <i class="fas fa-info-circle"></i>
+                                        <span>Tekan Ctrl (Windows) atau Cmd (Mac) untuk pilih lebih dari satu</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detail Publikasi -->
+                        <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                            <h2
+                                class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
+                                <i class="fas fa-book-open text-primary"></i>
+                                <span>Detail Publikasi</span>
+                            </h2>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                                <!-- Jumlah Halaman -->
+                                <div>
+                                    <label for="jumlah_halaman" class="form-label">
+                                        <i class="fas fa-file-alt text-primary"></i>
+                                        <span>Jumlah Halaman</span>
+                                    </label>
+                                    <input type="number" id="jumlah_halaman" name="jumlah_halaman" placeholder="0"
+                                        class="form-input w-full rounded-lg px-4 py-3" required>
+                                </div>
+
+                                <!-- Edisi -->
+                                <div>
+                                    <label for="edisi" class="form-label">
+                                        <i class="fas fa-bookmark text-primary"></i>
+                                        <span>Edisi</span>
+                                    </label>
+                                    <input type="text" id="edisi" name="edisi" placeholder="Contoh: Edisi 1"
+                                        class="form-input w-full rounded-lg px-4 py-3" required>
+                                </div>
+
+                                <!-- Stok -->
+                                <div>
+                                    <label for="stok" class="form-label">
+                                        <i class="fas fa-boxes text-primary"></i>
+                                        <span>Stok Tersedia</span>
+                                    </label>
+                                    <input type="number" id="stok" name="stok" placeholder="0"
+                                        class="form-input w-full rounded-lg px-4 py-3" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Deskripsi -->
+                        <div data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+                            <h2
+                                class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
+                                <i class="fas fa-align-left text-primary"></i>
+                                <span>Deskripsi Buku</span>
+                            </h2>
+
+                            <div>
+                                <label for="deskripsi" class="form-label">
+                                    <i class="fas fa-paragraph text-primary"></i>
+                                    <span>Deskripsi Lengkap</span>
+                                </label>
+                                <textarea id="deskripsi" name="deskripsi" rows="6"
+                                    placeholder="Tuliskan deskripsi lengkap mengenai buku, sinopsis, atau ringkasan isi buku..."
+                                    class="form-input w-full rounded-lg px-4 py-3 resize-none" required></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="bg-white rounded-lg p-6 shadow-md" data-aos="fade-up" data-aos-duration="800"
+                            data-aos-delay="400">
+                            <div class="flex flex-col sm:flex-row gap-4 justify-end">
+                                <a href="<?php echo e(route('admin.data_buku.index')); ?>"
+                                    class="btn-secondary text-center inline-flex items-center justify-center gap-2 min-w-[150px]">
+                                    <i class="fas fa-times"></i>
+                                    <span>Batal</span>
+                                </a>
+                                <button type="submit"
+                                    class="btn-primary inline-flex items-center justify-center gap-2 min-w-[150px]">
+                                    <i class="fas fa-save"></i>
+                                    <span>Simpan Buku</span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-
-
-                <!-- Judul Buku -->
-                <div>
-                    <label for="judul_buku" class="block text-gray-700 font-semibold mb-2">Judul Buku</label>
-                    <input type="text" id="judul_buku" name="judul_buku" placeholder="Masukkan judul buku"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
-
-                <!-- Penulis -->
-                <div>
-                    <label for="penulis" class="block text-gray-700 font-semibold mb-2">Penulis</label>
-                    <input type="text" id="penulis" name="penulis" placeholder="Masukkan nama penulis"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
-
-                <!-- Penerbit -->
-                <div>
-                    <label for="penerbit" class="block text-gray-700 font-semibold mb-2">Penerbit</label>
-                    <input type="text" id="penerbit" name="penerbit" placeholder="Masukkan nama penerbit"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
-
-                <!-- Tahun Terbit -->
-                <div>
-                    <label for="tahun_terbit" class="block text-gray-700 font-semibold mb-2">Tahun Terbit</label>
-                    <input type="text" id="tahun_terbit" name="tahun_terbit" placeholder="Masukkan tahun terbit"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
-
-                <!-- Bahasa -->
-                <div>
-                    <label for="bahasa" class="block text-gray-700 font-semibold mb-2">Bahasa</label>
-                    <input type="text" id="bahasa" name="bahasa" placeholder="Masukkan bahasa buku"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
-
-                <!-- Kategori -->
-                <div>
-                    <label for="kategori_id" class="block text-gray-700 font-semibold mb-2">Kategori</label>
-                    <select name="kategori_id[]" id="kategori_id" multiple
-                        class="form-control w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-    focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200"
-                        required>
-                        <option value="" disabled>Pilih kategori</option>
-                        <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($kategori->id); ?>"><?php echo e($kategori->nama_kategori); ?></option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </select>
-
-                </div>
-
-
-
-                <!-- Jumlah Halaman -->
-                <div>
-                    <label for="jumlah_halaman" class="block text-gray-700 font-semibold mb-2">Jumlah Halaman</label>
-                    <input type="number" id="jumlah_halaman" name="jumlah_halaman" placeholder="Masukkan jumlah halaman"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
-
-                <!-- Edisi -->
-                <div>
-                    <label for="edisi" class="block text-gray-700 font-semibold mb-2">Edisi</label>
-                    <input type="text" id="edisi" name="edisi" placeholder="Masukkan edisi buku"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
-
-
-                <!-- Stok -->
-                <div>
-                    <label for="stok" class="block text-gray-700 font-semibold mb-2">Stok</label>
-                    <input type="number" id="stok" name="stok" placeholder="Masukkan stok buku"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required>
-                </div>
-
-                <!-- File Buku (PDF) -->
-                <div>
-                    <label for="file_buku" class="block text-gray-700 font-semibold mb-2">File Buku (PDF)</label>
-                    <input type="file" id="file_buku" name="file_buku" accept=".pdf"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200">
-                </div>
-
-                <!-- Deskripsi -->
-                <div>
-                    <label for="deskripsi" class="block text-gray-700 font-semibold mb-2">Deskripsi</label>
-                    <textarea id="deskripsi" name="deskripsi" rows="4" placeholder="Tuliskan deskripsi singkat mengenai buku"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] placeholder-gray-400 transition duration-200"
-                        required></textarea>
-                </div>
-
-
-                <!-- Tombol Simpan -->
-                <div class="flex justify-end pt-4">
-                    <button type="submit"
-                        class="bg-blue-500 text-black px-8 py-3 rounded-xl font-semibold shadow-md 
-                           hover:bg-blue-600 hover:shadow-lg transition duration-200">
-                        💾 Simpan Buku
-                    </button>
-                </div>
-
-                <?php if($errors->any()): ?>
-                    <div class="text-red-500">
-                        <ul>
-                            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><?php echo e($error); ?></li>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
-
-            </form>
         </div>
-    </div>
-<?php $__env->stopSection(); ?>
+
+        <!-- PDF.js Library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+        <!-- AOS JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+        <script src="<?php echo e(asset('/assets_admin/js/create-databuku.js')); ?>"></script>
+    <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/data_buku/create.blade.php ENDPATH**/ ?>

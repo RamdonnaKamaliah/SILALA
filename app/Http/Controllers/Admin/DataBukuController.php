@@ -35,20 +35,21 @@ class DataBukuController extends Controller
 }
 
 
+
     /**
      * Store a newly created resource in storage.
      */
-  public function store(Request $request)
+public function store(Request $request)
 {
     $validated = $request->validate([
         'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-        'selected_gambar' => 'nullable|exists:gambar_bukus,id',
+        'foto_id'   => 'nullable|exists:gambar_bukus,id',
         'judul_buku' => 'required',
         'penulis' => 'required',
         'penerbit' => 'required',
         'tahun_terbit' => 'required',
         'bahasa' => 'required',
-        'kategori_id' => 'required|array',
+        'kategori_id' => 'required|array|min:1',
         'jumlah_halaman' => 'required',
         'edisi' => 'required',
         'deskripsi' => 'required',
@@ -56,28 +57,32 @@ class DataBukuController extends Controller
         'file_buku' => 'nullable|mimes:pdf|max:5120',
     ]);
 
-    $foto_id = null;
+    $foto_buku_path = null;
 
-    // 🚀 1. Jika upload foto baru
+    // 1️⃣ Upload manual
     if ($request->hasFile('foto_buku')) {
 
         $file = $request->file('foto_buku');
-        $path = $file->store('uploads/buku', 'public');
 
-        $media = GambarBuku::create([
+        $path = $file->store('uploads/buku', 'public');  
+        $foto_buku_path = 'storage/' . $path;
+
+        // Simpan ke tabel media
+        GambarBuku::create([
             'nama_file' => $file->getClientOriginalName(),
             'path_file' => $path,
         ]);
-
-        $foto_id = $media->id;
     }
 
-    // 🚀 2. Jika user pilih foto dari galeri
-    if ($request->selected_gambar) {
-        $foto_id = $request->selected_gambar;
+    // 2️⃣ Pilih dari galeri
+    if ($request->foto_id) {
+        $media = GambarBuku::find($request->foto_id);
+        if ($media) {
+            $foto_buku_path = 'storage/' . $media->path_file;
+        }
     }
 
-    // 🚀 3. Simpan Buku
+    // 3️⃣ Simpan data buku
     $buku = DataBuku::create([
         'judul_buku' => $request->judul_buku,
         'penulis' => $request->penulis,
@@ -88,14 +93,17 @@ class DataBukuController extends Controller
         'edisi' => $request->edisi,
         'deskripsi' => $request->deskripsi,
         'stok' => $request->stok,
+
         'file_buku' => $request->file_buku
-            ? $request->file_buku->store('uploads/file_buku', 'public')
+            ? 'storage/' . $request->file_buku->store('uploads/file_buku', 'public')
             : null,
+
+        'foto_buku' => $foto_buku_path,
+
         'kategori_ids' => implode(',', $request->kategori_id),
-        'foto_id' => $foto_id,
     ]);
 
-    // 🚀 4. Pivot kategori
+    // 4️⃣ Pivot kategori
     $buku->kategoris()->attach($request->kategori_id);
 
     return redirect()->route('admin.data_buku.index')

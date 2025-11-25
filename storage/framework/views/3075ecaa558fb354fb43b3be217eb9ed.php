@@ -78,6 +78,7 @@
   </div>
 </div>
 
+<<<<<<< HEAD
 <!-- darkmode -->
     <button onclick="toggleDarkMode()" class="text-[#626F47] text-lg flex items-center gap-2">
     <span class="iconify text-2xl dark:hidden" data-icon="mdi:weather-sunny"></span>
@@ -87,4 +88,13 @@
 </nav>
 
 
+=======
+<!-- Pengaturan -->
+    <button class="text-[#626F47] text-lg">
+      <i class="fa-solid fa-gear"></i>
+    </button>
+  </div>
+</nav>
+
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
 <?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/components/navbarUser.blade.php ENDPATH**/ ?>

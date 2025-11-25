@@ -47,7 +47,11 @@
       <div
         class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
+<<<<<<< HEAD
         <span class="iconify text-[#626F47]" data-icon="mdi:view-grid" data-width="32"></span>
+=======
+        <i class="fa-solid fa-chart-line text-xl"></i>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
         <span class="whitespace-nowrap text-base font-bold">Dashboard</span>
       </div>
     </a>
@@ -58,7 +62,11 @@
       <div
         class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
+<<<<<<< HEAD
         <span class="iconify text-[#626F47]" data-icon="fa-solid:book" data-width="30"></span>
+=======
+        <i class="fa-solid fa-book text-xl"></i>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
         <span class="whitespace-nowrap text-base font-bold">Buku</span>
       </div>
     </a>
@@ -69,7 +77,11 @@
       <div
         class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
+<<<<<<< HEAD
         <span class="iconify text-[#626F47]" data-icon="mdi:book-lock" data-width="32"></span>
+=======
+        <i class="fa-solid fa-clock-rotate-left text-xl"></i>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
         <span class="whitespace-nowrap text-base font-bold">Riwayat</span>
       </div>
     </a>
@@ -80,7 +92,11 @@
       <div
         class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
         group-hover:border-transparent group-hover:bg-white">
+<<<<<<< HEAD
         <span class="iconify text-[#626F47]" data-icon="mdi:book-heart" data-width="32"></span>
+=======
+        <i class="fa-solid fa-bookmark text-xl"></i>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
         <span class="whitespace-nowrap text-base font-bold">Favorit</span>
       </div>
     </a>
@@ -88,6 +104,7 @@
 
   <li><div class="h-[1px] bg-gray-300 mx-2 rounded"></div></li>
 
+<<<<<<< HEAD
  <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none"> <form action="<?php echo e(route('logout')); ?>" method="POST"> 
   <?php echo csrf_field(); ?> 
   <button type="submit" class="group relative flex items-center w-full text-red-600 transition-colors duration-300"> <div class="menu-item flex items-center gap-3 rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300"> 
@@ -101,4 +118,22 @@
 </ul>
   </div>
  
+=======
+  <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
+    <form method="POST" action="<?php echo e(route('logout')); ?>" class="w-full">
+      <?php echo csrf_field(); ?>
+      <button type="submit"
+        class="relative flex items-center w-full text-red-600 hover:text-[var(--green)] transition-colors duration-300">
+        <span class="block min-w-[60px] h-[60px] leading-[60px] text-center text-xl">
+          <i class="fa-solid fa-gear"></i>
+        </span>
+        <span class="block px-[10px] h-[60px] leading-[60px] whitespace-nowrap">
+          Logout
+        </span>
+      </button>
+    </form>
+  </li>
+</ul>
+  </div>
+>>>>>>> f0747171cd3dd3a038c7f5e52e06862e4f0a8864
 <?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/components/sidebarUser.blade.php ENDPATH**/ ?>

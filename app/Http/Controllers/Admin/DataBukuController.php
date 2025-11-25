@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataBukuImport; 
 use App\Models\DataKategori;
 use App\Helpers\ImageHelper;
+use App\Models\GambarBuku;
 
 
 class DataBukuController extends Controller
@@ -28,58 +29,78 @@ class DataBukuController extends Controller
     public function create()
 {
     $kategoris = DataKategori::all();
-    return view('admin.data_buku.create', compact('kategoris'));
+    $media = GambarBuku::all();
+
+    return view('admin.data_buku.create', compact('kategoris', 'media'));
 }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+  public function store(Request $request)
 {
     $validated = $request->validate([
-        'foto_buku' => 'nullable|image|mimes:png,jpg|max:2048',
-        'judul_buku' => 'required|string|max:255',
-        'penulis' => 'required|string|max:255',
-        'penerbit' => 'required|string|max:255',
-        'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . (date('Y') + 1),
-        'bahasa' => 'required|string|max:100',
+        'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        'selected_gambar' => 'nullable|exists:gambar_bukus,id',
+        'judul_buku' => 'required',
+        'penulis' => 'required',
+        'penerbit' => 'required',
+        'tahun_terbit' => 'required',
+        'bahasa' => 'required',
         'kategori_id' => 'required|array',
-        'kategori_id.*' => 'exists:data_kategoris,id',
-        'jumlah_halaman' => 'required|integer|min:1',
-        'edisi' => 'required|string|max:100',
-        'deskripsi' => 'required|string',
-        'stok' => 'required|integer|min:0',
+        'jumlah_halaman' => 'required',
+        'edisi' => 'required',
+        'deskripsi' => 'required',
+        'stok' => 'required',
         'file_buku' => 'nullable|mimes:pdf|max:5120',
     ]);
 
-    // Upload file foto
+    $foto_id = null;
+
+    // 🚀 1. Jika upload foto baru
     if ($request->hasFile('foto_buku')) {
-        $imageName = time() . '.' . $request->foto_buku->extension();
-        $request->foto_buku->move(public_path('uploads/buku'), $imageName);
-        $validated['foto_buku'] = 'uploads/buku/' . $imageName;
+
+        $file = $request->file('foto_buku');
+        $path = $file->store('uploads/buku', 'public');
+
+        $media = GambarBuku::create([
+            'nama_file' => $file->getClientOriginalName(),
+            'path_file' => $path,
+        ]);
+
+        $foto_id = $media->id;
     }
 
-    // Upload file PDF
-    if ($request->hasFile('file_buku')) {
-        $fileName = time() . '.' . $request->file_buku->extension();
-        $request->file_buku->move(public_path('uploads/file_buku'), $fileName);
-        $validated['file_buku'] = 'uploads/file_buku/' . $fileName;
+    // 🚀 2. Jika user pilih foto dari galeri
+    if ($request->selected_gambar) {
+        $foto_id = $request->selected_gambar;
     }
 
-    // Simpan id kategori dalam bentuk string (contoh: "1,2,3")
-    $validated['kategori_ids'] = implode(',', $request->kategori_id);
+    // 🚀 3. Simpan Buku
+    $buku = DataBuku::create([
+        'judul_buku' => $request->judul_buku,
+        'penulis' => $request->penulis,
+        'penerbit' => $request->penerbit,
+        'tahun_terbit' => $request->tahun_terbit,
+        'bahasa' => $request->bahasa,
+        'jumlah_halaman' => $request->jumlah_halaman,
+        'edisi' => $request->edisi,
+        'deskripsi' => $request->deskripsi,
+        'stok' => $request->stok,
+        'file_buku' => $request->file_buku
+            ? $request->file_buku->store('uploads/file_buku', 'public')
+            : null,
+        'kategori_ids' => implode(',', $request->kategori_id),
+        'foto_id' => $foto_id,
+    ]);
 
-    // Simpan buku
-    $dataBuku = collect($validated)->except('kategori_id')->toArray();
-    $buku = DataBuku::create($dataBuku);
-
-    // Simpan relasi di pivot
+    // 🚀 4. Pivot kategori
     $buku->kategoris()->attach($request->kategori_id);
 
-    return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil ditambahkan!');
+    return redirect()->route('admin.data_buku.index')
+        ->with('success', 'Data buku berhasil ditambahkan!');
 }
-
 
     /**
      * Display the specified resource.

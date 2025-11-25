@@ -11,17 +11,22 @@ class MediaBukuController extends Controller
 {
     public function index()
     {
-        $gambar = GambarBuku::latest()->paginate(20);
-        return view('admin.media.index', compact('gambar'));
+      $media = GambarBuku::all();
+      return view('admin.media.index', compact('media'));
+
     }
 
-    public function destroy(GambarBuku $gambar)
-    {
-        Storage::delete($gambar->path_file);
-        $gambar->delete();
+ public function destroy($id)
+{
+    $gambar = GambarBuku::findOrFail($id);
 
-        return redirect()
-            ->route('admin.media.index')
-            ->with('success', 'Gambar buku berhasil dihapus');
-    }
+    // hapus file di storage
+    Storage::disk('public')->delete($gambar->path_file);
+
+    // hapus row di database
+    $gambar->delete();
+
+    return back()->with('success', 'Gambar & Data berhasil dihapus');
+}
+
 }

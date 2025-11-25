@@ -14,21 +14,26 @@
             <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data" class="space-y-6">
                 <?php echo csrf_field(); ?>
 
-
                 <!-- Foto Buku -->
                 <div>
                     <label for="foto_buku" class="block text-gray-700 font-semibold mb-2">Foto Buku</label>
+
+                    <!-- Upload manual -->
                     <input type="file" id="foto_buku" name="foto_buku"
                         class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
-                           focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200">
-                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+        focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200">
+
+                    <!-- Pilih dari galeri -->
+                    <button type="button" class="btn btn-secondary mt-2" data-bs-toggle="modal"
                         data-bs-target="#pilihGambarModal">
                         Pilih dari Galeri
                     </button>
 
-                    <input type="hidden" name="selected_gambar" id="selectedGambar">
-                    <p class="mt-2">Selected: <span id="selectedGambarNama">-</span></p>
+                    <!-- Hidden input untuk menyimpan id gambar terpilih -->
+                    <input type="hidden" name="foto_id" id="selectedGambar">
+                    <p class="mt-2">Dipilih: <span id="selectedGambarNama">-</span></p>
 
+                    <!-- Modal galeri -->
                     <div class="modal fade" id="pilihGambarModal" tabindex="-1">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -40,7 +45,7 @@
 
                                 <div class="modal-body">
                                     <div class="row">
-                                        <?php $__currentLoopData = $gambarList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $g): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php $__currentLoopData = $media; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $g): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="col-3 mb-3">
                                                 <img src="<?php echo e(Storage::url($g->path_file)); ?>"
                                                     style="width:100%; height:150px; object-fit:cover; cursor:pointer;"
@@ -58,12 +63,13 @@
                         function pilihGambar(id, nama) {
                             document.getElementById('selectedGambar').value = id;
                             document.getElementById('selectedGambarNama').innerText = nama;
-                            var modal = bootstrap.Modal.getInstance(document.getElementById('pilihGambarModal'));
+
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('pilihGambarModal'));
                             modal.hide();
                         }
                     </script>
-
                 </div>
+
 
                 <!-- Judul Buku -->
                 <div>

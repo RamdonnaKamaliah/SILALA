@@ -143,8 +143,8 @@
                                 <td class="px-4 py-2 border-b border-gray-300">
                                     @if ($buku->foto_buku)
                                         <div class="w-16 h-20 overflow-hidden rounded-lg border-2 mx-auto">
-                                            <img src="{{ asset($buku->foto_buku) }}" alt="Foto Buku {{ $buku->judul_buku }}"
-                                                class="w-full h-full object-cover"
+                                            <img src="/storage/{{ $buku->foto_buku }}"
+                                                alt="Foto Buku {{ $buku->judul_buku }}" class="w-full h-full object-cover"
                                                 onerror="this.onerror=null; this.src='{{ asset('images/default-book.jpg') }}';">
                                         </div>
                                     @else
@@ -155,7 +155,6 @@
                                         </div>
                                     @endif
                                 </td>
-
 
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->judul_buku }}</td>
                                 <td class="px-4 py-2 border-b border-gray-300">{{ $buku->penulis }}</td>

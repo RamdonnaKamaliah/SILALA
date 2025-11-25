@@ -83,7 +83,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
  
     // Media Buku Routes
     Route::get('/media-buku', [MediaBukuController::class, 'index'])->name('media.index');
-    Route::delete('/media-buku/{gambar}', [MediaBukuController::class, 'destroy'])->name('media.destroy');
+    Route::delete('/media-buku/{id}', [MediaBukuController::class, 'destroy'])
+    ->name('media.destroy');
+
+
 
 });
 

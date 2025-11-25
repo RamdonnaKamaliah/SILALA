@@ -143,8 +143,8 @@
                                 <td class="px-4 py-2 border-b border-gray-300">
                                     <?php if($buku->foto_buku): ?>
                                         <div class="w-16 h-20 overflow-hidden rounded-lg border-2 mx-auto">
-                                            <img src="<?php echo e(asset($buku->foto_buku)); ?>" alt="Foto Buku <?php echo e($buku->judul_buku); ?>"
-                                                class="w-full h-full object-cover"
+                                            <img src="/storage/<?php echo e($buku->foto_buku); ?>"
+                                                alt="Foto Buku <?php echo e($buku->judul_buku); ?>" class="w-full h-full object-cover"
                                                 onerror="this.onerror=null; this.src='<?php echo e(asset('images/default-book.jpg')); ?>';">
                                         </div>
                                     <?php else: ?>
@@ -155,7 +155,6 @@
                                         </div>
                                     <?php endif; ?>
                                 </td>
-
 
                                 <td class="px-4 py-2 border-b border-gray-300"><?php echo e($buku->judul_buku); ?></td>
                                 <td class="px-4 py-2 border-b border-gray-300"><?php echo e($buku->penulis); ?></td>

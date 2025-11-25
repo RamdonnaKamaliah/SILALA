@@ -34,6 +34,10 @@ class DataBuku extends Model
     {
         return $this->belongsToMany(DataKategori::class, 'buku_kategori', 'data_buku_id', 'data_kategori_id');
     }
+    public function foto()
+{
+    return $this->belongsTo(GambarBuku::class, 'foto_id');
+}
 
     public function getFotoUrlAttribute()
     {

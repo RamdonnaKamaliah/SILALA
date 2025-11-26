@@ -36,14 +36,15 @@
     <!-- Grid Buku -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
       @forelse($riwayat as $data)
-      <div class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm">
+      <a href="{{ route('user.detailbuku', ['id' => $data->buku->id, 'from' => 'riwayatbaca']) }}" 
+         class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm block hover:no-underline group">
         <div class="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
           <img src="{{ asset($data->buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
                alt="{{ $data->buku->judul_buku }}" 
-               class="w-full h-full object-cover">
+               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
         </div>
 
-        <p class="text-[#2E2E2E] text-center font-semibold text-sm mt-2">
+        <p class="text-[#2E2E2E] text-center font-semibold text-sm mt-2 group-hover:text-[#626F47] transition-colors duration-200">
           {{ $data->buku->judul_buku ?? '-' }}
         </p>
         <p class="text-[#2E2E2E] text-center text-xs">
@@ -62,12 +63,12 @@
           Terakhir dibaca: {{ $data->terakhir_dibaca ? $data->terakhir_dibaca->diffForHumans() : '-' }}
         </p>
 
-        <a href="{{ asset($data->buku->file_buku) }}" target="_blank">
-          <button class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
-            Lanjutkan Baca
-          </button>
-        </a>
-      </div>
+        <!-- 🔗 Tombol "Lanjutkan Baca" - gunakan event.stopPropagation() agar tidak trigger link parent -->
+        <button onclick="event.stopPropagation(); window.open('{{ asset($data->buku->file_buku) }}', '_blank');"
+          class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
+          Lanjutkan Baca
+        </button>
+      </a>
       @empty
       <p class="text-gray-500 col-span-full text-center mt-8">Belum ada riwayat baca.</p>
       @endforelse

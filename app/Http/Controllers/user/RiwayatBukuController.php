@@ -93,30 +93,31 @@ class RiwayatBukuController extends Controller
     }
 
     public function kembalikanBuku($id)
-    {
-        $peminjaman = DataPeminjam::where('id', $id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+{
+    $peminjaman = DataPeminjam::where('id', $id)
+        ->where('user_id', Auth::id())
+        ->firstOrFail();
 
-        // Update keterangan jika terlambat
-        $tanggalKembali = Carbon::parse($peminjaman->tanggal_kembali);
-        $sekarang = Carbon::now();
-        
-        // Reset waktu ke 00:00:00 untuk perhitungan hari murni
-        $tanggalKembali->startOfDay();
-        $sekarang->startOfDay();
-        
-        if ($sekarang->gt($tanggalKembali)) {
-            $hariTelat = $sekarang->diffInDays($tanggalKembali);
-            $peminjaman->keterangan = 'Terlambat ' . $hariTelat . ' hari - Sudah dikembalikan';
-        } else {
-            $peminjaman->keterangan = 'Tepat waktu - Sudah dikembalikan';
-        }
-
-        // Ubah status menjadi menunggu konfirmasi admin
-        $peminjaman->status = 'menunggu_konfirmasi';
-        $peminjaman->save();
-
-        return redirect()->back()->with('success', 'Buku dikembalikan. Menunggu konfirmasi admin.');
+    // Update keterangan jika terlambat
+    $tanggalKembali = Carbon::parse($peminjaman->tanggal_kembali);
+    $sekarang = Carbon::now();
+    
+    // Reset waktu ke 00:00:00 untuk perhitungan hari murni
+    $tanggalKembali->startOfDay();
+    $sekarang->startOfDay();
+    
+    if ($sekarang->gt($tanggalKembali)) {
+        // PERBAIKAN: GUNAKAN abs() UNTUK NILAI POSITIF
+        $hariTelat = abs($sekarang->diffInDays($tanggalKembali));
+        $peminjaman->keterangan = 'Terlambat ' . $hariTelat . ' hari - Sudah dikembalikan';
+    } else {
+        $peminjaman->keterangan = 'Tepat waktu - Sudah dikembalikan';
     }
+
+    // Ubah status menjadi menunggu konfirmasi admin
+    $peminjaman->status = 'menunggu_konfirmasi';
+    $peminjaman->save();
+
+    return redirect()->back()->with('success', 'Buku dikembalikan. Menunggu konfirmasi admin.');
+}
 }

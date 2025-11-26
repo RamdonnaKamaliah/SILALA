@@ -50,12 +50,13 @@ class DataPeminjam extends Model
             $tanggalKembali->startOfDay();
             $sekarang->startOfDay();
             
-            return $sekarang->diffInDays($tanggalKembali);
+            // GUNAKAN abs() UNTUK MENGHILANGKAN TANDA MINUS
+            return abs($sekarang->diffInDays($tanggalKembali));
         }
         return 0;
     }
 
-    // Accessor untuk hari telat
+    // Accessor untuk hari telat - PERBAIKAN DENGAN abs()
     public function getHariTelatAttribute()
     {
         if ($this->status === 'dipinjam' && now()->gt($this->tanggal_kembali)) {
@@ -66,7 +67,8 @@ class DataPeminjam extends Model
             $tanggalKembali->startOfDay();
             $sekarang->startOfDay();
             
-            return $sekarang->diffInDays($tanggalKembali);
+            // PERBAIKAN: GUNAKAN abs() UNTUK NILAI POSITIF
+            return abs($sekarang->diffInDays($tanggalKembali));
         }
         return 0;
     }

@@ -25,10 +25,12 @@ $(document).on("change", ".row-checkbox", updateBulkButtons);
 
 function appendSelectedIdsToForm(formId) {
     const form = $(formId);
-    form.find('input[name="ids[]"]').remove();
+    form.find('input[name="selected_ids[]"]').remove();
     $(".row-checkbox:checked").each(function () {
         form.append(
-            `<input type="hidden" name="ids[]" value="${$(this).val()}">`
+            `<input type="hidden" name="selected_ids[]" value="${$(
+                this
+            ).val()}">`
         );
     });
 }

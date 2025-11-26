@@ -51,12 +51,19 @@
           By {{ $data->buku->penulis ?? '-' }}
         </p>
 
-        <div class="flex justify-center mt-1 text-yellow-400">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star-half-stroke"></i>
-          <i class="fa-regular fa-star"></i>
+        <div class="flex justify-center mt-1 text-yellow-400 text-xs">
+            @for($i = 1; $i <= 5; $i++)
+                @if($i <= floor($data->buku->average_rating))
+                    <i class="fa-solid fa-star"></i>
+                @elseif($i - 0.5 <= $data->buku->average_rating)
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                @else
+                    <i class="fa-regular fa-star"></i>
+                @endif
+            @endfor
+            @if($data->buku->total_ratings > 0)
+                <span class="text-gray-600 text-xs ml-1">({{ number_format($data->buku->average_rating, 1) }})</span>
+            @endif
         </div>
 
         <p class="text-center text-xs text-gray-500 mt-1">

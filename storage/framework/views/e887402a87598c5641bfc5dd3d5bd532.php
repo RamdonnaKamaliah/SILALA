@@ -51,12 +51,19 @@
 
         </p>
 
-        <div class="flex justify-center mt-1 text-yellow-400">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star-half-stroke"></i>
-          <i class="fa-regular fa-star"></i>
+        <div class="flex justify-center mt-1 text-yellow-400 text-xs">
+            <?php for($i = 1; $i <= 5; $i++): ?>
+                <?php if($i <= floor($data->buku->average_rating)): ?>
+                    <i class="fa-solid fa-star"></i>
+                <?php elseif($i - 0.5 <= $data->buku->average_rating): ?>
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                <?php else: ?>
+                    <i class="fa-regular fa-star"></i>
+                <?php endif; ?>
+            <?php endfor; ?>
+            <?php if($data->buku->total_ratings > 0): ?>
+                <span class="text-gray-600 text-xs ml-1">(<?php echo e(number_format($data->buku->average_rating, 1)); ?>)</span>
+            <?php endif; ?>
         </div>
 
         <p class="text-center text-xs text-gray-500 mt-1">

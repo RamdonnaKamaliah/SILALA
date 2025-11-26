@@ -26,16 +26,54 @@ class DataPeminjam extends Model
         'tanggal_kembali'
     ];
 
-    // Hitung denda otomatis
-    public function hitungDenda()
+    // Hitung keterlambatan untuk teguran
+    public function hitungKeterlambatan()
     {
         if ($this->status === 'dipinjam') {
-            $hariTelat = Carbon::now()->diffInDays(Carbon::parse($this->tanggal_kembali), false);
+            $hariTelat = $this->hitungHariTelat();
             if ($hariTelat > 0) {
-                $this->denda = $hariTelat * 1000;
+                // Hanya menandai keterlambatan, tanpa denda
+                $this->keterangan = 'Terlambat ' . $hariTelat . ' hari - Teguran';
                 $this->save();
             }
         }
+    }
+
+    // Method untuk menghitung hari telat
+    private function hitungHariTelat()
+    {
+        if ($this->status === 'dipinjam' && now()->gt($this->tanggal_kembali)) {
+            $tanggalKembali = Carbon::parse($this->tanggal_kembali);
+            $sekarang = Carbon::now();
+            
+            // Reset waktu ke 00:00:00 untuk perhitungan hari murni
+            $tanggalKembali->startOfDay();
+            $sekarang->startOfDay();
+            
+            return $sekarang->diffInDays($tanggalKembali);
+        }
+        return 0;
+    }
+
+    // Accessor untuk hari telat
+    public function getHariTelatAttribute()
+    {
+        if ($this->status === 'dipinjam' && now()->gt($this->tanggal_kembali)) {
+            $tanggalKembali = Carbon::parse($this->tanggal_kembali);
+            $sekarang = Carbon::now();
+            
+            // Reset waktu ke 00:00:00 untuk perhitungan hari murni
+            $tanggalKembali->startOfDay();
+            $sekarang->startOfDay();
+            
+            return $sekarang->diffInDays($tanggalKembali);
+        }
+        return 0;
+    }
+
+    public function getIsTerlambatAttribute()
+    {
+        return $this->status === 'dipinjam' && now()->gt($this->tanggal_kembali);
     }
 
     public function buku()

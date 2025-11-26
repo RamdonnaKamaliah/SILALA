@@ -77,28 +77,41 @@ class RiwayatBukuController extends Controller
     }
 
     public function store(Request $request)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
+        $data = new DataPeminjam();
+        $data->user_id = $user->id;
+        $data->buku_id = $request->buku_id;
+        $data->tanggal_pinjam = now(); // realtime dari server
+        $data->tanggal_kembali = $request->tanggal_kembali;
+        $data->status = 'dipinjam';
+        $data->keterangan = 'Sedang dipinjam';
+        $data->save();
 
-    $data = new DataPeminjam();
-    $data->user_id = $user->id;
-    $data->buku_id = $request->buku_id;
-    $data->tanggal_pinjam = now(); // realtime dari server
-    $data->tanggal_kembali = $request->tanggal_kembali;
-    $data->status = 'dipinjam';
-    $data->save();
+        return response()->json(['success' => true, 'message' => 'Buku berhasil dipinjam']);
+    }
 
-    return response()->json(['success' => true, 'message' => 'Buku berhasil dipinjam']);
-}
-
-
-    
     public function kembalikanBuku($id)
     {
         $peminjaman = DataPeminjam::where('id', $id)
             ->where('user_id', Auth::id())
             ->firstOrFail();
+
+        // Update keterangan jika terlambat
+        $tanggalKembali = Carbon::parse($peminjaman->tanggal_kembali);
+        $sekarang = Carbon::now();
+        
+        // Reset waktu ke 00:00:00 untuk perhitungan hari murni
+        $tanggalKembali->startOfDay();
+        $sekarang->startOfDay();
+        
+        if ($sekarang->gt($tanggalKembali)) {
+            $hariTelat = $sekarang->diffInDays($tanggalKembali);
+            $peminjaman->keterangan = 'Terlambat ' . $hariTelat . ' hari - Sudah dikembalikan';
+        } else {
+            $peminjaman->keterangan = 'Tepat waktu - Sudah dikembalikan';
+        }
 
         // Ubah status menjadi menunggu konfirmasi admin
         $peminjaman->status = 'menunggu_konfirmasi';
@@ -107,4 +120,3 @@ class RiwayatBukuController extends Controller
         return redirect()->back()->with('success', 'Buku dikembalikan. Menunggu konfirmasi admin.');
     }
 }
-

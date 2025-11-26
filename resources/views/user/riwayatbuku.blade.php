@@ -108,20 +108,10 @@
               $tanggalPinjam = \Carbon\Carbon::parse($data->tanggal_pinjam)->translatedFormat('d F Y');
               $tanggalKembali = \Carbon\Carbon::parse($data->tanggal_kembali)->translatedFormat('d F Y');
 
-              $hariTelat = 0;
-              $denda = 0;
-              $isTerlambat = false;
-              
-              if ($status === 'dipinjam' && now()->gt($data->tanggal_kembali)) {
-                  $hariTelat = $data->tanggal_kembali < now()
-    ? now()->diffInDays($data->tanggal_kembali)
-    : 0;
-
-                  $denda = $hariTelat * 1000;
-                  $isTerlambat = true;
-              }
+              // Gunakan accessor dari model
+              $hariTelat = $data->hari_telat;
+              $isTerlambat = $data->is_terlambat;
             @endphp
-
             <tr class="hover:bg-[#FFF8E8] transition">
               <td class="py-4 px-4 relative min-w-[220px]">
                 <div class="flex items-center gap-3">
@@ -150,14 +140,18 @@
                 @if ($status === 'dipinjam')
                   @if ($isTerlambat)
                     Telat {{ $hariTelat }} Hari
-                    <br><span class="text-xs text-red-500">Denda: Rp {{ number_format($denda, 0, ',', '.') }}</span>
+                    <br><span class="text-xs text-orange-500">Teguran</span>
                   @else
                     Masih Dipinjam
                   @endif
                 @elseif ($status === 'menunggu_konfirmasi')
                   Menunggu Konfirmasi Admin
                 @else
-                  Tepat Waktu
+                  @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
+                    <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
+                  @else
+                    Tepat Waktu
+                  @endif
                 @endif
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
@@ -166,12 +160,12 @@
                 @if ($status === 'dipinjam')
                   @if ($isTerlambat)
                     <div class="flex items-start relative">
-                      <span class="iconify text-[#B43131] w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:close"></span>
+                      <span class="iconify text-[#B43131] w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:alert-circle-outline"></span>
                       <div>
-                        <span class="inline-flex items-center bg-[#FFD1D1] text-[#B43131] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
-                          Terlambat
+                        <span class="inline-flex items-center bg-[#FFEBCD] text-[#B43131] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
+                          Terlambat - Teguran
                         </span>
-                        <span class="block mt-1 text-[11px] text-red-500 italic">*Denda Rp 1.000 per hari</span>
+                        <span class="block mt-1 text-[11px] text-orange-500 italic">*Peringatan keterlambatan</span>
                       </div>
                     </div>
                   @else

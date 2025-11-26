@@ -86,9 +86,10 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');
     Route::post('/favorit/toggle', [FavoritController::class, 'toggle'])->name('user.favorit.toggle');
 
+    // RATING
     Route::post('/rating', [RatingController::class, 'store'])->name('user.rating.store');
-Route::get('/rating/{bukuId}', [RatingController::class, 'getUserRating'])->name('user.rating.get');
-Route::delete('/rating/{bukuId}', [RatingController::class, 'destroy'])->name('user.rating.destroy');
+    Route::get('/rating/{bukuId}', [RatingController::class, 'getUserRating'])->name('user.rating.get');
+    Route::delete('/rating/{bukuId}', [RatingController::class, 'destroy'])->name('user.rating.destroy');
 });
 
 

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('layout_landing.patrial_landing.link')
-
+    <link rel="icon" href="{{ asset('assets/logo 1.png') }}" type="image/x-icon">
     <title>SILALA</title>
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

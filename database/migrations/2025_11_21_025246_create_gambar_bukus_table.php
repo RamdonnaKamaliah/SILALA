@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_file');
             $table->string('path_file');
+            $table->string('judul_buku')->nullable();
             $table->timestamps();
         });
     }

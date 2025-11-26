@@ -189,8 +189,8 @@ public function store(Request $request)
     {
         $buku = DataBuku::findOrFail($id);
         // Hapus foto buku jika ada
-        if ($buku->foto_buku && file_exists(public_path($buku->foto_buku))) {
-            unlink(public_path($buku->foto_buku));
+        if ($buku->foto_buku && file_exists(storage_path('app/public/' . $buku->foto_buku))) {
+            unlink(storage_path('app/public/' . $buku->foto_buku));
         }
         $buku->delete();
         return redirect()->route('admin.data_buku.index')

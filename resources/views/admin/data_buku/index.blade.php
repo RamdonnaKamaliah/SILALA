@@ -92,7 +92,7 @@
 
                             <!-- Tombol Download Template -->
                             <a href="{{ asset('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx') }}"
-                                class="block w-full bg-red-500 hover:bg-red-600 text-white text-center py-2 rounded-lg mb-4 transition flex items-center justify-center gap-2"
+                                class="w-full bg-red-500 hover:bg-red-600 text-white text-center py-2 rounded-lg mb-4 transition flex items-center justify-center gap-2"
                                 download>
                                 <i class="fa-solid fa-download"></i> Download Template
                             </a>
@@ -123,18 +123,30 @@
                         </div>
                     </div>
 
-                    <!-- Tombol Tambah Buku -->
-                    <a href="{{ route('admin.data_buku.create') }}"
-                        class="bg-[#A4B465] text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-[#8A9A55] transition w-full sm:w-auto text-center flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Tambah Buku
-                    </a>
+                    <div class="flex items-center space-x-2">
+                        <a href="{{ route('admin.data_buku.create') }}"
+                            class="bg-[#A4B465] text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-[#8A9A55] transition w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                            + Tambah Buku
+                        </a>
+                        <form id="bulkDeleteForm" action="{{ route('admin.data_buku.bulk-delete') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="selected_ids" id="selectedIdsDelete">
+                            <button type="submit" id="bulkDeleteBtn" disabled
+                                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">Hapus Data
+                                Terpilih</button>
+                        </form>
 
-                    <!-- Tombol Hapus Data Terpilih -->
-                    <button id="bulkDeleteBtn"
-                        class="bg-gray-400 text-white font-medium px-4 py-2 rounded-lg shadow transition cursor-not-allowed opacity-50 w-full sm:w-auto text-center flex items-center justify-center gap-2"
-                        disabled>
-                        <i class="fa-solid fa-trash"></i> Hapus Terpilih
-                    </button>
+                        {{-- Tombol Arsipkan --}}
+                        <form id="bulkArchiveForm" action="{{ route('admin.data_buku.bulkArchive') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="selected_ids" id="selectedIdsArchive">
+                            <button type="submit" id="bulkArchiveBtn" disabled
+                                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">Arsipkan
+                                Data
+                                Terpilih</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -304,7 +316,7 @@
     </div>
 
     <!-- JavaScript untuk fungsi interaktif -->
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Fungsi Select All
             const selectAll = document.getElementById('selectAll');
@@ -375,7 +387,7 @@
                 });
             }
         });
-    </script>
+    </script> --}}
 
     <style>
         /* Style untuk truncate text dengan ellipsis */

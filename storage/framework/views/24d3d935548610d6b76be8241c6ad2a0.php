@@ -57,7 +57,6 @@
     <script src="<?php echo e(asset('assets_admin/js/dataBuku/deleteArsip.js')); ?>"></script>
     <script src="<?php echo e(asset('assets_admin/js/arsipBuku/deleteArsip.js')); ?>"></script>
     <?php echo $__env->yieldPushContent('scripts'); ?>
-
 </body>
 
 </html>

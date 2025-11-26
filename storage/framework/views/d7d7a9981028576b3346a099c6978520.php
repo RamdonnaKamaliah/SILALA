@@ -1,34 +1,34 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @include('layout_landing.patrial_landing.link')
+    <?php echo $__env->make('layout_landing.patrial_landing.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <title>SILALA</title>
     <!-- Vite -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <!-- style -->
-    <link rel="stylesheet" href="{{ asset('assets_landing/css/landingpage.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('assets_landing/css/landingpage.css')); ?>">
 
 </head>
 
 <body class="bg-gray-50 dark:bg-[#15202B] font-sans text-slate-700 dark:text-[#39FF14]">
 
     <!-- navbar -->
-    @include('layout_landing.patrial_landing.header')
+    <?php echo $__env->make('layout_landing.patrial_landing.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- Hero Section -->
     <section class="pt-24 md:pt-32 pb-32 md:pb-40 relative bg-cover bg-center hero-section" id="/"
-        style="background-image: url('{{ asset('assets/background.png') }}');">
+        style="background-image: url('<?php echo e(asset('assets/background.png')); ?>');">
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-4 md:px-6">
 
             <!-- Judul + Icon -->
             <h1
                 class="flex items-center justify-center responsive-heading md:text-4xl font-inknut font-bold text-black dark:text-white">
                 <span class="mr-2">
-                    <img src="{{ asset('assets/logo 1.png') }}" alt="Ilustrasi Buku" class="w-10 h-10 md:w-12 md:h-12">
+                    <img src="<?php echo e(asset('assets/logo 1.png')); ?>" alt="Ilustrasi Buku" class="w-10 h-10 md:w-12 md:h-12">
                 </span>
                 <span class="wave-text">
                     P<span>e</span><span>r</span><span>p</span><span>u</span><span>s</span><span>t</span><span>a</span><span>k</span><span>a</span><span>a</span><span>n</span>
@@ -53,7 +53,7 @@
 
             <!-- Gambar di batas section -->
             <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
-                <img src="{{ asset('assets/hero1.png') }}" alt="Ilustrasi Buku"
+                <img src="<?php echo e(asset('assets/hero1.png')); ?>" alt="Ilustrasi Buku"
                     class="hero-image w-48 h-auto md:w-80 md:h-auto object-contain">
             </div>
 
@@ -99,62 +99,17 @@
             </div>
 
             <!-- Grid Card -->
-            {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                @forelse ($data_buku as $buku)
-                    <article
-                        class="recommend-card bg-white dark:bg-[#15202B] rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-5 w-full h-full
-                  opacity-0 translate-y-10 transition-all duration-700 ease-out
-                  hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
-
-                        <!-- Cover Buku -->
-                        <div
-                            class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0 transform transition-transform duration-500 hover:scale-105">
-                            @if ($buku->foto_buku)
-                                <img src="{{ asset($buku->foto_buku) }}" alt="{{ $buku->judul_buku }} - cover"
-                                    class="w-full h-full object-cover rounded-lg shadow-md">
-                            @else
-                                <img src="{{ asset('assets/default-cover.jpg') }}" alt="Default Cover"
-                                    class="w-full h-full object-cover rounded-lg shadow-md">
-                            @endif
-                        </div>
-
-                        <!-- Info Buku -->
-                        <div class="meta w-full text-center sm:text-left flex flex-col justify-between">
-                            <div>
-                                <h3
-                                    class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                                    {{ $buku->judul_buku }}</h3>
-                                <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">By
-                                    {{ $buku->penulis }}</p>
-                            </div>
-
-                            <!-- Kategori -->
-                            <div
-                                class="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center sm:justify-start gap-2">
-                                <i class="fa fa-book"></i>
-                                <span class="break-words">{{ $buku->kategori }}</span>
-                            </div>
-
-                            <!-- Rating -->
-                            <div class="mt-3 flex items-center justify-center sm:justify-start gap-3">
-                                <div class="rating text-yellow-400 text-base">★★★★☆</div>
-                            </div>
-                        </div>
-
-                    </article>
-                @empty
-                    <p class="col-span-3 text-center text-gray-500 dark:text-gray-400">Belum ada data buku.</p>
-                @endforelse
-            </div> --}}
+            
         </div>
     </section>
 
     <!-- footer -->
-    @include('layout_landing.patrial_landing.footer')
+    <?php echo $__env->make('layout_landing.patrial_landing.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <!-- js -->
-    <script src="{{ asset('assets_landing/js/landingpage.js') }}"></script>
+    <script src="<?php echo e(asset('assets_landing/js/landingpage.js')); ?>"></script>
 
 </body>
 
 </html>
+<?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/landingpage.blade.php ENDPATH**/ ?>

@@ -9,15 +9,23 @@
                 class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition hover:shadow-lg hover:-translate-y-1">
 
                 {{-- Image Preview --}}
-                <div class="w-full h-40 bg-gray-100">
-                    @if ($item->foto)
-                        <img src="{{ asset('storage/' . $item->foto->path_file) }}" class="w-40 h-40 object-cover">
+                <div class="w-full h-40">
+                    @if ($item->path_file)
+                        @if ($item->path_file && Storage::disk('public')->exists($item->path_file))
+                            <img src="{{ asset('storage/' . $item->path_file) }}" class="w-full h-full object-cover">
+                        @else
+                            <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
+                                class="w-full h-full object-cover">
+                        @endif
                     @endif
-
                 </div>
 
                 {{-- Info + Actions --}}
                 <div class="p-3 flex flex-col gap-2">
+
+                    <p class="text-lg text-gray-700 font-medium truncate">
+                        {{ $item->buku?->judul_buku ?? 'Tidak ada judul' }}
+                    </p>
 
                     {{-- Filename --}}
                     <p class="text-xs text-gray-700 font-medium truncate">

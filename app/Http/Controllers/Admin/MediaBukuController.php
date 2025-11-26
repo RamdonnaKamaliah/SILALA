@@ -11,7 +11,7 @@ class MediaBukuController extends Controller
 {
     public function index()
     {
-      $media = GambarBuku::all();
+      $media = GambarBuku::with('buku')->get();
       return view('admin.media.index', compact('media'));
 
     }

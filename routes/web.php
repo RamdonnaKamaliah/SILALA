@@ -65,6 +65,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
     Route::delete('/data-kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
 
+    
     // Data Arsip Routes
     Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');
     Route::post('/data_arsip/bulk-restore', [DataArsipController::class, 'bulkRestore'])

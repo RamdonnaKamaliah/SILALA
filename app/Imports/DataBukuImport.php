@@ -48,6 +48,7 @@ class DataBukuImport implements ToModel, WithStartRow
 
                         // SIMPAN ke tabel gambar_bukus
                         GambarBuku::create([
+                            // 'data_buku' =>$buku->id,
                             'nama_file' => $fileName,
                             'path_file' => $path
                         ]);

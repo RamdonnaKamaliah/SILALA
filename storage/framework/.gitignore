@@ -1,3 +1,10 @@
+/storage/framework/views/
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/logs/
+/storage/framework/testing/
+
+# File existing Anda
 compiled.php
 config.php
 down

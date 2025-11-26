@@ -88,15 +88,15 @@
 
   <li><div class="h-[1px] bg-gray-300 mx-2 rounded"></div></li>
 
-  <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
-    <a href="<?php echo e(route('logout')); ?>" class="group relative flex items-center w-full text-red-600 transition-colors duration-300">
-      <div
-        class="menu-item flex items-center gap-3 rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300">
-        <i class="fa-solid fa-bookmark text-xl"></i>
-        <span class="whitespace-nowrap text-base font-bold">Logout</span>
-      </div>
-    </a>
-  </li>
+ <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none"> <form action="<?php echo e(route('logout')); ?>" method="POST"> 
+  <?php echo csrf_field(); ?> 
+  <button type="submit" class="group relative flex items-center w-full text-red-600 transition-colors duration-300"> <div class="menu-item flex items-center gap-3 rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300"> 
+    <i class="fa-solid fa-bookmark text-xl"></i> 
+    <span class="whitespace-nowrap text-base font-bold">Logout</span> 
+  </div> 
+</button> 
+</form> 
+</li>
   
 </ul>
   </div>

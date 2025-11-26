@@ -132,10 +132,10 @@
   <!-- ====== Bagian Tengah: Cover & Info Buku (tetap di dalam nav seperti aslinya) ====== -->
   <div class="flex flex-col md:flex-row items-start justify-center 
               gap-6 md:gap-8 w-full max-w-4xl mx-auto relative 
-              mt-[80px] md:mt-8 px-4">
+              mt-[50px] md:mt-8 px-4">
 
     <!-- Cover Buku -->
-<div class="relative w-36 sm:w-44 md:w-56 flex-shrink-0 mx-auto md:mx-0 
+<div class="relative w-32 sm:w-40 md:w-52 flex-shrink-0 mx-auto md:mx-0 
             -mt-4 md:mt-0 z-10">
 
   <div class="w-full aspect-[3/4] overflow-hidden rounded-md 
@@ -147,9 +147,6 @@
       >
   </div>
 </div>
-
-
-
 
     <!-- Info Buku -->
     <div class="flex flex-col justify-start text-center md:text-left w-full md:w-[60%] relative z-10">
@@ -165,12 +162,20 @@
 
       <div class="flex flex-col items-center md:items-start -mt-1">
         <p class="text-sm text-[#626F47] mb-1"><?php echo e($buku->penulis); ?></p>
+        <!-- Rating Stars berdasarkan rata-rata semua user -->
         <div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-regular fa-star"></i>
+          <?php for($i = 1; $i <= 5; $i++): ?>
+            <?php if($i <= floor($averageRating)): ?>
+              <i class="fa-solid fa-star"></i>
+            <?php elseif($i - 0.5 <= $averageRating): ?>
+              <i class="fa-solid fa-star-half-stroke"></i>
+            <?php else: ?>
+              <i class="fa-regular fa-star"></i>
+            <?php endif; ?>
+          <?php endfor; ?>
+          <?php if($totalRatings > 0): ?>
+            <span class="text-xs text-gray-600 ml-2">(<?php echo e(number_format($averageRating, 1)); ?>)</span>
+          <?php endif; ?>
         </div>
       </div>
 
@@ -206,8 +211,7 @@
   <div class="max-w-4xl mx-auto px-4">
 
     <!-- ====== FIXED TOMBOL BACA/PINJAM/FAVORIT ====== -->
-    <div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[20] bg-white pt-3">
-
+    <div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[30] bg-white pt-3">
 
       <div class="max-w-full px-4 md:px-6">
         <div class="flex items-center justify-between mb-2 md:px-0">
@@ -221,6 +225,7 @@
       </button>
               </a>
             <?php else: ?>
+            
               <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
                 Baca
               </button>
@@ -402,7 +407,7 @@
     </div>
 </div>
 
-    <!--      KONTEN DESKRIPSI     -->
+    <!-- KONTEN DESKRIPSI -->
 <div class="pt-6">
 
   <!-- Wrapper biasa, TANPA overflow lagi -->
@@ -462,35 +467,46 @@
     </div>
 
     <!-- === RATING CARD === -->
-    <div class="w-full flex justify-center mt-8">
-      <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
+<?php if(($hasRead || $userBorrow) && Schema::hasTable('ratings')): ?>
+<div class="w-full flex justify-center mt-8">
+  <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
 
-        <!-- Judul -->
-        <p class="text-xl font-bold text-[#3a3a3a] text-center mb-1">
-          Beri Rating Buku Ini
-        </p>
+    <!-- Judul -->
+    <p class="text-xl font-bold text-[#3a3a3a] text-center mb-1">
+      <?php if($userRating): ?>
+        Ubah Rating Buku Ini
+      <?php else: ?>
+        Beri Rating Buku Ini
+      <?php endif; ?>
+    </p>
 
-        <p class="text-sm text-[#6b6b6b] text-center mb-4">
-          Seberapa bagus buku ini menurutmu?
-        </p>
+    <p class="text-sm text-[#6b6b6b] text-center mb-4">
+      Seberapa bagus buku ini menurutmu?
+    </p>
 
-        <!-- Bintang -->
-        <div id="starContainer" class="flex items-center justify-center gap-3 mb-5">
-          <?php for($i = 1; $i <= 5; $i++): ?>
-            <i class="fa-regular fa-star text-4xl text-[#d5ccb8] cursor-pointer transition-all"
-               data-star="<?php echo e($i); ?>"></i>
-          <?php endfor; ?>
-        </div>
-
-        <!-- Tombol -->
-        <div class="flex justify-center">
-          <button id="submitRating" class="bg-[#5c7040] hover:bg-[#4d5e34] active:scale-95 
-            text-white text-sm font-medium px-7 py-2.5 rounded-xl transition-all shadow hidden">
-            Kirim Rating
-          </button>
-        </div>
-      </div>
+    <!-- Bintang -->
+    <div id="starContainer" class="flex items-center justify-center gap-3 mb-5">
+      <?php for($i = 1; $i <= 5; $i++): ?>
+        <i class="fa-regular fa-star text-4xl text-[#d5ccb8] cursor-pointer transition-all rating-star"
+           data-star="<?php echo e($i); ?>"></i>
+      <?php endfor; ?>
     </div>
+
+    <!-- Tombol -->
+    <div class="flex justify-center">
+      <button id="submitRating" class="bg-[#5c7040] hover:bg-[#4d5e34] active:scale-95 
+        text-white text-sm font-medium px-7 py-2.5 rounded-xl transition-all shadow 
+        opacity-50 cursor-not-allowed" disabled>
+        <?php if($userRating): ?>
+          Update Rating
+        <?php else: ?>
+          Kirim Rating
+        <?php endif; ?>
+      </button>
+    </div>
+  </div>
+</div>
+<?php endif; ?>
   </div>
 
 </div>
@@ -504,269 +520,320 @@
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
   <!-- Script -->
 <script src="<?php echo e(asset('assets_user/js/sidebarnavbar.js')); ?>"></script>
+<!-- Script Rating System -->
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  // ====== SweetAlert default supaya selalu muncul di atas ======
-  const SwalDefault = Swal.mixin({
-    target: document.body,
-    zIndex: 999999
-  });
+document.addEventListener("DOMContentLoaded", function() {
+    // ====== RATING SYSTEM ======
+    const starContainer = document.getElementById("starContainer");
+    const submitRatingBtn = document.getElementById("submitRating");
+    
+    // Jika elemen rating tidak ada, keluar
+    if (!starContainer || !submitRatingBtn) return;
 
-  // ====== Element references ======
-  const openPinjamModal = document.getElementById("openPinjamModal");
-  const pinjamModal = document.getElementById("pinjamModal");
-  const closeModalBtn = document.getElementById("closeModalBtn");
-  const tglPinjamInput = document.getElementById("tglPinjamInput");
-  const tglKembaliInput = document.getElementById("tglKembaliInput");
-  const konfirmasiBtn = document.getElementById("konfirmasiPinjam");
-  const closeKosong = document.getElementById("closeKosong");
-  const popupStokKosong = document.getElementById("popupStokKosong");
-  const loveBtn = document.getElementById('loveBtn');
-  const heartIcon = document.getElementById('heartIcon');
-  const bukuId = "<?php echo e($buku->id); ?>";
-  const starContainer = document.getElementById("starContainer");
-  const submitRatingBtn = document.getElementById("submitRating");
-
-  // ====== Utility: format date yyyy-mm-dd ======
-  const now = new Date();
-  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-  const maxDate = new Date(today);
-  maxDate.setDate(today.getDate() + 7);
-  const formatDate = d => d.toISOString().split("T")[0];
-
-  // ====== Modal open/close handlers ======
-  if (openPinjamModal && pinjamModal) {
-    openPinjamModal.addEventListener("click", (e) => {
-      e.preventDefault();
-      pinjamModal.classList.remove("hidden");
-      resetModal();
-      // optional: focus first input
-      if (tglKembaliInput) tglKembaliInput.focus();
-    });
-  }
-
-  if (closeModalBtn && pinjamModal) {
-    closeModalBtn.addEventListener("click", () => {
-      pinjamModal.classList.add("hidden");
-    });
-  }
-
-  // close stok kosong popup
-  if (closeKosong && popupStokKosong) {
-    closeKosong.addEventListener("click", () => {
-      popupStokKosong.classList.add("hidden");
-    });
-  }
-
-  // close modal when clicking outside content
-  if (pinjamModal) {
-    pinjamModal.addEventListener("click", (e) => {
-      if (e.target === pinjamModal) {
-        pinjamModal.classList.add("hidden");
-      }
-    });
-  }
-
-  // ====== Set tanggal pinjam & min/max tanggal kembali ======
-  if (tglPinjamInput) {
-    tglPinjamInput.value = formatDate(today);
-  }
-  if (tglKembaliInput) {
-    tglKembaliInput.min = formatDate(today);
-    tglKembaliInput.max = formatDate(maxDate);
-    tglKembaliInput.value = '';
-  }
-
-  function resetModal() {
-    if (tglKembaliInput) tglKembaliInput.value = '';
-  }
-
-  // ====== Konfirmasi peminjaman (AJAX) ======
-  if (konfirmasiBtn) {
-    konfirmasiBtn.addEventListener("click", async () => {
-      const tanggalKembali = tglKembaliInput ? tglKembaliInput.value : '';
-
-      // Validasi: tanggal harus diisi
-      if (!tanggalKembali) {
-        SwalDefault.fire({
-          icon: "warning",
-          title: "Peringatan",
-          text: "Tanggal kembali belum diisi"
-        });
-        return;
-      }
-
-      // Validasi: tidak boleh < today
-      const selectedReturnDate = new Date(tanggalKembali);
-      if (selectedReturnDate < today) {
-        SwalDefault.fire({
-          icon: "warning",
-          title: "Peringatan",
-          text: "Tanggal kembali tidak boleh kurang dari tanggal pinjam"
-        });
-        return;
-      }
-
-      // Validasi: maksimal 7 hari
-      const diffTime = selectedReturnDate - today;
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      if (diffDays > 7) {
-        SwalDefault.fire({
-          icon: "warning",
-          title: "Peringatan",
-          text: "Maksimal peminjaman adalah 7 hari"
-        });
-        return;
-      }
-
-      try {
-        // Tampilkan loading state
-        konfirmasiBtn.disabled = true;
-        konfirmasiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
-
-        // Kirim request peminjaman
-        const response = await fetch("<?php echo e(route('pinjam.store')); ?>", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
-            "Accept": "application/json",
-            "X-Requested-With": "XMLHttpRequest"
-          },
-          body: JSON.stringify({
-            buku_id: "<?php echo e($buku->id); ?>",
-            tanggal_kembali: tanggalKembali
-          })
-        });
-
-        const responseText = await response.text();
-
-        let result;
-        try {
-          result = JSON.parse(responseText);
-        } catch (parseError) {
-          // Jika server tidak mengembalikan JSON valid
-          throw new Error("Response tidak valid dari server");
-        }
-
-        if (result.success) {
-          // Tutup modal sebelum menampilkan alert
-          if (pinjamModal) pinjamModal.classList.add("hidden");
-
-          // Tampilkan SweetAlert sukses (menggunakan mixin sehingga pasti di depan)
-          await SwalDefault.fire({
-            icon: "success",
-            title: "Berhasil!",
-            text: result.message,
-            timer: 2000,
-            timerProgressBar: true,
-            showConfirmButton: false
-          });
-
-          // Redirect setelah timer
-          window.location.href = "<?php echo e(route('user.riwayatbuku')); ?>";
-        } else {
-          // Error dari server (tetap dengan SweetAlert front)
-          SwalDefault.fire({
-            icon: "error",
-            title: "Gagal",
-            text: result.message || "Terjadi kesalahan saat meminjam buku"
-          });
-        }
-
-      } catch (error) {
-        console.error("Error peminjaman:", error);
-        SwalDefault.fire({
-          icon: "error",
-          title: "Error",
-          text: "Terjadi kesalahan sistem: " + (error.message || "Unknown")
-        });
-      } finally {
-        // Reset tombol
-        konfirmasiBtn.disabled = false;
-        konfirmasiBtn.innerHTML = '<i class="fa-solid fa-check text-[#2E2E2E]"></i> Konfirmasi';
-      }
-    });
-  }
-
-  // ====== Toggle favorit (love) ======
-  if (loveBtn && heartIcon) {
-    loveBtn.addEventListener('click', async () => {
-      try {
-        const res = await fetch("<?php echo e(route('user.favorit.toggle')); ?>", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>"
-          },
-          body: JSON.stringify({ buku_id: bukuId })
-        });
-
-        const data = await res.json();
-
-        if (data.favorited) {
-          heartIcon.classList.remove('fa-regular');
-          heartIcon.classList.add('fa-solid', 'text-[#E63946]');
-        } else {
-          heartIcon.classList.remove('fa-solid', 'text-[#E63946]');
-          heartIcon.classList.add('fa-regular');
-        }
-
-      } catch (err) {
-        console.error(err);
-        SwalDefault.fire({
-          icon: "error",
-          title: "Gagal",
-          text: "Tidak dapat mengubah favorit sekarang."
-        });
-      }
-    });
-  }
-
-  // ====== Rating stars ======
-  if (starContainer && submitRatingBtn) {
-    const stars = starContainer.querySelectorAll("i");
-    submitRatingBtn.classList.remove("hidden");
+    const stars = starContainer.querySelectorAll(".rating-star");
     let selectedRating = 0;
+    const bukuId = "<?php echo e($buku->id); ?>";
 
-    stars.forEach(star => {
-      star.addEventListener("mouseover", function () {
-        const rating = this.dataset.star;
-        stars.forEach(s => {
-          s.classList.remove("fa-solid", "text-yellow-500");
-          s.classList.add("fa-regular", "text-[#d5ccb8]");
+    console.log('Rating system initialized'); // Debug
+
+    // Fungsi untuk update tampilan bintang
+    function updateStars(rating, permanent = false) {
+        stars.forEach((star, index) => {
+            const starNumber = index + 1;
+            if (starNumber <= rating) {
+                star.classList.remove('fa-regular', 'text-[#d5ccb8]');
+                star.classList.add('fa-solid', 'text-yellow-500');
+            } else {
+                star.classList.remove('fa-solid', 'text-yellow-500');
+                star.classList.add('fa-regular', 'text-[#d5ccb8]');
+            }
         });
-        for (let i = 0; i < rating; i++) {
-          stars[i].classList.remove("fa-regular", "text-[#d5ccb8]");
-          stars[i].classList.add("fa-solid", "text-yellow-500");
+        
+        if (permanent) {
+            selectedRating = rating;
         }
-      });
+    }
 
-      star.addEventListener("click", function () {
-        selectedRating = this.dataset.star;
-      });
+    // Event hover untuk bintang
+    stars.forEach(star => {
+        star.addEventListener("mouseover", function() {
+            const rating = parseInt(this.dataset.star);
+            updateStars(rating, false);
+        });
+
+        star.addEventListener("click", function() {
+            selectedRating = parseInt(this.dataset.star);
+            updateStars(selectedRating, true);
+            
+            // Aktifkan tombol submit
+            submitRatingBtn.disabled = false;
+            submitRatingBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            submitRatingBtn.classList.add('hover:bg-[#4d5e34]', 'active:scale-95');
+            
+            console.log('Rating selected:', selectedRating); // Debug
+        });
     });
 
-    starContainer.addEventListener("mouseleave", function () {
-      stars.forEach(s => {
-        s.classList.remove("fa-solid", "text-yellow-500");
-        s.classList.add("fa-regular", "text-[#d5ccb8]");
-      });
-      for (let i = 0; i < selectedRating; i++) {
-        stars[i].classList.remove("fa-regular", "text-[#d5ccb8]");
-        stars[i].classList.add("fa-solid", "text-yellow-500");
-      }
+    // Reset bintang saat mouse leave
+    starContainer.addEventListener("mouseleave", function() {
+        updateStars(selectedRating, true);
     });
-  }
 
-}); // end DOMContentLoaded
+    // Submit rating
+    submitRatingBtn.addEventListener("click", async function() {
+        if (selectedRating === 0) {
+            Swal.fire({
+                icon: "warning",
+                title: "Peringatan",
+                text: "Pilih rating terlebih dahulu!"
+            });
+            return;
+        }
 
+        try {
+            // Tampilkan loading
+            submitRatingBtn.disabled = true;
+            submitRatingBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
 
-// ====== Konfigurasi awal ======
+            const response = await fetch("<?php echo e(route('user.rating.store')); ?>", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    buku_id: bukuId,
+                    rating: selectedRating
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Berhasil!",
+                    text: result.message,
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: result.message
+                });
+                
+                // Reset tombol
+                submitRatingBtn.disabled = false;
+                submitRatingBtn.innerHTML = 'Kirim Rating';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Terjadi kesalahan sistem"
+            });
+            
+            // Reset tombol
+            submitRatingBtn.disabled = false;
+            submitRatingBtn.innerHTML = 'Kirim Rating';
+        }
+    });
+});
+</script>
+<!-- Script Peminjaman Buku -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // ====== PEMINJAMAN BUKU ======
+    const openPinjamModal = document.getElementById("openPinjamModal");
+    const pinjamModal = document.getElementById("pinjamModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const tglPinjamInput = document.getElementById("tglPinjamInput");
+    const tglKembaliInput = document.getElementById("tglKembaliInput");
+    const konfirmasiBtn = document.getElementById("konfirmasiPinjam");
+
+    if (!openPinjamModal || !pinjamModal) return;
+
+    // Utility: format date yyyy-mm-dd
+    const now = new Date();
+    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+    const maxDate = new Date(today);
+    maxDate.setDate(today.getDate() + 7);
+    const formatDate = d => d.toISOString().split("T")[0];
+
+    // Set tanggal pinjam & min/max tanggal kembali
+    if (tglPinjamInput) {
+        tglPinjamInput.value = formatDate(today);
+    }
+    if (tglKembaliInput) {
+        tglKembaliInput.min = formatDate(today);
+        tglKembaliInput.max = formatDate(maxDate);
+        tglKembaliInput.value = '';
+    }
+
+    function resetModal() {
+        if (tglKembaliInput) tglKembaliInput.value = '';
+    }
+
+    // Modal open/close handlers
+    openPinjamModal.addEventListener("click", (e) => {
+        e.preventDefault();
+        pinjamModal.classList.remove("hidden");
+        resetModal();
+        if (tglKembaliInput) tglKembaliInput.focus();
+    });
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener("click", () => {
+            pinjamModal.classList.add("hidden");
+        });
+    }
+
+    // Close modal when clicking outside content
+    pinjamModal.addEventListener("click", (e) => {
+        if (e.target === pinjamModal) {
+            pinjamModal.classList.add("hidden");
+        }
+    });
+
+    // Konfirmasi peminjaman
+    if (konfirmasiBtn) {
+        konfirmasiBtn.addEventListener("click", async () => {
+            const tanggalKembali = tglKembaliInput ? tglKembaliInput.value : '';
+
+            if (!tanggalKembali) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Peringatan",
+                    text: "Tanggal kembali belum diisi"
+                });
+                return;
+            }
+
+            const selectedReturnDate = new Date(tanggalKembali);
+            if (selectedReturnDate < today) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Peringatan",
+                    text: "Tanggal kembali tidak boleh kurang dari tanggal pinjam"
+                });
+                return;
+            }
+
+            const diffTime = selectedReturnDate - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            if (diffDays > 7) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Peringatan",
+                    text: "Maksimal peminjaman adalah 7 hari"
+                });
+                return;
+            }
+
+            try {
+                konfirmasiBtn.disabled = true;
+                konfirmasiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+
+                const response = await fetch("<?php echo e(route('pinjam.store')); ?>", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        buku_id: "<?php echo e($buku->id); ?>",
+                        tanggal_kembali: tanggalKembali
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    pinjamModal.classList.add("hidden");
+                    await Swal.fire({
+                        icon: "success",
+                        title: "Berhasil!",
+                        text: result.message,
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    window.location.href = "<?php echo e(route('user.riwayatbuku')); ?>";
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: result.message || "Terjadi kesalahan saat meminjam buku"
+                    });
+                }
+            } catch (error) {
+                console.error("Error peminjaman:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Terjadi kesalahan sistem"
+                });
+            } finally {
+                konfirmasiBtn.disabled = false;
+                konfirmasiBtn.innerHTML = '<i class="fa-solid fa-check text-[#2E2E2E]"></i> Konfirmasi';
+            }
+        });
+    }
+});
+</script>
+<!-- Script Favorit -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // ====== FAVORIT SYSTEM ======
+    const loveBtn = document.getElementById('loveBtn');
+    const heartIcon = document.getElementById('heartIcon');
+    const bukuId = "<?php echo e($buku->id); ?>";
+
+    if (!loveBtn || !heartIcon) return;
+
+    loveBtn.addEventListener('click', async () => {
+        try {
+            const res = await fetch("<?php echo e(route('user.favorit.toggle')); ?>", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "<?php echo e(csrf_token()); ?>"
+                },
+                body: JSON.stringify({ buku_id: bukuId })
+            });
+
+            const data = await res.json();
+
+            if (data.favorited) {
+                heartIcon.classList.remove('fa-regular');
+                heartIcon.classList.add('fa-solid', 'text-[#E63946]');
+            } else {
+                heartIcon.classList.remove('fa-solid', 'text-[#E63946]');
+                heartIcon.classList.add('fa-regular');
+            }
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: "Tidak dapat mengubah favorit sekarang."
+            });
+        }
+    });
+});
+</script>
+<!-- Script PDF Viewer -->
+<script>
+// ====== PDF VIEWER ======
 let pdfDoc = null;
-let zoom = 1.0; // ← UKURAN AWAL 100%
+let zoom = 1.0;
 let totalPages = 0;
-const DEFAULT_URL_FALLBACK = "/mnt/data/5e9aa4f2-b5a9-4417-a057-03dd679ca248.png";
 
 const viewer = document.getElementById("pdfViewer");
 const zoomInBtn = document.getElementById("zoomIn");
@@ -778,214 +845,117 @@ const openBtn = document.getElementById("openPdfModal");
 const closeBtn = document.getElementById("closePdfModal");
 const modal = document.getElementById("pdfModal");
 
-// debounce
+// Debounce function
 function debounce(fn, wait = 120) {
-  let t;
-  return (...args) => {
-    clearTimeout(t);
-    t = setTimeout(() => fn(...args), wait);
-  };
+    let t;
+    return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...args), wait);
+    };
 }
 
-// render satu halaman
+// Render satu halaman PDF
 function renderPage(pageNum) {
-  return pdfDoc.getPage(pageNum).then(page => {
-    const viewport = page.getViewport({ scale: zoom });
+    return pdfDoc.getPage(pageNum).then(page => {
+        const viewport = page.getViewport({ scale: zoom });
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
 
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
 
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
+        canvas.style.marginBottom = "20px";
+        canvas.style.border = "1px solid #ddd";
+        canvas.style.borderRadius = "10px";
+        canvas.style.background = "white";
+        canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+        canvas.style.display = "block";
+        canvas.style.marginLeft = "auto";
+        canvas.style.marginRight = "auto";
 
-    canvas.style.marginBottom = "20px";
-    canvas.style.border = "1px solid #ddd";
-    canvas.style.borderRadius = "10px";
-    canvas.style.background = "white";
-    canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
-    canvas.style.display = "block";
-    canvas.style.marginLeft = "auto";
-    canvas.style.marginRight = "auto";
+        const wrap = document.createElement("div");
+        wrap.appendChild(canvas);
+        viewer.appendChild(wrap);
 
-    const wrap = document.createElement("div");
-    wrap.appendChild(canvas);
-    viewer.appendChild(wrap);
-
-    return page.render({
-      canvasContext: ctx,
-      viewport: viewport
-    }).promise.then(() => {
-      document.dispatchEvent(new Event("pdf-render-finished"));
-      return canvas;
+        return page.render({
+            canvasContext: ctx,
+            viewport: viewport
+        }).promise.then(() => canvas);
     });
-  });
 }
 
-// render semua halaman
+// Render semua halaman PDF
 function renderAllPages() {
-  if (!pdfDoc) return Promise.resolve();
+    if (!pdfDoc) return Promise.resolve();
+    viewer.innerHTML = "";
+    pageCurrentEl.innerText = "1";
 
-  viewer.innerHTML = "";
-  pageCurrentEl.innerText = "1";
-
-  const renderPromises = [];
-  for (let i = 1; i <= totalPages; i++) {
-    renderPromises.push(renderPage(i));
-  }
-
-  return Promise.all(renderPromises).then(canvases => {
-    zoomLabel.innerText = Math.round(zoom * 100) + "%";
-    pageTotalEl.innerText = totalPages;
-
-    fixPdfLayout();
-    centerPdfDesktop();
-
-    document.dispatchEvent(new Event("pdf-render-finished-all"));
-
-    return canvases;
-  });
-}
-
-// open PDF
-openBtn.addEventListener("click", function () {
-  const url = this.getAttribute("data-url") || DEFAULT_URL_FALLBACK;
-  modal.classList.remove("hidden");
-
-  viewer.innerHTML = "<p class='text-center mt-5 text-gray-500'>Memuat PDF...</p>";
-
-  pdfjsLib.getDocument(url).promise.then(pdf => {
-    pdfDoc = pdf;
-    totalPages = pdf.numPages;
-    pageTotalEl.innerText = totalPages;
-
-    zoom = 1.0; // ← RESET SELALU 100% SAAT BUKA PDF
-    zoomLabel.innerText = "100%";
-
-    renderAllPages();
-  }).catch(err => {
-    viewer.innerHTML = `<p class="text-center text-red-500 mt-6">Gagal memuat PDF: ${err.message}</p>`;
-    console.error("PDF load error:", err);
-  });
-});
-
-// close PDF
-closeBtn.addEventListener("click", () => {
-  modal.classList.add("hidden");
-  viewer.innerHTML = "";
-  pageCurrentEl.innerText = "1";
-  pdfDoc = null;
-  totalPages = 0;
-});
-
-// zoom in
-zoomInBtn.addEventListener("click", () => {
-  if (zoom < 3.0) {
-    zoom = +(zoom + 0.2).toFixed(2);
-    renderAllPages();
-    viewer.scrollTop = 0;
-  }
-});
-
-// zoom out
-zoomOutBtn.addEventListener("click", () => {
-  if (zoom > 0.4) {
-    zoom = +(zoom - 0.2).toFixed(2);
-    renderAllPages();
-    viewer.scrollTop = 0;
-  }
-});
-
-// update page on scroll
-function updateCurrentPageOnScroll() {
-  const canvases = Array.from(viewer.querySelectorAll("canvas"));
-  if (!canvases.length) return;
-
-  const scrollTop = viewer.scrollTop;
-  const midpoint = scrollTop + (viewer.clientHeight / 2);
-
-  let current = 1;
-  for (let i = 0; i < canvases.length; i++) {
-    const rectTop = canvases[i].offsetTop;
-    const rectBottom = rectTop + canvases[i].offsetHeight;
-    if (midpoint >= rectTop && midpoint <= rectBottom) {
-      current = i + 1;
-      break;
+    const renderPromises = [];
+    for (let i = 1; i <= totalPages; i++) {
+        renderPromises.push(renderPage(i));
     }
-    if (i === canvases.length - 1 && midpoint > rectTop) {
-      current = canvases.length;
-    }
-  }
 
-  pageCurrentEl.innerText = current;
-}
-viewer.addEventListener("scroll", debounce(updateCurrentPageOnScroll, 60));
-
-// layout fixes
-function fixPdfLayout() {
-  const canvases = viewer.querySelectorAll("canvas");
-  if (!canvases.length) return;
-
-  if (window.innerWidth < 640) {
-    canvases.forEach(c => {
-      c.style.width = "100%";
-      c.style.height = "auto";
-      c.style.maxWidth = "none";
+    return Promise.all(renderPromises).then(() => {
+        zoomLabel.innerText = Math.round(zoom * 100) + "%";
+        pageTotalEl.innerText = totalPages;
     });
-    zoomLabel.textContent = "100%";
-  } else {
-    canvases.forEach(c => {
-      c.style.width = "auto";
-      c.style.height = "auto";
-      c.style.maxWidth = "100%";
-    });
-    zoomLabel.textContent = Math.round(zoom * 100) + "%";
-  }
 }
 
-function centerPdfDesktop() {
-  if (window.innerWidth >= 640) {
-    document.querySelectorAll("#pdfViewer canvas").forEach(c => {
-      c.style.marginLeft = "auto";
-      c.style.marginRight = "auto";
-      c.style.display = "block";
+// Event listeners untuk PDF
+if (openBtn) {
+    openBtn.addEventListener("click", function () {
+        const url = this.getAttribute("data-url");
+        modal.classList.remove("hidden");
+        viewer.innerHTML = "<p class='text-center mt-5 text-gray-500'>Memuat PDF...</p>";
+
+        pdfjsLib.getDocument(url).promise.then(pdf => {
+            pdfDoc = pdf;
+            totalPages = pdf.numPages;
+            pageTotalEl.innerText = totalPages;
+            zoom = 1.0;
+            zoomLabel.innerText = "100%";
+            renderAllPages();
+        }).catch(err => {
+            viewer.innerHTML = `<p class="text-center text-red-500 mt-6">Gagal memuat PDF: ${err.message}</p>`;
+        });
     });
-  } else {
-    document.querySelectorAll("#pdfViewer canvas").forEach(c => {
-      c.style.display = "block";
-      c.style.marginLeft = "";
-      c.style.marginRight = "";
-    });
-  }
 }
 
-// handle resize
-const onResize = debounce(() => {
-  fixPdfLayout();
-  centerPdfDesktop();
-}, 150);
-window.addEventListener("resize", onResize);
+if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        viewer.innerHTML = "";
+        pageCurrentEl.innerText = "1";
+        pdfDoc = null;
+        totalPages = 0;
+    });
+}
 
-// event hooks
-document.addEventListener("pdf-render-finished", () => {
-  fixPdfLayout();
-  centerPdfDesktop();
-  updateCurrentPageOnScroll();
-});
+if (zoomInBtn) {
+    zoomInBtn.addEventListener("click", () => {
+        if (zoom < 3.0) {
+            zoom = +(zoom + 0.2).toFixed(2);
+            renderAllPages();
+        }
+    });
+}
 
-document.addEventListener("pdf-render-finished-all", () => {
-  fixPdfLayout();
-  centerPdfDesktop();
-  updateCurrentPageOnScroll();
-});
+if (zoomOutBtn) {
+    zoomOutBtn.addEventListener("click", () => {
+        if (zoom > 0.4) {
+            zoom = +(zoom - 0.2).toFixed(2);
+            renderAllPages();
+        }
+    });
+}
 
-// ESC to close
+// ESC to close PDF modal
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-    closeBtn.click();
-  }
+    if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) {
+        closeBtn.click();
+    }
 });
 </script>
-
   
 
 </body>

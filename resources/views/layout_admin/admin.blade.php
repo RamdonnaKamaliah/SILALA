@@ -5,10 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @include('layout_admin.partial_admin.link')
 
-    <style>
+    {{-- <style>
         html,
         body {
             max-width: 100%;
@@ -30,9 +30,9 @@
                 padding-right: 1rem;
             }
         }
-    </style>
-
-    @stack('styles')
+    </style> --}}
+    {{-- 
+    @stack('styles') --}}
 
 </head>
 
@@ -56,7 +56,8 @@
     <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="{{ asset('assets_admin/js/dataBuku/deleteArsip.js') }}"></script>
     <script src="{{ asset('assets_admin/js/arsipBuku/deleteArsip.js') }}"></script>
-    @stack('scripts')
+    <script src="{{ asset('assets_admin/js/dataBuku/ModalPlilhMedia.js') }}"></script>
+    {{-- @stack('scripts') --}}
 </body>
 
 </html>

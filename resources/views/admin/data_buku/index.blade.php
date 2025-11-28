@@ -8,7 +8,6 @@
     <div class="p-4 md:p-8 font-[Poppins] text-slate-800 bg-gray-50 min-h-screen">
 
         <div class="user-dashboard p-4 md:p-6 bg-gray-50 min-h-screen">
-
             <!-- Header Profesional -->
             <div class="flex items-center mb-6">
                 <div class="bg-user-primary p-3 rounded-xl mr-4 shadow-sm">

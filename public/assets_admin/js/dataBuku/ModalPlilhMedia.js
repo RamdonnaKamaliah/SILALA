@@ -1,27 +1,24 @@
-const modal = document.getElementById("imageModal");
+const modal = document.getElementById("modalGambar");
 const openBtn = document.getElementById("openModalBtn");
 const closeBtn = document.getElementById("closeModalBtn");
-const preview = document.getElementById("previewImage");
-const input = document.getElementById("selectedImageInput");
 
-// Open modal
+const preview = document.getElementById("previewImage");
+const inputHidden = document.getElementById("gambar_buku");
+
 openBtn.addEventListener("click", () => {
     modal.classList.remove("hidden");
     modal.classList.add("flex");
 });
 
-// Close modal
 closeBtn.addEventListener("click", () => {
-    modal.classList.remove("flex");
     modal.classList.add("hidden");
+    modal.classList.remove("flex");
 });
 
-// choose image
-function selectImage(id, url) {
-    document.getElementById("selectedImageInput").value = id;
+function pilihGambar(pathFile, urlImage) {
+    preview.src = urlImage;
+    inputHidden.value = pathFile;
 
-    document.getElementById("previewImage").src = url;
-    document.getElementById("previewImage").classList.remove("hidden");
-
-    document.getElementById("imageModal").classList.add("hidden");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
 }

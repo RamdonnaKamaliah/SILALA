@@ -57,7 +57,6 @@
     <script src="{{ asset('assets_admin/js/dataBuku/deleteArsip.js') }}"></script>
     <script src="{{ asset('assets_admin/js/arsipBuku/deleteArsip.js') }}"></script>
     @stack('scripts')
-
 </body>
 
 </html>

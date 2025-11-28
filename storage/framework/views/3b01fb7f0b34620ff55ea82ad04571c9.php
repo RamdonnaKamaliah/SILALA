@@ -106,31 +106,26 @@
               $tanggalPinjam = \Carbon\Carbon::parse($data->tanggal_pinjam)->translatedFormat('d F Y');
               $tanggalKembali = \Carbon\Carbon::parse($data->tanggal_kembali)->translatedFormat('d F Y');
 
-              $hariTelat = 0;
-              $denda = 0;
-              $isTerlambat = false;
-              
-              if ($status === 'dipinjam' && now()->gt($data->tanggal_kembali)) {
-                  $hariTelat = $data->tanggal_kembali < now()
-    ? now()->diffInDays($data->tanggal_kembali)
-    : 0;
-
-                  $denda = $hariTelat * 1000;
-                  $isTerlambat = true;
-              }
+              // Gunakan accessor dari model
+              $hariTelat = $data->hari_telat;
+              $isTerlambat = $data->is_terlambat;
             ?>
-
             <tr class="hover:bg-[#FFF8E8] transition">
               <td class="py-4 px-4 relative min-w-[220px]">
-                <div class="flex items-center gap-3">
+                <!-- 🔗 UBAH: Tambahkan link ke detail buku -->
+                <a href="<?php echo e(route('user.detailbuku', ['id' => $buku->id, 'from' => 'riwayatbuku'])); ?>" 
+                   class="flex items-center gap-3 hover:no-underline group">
                   <img src="<?php echo e(asset($buku->foto_buku ?? 'assets/default-cover.jpg')); ?>"
                        alt="Buku"
-                       class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0">
+                       class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0 group-hover:shadow-xl transition-shadow duration-200">
                   <div class="min-w-0">
-                    <p class="font-semibold text-sm leading-snug"><?php echo e($buku->judul_buku); ?></p>
+                    <p class="font-semibold text-sm leading-snug group-hover:text-[#626F47] transition-colors duration-200">
+                      <?php echo e($buku->judul_buku); ?>
+
+                    </p>
                     <p class="text-[#626F47] text-xs font-medium"><?php echo e($buku->penulis); ?></p>
                   </div>
-                </div>
+                </a>
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
 
@@ -150,14 +145,18 @@
                 <?php if($status === 'dipinjam'): ?>
                   <?php if($isTerlambat): ?>
                     Telat <?php echo e($hariTelat); ?> Hari
-                    <br><span class="text-xs text-red-500">Denda: Rp <?php echo e(number_format($denda, 0, ',', '.')); ?></span>
+                    <br><span class="text-xs text-orange-500">Teguran</span>
                   <?php else: ?>
                     Masih Dipinjam
                   <?php endif; ?>
                 <?php elseif($status === 'menunggu_konfirmasi'): ?>
                   Menunggu Konfirmasi Admin
                 <?php else: ?>
-                  Tepat Waktu
+                  <?php if($data->keterangan && str_contains($data->keterangan, 'Terlambat')): ?>
+                    <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
+                  <?php else: ?>
+                    Tepat Waktu
+                  <?php endif; ?>
                 <?php endif; ?>
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
@@ -166,12 +165,12 @@
                 <?php if($status === 'dipinjam'): ?>
                   <?php if($isTerlambat): ?>
                     <div class="flex items-start relative">
-                      <span class="iconify text-[#B43131] w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:close"></span>
+                      <span class="iconify text-[#B43131] w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:alert-circle-outline"></span>
                       <div>
-                        <span class="inline-flex items-center bg-[#FFD1D1] text-[#B43131] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
+                        <span class="inline-flex items-center bg-[#FFEBCD] text-[#B43131] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
                           Terlambat
                         </span>
-                        <span class="block mt-1 text-[11px] text-red-500 italic">*Denda Rp 1.000 per hari</span>
+                        <span class="block mt-1 text-[11px] text-orange-500 italic">*Peringatan keterlambatan</span>
                       </div>
                     </div>
                   <?php else: ?>

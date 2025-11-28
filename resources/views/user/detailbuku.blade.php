@@ -10,6 +10,13 @@
 
   <!-- Custom Style -->
   <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
+  <style>
+    #pdfViewer.zoom-small {
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+    }
+</style>
 </head>
 <body class="min-h-screen font-[Ubuntu,sans-serif] bg-white flex">
 
@@ -27,15 +34,27 @@
   <div class="flex justify-between items-center w-full relative">
 
     <!-- ===== Judul & Panah ===== -->
-    <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3 md:static md:transform-none">
-      <a href="{{ route('user.daftarbuku') }}"
+<div class="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3 md:static md:transform-none">
+  <button onclick="goBack()"
          class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
-        <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
-      </a>
-      <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
-        {{ $title ?? 'Detail Buku' }}
-      </h1>
-    </div>
+    <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
+  </button>
+  <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
+    {{ $title ?? 'Detail Buku' }}
+  </h1>
+</div>
+
+<script>
+function goBack() {
+  // Cek jika ada referrer (halaman sebelumnya)
+  if (document.referrer && document.referrer.includes(window.location.hostname)) {
+    window.history.back();
+  } else {
+    // Default ke daftar buku jika tidak ada history
+    window.location.href = "{{ route('user.daftarbuku') }}";
+  }
+}
+</script>
 
     <!-- ===== Ikon kanan ===== -->
     <div class="relative flex items-center gap-4 ml-auto">
@@ -378,9 +397,9 @@
 
         <!-- VIEWER -->
         <div id="pdfViewer"
-    class="flex-1 overflow-y-auto overflow-x-auto bg-gray-50 scroll-smooth
+    class="flex-1 overflow-y-auto bg-gray-50 scroll-smooth
            p-2 sm:p-8
-           flex sm:justify-center">
+           flex flex-col items-center">
 </div>
     </div>
 </div>
@@ -484,9 +503,7 @@
 </div>
 @endif
   </div>
-
 </div>
-
 </main>
 
   <!-- SweetAlert2 -->
@@ -806,10 +823,16 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 <!-- Script PDF Viewer -->
 <script>
-// ====== PDF VIEWER ======
+ /* ============================================================
+   PDF VIEWER — FULL REFACTOR (Mobile friendly, Responsive)
+   Replace entire previous script with this.
+============================================================ */
+
 let pdfDoc = null;
-let zoom = 1.0;
+let zoom = 1.0;           // used for desktop zoom only
 let totalPages = 0;
+let observer = null;
+let resizeTimeout = null;
 
 const viewer = document.getElementById("pdfViewer");
 const zoomInBtn = document.getElementById("zoomIn");
@@ -821,119 +844,248 @@ const openBtn = document.getElementById("openPdfModal");
 const closeBtn = document.getElementById("closePdfModal");
 const modal = document.getElementById("pdfModal");
 
-// Debounce function
-function debounce(fn, wait = 120) {
-    let t;
-    return (...args) => {
-        clearTimeout(t);
-        t = setTimeout(() => fn(...args), wait);
-    };
+/* ============================================================
+   CLEANUP
+============================================================ */
+function cleanupViewer() {
+    if (observer) {
+        observer.disconnect();
+        observer = null;
+    }
+    if (viewer) viewer.innerHTML = "";
+    zoom = 1.0;
+    pdfDoc = null;
+    totalPages = 0;
+    pageCurrentEl && (pageCurrentEl.innerText = "0");
+    pageTotalEl && (pageTotalEl.innerText = "0");
 }
 
-// Render satu halaman PDF
+/* ============================================================
+   RENDER PAGE
+   (renders at scale 1 inside canvas, visual scaling done via CSS transform)
+============================================================ */
 function renderPage(pageNum) {
     return pdfDoc.getPage(pageNum).then(page => {
-        const viewport = page.getViewport({ scale: zoom });
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+        const viewport = page.getViewport({ scale: 1 });
 
+        const canvas = document.createElement("canvas");
+        canvas.className = "pdf-page";
+        canvas.dataset.pageNumber = pageNum;
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-
-        canvas.style.marginBottom = "20px";
-        canvas.style.border = "1px solid #ddd";
-        canvas.style.borderRadius = "10px";
-        canvas.style.background = "white";
-        canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.1)";
+        canvas.style.transformOrigin = "top center";
         canvas.style.display = "block";
-        canvas.style.marginLeft = "auto";
-        canvas.style.marginRight = "auto";
 
         const wrap = document.createElement("div");
+        wrap.className = "pdf-page-wrap";
+        wrap.dataset.wrapFor = pageNum;
+        wrap.style.display = "flex";
+        wrap.style.justifyContent = "center";
+        wrap.style.alignItems = "flex-start";
+        wrap.style.overflow = "hidden";
+
         wrap.appendChild(canvas);
         viewer.appendChild(wrap);
 
-        return page.render({
-            canvasContext: ctx,
-            viewport: viewport
-        }).promise.then(() => canvas);
+        const ctx = canvas.getContext("2d");
+        return page.render({ canvasContext: ctx, viewport }).promise;
     });
 }
 
-// Render semua halaman PDF
+/* ============================================================
+   RENDER ALL PAGES
+============================================================ */
 function renderAllPages() {
-    if (!pdfDoc) return Promise.resolve();
     viewer.innerHTML = "";
-    pageCurrentEl.innerText = "1";
+    const jobs = [];
+    for (let i = 1; i <= totalPages; i++) jobs.push(renderPage(i));
+    Promise.all(jobs).then(() => {
+        setupObserver();
+        applyZoom(); // layout after pages exist
+    });
+}
 
-    const renderPromises = [];
-    for (let i = 1; i <= totalPages; i++) {
-        renderPromises.push(renderPage(i));
+/* ============================================================
+   COLUMN LOGIC (desktop)
+============================================================ */
+function getColumns(z) {
+    if (window.innerWidth < 600) return 1; // mobile always single-page
+    if (z >= 1) return 1;
+    if (z >= 0.7) return 2;
+    if (z >= 0.45) return 3;
+    return 4;
+}
+
+/* ============================================================
+   APPLY ZOOM & LAYOUT
+   - Mobile: compute fit-to-screen per canvas (scale so page width = container width)
+   - Desktop: grid layout and use `zoom` scale
+============================================================ */
+function applyZoom() {
+    const pages = document.querySelectorAll(".pdf-page");
+    if (!pages || pages.length === 0) return;
+
+    const isMobile = window.innerWidth < 600;
+
+    if (isMobile) {
+        // MOBILE: single column, fit width
+        viewer.style.display = "block";
+        viewer.style.width = "100%";
+        viewer.style.overflowX = "hidden";
+
+        pages.forEach(canvas => {
+            const wrap = canvas.parentElement;
+            const containerWidth = viewer.clientWidth || window.innerWidth;
+            // ensure we leave small padding inside container if needed
+            const available = Math.max(1, containerWidth);
+            const scale = available / canvas.width;
+
+            canvas.style.transform = `scale(${scale})`;
+            canvas.style.transformOrigin = "top center";
+
+            wrap.style.width = available + "px";
+            wrap.style.height = (canvas.height * scale) + "px";
+            wrap.style.margin = "0 auto 16px auto";
+        });
+
+        // show "100%" (fit to screen) for mobile UX clarity
+        zoomLabel && (zoomLabel.innerText = "100%");
+        return;
     }
 
-    return Promise.all(renderPromises).then(() => {
-        zoomLabel.innerText = Math.round(zoom * 100) + "%";
-        pageTotalEl.innerText = totalPages;
+    // DESKTOP: grid using zoom
+    const cols = getColumns(zoom);
+
+    viewer.style.display = "grid";
+    viewer.style.gridTemplateColumns = `repeat(${cols}, auto)`;
+    viewer.style.justifyContent = "center";
+    viewer.style.alignItems = "start";
+    viewer.style.gap = (20 * zoom) + "px";
+    viewer.style.overflowX = "hidden";
+    viewer.style.width = "100%";
+
+    pages.forEach(canvas => {
+        const wrap = canvas.parentElement;
+        canvas.style.transform = `scale(${zoom})`;
+        canvas.style.transformOrigin = "top center";
+
+        wrap.style.width = (canvas.width * zoom) + "px";
+        wrap.style.height = (canvas.height * zoom) + "px";
+        wrap.style.margin = "0 auto";
     });
+
+    zoomLabel && (zoomLabel.innerText = Math.round(zoom * 100) + "%");
 }
 
-// Event listeners untuk PDF
-if (openBtn) {
-    openBtn.addEventListener("click", function () {
-        const url = this.getAttribute("data-url");
-        modal.classList.remove("hidden");
-        viewer.innerHTML = "<p class='text-center mt-5 text-gray-500'>Memuat PDF...</p>";
+/* ============================================================
+   OBSERVER — page indicator
+   Uses IntersectionObserver with root = viewer (the scroll container)
+============================================================ */
+function setupObserver() {
+    if (observer) {
+        observer.disconnect();
+        observer = null;
+    }
 
-        pdfjsLib.getDocument(url).promise.then(pdf => {
-            pdfDoc = pdf;
-            totalPages = pdf.numPages;
-            pageTotalEl.innerText = totalPages;
-            zoom = 1.0;
-            zoomLabel.innerText = "100%";
-            renderAllPages();
-        }).catch(err => {
-            viewer.innerHTML = `<p class="text-center text-red-500 mt-6">Gagal memuat PDF: ${err.message}</p>`;
+    const wraps = document.querySelectorAll(".pdf-page-wrap");
+    if (!wraps || wraps.length === 0) return;
+
+    // root: the viewer (so entries are relative to the viewer's viewport)
+    observer = new IntersectionObserver(entries => {
+        let bestPage = 1;
+        let bestRatio = 0;
+        entries.forEach(e => {
+            const p = parseInt(e.target.dataset.wrapFor, 10);
+            if (e.intersectionRatio > bestRatio) {
+                bestRatio = e.intersectionRatio;
+                bestPage = p;
+            }
         });
+        pageCurrentEl && (pageCurrentEl.innerText = bestPage);
+    }, {
+        root: viewer,
+        threshold: Array.from({ length: 21 }, (_, i) => i * 0.05)
     });
+
+    wraps.forEach(w => observer.observe(w));
 }
 
-if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-        modal.classList.add("hidden");
-        viewer.innerHTML = "";
-        pageCurrentEl.innerText = "1";
-        pdfDoc = null;
-        totalPages = 0;
-    });
+/* ============================================================
+   ZOOM CONTROLS
+============================================================ */
+function changeZoom(f) {
+    // zoom only affects desktop (mobile uses fit-to-screen)
+    zoom = Math.max(0.25, Math.min(zoom * f, 3));
+    applyZoom();
 }
 
-if (zoomInBtn) {
-    zoomInBtn.addEventListener("click", () => {
-        if (zoom < 3.0) {
-            zoom = +(zoom + 0.2).toFixed(2);
-            renderAllPages();
-        }
-    });
-}
+zoomInBtn?.addEventListener("click", () => changeZoom(1.15));
+zoomOutBtn?.addEventListener("click", () => changeZoom(1 / 1.15));
 
-if (zoomOutBtn) {
-    zoomOutBtn.addEventListener("click", () => {
-        if (zoom > 0.4) {
-            zoom = +(zoom - 0.2).toFixed(2);
-            renderAllPages();
-        }
-    });
-}
+// ctrl + wheel = zoom (desktop)
+viewer.addEventListener("wheel", e => {
+    if (e.ctrlKey) {
+        e.preventDefault();
+        changeZoom(e.deltaY < 0 ? 1.08 : 1 / 1.08);
+    }
+}, { passive: false });
 
-// ESC to close PDF modal
-document.addEventListener("keydown", (e) => {
+/* ============================================================
+   OPEN / LOAD PDF (modal) — uses pdfjsLib
+============================================================ */
+openBtn?.addEventListener("click", function () {
+    const url = this.dataset.url;
+    if (!url) return alert("URL PDF tidak ditemukan.");
+
+    // show modal
+    modal && modal.classList.remove("hidden");
+
+    // load PDF
+    pdfjsLib.getDocument(url).promise.then(pdf => {
+        cleanupViewer();
+        pdfDoc = pdf;
+        totalPages = pdf.numPages;
+        pageTotalEl && (pageTotalEl.innerText = totalPages);
+        renderAllPages();
+    }).catch(err => {
+        console.error("PDF load error:", err);
+        alert("Gagal memuat PDF.");
+        modal && modal.classList.add("hidden");
+    });
+});
+
+/* ============================================================
+   CLOSE
+============================================================ */
+closeBtn?.addEventListener("click", () => {
+    cleanupViewer();
+    modal && modal.classList.add("hidden");
+});
+
+document.addEventListener("keydown", e => {
     if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) {
-        closeBtn.click();
+        closeBtn && closeBtn.click();
     }
 });
-</script>
-  
 
+/* ============================================================
+   RESIZE HANDLING — reapply layout on resize (debounced)
+============================================================ */
+window.addEventListener("resize", () => {
+    if (resizeTimeout) clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        // Recompute layout for mobile/desktop transitions
+        applyZoom();
+
+        // Recreate observer root bounding if needed
+        if (observer) {
+            observer.disconnect();
+            setupObserver();
+        }
+    }, 120);
+});
+
+</script>
 </body>
 </html>
 

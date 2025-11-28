@@ -24,6 +24,8 @@ use App\Http\Controllers\user\FavoritController;
 use App\Http\Controllers\user\ProfilController;
 use App\Http\Controllers\user\EditProfilController;
 use App\Http\Controllers\user\RatingController;
+use App\Http\Controllers\Admin\MediaBukuController;
+
 
 // Public Routes
 Route::get('/', function () {
@@ -39,14 +41,6 @@ Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGo
 
 Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])
     ->name('google.callback');
-
-    
-
-Route::middleware('auth:web')->group(function () {
-    Route::get('/setup-password', [SetupPasswordController::class, 'index'])->name('setup.password');
-    Route::post('/setup-password', [SetupPasswordController::class, 'store'])->name('setup.password.store');
-});
-
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
@@ -86,12 +80,11 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');
     Route::post('/favorit/toggle', [FavoritController::class, 'toggle'])->name('user.favorit.toggle');
 
+    // RATING
     Route::post('/rating', [RatingController::class, 'store'])->name('user.rating.store');
-Route::get('/rating/{bukuId}', [RatingController::class, 'getUserRating'])->name('user.rating.get');
-Route::delete('/rating/{bukuId}', [RatingController::class, 'destroy'])->name('user.rating.destroy');
+    Route::get('/rating/{bukuId}', [RatingController::class, 'getUserRating'])->name('user.rating.get');
+    Route::delete('/rating/{bukuId}', [RatingController::class, 'destroy'])->name('user.rating.destroy');
 });
-
-
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
@@ -115,6 +108,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
     Route::delete('/data-kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
 
+    
     // Data Arsip Routes
     Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');
     Route::post('/data_arsip/bulk-restore', [DataArsipController::class, 'bulkRestore'])
@@ -132,16 +126,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::put('/data_peminjam/{id}/masalah', [DataPeminjamController::class, 'masalah'])
         ->name('data_peminjam.masalah');
 
-
-
     // Data Denda Routes
     Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
  
+    // Media Buku Routes
+    Route::get('/media-buku', [MediaBukuController::class, 'index'])->name('media.index');
+    Route::delete('/media-buku/{id}', [MediaBukuController::class, 'destroy'])
+    ->name('media.destroy');
+
+
+
 });
-
-
-//route landingpage data buku
-    Route::get('/', [LandingpageController::class, 'index'])->name('landing.index');
 
 // Home Redirect Route
 Route::get('/home', function () {

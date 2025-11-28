@@ -25,6 +25,7 @@ return new class extends Migration
     $table->text('deskripsi');
     $table->integer('stok')->default(0);
     $table->string('file_buku')->nullable();
+    $table->unsignedBigInteger('foto_id')->nullable();
     $table->timestamps();
 });
 

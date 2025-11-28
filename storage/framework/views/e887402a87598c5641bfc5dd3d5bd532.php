@@ -34,14 +34,15 @@
     <!-- Grid Buku -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
       <?php $__empty_1 = true; $__currentLoopData = $riwayat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-      <div class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm">
+      <a href="<?php echo e(route('user.detailbuku', ['id' => $data->buku->id, 'from' => 'riwayatbaca'])); ?>" 
+         class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm block hover:no-underline group">
         <div class="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
           <img src="<?php echo e(asset($data->buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
                alt="<?php echo e($data->buku->judul_buku); ?>" 
-               class="w-full h-full object-cover">
+               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
         </div>
 
-        <p class="text-[#2E2E2E] text-center font-semibold text-sm mt-2">
+        <p class="text-[#2E2E2E] text-center font-semibold text-sm mt-2 group-hover:text-[#626F47] transition-colors duration-200">
           <?php echo e($data->buku->judul_buku ?? '-'); ?>
 
         </p>
@@ -50,12 +51,19 @@
 
         </p>
 
-        <div class="flex justify-center mt-1 text-yellow-400">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star-half-stroke"></i>
-          <i class="fa-regular fa-star"></i>
+        <div class="flex justify-center mt-1 text-yellow-400 text-xs">
+            <?php for($i = 1; $i <= 5; $i++): ?>
+                <?php if($i <= floor($data->buku->average_rating)): ?>
+                    <i class="fa-solid fa-star"></i>
+                <?php elseif($i - 0.5 <= $data->buku->average_rating): ?>
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                <?php else: ?>
+                    <i class="fa-regular fa-star"></i>
+                <?php endif; ?>
+            <?php endfor; ?>
+            <?php if($data->buku->total_ratings > 0): ?>
+                <span class="text-gray-600 text-xs ml-1">(<?php echo e(number_format($data->buku->average_rating, 1)); ?>)</span>
+            <?php endif; ?>
         </div>
 
         <p class="text-center text-xs text-gray-500 mt-1">
@@ -63,12 +71,12 @@
 
         </p>
 
-        <a href="<?php echo e(asset($data->buku->file_buku)); ?>" target="_blank">
-          <button class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
-            Lanjutkan Baca
-          </button>
-        </a>
-      </div>
+        <!-- 🔗 Tombol "Lanjutkan Baca" - gunakan event.stopPropagation() agar tidak trigger link parent -->
+        <button onclick="event.stopPropagation(); window.open('<?php echo e(asset($data->buku->file_buku)); ?>', '_blank');"
+          class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
+          Lanjutkan Baca
+        </button>
+      </a>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
       <p class="text-gray-500 col-span-full text-center mt-8">Belum ada riwayat baca.</p>
       <?php endif; ?>

@@ -26,7 +26,7 @@
 
             <!-- Form -->
             <form action="{{ route('admin.data_buku.store') }}" method="POST" enctype="multipart/form-data"
-                class="space-y-6">
+                class="space-y-6" enctype="multipart/form-data">
                 @csrf
 
 
@@ -43,6 +43,10 @@
                             <label class="form-label">
                                 <i class="fas fa-image text-primary"></i>
                                 <span>Foto Cover Buku</span>
+                                @error('foto_buku')
+                                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                                @enderror
+
                             </label>
 
                             <input type="file" id="foto_buku" name="foto_buku" accept="image/*"
@@ -65,7 +69,7 @@
                                 </div>
 
                                 {{-- input hidden untuk simpan path_file --}}
-                                <input type="hidden" name="gambar_buku" id="gambar_buku">
+                                <input type="hidden" name="foto_id" id="foto_id">
                             </div>
 
                         </div>
@@ -82,7 +86,7 @@
 
                                 @foreach ($media as $g)
                                     <div class="cursor-pointer border rounded p-1 hover:border-indigo-600 transition"
-                                        onclick="pilihGambar('{{ $g->path_file }}', '{{ asset('storage/' . $g->path_file) }}')">
+                                        onclick="pilihGambar('{{ $g->id }}', '{{ asset('storage/' . $g->path_file) }}')">
 
                                         <img src="{{ asset('storage/' . $g->path_file) }}"
                                             class="w-full h-32 object-cover rounded">

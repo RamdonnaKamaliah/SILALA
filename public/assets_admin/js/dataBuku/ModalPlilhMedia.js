@@ -15,10 +15,8 @@ closeBtn.addEventListener("click", () => {
     modal.classList.remove("flex");
 });
 
-function pilihGambar(pathFile, urlImage) {
-    preview.src = urlImage;
-    inputHidden.value = pathFile;
-
-    modal.classList.add("hidden");
-    modal.classList.remove("flex");
+function pilihGambar(id, full_path) {
+    document.getElementById("foto_id").value = id;
+    document.getElementById("previewImage").src = full_path;
+    document.getElementById("modalGambar").classList.add("hidden");
 }

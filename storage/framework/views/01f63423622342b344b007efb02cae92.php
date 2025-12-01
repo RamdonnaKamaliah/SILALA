@@ -194,7 +194,6 @@
                                                     <img src="<?php echo e(asset('assets/image_default/image_default_book.jpeg')); ?>"
                                                         class="w-full h-full object-cover">
                                                 <?php endif; ?>
-
                                             </div>
                                         </td>
 

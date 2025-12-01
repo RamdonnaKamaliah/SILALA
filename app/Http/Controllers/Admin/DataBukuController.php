@@ -8,7 +8,6 @@ use App\Models\DataBuku;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataBukuImport; 
 use App\Models\DataKategori;
-use App\Helpers\ImageHelper;
 use App\Models\GambarBuku;
 
 
@@ -65,7 +64,7 @@ public function store(Request $request)
         $file = $request->file('foto_buku');
 
         $path = $file->store('uploads/buku', 'public');  
-        $foto_buku_path = 'storage/' . $path;
+        $foto_buku_path = $path;
 
         // Simpan ke tabel media
         GambarBuku::create([
@@ -78,7 +77,7 @@ public function store(Request $request)
     if ($request->foto_id) {
         $media = GambarBuku::find($request->foto_id);
         if ($media) {
-            $foto_buku_path = 'storage/' . $media->path_file;
+            $foto_buku_path = $media->path_file;
         }
     }
 

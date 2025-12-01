@@ -195,7 +195,6 @@
                                                     <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
                                                         class="w-full h-full object-cover">
                                                 @endif
-
                                             </div>
                                         </td>
 

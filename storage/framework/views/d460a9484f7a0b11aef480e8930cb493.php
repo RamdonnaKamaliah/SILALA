@@ -25,7 +25,7 @@
 
             <!-- Form -->
             <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data"
-                class="space-y-6">
+                class="space-y-6" enctype="multipart/form-data">
                 <?php echo csrf_field(); ?>
 
 
@@ -42,6 +42,17 @@
                             <label class="form-label">
                                 <i class="fas fa-image text-primary"></i>
                                 <span>Foto Cover Buku</span>
+                                <?php $__errorArgs = ['foto_buku'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p class="text-red-500 text-sm"><?php echo e($message); ?></p>
+                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
                             </label>
 
                             <input type="file" id="foto_buku" name="foto_buku" accept="image/*"
@@ -64,7 +75,7 @@
                                 </div>
 
                                 
-                                <input type="hidden" name="gambar_buku" id="gambar_buku">
+                                <input type="hidden" name="foto_id" id="foto_id">
                             </div>
 
                         </div>
@@ -81,7 +92,7 @@
 
                                 <?php $__currentLoopData = $media; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $g): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="cursor-pointer border rounded p-1 hover:border-indigo-600 transition"
-                                        onclick="pilihGambar('<?php echo e($g->path_file); ?>', '<?php echo e(asset('storage/' . $g->path_file)); ?>')">
+                                        onclick="pilihGambar('<?php echo e($g->id); ?>', '<?php echo e(asset('storage/' . $g->path_file)); ?>')">
 
                                         <img src="<?php echo e(asset('storage/' . $g->path_file)); ?>"
                                             class="w-full h-32 object-cover rounded">

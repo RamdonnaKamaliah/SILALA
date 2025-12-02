@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\DataPeminjam;
 use App\Models\DataBuku;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; // TAMBAH INI
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class DataPeminjamController extends Controller
@@ -65,17 +65,6 @@ class DataPeminjamController extends Controller
         $peminjam = DataPeminjam::with(['user', 'buku'])->findOrFail($id);
         
         return view('admin.data_peminjam.show', compact('peminjam'));
-    }
-
-    public function masalah($id)
-    {
-        $peminjam = DataPeminjam::findOrFail($id);
-
-        $peminjam->status = 'bermasalah';
-        $peminjam->denda = 50000; // contoh nominal default
-        $peminjam->save();
-
-        return redirect()->back()->with('error', 'Buku dilaporkan bermasalah.');
     }
 
     // Tambahkan method untuk konfirmasi peminjaman
@@ -216,5 +205,88 @@ public function store(Request $request)
     }
 }
 
+public function konfirmasiPengembalian($id)
+    {
+        $peminjaman = DataPeminjam::findOrFail($id);
+        
+        // Validasi hanya bisa konfirmasi yang statusnya menunggu_konfirmasi
+        if ($peminjaman->status !== 'menunggu_konfirmasi') {
+            return redirect()->back()->with('error', 'Hanya bisa mengkonfirmasi pengembalian yang menunggu konfirmasi.');
+        }
+        
+        // Update status menjadi dikembalikan
+        $peminjaman->status = 'dikembalikan';
+        
+        // Update metode pengembalian jika belum ada
+        if (!$peminjaman->metode_pengembalian) {
+            $peminjaman->metode_pengembalian = 'mandiri';
+        }
+        
+        // Update waktu pengembalian aktual jika belum ada
+        if (!$peminjaman->waktu_pengembalian_aktual) {
+            $peminjaman->waktu_pengembalian_aktual = Carbon::now();
+        }
+        
+        // Update keterangan
+        if (strpos($peminjaman->keterangan, 'Menunggu konfirmasi admin') !== false) {
+            $peminjaman->keterangan = str_replace('Menunggu konfirmasi admin', 'Terkonfirmasi admin', $peminjaman->keterangan);
+        } else {
+            $peminjaman->keterangan .= ' - Terkonfirmasi admin';
+        }
+        
+        $peminjaman->save();
+        
+        // Update stok buku
+        if ($peminjaman->buku) {
+            $buku = $peminjaman->buku;
+            $buku->stok += 1;
+            $buku->save();
+        }
+        
+        return redirect()->back()->with('success', 'Pengembalian buku berhasil dikonfirmasi.');
+    }
+
+    // Method untuk mengembalikan buku (untuk admin)
+    public function kembalikanBuku($id)
+    {
+        $peminjaman = DataPeminjam::findOrFail($id);
+        
+        // Update status dan keterangan
+        $tanggalKembali = Carbon::parse($peminjaman->tanggal_kembali);
+        $sekarang = Carbon::now();
+        
+        if ($sekarang->gt($tanggalKembali)) {
+            $hariTelat = abs($sekarang->diffInDays($tanggalKembali));
+            $peminjaman->keterangan = 'Terlambat ' . $hariTelat . ' hari - Dikembalikan oleh admin';
+        } else {
+            $peminjaman->keterangan = 'Tepat waktu - Dikembalikan oleh admin';
+        }
+        
+        $peminjaman->status = 'dikembalikan';
+        $peminjaman->metode_pengembalian = 'admin';
+        $peminjaman->waktu_pengembalian_aktual = $sekarang;
+        $peminjaman->save();
+        
+        // Update stok buku
+        if ($peminjaman->buku) {
+            $buku = $peminjaman->buku;
+            $buku->stok += 1;
+            $buku->save();
+        }
+        
+        return redirect()->back()->with('success', 'Buku berhasil dikembalikan.');
+    }
+
+    // Method untuk melaporkan masalah
+    public function laporkanMasalah($id)
+    {
+        $peminjaman = DataPeminjam::findOrFail($id);
+        
+        $peminjaman->status = 'bermasalah';
+        $peminjaman->keterangan = 'Dilaporkan bermasalah oleh admin';
+        $peminjaman->save();
+        
+        return redirect()->back()->with('warning', 'Peminjaman dilaporkan bermasalah.');
+    }
 
 }

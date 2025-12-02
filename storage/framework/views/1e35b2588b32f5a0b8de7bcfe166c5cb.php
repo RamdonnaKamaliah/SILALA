@@ -5,7 +5,7 @@
             px-4 md:px-6 py-6 transition-all duration-300
             h-[55vh] flex flex-col justify-start">
 
-  @php
+  <?php
       $title = $title ?? 'Detail Buku';
       $averageRating = isset($averageRating) ? (float) $averageRating : 0.0;
       $totalRatings = isset($totalRatings) ? (int) $totalRatings : 0;
@@ -14,7 +14,7 @@
                       ->where('buku_id', $buku->id)
                       ->where('status', 'dipinjam')
                       ->first();
-  @endphp
+  ?>
 
   <!-- ====== Bagian Atas: Judul & Icon ====== -->
   <div class="flex justify-between items-center w-full relative">
@@ -25,7 +25,7 @@
               class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
         <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
       </button>
-      <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">{{ $title }}</h1>
+      <h1 class="text-lg md:text-xl font-semibold text-[#626F47]"><?php echo e($title); ?></h1>
     </div>
 
     <!-- IKON KANAN -->
@@ -47,7 +47,7 @@
           </button>
         </div>
         <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
-          {{-- NOTIF CONTENT --}}
+          
         </div>
         <div class="text-center py-3 border-t border-gray-100">
           <a href="#" class="text-[#626F47] text-sm font-medium hover:text-[#A4B465]">
@@ -72,8 +72,8 @@
     <div class="relative w-32 sm:w-40 md:w-52 mx-auto md:mx-0 -mt-4 md:mt-0 z-10">
       <div class="w-full aspect-[3/4] overflow-hidden rounded-md shadow-2xl shadow-gray-500/60">
         <img 
-          src="{{ asset($buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
-          alt="{{ $buku->judul_buku }}"
+          src="<?php echo e(asset($buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
+          alt="<?php echo e($buku->judul_buku); ?>"
           class="w-full h-full object-cover">
       </div>
     </div>
@@ -81,44 +81,48 @@
     <!-- Info Buku -->
     <div class="flex flex-col justify-start text-center md:text-left w-full md:w-[60%] z-10">
       <h2 class="block md:hidden text-xl sm:text-2xl font-semibold text-[#2E2E2E] mb-2">
-        {{ $buku->judul_buku }}
+        <?php echo e($buku->judul_buku); ?>
+
       </h2>
       <h2 class="hidden md:block text-3xl font-semibold text-[#2E2E2E] mb-2">
-        {{ $buku->judul_buku }}
+        <?php echo e($buku->judul_buku); ?>
+
       </h2>
 
       <div class="flex flex-col items-center md:items-start -mt-1">
-        <p class="text-sm text-[#626F47] mb-1">{{ $buku->penulis }}</p>
+        <p class="text-sm text-[#626F47] mb-1"><?php echo e($buku->penulis); ?></p>
 
         <!-- RATING TERUPDATE -->
-        <div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2" id="navbarRating" data-average="{{ $averageRating }}" data-total="{{ $totalRatings }}">
-          @for($i = 1; $i <= 5; $i++)
-            @if($i <= floor($averageRating))
+        <div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2" id="navbarRating" data-average="<?php echo e($averageRating); ?>" data-total="<?php echo e($totalRatings); ?>">
+          <?php for($i = 1; $i <= 5; $i++): ?>
+            <?php if($i <= floor($averageRating)): ?>
               <i class="fa-solid fa-star"></i>
-            @elseif($i - 0.5 <= $averageRating)
+            <?php elseif($i - 0.5 <= $averageRating): ?>
               <i class="fa-solid fa-star-half-stroke"></i>
-            @else
+            <?php else: ?>
               <i class="fa-regular fa-star"></i>
-            @endif
-          @endfor
-          @if($totalRatings > 0)
-            <span class="text-xs text-gray-600 ml-2">({{ number_format($averageRating, 1) }})</span>
-          @endif
+            <?php endif; ?>
+          <?php endfor; ?>
+          <?php if($totalRatings > 0): ?>
+            <span class="text-xs text-gray-600 ml-2">(<?php echo e(number_format($averageRating, 1)); ?>)</span>
+          <?php endif; ?>
         </div>
       </div>
 
-      @if($userBorrow)
+      <?php if($userBorrow): ?>
       <div class="mt-2">
         <div class="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold">
           <i class="fa-solid fa-clock"></i>
           Anda sedang meminjam buku ini
         </div>
         <p class="text-xs text-gray-600 mt-1">
-          Batas pengembalian: {{ \Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
+          Batas pengembalian: <?php echo e(\Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y')); ?>
+
         </p>
       </div>
-      @endif
+      <?php endif; ?>
 
     </div>
   </div>
 </nav>
+<?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/components/navbardetus.blade.php ENDPATH**/ ?>

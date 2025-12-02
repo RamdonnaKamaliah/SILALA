@@ -1,0 +1,6 @@
+ #pdfViewer.zoom-small {
+        flex-direction: row !important;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+    }
+    

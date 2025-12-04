@@ -35,6 +35,7 @@
                     <h2 class="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-3 section-divider">
                         <i class="fas fa-cloud-upload-alt text-primary"></i>
                         <span>Upload File Buku</span>
+
                     </h2>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
@@ -43,18 +44,22 @@
                             <label class="form-label">
                                 <i class="fas fa-image text-primary"></i>
                                 <span>Foto Cover Buku</span>
-                                @error('foto_buku')
-                                    <p class="text-red-500 text-sm">{{ $message }}</p>
-                                @enderror
-
                             </label>
 
-                            <input type="file" id="foto_buku" name="foto_buku" accept="image/*"
+                            <img id="previewImage" class="w-32 h-32 object-cover rounded border mb-2"
+                                src="https://placehold.co/150x150?text=Preview">
+
+                            <input type="file" id="previewImage" name="foto_buku" accept="image/*"
                                 onchange="previewImage(event)" class="hidden">
+
                             <label for="foto_buku" class="file-upload-btn">
                                 <i class="fas fa-camera"></i>
                                 <span>Pilih Foto Cover</span>
                             </label>
+
+                            @error('foto_buku')
+                                <p class="text-red-500 text-sm">{{ $message }}</p>
+                            @enderror
 
                             {{-- GAMBAR BUKU (PICK FROM MEDIA) --}}
                             <div class="mb-4">
@@ -62,14 +67,14 @@
 
                                 <div class="flex items-center gap-4">
                                     <img id="previewImage" class="w-24 h-24 object-cover rounded border"
-                                        src="https://placehold.co/100x100?text=No+Image">
+                                        src="{{ old('foto_url', 'https://placehold.co/100x100?text=No+Image') }}">
 
                                     <button type="button" id="openModalBtn"
                                         class="px-4 py-2 bg-indigo-600 text-white rounded">Pilih dari Media</button>
                                 </div>
 
                                 {{-- input hidden untuk simpan path_file --}}
-                                <input type="hidden" name="foto_id" id="foto_id">
+                                <input type="hidden" name="foto_id" id="foto_id" value="{{ old('foto_id') }}">
                             </div>
 
                         </div>
@@ -113,7 +118,10 @@
                         </label>
 
                         <input type="file" id="file_buku" name="file_buku" accept=".pdf" onchange="previewPDF(event)"
-                            class="hidden">
+                            class="hidden" value="{{ old('file_buku') }}">
+                        @error('file_buku')
+                            <span class="text-red-600 text-sm">{{ $message }}</span>
+                        @enderror
                         <label for="file_buku" class="file-upload-btn">
                             <i class="fas fa-file-upload"></i>
                             <span>Pilih File PDF</span>
@@ -146,7 +154,13 @@
                         <span>Judul Buku</span>
                     </label>
                     <input type="text" id="judul_buku" name="judul_buku" placeholder="Masukkan judul buku"
-                        class="form-input w-full rounded-lg px-4 py-3" required>
+                        class="form-input w-full rounded-lg px-4 py-3 @error('judul_buku')
+                            border-red-500
+                        @enderror"
+                        value="{{ old('judul_buku') }}"
+                        @error('file_buku')
+                                border-red-500 @else border-gray-300
+                            @enderror>
                 </div>
 
                 <!-- Penulis -->
@@ -156,7 +170,13 @@
                         <span>Penulis</span>
                     </label>
                     <input type="text" id="penulis" name="penulis" placeholder="Masukkan nama penulis"
-                        class="form-input w-full rounded-lg px-4 py-3" required>
+                        class="form-input w-full rounded-lg px-4 py-3 @error('penulis')
+                            border-red-500
+                        @enderror"
+                        value="{{ old('penulis') }}">
+                    @error('penulis')
+                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Penerbit -->
@@ -166,7 +186,10 @@
                         <span>Penerbit</span>
                     </label>
                     <input type="text" id="penerbit" name="penerbit" placeholder="Masukkan nama penerbit"
-                        class="form-input w-full rounded-lg px-4 py-3" required>
+                        class="form-input w-full rounded-lg px-4 py-3 @error('penerbit')
+                            border-red-500
+                        @enderror"
+                        value="{{ old('penerbit') }}">
                 </div>
 
                 <!-- Tahun Terbit -->
@@ -176,7 +199,10 @@
                         <span>Tahun Terbit</span>
                     </label>
                     <input type="number" id="tahun_terbit" name="tahun_terbit" placeholder="Contoh: 2024"
-                        class="form-input w-full rounded-lg px-4 py-3" required>
+                        class="form-input w-full rounded-lg px-4 py-3 @error('tahun_terbit')
+                            border-red-500
+                        @enderror"
+                        value="{{ old('tahun_terbit') }}">
 
                 </div>
 
@@ -187,7 +213,10 @@
                         <span>Bahasa</span>
                     </label>
                     <input type="text" id="bahasa" name="bahasa" placeholder="Contoh: Indonesia"
-                        class="form-input w-full rounded-lg px-4 py-3" required>
+                        class="form-input w-full rounded-lg px-4 py-3 @error('bahasa')
+                            border-red-500
+                        @enderror"
+                        value="{{ old('bahasa') }}">
                 </div>
 
                 <!-- Kategori -->
@@ -197,11 +226,16 @@
                         <span>Kategori</span>
                     </label>
                     <select name="kategori_id[]" id="kategori_id" multiple class="form-input w-full rounded-lg px-4 py-3"
-                        required>
+                        class=" @error('kategori_id')
+                            border-red-500
+                        @enderror">
                         @foreach ($kategoris as $kategori)
                             <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
                         @endforeach
                     </select>
+                    @error('kategori_id')
+                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                    @enderror
                     <small class="text-gray-600 text-xs mt-1 flex items-center gap-1">
                         <i class="fas fa-info-circle"></i>
                         <span>Tekan Ctrl (Windows) atau Cmd (Mac) untuk pilih lebih dari satu</span>
@@ -225,7 +259,10 @@
                         <span>Jumlah Halaman</span>
                     </label>
                     <input type="number" id="jumlah_halaman" name="jumlah_halaman" placeholder="0"
-                        class="form-input w-full rounded-lg px-4 py-3" required>
+                        class="form-input w-full rounded-lg px-4 py-3 @error('jumlah_halaman')
+                            border-red-500
+                        @enderror"
+                        value="{{ old('jumlah_halaman') }}">
                 </div>
 
                 <!-- Edisi -->
@@ -235,7 +272,10 @@
                         <span>Edisi</span>
                     </label>
                     <input type="text" id="edisi" name="edisi" placeholder="Contoh: Edisi 1"
-                        class="form-input w-full rounded-lg px-4 py-3" required>
+                        class="form-input w-full rounded-lg px-4 py-3 @error('edisi')
+                            border-red-500
+                        @enderror"
+                        value="{{ old('edisi') }}">
                 </div>
 
                 <!-- Stok -->
@@ -245,7 +285,10 @@
                         <span>Stok Tersedia</span>
                     </label>
                     <input type="number" id="stok" name="stok" placeholder="0"
-                        class="form-input w-full rounded-lg px-4 py-3" required>
+                        class="form-input w-full rounded-lg px-4 py-3 @error('stok')
+                            border-red-500
+                        @enderror"
+                        value="{{ old('stok') }}">
                 </div>
             </div>
         </div>
@@ -264,7 +307,9 @@
                 </label>
                 <textarea id="deskripsi" name="deskripsi" rows="6"
                     placeholder="Tuliskan deskripsi lengkap mengenai buku, sinopsis, atau ringkasan isi buku..."
-                    class="form-input w-full rounded-lg px-4 py-3 resize-none" required></textarea>
+                    class="form-input w-full rounded-lg px-4 py-3 resize-none @error('deskripsi')
+                        border-red-500
+                    @enderror">{{ old('deskripsi') }}</textarea>
             </div>
         </div>
 
@@ -292,5 +337,5 @@
 
     <!-- AOS JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="{{ asset('/assets_admin/js/create-databuku.js') }}"></script>
+
 @endsection

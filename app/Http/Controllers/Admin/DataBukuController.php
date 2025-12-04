@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataBukuImport; 
 use App\Models\DataKategori;
 use App\Models\GambarBuku;
+use Illuminate\Support\Facades\Storage;
 
 
 class DataBukuController extends Controller
@@ -41,7 +42,7 @@ class DataBukuController extends Controller
 public function store(Request $request)
 {
     $validated = $request->validate([
-        'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        'foto_buku' => 'required|image|mimes:png,jpg,jpeg|max:2048',
         'foto_id'   => 'nullable|exists:gambar_bukus,id',
         'judul_buku' => 'required',
         'penulis' => 'required',
@@ -53,7 +54,7 @@ public function store(Request $request)
         'edisi' => 'required',
         'deskripsi' => 'required',
         'stok' => 'required',
-        'file_buku' => 'nullable|mimes:pdf|max:5120',
+        'file_buku' => 'required|mimes:pdf|max:5120',
     ]);
 
     $foto_buku_path = null;

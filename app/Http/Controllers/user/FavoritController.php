@@ -30,7 +30,6 @@ class FavoritController extends Controller
             return response()->json(['favorited' => true]);
         }
     }
-
     public function index()
 {
     $favorites = Favorit::where('user_id', Auth::id())

@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
 // User Routes
 Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/userProfile', [ProfileController::class, 'index'])->name('user profile');
 });
 
 // Admin Routes

@@ -138,100 +138,123 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   // ====== RATING ======
-    const starContainer = document.getElementById("starContainer");
-    const submitRatingBtn = document.getElementById("submitRating");
-    const navbar = document.querySelector(".navbar-rating");
+   const starContainer = document.getElementById("starContainer");
+const submitRatingBtn = document.getElementById("submitRating");
+const navbar = document.querySelector(".navbar-rating");
 
-    if (!starContainer || !submitRatingBtn) return;
+if (!starContainer || !submitRatingBtn) return;
 
-    const initialRating = parseInt(starContainer.dataset.userRating) || 0;
-    const stars = starContainer.querySelectorAll(".rating-star");
-    let selectedRating = initialRating;
+const initialRating = parseInt(starContainer.dataset.userRating) || 0;
+const stars = starContainer.querySelectorAll(".rating-star");
+let selectedRating = initialRating;
 
-    function updateStars(rating, permanent = false) {
-        stars.forEach((star, index) => {
-            if (index < rating) {
-                star.classList.remove('fa-regular', 'text-[#d5ccb8]');
-                star.classList.add('fa-solid', 'text-yellow-500');
-            } else {
-                star.classList.remove('fa-solid', 'text-yellow-500');
-                star.classList.add('fa-regular', 'text-[#d5ccb8]');
-            }
-        });
-        if (permanent) selectedRating = rating;
-    }
-
-    function updateNavbar(avgRating, totalRatings) {
-        if (!navbar) return;
-        let html = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= Math.floor(avgRating)) html += '<i class="fa-solid fa-star"></i>';
-            else if (i - 0.5 <= avgRating) html += '<i class="fa-solid fa-star-half-stroke"></i>';
-            else html += '<i class="fa-regular fa-star"></i>';
+function updateStars(rating, permanent = false) {
+    stars.forEach((star, index) => {
+        const icon = star.querySelector(".iconify");
+        if (index < rating) {
+            icon.dataset.icon = "mdi:star"; // ⭐ penuh
+        } else {
+            icon.dataset.icon = "mdi:star-outline"; // ☆ kosong
         }
-        if (totalRatings > 0) html += `<span class="text-xs text-gray-600 ml-2">(${avgRating.toFixed(1)})</span>`;
-        navbar.innerHTML = html;
-    }
-
-    // Set awal bintang dan tombol
-    updateStars(initialRating, true);
-    if (initialRating > 0) {
-        submitRatingBtn.disabled = false;
-        submitRatingBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-    }
-
-    stars.forEach(star => {
-        star.addEventListener("mouseover", () => updateStars(parseInt(star.dataset.star)));
-        star.addEventListener("click", () => {
-            const rating = parseInt(star.dataset.star);
-            updateStars(rating, true);
-            submitRatingBtn.disabled = false;
-            submitRatingBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-        });
     });
 
-    starContainer.addEventListener("mouseleave", () => updateStars(selectedRating, true));
+    if (permanent) selectedRating = rating;
+}
 
-    submitRatingBtn.addEventListener("click", async () => {
-        if (selectedRating === 0) return Swal.fire({ icon: "warning", title: "Pilih rating dulu!" });
+function updateNavbar(avgRating, totalRatings) {
+    if (!navbar) return;
 
-        submitRatingBtn.disabled = true;
-        submitRatingBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+        if (i <= Math.floor(avgRating)) {
+            html += `<span class="iconify text-yellow-500" data-icon="mdi:star"></span>`;
+        } else {
+            html += `<span class="iconify text-yellow-500" data-icon="mdi:star-outline"></span>`;
+        }
+    }
 
-        try {
-            const res = await fetch(starContainer.dataset.ratingUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": starContainer.dataset.csrf,
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({ buku_id: starContainer.dataset.bukuId, rating: selectedRating })
+    if (totalRatings > 0) {
+        html += `<span class="text-xs text-gray-600 ml-2">(${avgRating.toFixed(1)})</span>`;
+    }
+
+    navbar.innerHTML = html;
+}
+
+// Set awal bintang
+updateStars(initialRating, true);
+
+if (initialRating > 0) {
+    submitRatingBtn.disabled = false;
+    submitRatingBtn.classList.remove("opacity-50", "cursor-not-allowed");
+}
+
+stars.forEach(star => {
+    star.addEventListener("mouseover", () => {
+        updateStars(parseInt(star.dataset.star));
+    });
+
+    star.addEventListener("click", () => {
+        const rating = parseInt(star.dataset.star);
+        updateStars(rating, true);
+
+        submitRatingBtn.disabled = false;
+        submitRatingBtn.classList.remove("opacity-50", "cursor-not-allowed");
+    });
+});
+
+starContainer.addEventListener("mouseleave", () => {
+    updateStars(selectedRating, true);
+});
+
+submitRatingBtn.addEventListener("click", async () => {
+    if (selectedRating === 0)
+        return Swal.fire({ icon: "warning", title: "Pilih rating dulu!" });
+
+    submitRatingBtn.disabled = true;
+    submitRatingBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+
+    try {
+        const res = await fetch(starContainer.dataset.ratingUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": starContainer.dataset.csrf,
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                buku_id: starContainer.dataset.bukuId,
+                rating: selectedRating
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: data.message,
+                timer: 1500,
+                showConfirmButton: false
             });
 
-            const data = await res.json();
-
-            if (data.success) {
-                Swal.fire({ icon: "success", title: "Berhasil!", text: data.message, timer: 1500, showConfirmButton: false });
-                
-                // Update navbar live jika ada
-                if (navbar) {
-                    const avgRating = selectedRating; // sementara ambil rating user sebagai avg
-                    const totalRatings = parseInt(navbar.dataset.totalRatings) || 1;
-                    updateNavbar(avgRating, totalRatings);
-                }
-            } else {
-                Swal.fire({ icon: "error", title: "Gagal", text: data.message });
+            if (navbar) {
+                const avgRating = selectedRating;
+                const totalRatings = parseInt(navbar.dataset.totalRatings) || 1;
+                updateNavbar(avgRating, totalRatings);
             }
-        } catch (err) {
-            console.error(err);
-            Swal.fire({ icon: "error", title: "Error", text: "Kesalahan sistem" });
-        } finally {
-            submitRatingBtn.disabled = false;
-            submitRatingBtn.innerHTML = submitRatingBtn.dataset.defaultText || "Kirim Rating";
+        } else {
+            Swal.fire({ icon: "error", title: "Gagal", text: data.message });
         }
-    });
-
+    } catch (err) {
+        console.error(err);
+        Swal.fire({ icon: "error", title: "Error", text: "Kesalahan sistem" });
+    } finally {
+        submitRatingBtn.disabled = false;
+        submitRatingBtn.innerHTML = submitRatingBtn.dataset.defaultText;
+    }
+});
+  
   // ====== PDF VIEWER (multi-page, stable) ======
   (function initPdfViewer() {
     const pdfViewer = document.getElementById("pdfViewer");

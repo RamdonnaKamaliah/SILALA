@@ -22,7 +22,8 @@
         <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
       </button>
 
-      <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
+      <h1 class="text-lg md:text-xl font-semibold tex
+      t-[#626F47]">
         {{ $title }}
       </h1>
     </div>
@@ -130,7 +131,7 @@
 <div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2 navbar-rating"
     data-average-rating="{{ $averageRating }}"
     data-total-ratings="{{ $totalRatings }}"
-    data-user-rating="{{ $userRating?->rating ?? 0 }}">   {{-- ⬅⬅ WAJIB ADA --}}
+    data-user-rating="{{ $userRating?->rating ?? 0 }}"> 
     
   @for($i = 1; $i <= 5; $i++)
     @if($i <= floor($averageRating))

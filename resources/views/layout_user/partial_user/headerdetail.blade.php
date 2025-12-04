@@ -1,3 +1,9 @@
 <x-sidebarUser></x-sidebarUser>
 
-<x-navbardetus :buku="$buku"></x-navbardetus>
+<x-navbardetus 
+    :buku="$buku"
+    :averageRating="$averageRating"
+    :totalRatings="$totalRatings"
+    :userRating="$userRating"
+></x-navbardetus>
+

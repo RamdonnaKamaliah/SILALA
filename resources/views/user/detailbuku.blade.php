@@ -202,8 +202,8 @@
         </div>
       </div>
 
-      {{-- RATING --}}
-   @if(($hasRead || $userBorrow) && Schema::hasTable('ratings'))
+     {{-- RATING --}}
+@if(($hasRead || $userBorrow) && Schema::hasTable('ratings'))
 <div class="w-full flex justify-center mt-8">
   <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
 
@@ -226,8 +226,12 @@
          data-rating-url="{{ route('user.rating.store') }}" 
          data-csrf="{{ csrf_token() }}"
          data-user-rating="{{ $userRating?->rating ?? 0 }}">
+
       @for ($i = 1; $i <= 5; $i++)
-        <i class="fa-regular fa-star rating-star text-4xl cursor-pointer" data-star="{{ $i }}"></i>
+      <span class="rating-star text-4xl cursor-pointer" data-star="{{ $i }}">
+  <span class="iconify text-yellow-500" data-icon="material-symbols:star-outline-rounded"></span>
+</span>
+      </span>
       @endfor
     </div>
 
@@ -240,6 +244,7 @@
         {{ $userRating ? 'Update Rating' : 'Kirim Rating' }}
       </button>
     </div>
+
   </div>
 </div>
 @endif

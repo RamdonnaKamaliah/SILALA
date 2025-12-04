@@ -22,7 +22,8 @@
         <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
       </button>
 
-      <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
+      <h1 class="text-lg md:text-xl font-semibold tex
+      t-[#626F47]">
         <?php echo e($title); ?>
 
       </h1>
@@ -133,7 +134,7 @@
 <div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2 navbar-rating"
     data-average-rating="<?php echo e($averageRating); ?>"
     data-total-ratings="<?php echo e($totalRatings); ?>"
-    data-user-rating="<?php echo e($userRating?->rating ?? 0); ?>">   
+    data-user-rating="<?php echo e($userRating?->rating ?? 0); ?>"> 
     
   <?php for($i = 1; $i <= 5; $i++): ?>
     <?php if($i <= floor($averageRating)): ?>

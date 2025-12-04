@@ -44,7 +44,17 @@
 <?php endif; ?>
 
     
-    <?php echo $__env->make('layout_user.partial_user.headerdetail', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    <?php echo $__env->make('layout_user.partial_user.headerdetail', [
+    'buku' => $buku,
+    'userBorrow' => $userBorrow ?? null,
+    'hasRead' => $hasRead ?? null,
+    'userRating' => $userRating ?? null,
+    'averageRating' => $averageRating ?? 0,
+    'totalRatings' => $totalRatings ?? 0,
+    'stokHabis' => $stokHabis ?? null,
+    'isFavorited' => $isFavorited ?? false
+], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
 
     
     <main class="flex-1 ml-0 md:ml-[320px] mr-0 md:mr-3 transition-all duration-300 relative overflow-y-auto pt-[55vh] pb-20">

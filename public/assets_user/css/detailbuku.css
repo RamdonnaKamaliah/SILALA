@@ -1,6 +1,5 @@
- #pdfViewer.zoom-small {
-        flex-direction: row !important;
-        flex-wrap: nowrap;
-        align-items: flex-start;
-    }
-    
+#pdfViewer {
+  display: grid !important;
+  gap: 20px;
+  justify-content: center; /* halaman tetap center */
+}

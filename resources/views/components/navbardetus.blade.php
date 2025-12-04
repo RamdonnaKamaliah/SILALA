@@ -1,19 +1,15 @@
 <!-- ====== NAVBAR ====== -->
 <nav id="navbar"
-     class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-40 
-            bg-[#f7edd6] rounded-b-3xl shadow-sm
-            px-4 md:px-6 py-6 transition-all duration-300
-            h-[55vh] flex flex-col justify-start">
+  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-40 
+  bg-[#f7edd6] rounded-b-3xl shadow-sm
+  px-4 md:px-6 py-6 transition-all duration-300
+  h-[55vh] flex flex-col justify-start">
 
   @php
+      // Proteksi variabel
       $title = $title ?? 'Detail Buku';
       $averageRating = isset($averageRating) ? (float) $averageRating : 0.0;
       $totalRatings = isset($totalRatings) ? (int) $totalRatings : 0;
-      $userId = Auth::id();
-      $userBorrow = \App\Models\DataPeminjam::where('user_id', $userId)
-                      ->where('buku_id', $buku->id)
-                      ->where('status', 'dipinjam')
-                      ->first();
   @endphp
 
   <!-- ====== Bagian Atas: Judul & Icon ====== -->
@@ -25,30 +21,66 @@
               class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
         <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
       </button>
-      <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">{{ $title }}</h1>
+
+      <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
+        {{ $title }}
+      </h1>
     </div>
 
     <!-- IKON KANAN -->
     <div class="relative flex items-center gap-4 ml-auto">
+
+      <!-- Notifikasi -->
       <button id="notifBtn" class="text-[#626F47] text-lg focus:outline-none">
         <i class="fa-solid fa-bell"></i>
       </button>
+
+      <!-- Popup Notifikasi -->
       <div id="notifBox"
            class="absolute right-0 top-full mt-3 w-72 sm:w-80 bg-white rounded-2xl shadow-2xl 
                   border border-gray-100 z-[10000] opacity-0 pointer-events-none 
                   transform scale-95 transition-all duration-300 origin-top">
+
+        <!-- Header -->
         <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100">
           <div class="flex items-center gap-2">
             <i class="fa-solid fa-bell text-[#A4B465]"></i>
             <h3 class="font-semibold text-gray-700 text-sm">Notifikasi</h3>
           </div>
+
           <button id="closeNotif" class="text-gray-400 hover:text-gray-600 transition">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
+
+        <!-- List Notifikasi -->
         <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
-          {{-- NOTIF CONTENT --}}
+
+          <!-- NOTIF 1 -->
+          <div class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
+            <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
+            <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full"></div>
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-[#626F47]">Admin</p>
+              <p class="text-xs text-gray-600">Buku <b>Buku Saku</b> berhasil disimpan oleh Wildan.</p>
+            </div>
+            <span class="text-[10px] text-gray-400">1m</span>
+          </div>
+
+          <!-- NOTIF 2 -->
+          <div class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
+            <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
+            <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full"></div>
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-[#626F47]">Sistem</p>
+              <p class="text-xs text-gray-600">Perpustakaan diperbarui ke versi terbaru.</p>
+            </div>
+            <span class="text-[10px] text-gray-400">10m</span>
+          </div>
+
         </div>
+
+        <!-- Footer -->
         <div class="text-center py-3 border-t border-gray-100">
           <a href="#" class="text-[#626F47] text-sm font-medium hover:text-[#A4B465]">
             Lihat semua aktivitas
@@ -56,10 +88,12 @@
         </div>
       </div>
 
+      <!-- DARK MODE -->
       <button id="darkModeBtn" class="text-[#626F47] text-lg flex items-center gap-2">
         <span class="iconify text-2xl dark:hidden" data-icon="mdi:weather-sunny"></span>
         <span class="iconify text-2xl hidden dark:inline" data-icon="mdi:weather-night"></span>
       </button>
+
     </div>
   </div>
 
@@ -80,9 +114,11 @@
 
     <!-- Info Buku -->
     <div class="flex flex-col justify-start text-center md:text-left w-full md:w-[60%] z-10">
+
       <h2 class="block md:hidden text-xl sm:text-2xl font-semibold text-[#2E2E2E] mb-2">
         {{ $buku->judul_buku }}
       </h2>
+
       <h2 class="hidden md:block text-3xl font-semibold text-[#2E2E2E] mb-2">
         {{ $buku->judul_buku }}
       </h2>
@@ -90,34 +126,26 @@
       <div class="flex flex-col items-center md:items-start -mt-1">
         <p class="text-sm text-[#626F47] mb-1">{{ $buku->penulis }}</p>
 
-        <!-- RATING TERUPDATE -->
-        <div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2" id="navbarRating" data-average="{{ $averageRating }}" data-total="{{ $totalRatings }}">
-          @for($i = 1; $i <= 5; $i++)
-            @if($i <= floor($averageRating))
-              <i class="fa-solid fa-star"></i>
-            @elseif($i - 0.5 <= $averageRating)
-              <i class="fa-solid fa-star-half-stroke"></i>
-            @else
-              <i class="fa-regular fa-star"></i>
-            @endif
-          @endfor
-          @if($totalRatings > 0)
-            <span class="text-xs text-gray-600 ml-2">({{ number_format($averageRating, 1) }})</span>
-          @endif
-        </div>
-      </div>
-
-      @if($userBorrow)
-      <div class="mt-2">
-        <div class="inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold">
-          <i class="fa-solid fa-clock"></i>
-          Anda sedang meminjam buku ini
-        </div>
-        <p class="text-xs text-gray-600 mt-1">
-          Batas pengembalian: {{ \Carbon\Carbon::parse($userBorrow->tanggal_kembali)->timezone('Asia/Jakarta')->translatedFormat('d F Y') }}
-        </p>
-      </div>
-      @endif
+        <!-- RATING NAVBAR -->
+<div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2 navbar-rating"
+    data-average-rating="{{ $averageRating }}"
+    data-total-ratings="{{ $totalRatings }}"
+    data-user-rating="{{ $userRating?->rating ?? 0 }}">   {{-- ⬅⬅ WAJIB ADA --}}
+    
+  @for($i = 1; $i <= 5; $i++)
+    @if($i <= floor($averageRating))
+      <i class="fa-solid fa-star"></i>
+    @elseif($i - 0.5 <= $averageRating)
+      <i class="fa-solid fa-star-half-stroke"></i>
+    @else
+      <i class="fa-regular fa-star"></i>
+    @endif
+  @endfor
+  
+  @if($totalRatings > 0)
+    <span class="text-xs text-gray-600 ml-2">({{ number_format($averageRating, 1) }})</span>
+  @endif
+</div>
 
     </div>
   </div>

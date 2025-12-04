@@ -156,7 +156,7 @@
         </span>
       </div>
 
-      <div id="pdfViewer" class="flex-1 overflow-y-auto bg-gray-50 scroll-smooth p-2 sm:p-8 flex flex-col items-center"></div>
+      <div id="pdfViewer" class="flex-1 overflow-y-auto bg-gray-50 scroll-smooth p-4"></div>
     </div>
   </div>
 
@@ -203,27 +203,46 @@
       </div>
 
       {{-- RATING --}}
-      @if(($hasRead || $userBorrow) && Schema::hasTable('ratings'))
-        <div class="w-full flex justify-center mt-8">
-          <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
-            <p class="text-xl font-bold text-[#3a3a3a] text-center mb-1">
-              @if($userRating) Ubah Rating Buku Ini @else Beri Rating Buku Ini @endif
-            </p>
-            <p class="text-sm text-[#6b6b6b] text-center mb-4">Seberapa bagus buku ini menurutmu?</p>
-            <div id="starContainer" class="flex items-center justify-center gap-3 mb-5" data-user-rating="{{ $userRating ?? '' }}">
-              @for ($i = 1; $i <= 5; $i++)
-                <i class="fa-regular fa-star text-4xl text-[#d5ccb8] cursor-pointer transition-all rating-star" data-star="{{ $i }}"></i>
-              @endfor
-            </div>
-            <div class="flex justify-center">
-              <button id="submitRating" class="bg-[#5c7040] hover:bg-[#4d5e34] active:scale-95 text-white text-sm font-medium px-7 py-2.5 rounded-xl transition-all shadow opacity-50 cursor-not-allowed" disabled>
-                @if($userRating) Update Rating @else Kirim Rating @endif
-              </button>
-            </div>
-          </div>
-        </div>
-      @endif
+   @if(($hasRead || $userBorrow) && Schema::hasTable('ratings'))
+<div class="w-full flex justify-center mt-8">
+  <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
 
+    <!-- Judul -->
+    <p class="text-xl font-bold text-[#3a3a3a] text-center mb-1">
+      @if($userRating)
+        Ubah Rating Buku Ini
+      @else
+        Beri Rating Buku Ini
+      @endif
+    </p>
+
+    <p class="text-sm text-[#6b6b6b] text-center mb-4">
+      Seberapa bagus buku ini menurutmu?
+    </p>
+
+    <!-- Bintang -->
+    <div id="starContainer" class="flex items-center justify-center gap-3 mb-5"
+         data-buku-id="{{ $buku->id }}" 
+         data-rating-url="{{ route('user.rating.store') }}" 
+         data-csrf="{{ csrf_token() }}"
+         data-user-rating="{{ $userRating?->rating ?? 0 }}">
+      @for ($i = 1; $i <= 5; $i++)
+        <i class="fa-regular fa-star rating-star text-4xl cursor-pointer" data-star="{{ $i }}"></i>
+      @endfor
+    </div>
+
+    <!-- Tombol -->
+    <div class="flex justify-center mt-4">
+      <button id="submitRating" 
+              data-default-text="{{ $userRating ? 'Update Rating' : 'Kirim Rating' }}" 
+              class="bg-[#5c7040] hover:bg-[#4d5e34] active:scale-95 text-white text-sm font-medium px-7 py-2.5 rounded-xl transition-all shadow opacity-50 cursor-not-allowed" 
+              disabled>
+        {{ $userRating ? 'Update Rating' : 'Kirim Rating' }}
+      </button>
+    </div>
+  </div>
+</div>
+@endif
     </div>
   </div>
 

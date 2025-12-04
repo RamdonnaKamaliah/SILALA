@@ -4,34 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard</title>
-
+    <title><?php echo $__env->yieldContent('pageTitle', 'Admin Dashboard'); ?></title>
     <?php echo $__env->make('layout_admin.partial_admin.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-
-    <style>
-        html,
-        body {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        @media (max-width: 1024px) {
-            main {
-                margin-left: 0 !important;
-                width: 100% !important;
-                padding-top: 6.5rem !important;
-            }
-        }
-
-        @media (max-width: 640px) {
-            main {
-                padding-top: 7.5rem !important;
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-        }
-    </style>
-
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
+    <link rel="stylesheet" href="<?php echo e(asset('/assets_admin/css/admin/admin.css')); ?>">
     <?php echo $__env->yieldPushContent('styles'); ?>
 
 </head>

@@ -4,7 +4,19 @@
     <!-- Logo + Deskripsi -->
     <div class="flex flex-col space-y-5">
       <div class="flex items-center space-x-4">
-        <img src="{{asset('assets/logo_kementan.png')}}" alt="Logo" class="w-16 h-16">
+
+        {{-- bagian gambar footer logo --}}
+        @php
+            $footerLogo = \App\Models\Setting::getValue('footer_logo', 'logo_kementan.png');
+        @endphp
+
+        @if (\Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $footerLogo))
+            <img src="{{ \Illuminate\Support\Facades\Storage::url('cms/' . $footerLogo) }}?v={{ filemtime(public_path('storage/cms/' . $footerLogo)) ?? time() }}"
+                alt="Logo" class="w-16 h-16 object-contain">
+        @else
+            <img src="{{ asset('assets/logo_kementan.png') }}" alt="Logo" class="w-16 h-16 object-contain">
+        @endif
+
         <h3 class="text-lg md:text-xl font-bold leading-snug dark:text-white">
           BALAI PENGUJIAN MUTU <br>
           DAN SERTIFIKASI PRODUK HEWAN

@@ -24,4 +24,8 @@
  
  <link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/dataBuku/deleteArsip.css')); ?>">
  <script src="<?php echo e(asset('assets_admin/js/data table/dataTable.js')); ?>"></script>
+
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
 <?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/layout_admin/partial_admin/link.blade.php ENDPATH**/ ?>

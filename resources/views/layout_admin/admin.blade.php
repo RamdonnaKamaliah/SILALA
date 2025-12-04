@@ -4,34 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard</title>
-
+    <title>@yield('pageTitle', 'Admin Dashboard')</title>
     @include('layout_admin.partial_admin.link')
-
-    <style>
-        html,
-        body {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        @media (max-width: 1024px) {
-            main {
-                margin-left: 0 !important;
-                width: 100% !important;
-                padding-top: 6.5rem !important;
-            }
-        }
-
-        @media (max-width: 640px) {
-            main {
-                padding-top: 7.5rem !important;
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-        }
-    </style>
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('/assets_admin/css/admin/admin.css') }}">
     @stack('styles')
 
 </head>

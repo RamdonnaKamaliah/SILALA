@@ -13,7 +13,24 @@ use App\Http\Controllers\Admin\DataKategoriController;
 use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
-use App\Http\Controllers\Admin\DataDendaController;
+use App\Http\Controllers\Admin\MediaBukuController;
+use App\Http\Controllers\Admin\CmsController;
+
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth:admin', AdminMiddleware::class])
+    ->group(function () {
+
+        Route::get('/cms', [CmsController::class, 'editHero'])
+            ->name('cms_admin.index');
+
+        Route::post('/cms/update-hero', [CmsController::class, 'updateHero'])
+            ->name('cms_admin.updateHero');
+
+        // UPDATE LOGO FOOTER (FIXED)
+        Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
+            ->name('cms_admin.updateFooterLogo');
+    });
 
 // Public Routes
 Route::get('/', function () {
@@ -47,7 +64,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
        
     // Data Buku Routes
-        
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
@@ -77,9 +93,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     // Data Peminjam Routes
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
 
-    // Data Denda Routes
-    Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
- 
+    // Media Buku Routes
+    Route::get('/media-buku', [MediaBukuController::class, 'index'])->name('media.index');
+    Route::delete('/media-buku/{id}', [MediaBukuController::class, 'destroy'])
+    ->name('media.destroy');
+
 });
 
 // Home Redirect Route

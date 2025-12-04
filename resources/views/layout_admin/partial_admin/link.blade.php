@@ -25,3 +25,7 @@
  {{-- delete & arsip --}}
  <link rel="stylesheet" href="{{ asset('assets_admin/css/dataBuku/deleteArsip.css') }}">
  <script src="{{ asset('assets_admin/js/data table/dataTable.js') }}"></script>
+
+ {{-- link login --}}
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">

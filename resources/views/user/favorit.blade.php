@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  @include('layout_dashboard.partial_dashboard.link')
-  <title>SILALA</title>
-  <!-- vite -->
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <!-- style -->
-  <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
-</head>
-<body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white">
+@extends('layout_user.user')
 
-  @include('layout_dashboard.partial_dashboard.header')
-  
-  <!-- Konten Utama Dashboard -->
-  <main class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-30 flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
-    
+@section('title', 'Favorit User')
+
+@section('content')
   <!-- Pencarian -->
 <div class="w-full">
   <div class="relative w-full mb-8">
@@ -63,27 +49,4 @@ async function hapusFavorite(id) {
   location.reload();
 }
 </script>
-
-</main>
-@include('layout_dashboard.partial_dashboard.footer')
-<script src="{{asset('assets_user/js/dashboard.js')}}"></script>
-<script>
-document.getElementById('searchBuku').addEventListener('keyup', function() {
-  let keyword = this.value.toLowerCase();
-  let cards = document.querySelectorAll('.book-card');
-
-  cards.forEach(card => {
-    let title = card.querySelector('.book-title').textContent.toLowerCase();
-    
-    if(title.includes(keyword)) {
-      card.style.display = "flex"; 
-    } else {
-      card.style.display = "none";
-    }
-  });
-});
-</script>
-
-
-</body>
-</html>
+@endsection

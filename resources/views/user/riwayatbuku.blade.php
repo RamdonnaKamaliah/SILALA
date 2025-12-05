@@ -1,22 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  @include('layout_dashboard.partial_dashboard.link')
-  <title>SILALA</title>
-  <!-- vite -->
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <!-- style -->
-  <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
-</head>
-<body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white">
+@extends('layout_user.user')
 
-  @include('layout_dashboard.partial_dashboard.header')
-  
-  <!-- Konten Utama Dashboard -->
-  <main class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-30 flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
+@section('title', 'Beranda User')
 
+@section('content')
     <!-- Filter dan Pencarian -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 w-full md:w-auto">
@@ -122,31 +108,25 @@
               $tanggalPinjam = \Carbon\Carbon::parse($data->tanggal_pinjam)->translatedFormat('d F Y');
               $tanggalKembali = \Carbon\Carbon::parse($data->tanggal_kembali)->translatedFormat('d F Y');
 
-              $hariTelat = 0;
-              $denda = 0;
-              $isTerlambat = false;
-              
-              if ($status === 'dipinjam' && now()->gt($data->tanggal_kembali)) {
-                  $hariTelat = $data->tanggal_kembali < now()
-    ? now()->diffInDays($data->tanggal_kembali)
-    : 0;
-
-                  $denda = $hariTelat * 1000;
-                  $isTerlambat = true;
-              }
+              // Gunakan accessor dari model
+              $hariTelat = $data->hari_telat;
+              $isTerlambat = $data->is_terlambat;
             @endphp
-
             <tr class="hover:bg-[#FFF8E8] transition">
               <td class="py-4 px-4 relative min-w-[220px]">
-                <div class="flex items-center gap-3">
+                <!-- 🔗 UBAH: Tambahkan link ke detail buku -->
+                <a href="{{ route('user.detailbuku', ['id' => $buku->id, 'from' => 'riwayatbuku']) }}" 
+                   class="flex items-center gap-3 hover:no-underline group">
                   <img src="{{ asset($buku->foto_buku ?? 'assets/default-cover.jpg') }}"
                        alt="Buku"
-                       class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0">
+                       class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0 group-hover:shadow-xl transition-shadow duration-200">
                   <div class="min-w-0">
-                    <p class="font-semibold text-sm leading-snug">{{ $buku->judul_buku }}</p>
+                    <p class="font-semibold text-sm leading-snug group-hover:text-[#626F47] transition-colors duration-200">
+                      {{ $buku->judul_buku }}
+                    </p>
                     <p class="text-[#626F47] text-xs font-medium">{{ $buku->penulis }}</p>
                   </div>
-                </div>
+                </a>
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
 
@@ -164,14 +144,18 @@
                 @if ($status === 'dipinjam')
                   @if ($isTerlambat)
                     Telat {{ $hariTelat }} Hari
-                    <br><span class="text-xs text-red-500">Denda: Rp {{ number_format($denda, 0, ',', '.') }}</span>
+                    <br><span class="text-xs text-orange-500">Teguran</span>
                   @else
                     Masih Dipinjam
                   @endif
                 @elseif ($status === 'menunggu_konfirmasi')
                   Menunggu Konfirmasi Admin
                 @else
-                  Tepat Waktu
+                  @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
+                    <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
+                  @else
+                    Tepat Waktu
+                  @endif
                 @endif
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
@@ -180,12 +164,12 @@
                 @if ($status === 'dipinjam')
                   @if ($isTerlambat)
                     <div class="flex items-start relative">
-                      <span class="iconify text-[#B43131] w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:close"></span>
+                      <span class="iconify text-[#B43131] w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:alert-circle-outline"></span>
                       <div>
-                        <span class="inline-flex items-center bg-[#FFD1D1] text-[#B43131] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
+                        <span class="inline-flex items-center bg-[#FFEBCD] text-[#B43131] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
                           Terlambat
                         </span>
-                        <span class="block mt-1 text-[11px] text-red-500 italic">*Denda Rp 1.000 per hari</span>
+                        <span class="block mt-1 text-[11px] text-orange-500 italic">*Peringatan keterlambatan</span>
                       </div>
                     </div>
                   @else
@@ -229,29 +213,5 @@
         </div>
       @endif
     </div>
-  </main>
-
-  @include('layout_dashboard.partial_dashboard.footer')
-
-  <!-- script -->
-  <script src="{{asset('assets_user/js/dashboard.js')}}"></script>
-  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-  <script>
-    const dropdownButton = document.getElementById('dropdownButton');
-    const dropdownMenu = document.getElementById('dropdownMenu');
-
-    dropdownButton.addEventListener('click', function () {
-      dropdownMenu.classList.toggle('hidden');
-      dropdownButton.querySelector('.iconify').classList.toggle('rotate-180');
-    });
-
-    // Klik di luar dropdown → tutup
-    document.addEventListener('click', function (e) {
-      if (!document.getElementById('dropdownWrapper').contains(e.target)) {
-        dropdownMenu.classList.add('hidden');
-        dropdownButton.querySelector('.iconify').classList.remove('rotate-180');
-      }
-    });
-  </script>
-</body>
-</html>
+  @endsection
+  

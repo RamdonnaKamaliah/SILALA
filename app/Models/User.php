@@ -36,7 +36,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
     /**
      * Scope untuk user karyawan
      */

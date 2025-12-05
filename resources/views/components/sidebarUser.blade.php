@@ -27,18 +27,27 @@
     <!-- Profil -->
      <ul id="sidebar-menu" class="space-y-3">
   <li class="relative nav-item rounded-l-[50px] hover:bg-white list-none">
-  <a href="{{ route('user.profil') }}" class="group relative flex items-center w-full text-[#626F47] transition-all duration-300">
-
-    <div class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
-          group-hover:border-transparent group-hover:bg-white">
-      <img src="{{ asset('assets/Profile.jpg') }}" alt="Foto Profil"
-        class="w-20 h-20 rounded-full border-2 border-[#626F47] object-cover shadow-md" />
-      <div class="leading-tight">
-        <p class="font-bold text-[#626F47] text-sm">Rifdatul Aisya</p>
-        <p class="text-xs opacity-80 -mt-[2px]">Rifdah@gmail.com</p>
-      </div>
-    </div>
-  </a>
+    <a href="{{ route('user.profil') }}" class="group relative flex items-center w-full text-[#626F47] transition-all duration-300">
+        <div class="menu-item flex items-center gap-3 border-[2px] border-[#F5ECD5] bg-[#F5ECD5] rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
+              group-hover:border-transparent group-hover:bg-white">
+            
+            <!-- Foto Profil -->
+            @if(Auth::user()->foto_profil)
+                <!-- Jika ada foto profil di database -->
+                <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto Profil"
+                    class="w-20 h-20 rounded-full border-2 border-[#626F47] object-cover shadow-md flex-shrink-0" />
+            @else
+                <!-- Jika tidak ada foto profil, gunakan default -->
+                <img src="{{ asset('assets/Profile.jpg') }}" alt="Foto Profil"
+                    class="w-20 h-20 rounded-full border-2 border-[#626F47] object-cover shadow-md flex-shrink-0" />
+            @endif
+            
+            <div class="leading-tight flex-1 min-w-0">
+                <p class="font-bold text-[#626F47] text-sm truncate">{{ Auth::user()->name }}</p>
+                <p class="text-xs opacity-80 -mt-[2px] truncate">{{ Auth::user()->email }}</p>
+            </div>
+        </div>
+    </a>
 </li>
 
     <!-- Menu -->

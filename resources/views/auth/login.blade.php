@@ -81,9 +81,19 @@
         Login SiLala BPMSPH
       </h2>
 
-      <p class="text-sm text-gray-600 mb-4 text-center">
+      <p class="text-sm text-gray-600 mb-6 text-center">
         Masuk untuk mengakses SiLala BPMSPH.
       </p>
+
+      <!-- Tampilkan pesan sukses jika ada (setelah registrasi dll) -->
+      @if(session('success'))
+        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+          <div class="flex items-center">
+            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+            <span class="text-sm text-green-600 font-medium">{{ session('success') }}</span>
+          </div>
+        </div>
+      @endif
 
       <!-- Google Login -->
       <div class="mb-4">
@@ -109,8 +119,13 @@
           <label for="email" class="block text-sm font-medium text-green-700 mb-1">
             <i class="fa-solid fa-envelope mr-2"></i>Email
           </label>
-          <input id="email" type="email" name="email" required autofocus autocomplete="username"
-            class="block w-full px-3 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
+          <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
+            class="block w-full px-3 py-2 border {{ $errors->has('email') ? 'border-red-400' : 'border-green-200' }} rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
+          @error('email')
+            <p class="mt-1 text-xs text-red-500">
+              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+            </p>
+          @enderror
         </div>
 
         <!-- Password -->
@@ -120,11 +135,16 @@
           </label>
           <div class="relative flex items-center">
             <input id="password" type="password" name="password" required autocomplete="current-password"
-              class="block w-full px-3 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm pr-10">
+              class="block w-full px-3 py-2 border {{ $errors->has('password') ? 'border-red-400' : 'border-green-200' }} rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm pr-10">
             <span class="absolute right-3 cursor-pointer text-gray-400" onclick="togglePassword()">
               <i id="eyeIcon" class="fa-solid fa-eye"></i>
             </span>
           </div>
+          @error('password')
+            <p class="mt-1 text-xs text-red-500">
+              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+            </p>
+          @enderror
         </div>
 
         <!-- Remember Me -->

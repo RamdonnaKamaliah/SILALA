@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Admin\DataBukuController;
@@ -21,8 +20,8 @@ use App\Http\Controllers\user\DetailBukuController;
 use App\Http\Controllers\user\RiwayatBukuController;
 use App\Http\Controllers\user\RiwayatBacaController;
 use App\Http\Controllers\user\FavoritController;
-use App\Http\Controllers\user\ProfilController;
-use App\Http\Controllers\user\EditProfilController;
+use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\EditProfilController;
 use App\Http\Controllers\user\RatingController;
 use App\Http\Controllers\Admin\MediaBukuController;
 
@@ -50,13 +49,6 @@ Route::middleware('auth:web')->group(function () {
         ->name('setup.password.store');
 });
 
-// Authenticated Routes
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
 // User Routes
 Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     // USER
@@ -74,9 +66,10 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
 
     // PROFIL USER
-    Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
-    Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
-    
+Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
+Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
+Route::put('/editprofil', [EditProfilController::class, 'update'])->name('user.updateprofil');
+
     // BACA
     Route::get('/baca/{id}', [DetailBukuController::class, 'baca'])->name('user.baca');
 

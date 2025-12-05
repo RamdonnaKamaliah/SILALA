@@ -75,11 +75,11 @@
 </section>
 
 
-<!-- BAGIAN KONTEN YANG SCROLL -->
+  <!-- BAGIAN KONTEN YANG SCROLL -->
   <div class="mt-6 overflow-y-auto scrollbar-hide flex-1 pr-2 
     pb-10 md:rounded-b-3xl">
     <!-- Bacaan Anda -->
-     <section class="pb-8">
+    <section class="pb-8">
       <h2 class="text-lg md:text-xl font-medium text-black mb-4 ml-2">Rekomendasi</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Card Buku 1 -->
@@ -106,69 +106,10 @@
               Baca
             </button>
           </div>
-        </div>
-    <!-- Card Buku 2 -->
-    <div class="flex items-start bg-transparent p-3 hover:scale-[1.03] transition-transform duration-300">
-      <!-- Cover Buku -->
-      <div class="relative w-32 h-44 flex-shrink-0">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#00000020] to-transparent rounded-lg shadow-md"></div>
-        <img src="<?php echo e(asset('assets/buku2.jpg')); ?>" alt="Buku 2"
-             class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
-        <div class="absolute right-0 top-0 w-1 h-full bg-[#d1cfcf] rounded-r-lg"></div>
+        </div> 
+        
       </div>
-   <!-- Info Buku -->
-      <div class="ml-4 flex flex-col justify-between h-full">
-        <div>
-          <h3 class="font-bold text-[#1E1E1E] text-base leading-snug">Buku Saku Pelaksanaan KIE</h3>
-          <p class="text-sm text-gray-600 mb-2">By J. Anderson</p>
-
-          <!-- Bintang rating -->
-          <div class="flex text-yellow-400 text-sm space-x-1 mb-2">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-regular fa-star"></i>
-            <i class="fa-regular fa-star"></i>
-          </div>
-        </div>
-
-        <button class="bg-[#626F47] text-white text-xs px-5 py-1.5 rounded-full hover:bg-[#4e5d38] transition w-fit">
-          Baca
-        </button>
-      </div>
-    </div>
-
-<!-- Card Buku 3 -->
-    <div class="flex items-start bg-transparent p-3 hover:scale-[1.03] transition-transform duration-300">
-      <!-- Cover Buku -->
-      <div class="relative w-32 h-44 flex-shrink-0">
-        <div class="absolute inset-0 bg-gradient-to-r from-[#00000020] to-transparent rounded-lg shadow-md"></div>
-        <img src="<?php echo e(asset('assets/buku3.jpg')); ?>" alt="Buku 3"
-             class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
-        <div class="absolute right-0 top-0 w-1 h-full bg-[#d1cfcf] rounded-r-lg"></div>
-      </div>
-
-      <!-- Info Buku -->
-      <div class="ml-4 flex flex-col justify-between h-full">
-        <div>
-          <h3 class="font-bold text-[#1E1E1E] text-base leading-snug">Budi Daya Peternakan</h3>
-          <p class="text-sm text-gray-600 mb-2">By J. Anderson</p>
-
-          <!-- Bintang rating -->
-          <div class="flex text-yellow-400 text-sm space-x-1 mb-2">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-regular fa-star"></i>
-          </div>
- </div>
-        <button class="bg-[#626F47] text-white text-xs px-5 py-1.5 rounded-full hover:bg-[#4e5d38] transition w-fit">
-          Baca
-        </button>
-      </div>
-    </div>
+    </section>
   </div>
-</section>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/dashboard.blade.php ENDPATH**/ ?>

@@ -461,7 +461,7 @@
                     // Custom confirmation dialog
                     if (confirm(
                             `Hapus permanen buku "${bookTitle}"?\n\nTindakan ini tidak dapat dibatalkan!`
-                            )) {
+                        )) {
                         form.submit();
                     }
                 });
@@ -477,7 +477,7 @@
 
                 if (!confirm(
                         `Hapus permanen ${checkedCount} buku terpilih?\n\nTindakan ini tidak dapat dibatalkan!`
-                        )) {
+                    )) {
                     e.preventDefault();
                 }
             });
@@ -491,7 +491,7 @@
 
                 if (!confirm(
                         `Pulihkan ${checkedCount} buku terpilih?\n\nBuku akan dikembalikan ke data aktif.`
-                        )) {
+                    )) {
                     e.preventDefault();
                 }
             });

@@ -19,7 +19,6 @@ class DataBukuImport implements ToModel, WithStartRow
 
     public function model(array $row)
     {
-        // ===============================
         // 1. Import FOTO dari Google Drive
         // ===============================
         $fotoUrl = $row[10];
@@ -48,6 +47,7 @@ class DataBukuImport implements ToModel, WithStartRow
 
                         // SIMPAN ke tabel gambar_bukus
                         GambarBuku::create([
+                            // 'data_buku' =>$buku->id,
                             'nama_file' => $fileName,
                             'path_file' => $path
                         ]);

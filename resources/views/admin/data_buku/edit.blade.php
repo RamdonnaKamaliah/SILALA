@@ -106,7 +106,7 @@
                                             </div>
                                             <div class="mt-2">
                                                 <p class="text-sm font-medium text-[#8a9a58]">File PDF tersedia</p>
-                                                <a href="{{ asset($buku->file_buku) }}" target="_blank"
+                                                <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank"
                                                     class="text-[#8a9a58] underline text-sm mt-1 inline-block hover:text-[#A4B465]">
                                                     Lihat file lengkap
                                                 </a>

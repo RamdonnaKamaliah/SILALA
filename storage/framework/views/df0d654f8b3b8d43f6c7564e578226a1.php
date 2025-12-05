@@ -73,7 +73,7 @@
                             </a>
 
                             <!-- View PDF Button -->
-                            <button type="button" onclick="openPdfModal('<?php echo e(asset($buku->file_buku)); ?>')"
+                            <button type="button" onclick="openPdfModal('<?php echo e(asset('storage/' . $buku->file_buku)); ?>')"
                                 class="flex items-center justify-center space-x-3 px-6 py-3
                                    bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-bold
                                    hover:from-blue-600 hover:to-blue-700 transition-all duration-200
@@ -457,7 +457,7 @@
 
                     const confirmed = confirm(
                         `Hapus permanen buku "${bookTitle}"?\n\n⚠️ Tindakan ini tidak dapat dibatalkan dan data akan hilang selamanya!`
-                        );
+                    );
 
                     if (confirmed) {
                         form.submit();

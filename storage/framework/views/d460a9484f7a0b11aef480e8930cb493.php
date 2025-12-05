@@ -30,7 +30,6 @@
                                 class="px-4 py-2 bg-indigo-600 text-white rounded">Pilih dari Media</button>
                         </div>
 
-                        
                         <input type="hidden" name="foto_id" id="foto_id" value="<?php echo e(old('foto_id')); ?>">
                     </div>
 

@@ -92,7 +92,6 @@
                         class="bg-gradient-to-r from-[#A4B465]/10 to-[#8AA24F]/10 text-gray-700 border-b border-gray-200">
                         <tr>
                             <th class="w-12 px-3 py-4 text-center">
-                                <!-- Checkbox column -->
                             </th>
                             <th class="px-4 py-4 text-center font-bold text-gray-900 text-xs uppercase tracking-wider">
                                 No

@@ -159,7 +159,7 @@
                             <thead class="bg-[#A4B465] text-white">
                                 <tr>
                                     <th class="px-4 py-3 text-center w-12">
-                                        <input type="checkbox" id="selectAll" class="w-4 h-4">
+                                        <input type="checkbox" id="selectAll" class="w-4 h-4 row-checkbox">
                                     </th>
                                     <th class="px-4 py-3 text-center font-semibold w-12">No</th>
                                     <th class="px-4 py-3 text-center font-semibold w-20">Foto</th>
@@ -249,7 +249,7 @@
                                                 $path = str_replace('public/', '', $path);
                                             ?>
 
-                                            <a href="<?php echo e(asset('storage/' . $path)); ?>" target="_blank"
+                                            <a href="<?php echo e(asset('storage/' . $buku->file_buku)); ?>" target="_blank"
                                                 class="inline-block bg-blue-600 text-white px-3 py-1 rounded-lg shadow hover:bg-blue-700 text-xs">
                                                 Lihat File
                                             </a>

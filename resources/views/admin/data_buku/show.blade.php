@@ -56,7 +56,7 @@
                                     $path = str_replace('public/', '', $path);
                                 @endphp
                                 @if ($buku->file_buku)
-                                    <a href="{{ asset('storage/' . $path) }}" target="_blank"
+                                    <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank"
                                         class="inline-flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-[#7a9140] to-[#657f2e] text-white rounded-xl shadow-lg hover:from-[#657f2e] hover:to-[#506d1c] transition-all duration-300 transform hover:-translate-y-1 font-medium">
                                         <i class="fas fa-external-link-alt mr-2"></i>
                                         <span>Buka File PDF</span>

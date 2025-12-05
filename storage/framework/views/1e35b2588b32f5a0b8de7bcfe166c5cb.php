@@ -17,17 +17,16 @@
 
     <!-- NAV TITLE + BACK -->
     <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3 md:static md:transform-none">
-      <button id="backBtn"
-              class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
-        <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
-      </button>
+  <button id="backBtn"
+          class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
+    <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
+  </button>
 
-      <h1 class="text-lg md:text-xl font-semibold tex
-      t-[#626F47]">
-        <?php echo e($title); ?>
+  <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
+    <?php echo e($title ?? 'Detail Buku'); ?>
 
-      </h1>
-    </div>
+  </h1>
+</div>
 
     <!-- IKON KANAN -->
     <div class="relative flex items-center gap-4 ml-auto">

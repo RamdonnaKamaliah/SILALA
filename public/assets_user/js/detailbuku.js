@@ -1,5 +1,19 @@
 // detailbuku.js
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ====== PANAH TITLE ======
+  const backBtn = document.getElementById("backBtn");
+
+    if (!backBtn) return;
+
+    backBtn.addEventListener("click", () => {
+        if (document.referrer && document.referrer.includes(window.location.hostname)) {
+            window.history.back();
+        } else {
+            window.location.href = "{{ route('user.daftarbuku') }}";
+        }
+    });
+    
   // ====== GLOBAL DATA ======
   const body = document.body;
   const bukuId = body.dataset.bukuId;
@@ -254,8 +268,8 @@ submitRatingBtn.addEventListener("click", async () => {
         submitRatingBtn.innerHTML = submitRatingBtn.dataset.defaultText;
     }
 });
-  
-  // ====== PDF VIEWER (multi-page, stable) ======
+
+  // ====== PDF VIEWER ======
   (function initPdfViewer() {
     const pdfViewer = document.getElementById("pdfViewer");
     const pdfModal = document.getElementById("pdfModal");
@@ -279,98 +293,127 @@ submitRatingBtn.addEventListener("click", async () => {
     let observer = null;
 
     /* =========================================================
-       AUTO MULTI-COLUMN LIKE GOOGLE DOCS
+       AUTO LAYOUT (GOOGLE DOCS STYLE)
     ========================================================== */
     const updateLayout = () => {
-    if (!pageCanvases.length) return;
+        if (!pageCanvases.length) return;
 
-    const firstCanvas = pageCanvases[0].canvas;
-    const pageWidth = firstCanvas.width + 40;
-    const containerWidth = pdfViewer.clientWidth;
+        const isMobile = window.innerWidth <= 1024;
+        let cols = 1;
 
-    // Kalau zoom > 1.2, pakai 1 kolom supaya scroll horizontal muncul
-    const cols = zoom > 1.2 ? 1 : Math.max(1, Math.floor(containerWidth / pageWidth));
+        if (isMobile) {
+            // MOBILE → Selalu 1 kolom
+            cols = 1;
+            pdfViewer.style.justifyContent = "center";
+        } else {
+            // DESKTOP
+            if (zoom > 1.2) {
+                cols = 1;
+                pdfViewer.style.justifyContent = "start";
+            } else {
+                const firstCanvas = pageCanvases[0].canvas;
+                const pageWidth = firstCanvas.width + 40;
+                const containerWidth = pdfViewer.parentElement.clientWidth;
 
-    pdfViewer.style.display = "grid";
-    pdfViewer.style.gridTemplateColumns = `repeat(${cols}, auto)`;
-    
-    // Jika zoom > 1.2, scroll horizontal aktif (justify start)
-    // Jika zoom <= 1.2, tetap di tengah (justify center)
-    pdfViewer.style.justifyContent = zoom > 1.2 ? "start" : "center";
+                cols = Math.max(1, Math.floor(containerWidth / pageWidth));
+                pdfViewer.style.justifyContent = "center";
+            }
+        }
 
-    pdfViewer.style.gap = "24px";
-    pdfViewer.style.padding = "24px";
-};
+        pdfViewer.style.display = "grid";
+        pdfViewer.style.gridTemplateColumns = `repeat(${cols}, auto)`;
+        pdfViewer.style.gap = "24px";
+        pdfViewer.style.padding = "24px";
+    };
 
     /* =========================================================
-       PAGE TRACKING SAAT SCROLL (LIKE GOOGLE PDF VIEWER)
+       PAGE TRACKING LIKE GOOGLE VIEWER
     ========================================================== */
     const activatePageTracking = () => {
-    if (observer) observer.disconnect();
+        if (observer) observer.disconnect();
 
-    observer = new IntersectionObserver(
-        (entries) => {
-            // Pilih entry yang paling terlihat
-            let maxRatio = 0;
-            let visiblePage = 1;
+        observer = new IntersectionObserver(
+            (entries) => {
+                let maxRatio = 0;
+                let visiblePage = 1;
 
-            entries.forEach((entry) => {
-                if (entry.intersectionRatio > maxRatio) {
-                    maxRatio = entry.intersectionRatio;
-                    visiblePage = parseInt(entry.target.dataset.page);
-                }
-            });
+                entries.forEach((entry) => {
+                    if (entry.intersectionRatio > maxRatio) {
+                        maxRatio = entry.intersectionRatio;
+                        visiblePage = parseInt(entry.target.dataset.page);
+                    }
+                });
 
-            pageCurrent.innerText = visiblePage;
-        },
-        {
-            root: pdfViewer,       // scroll container
-            threshold: Array.from({ length: 101 }, (_, i) => i / 100) // 0, 0.01, ..., 1
-        }
-    );
+                pageCurrent.innerText = visiblePage;
+            },
+            {
+                root: pdfViewer,
+                threshold: Array.from({ length: 101 }, (_, i) => i / 100)
+            }
+        );
 
-    pageCanvases.forEach((item) => observer.observe(item.canvas));
-};
-
+        pageCanvases.forEach((item) => observer.observe(item.canvas));
+    };
 
     /* =========================================================
-       RENDER SEMUA HALAMAN (DIPAKAI UNTUK ZOOM)
+       RENDER SEMUA HALAMAN (UNTUK ZOOM)
     ========================================================== */
-   const renderPages = async () => {
-    if (!pdfDoc) return;
+    const renderPages = async () => {
+        if (!pdfDoc) return;
 
-    pdfViewer.innerHTML = "";
+        const isMobile = window.innerWidth <= 1024;
+        pdfViewer.innerHTML = "";
 
-    for (let item of pageCanvases) {
-        try {
-            const page = await pdfDoc.getPage(item.pageNumber);
-            const viewport = page.getViewport({ scale: zoom });
-            const canvas = item.canvas;
-            const ctx = canvas.getContext("2d");
+        for (let item of pageCanvases) {
+            try {
+                const page = await pdfDoc.getPage(item.pageNumber);
+                const viewport = page.getViewport({ scale: zoom });
+                const canvas = item.canvas;
+                const ctx = canvas.getContext("2d");
 
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            await page.render({ canvasContext: ctx, viewport }).promise;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                await page.render({ canvasContext: ctx, viewport }).promise;
 
-            pdfViewer.appendChild(canvas);
-        } catch (err) {
-            console.error("Render gagal:", err);
+                /* ====== FIX MOBILE RESPONSIVE + ZOOM WORK ====== */
+                if (isMobile) {
+                    if (zoom <= 1) {
+                        // DEFAULT mobile → full width terpampang
+                        canvas.style.width = "100%";
+                        canvas.style.height = "auto";
+                        canvas.style.maxWidth = "100%";
+                        canvas.style.margin = "0 auto";
+                    } else {
+                        // AFTER zoom → biarkan ukuran asli dan bisa digeser
+                        canvas.style.width = "auto";
+                        canvas.style.height = "auto";
+                        canvas.style.maxWidth = "none";
+                        canvas.style.margin = "0 auto";
+                    }
+                } else {
+                    // DESKTOP → tidak berubah sama sekali
+                    canvas.style.width = "auto";
+                    canvas.style.height = "auto";
+                    canvas.style.maxWidth = "none";
+                }
+
+                pdfViewer.appendChild(canvas);
+            } catch (err) {
+                console.error("Render gagal:", err);
+            }
         }
-    }
 
-    zoomLabel.innerText = Math.round(zoom * 100) + "%";
-    pageTotal.innerText = totalPages;
+        zoomLabel.innerText = Math.round(zoom * 100) + "%";
+        pageTotal.innerText = totalPages;
 
-    updateLayout();
-    activatePageTracking();
+        updateLayout();
+        activatePageTracking();
 
-    // 🔹 posisi scroll awal ke kiri atas
-    pdfViewer.scrollLeft = 0;
-    pdfViewer.scrollTop = 0;
-};
-
+        pdfViewer.scrollLeft = 0;
+        pdfViewer.scrollTop = 0;
+    };
 
     /* =========================================================
        BUKA PDF
@@ -388,7 +431,7 @@ submitRatingBtn.addEventListener("click", async () => {
 
             for (let i = 1; i <= totalPages; i++) {
                 const canvas = document.createElement("canvas");
-                canvas.dataset.page = i;              // WAJIB untuk tracking
+                canvas.dataset.page = i;
                 canvas.style.display = "block";
                 canvas.style.border = "1px solid #ddd";
                 canvas.style.borderRadius = "12px";

@@ -19,7 +19,6 @@ class DataBukuImport implements ToModel, WithStartRow
 
     public function model(array $row)
     {
-        // ===============================
         // 1. Import FOTO dari Google Drive
         // ===============================
         $fotoUrl = $row[10];
@@ -39,7 +38,8 @@ class DataBukuImport implements ToModel, WithStartRow
 
                     if ($response->ok()) {
 
-                        $fileName = time() . '_' . uniqid() . '.jpg';
+                         $lastId = (GambarBuku::max('id') ?? 0) + 1;
+                        $fileName = 'gambar-' . $lastId . '.jpg';
                         $path = "uploads/buku/{$fileName}";
 
                         Storage::disk('public')->put($path, $response->body());
@@ -47,6 +47,7 @@ class DataBukuImport implements ToModel, WithStartRow
 
                         // SIMPAN ke tabel gambar_bukus
                         GambarBuku::create([
+                            // 'data_buku' =>$buku->id,
                             'nama_file' => $fileName,
                             'path_file' => $path
                         ]);
@@ -65,27 +66,34 @@ class DataBukuImport implements ToModel, WithStartRow
 
         if ($pdfUrl && str_contains($pdfUrl, 'drive.google.com')) {
 
-            $fileId = null;
-            if (preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $pdfUrl, $m)) $fileId = $m[1];
-            if (preg_match('/id=([a-zA-Z0-9_-]+)/', $pdfUrl, $m)) $fileId = $m[1];
+            // Ambil ID otomatis
+            preg_match('/(?:id=|\/d\/)([a-zA-Z0-9_-]+)/', $pdfUrl, $match);
+            $fileId = $match[1] ?? null;
 
             if ($fileId) {
+
                 $direct = "https://drive.google.com/uc?export=download&id={$fileId}";
 
                 try {
-                    $response = Http::get($direct);
+                    $response = Http::withOptions(['allow_redirects' => true])
+                        ->get($direct);
 
-                    if ($response->ok()) {
+                    // Simpan langsung tanpa cek content-type
+                    if ($response->ok() && $response->body()) {
+
                         $fileName = time() . '_' . uniqid() . '.pdf';
                         $path = "uploads/file_buku/{$fileName}";
 
                         Storage::disk('public')->put($path, $response->body());
+
                         $localPdfPath = $path;
                     }
                 } catch (\Exception $e) {
+                    $localPdfPath = null;
                 }
             }
         }
+
 
         // ===============================
         // 3. Simpan Data Buku

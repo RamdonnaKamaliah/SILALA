@@ -188,10 +188,7 @@ public function store(Request $request)
     public function destroy(string $id)
     {
         $buku = DataBuku::findOrFail($id);
-        // Hapus foto buku jika ada
-        if ($buku->foto_buku && file_exists(public_path($buku->foto_buku))) {
-            unlink(public_path($buku->foto_buku));
-        }
+       
         $buku->delete();
         return redirect()->route('admin.data_buku.index')
             ->with('success', 'Data buku berhasil dihapus!');

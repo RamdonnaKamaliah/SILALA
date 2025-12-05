@@ -8,7 +8,6 @@
     <div class="p-4 md:p-8 font-[Poppins] text-slate-800 bg-gray-50 min-h-screen">
 
         <div class="user-dashboard p-4 md:p-6 bg-gray-50 min-h-screen">
-
             <!-- Header Profesional -->
             <div class="flex items-center mb-6">
                 <div class="bg-user-primary p-3 rounded-xl mr-4 shadow-sm">
@@ -92,7 +91,7 @@
 
                             <!-- Tombol Download Template -->
                             <a href="{{ asset('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx') }}"
-                                class="block w-full bg-red-500 hover:bg-red-600 text-white text-center py-2 rounded-lg mb-4 transition flex items-center justify-center gap-2"
+                                class="w-full bg-red-500 hover:bg-red-600 text-white text-center py-2 rounded-lg mb-4 transition flex items-center justify-center gap-2"
                                 download>
                                 <i class="fa-solid fa-download"></i> Download Template
                             </a>
@@ -123,18 +122,30 @@
                         </div>
                     </div>
 
-                    <!-- Tombol Tambah Buku -->
-                    <a href="{{ route('admin.data_buku.create') }}"
-                        class="bg-[#A4B465] text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-[#8A9A55] transition w-full sm:w-auto text-center flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-plus"></i> Tambah Buku
-                    </a>
+                    <div class="flex items-center space-x-2">
+                        <a href="{{ route('admin.data_buku.create') }}"
+                            class="bg-[#A4B465] text-white font-medium px-4 py-2 rounded-lg shadow hover:bg-[#8A9A55] transition w-full sm:w-auto text-center flex items-center justify-center gap-2">
+                            + Tambah Buku
+                        </a>
+                        <form id="bulkDeleteForm" action="{{ route('admin.data_buku.bulk-delete') }}" method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="selected_ids" id="selectedIdsDelete">
+                            <button type="submit" id="bulkDeleteBtn" disabled
+                                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">Hapus Data
+                                Terpilih</button>
+                        </form>
 
-                    <!-- Tombol Hapus Data Terpilih -->
-                    <button id="bulkDeleteBtn"
-                        class="bg-gray-400 text-white font-medium px-4 py-2 rounded-lg shadow transition cursor-not-allowed opacity-50 w-full sm:w-auto text-center flex items-center justify-center gap-2"
-                        disabled>
-                        <i class="fa-solid fa-trash"></i> Hapus Terpilih
-                    </button>
+                        {{-- Tombol Arsipkan --}}
+                        <form id="bulkArchiveForm" action="{{ route('admin.data_buku.bulkArchive') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="selected_ids" id="selectedIdsArchive">
+                            <button type="submit" id="bulkArchiveBtn" disabled
+                                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">Arsipkan
+                                Data
+                                Terpilih</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -302,130 +313,4 @@
             </form>
         </div>
     </div>
-
-    <!-- JavaScript untuk fungsi interaktif -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Fungsi Select All
-            const selectAll = document.getElementById('selectAll');
-            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
-            const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
-            const bulkDeleteForm = document.getElementById('bulkDeleteForm');
-
-            selectAll.addEventListener('change', function() {
-                rowCheckboxes.forEach(checkbox => {
-                    checkbox.checked = selectAll.checked;
-                });
-                updateBulkDeleteButton();
-            });
-
-            rowCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', updateBulkDeleteButton);
-            });
-
-            function updateBulkDeleteButton() {
-                const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
-                if (checkedBoxes.length > 0) {
-                    bulkDeleteBtn.disabled = false;
-                    bulkDeleteBtn.classList.remove('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
-                    bulkDeleteBtn.classList.add('bg-red-600', 'cursor-pointer', 'opacity-100', 'hover:bg-red-700');
-
-                    // Tambahkan event listener untuk bulk delete
-                    bulkDeleteBtn.onclick = function() {
-                        if (confirm(
-                                `Apakah Anda yakin ingin menghapus ${checkedBoxes.length} buku yang dipilih?`
-                            )) {
-                            bulkDeleteForm.submit();
-                        }
-                    };
-                } else {
-                    bulkDeleteBtn.disabled = true;
-                    bulkDeleteBtn.classList.add('bg-gray-400', 'cursor-not-allowed', 'opacity-50');
-                    bulkDeleteBtn.classList.remove('bg-red-600', 'cursor-pointer', 'opacity-100',
-                        'hover:bg-red-700');
-                    bulkDeleteBtn.onclick = null;
-                }
-            }
-
-            // Fungsi Search
-            const searchInput = document.getElementById('search');
-            if (searchInput) {
-                searchInput.addEventListener('input', function() {
-                    const searchTerm = this.value.toLowerCase();
-                    const rows = document.querySelectorAll('#dataTable tbody tr');
-
-                    rows.forEach(row => {
-                        const text = row.textContent.toLowerCase();
-                        if (text.includes(searchTerm)) {
-                            row.style.display = '';
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    });
-                });
-            }
-
-            // Fungsi Entries
-            const entriesSelect = document.getElementById('entries');
-            if (entriesSelect) {
-                entriesSelect.addEventListener('change', function() {
-                    // Implementasi pagination berdasarkan jumlah entries
-                    console.log('Entries changed to:', this.value);
-                    // Di sini Anda bisa menambahkan logika untuk mengubah jumlah data yang ditampilkan
-                });
-            }
-        });
-    </script>
-
-    <style>
-        /* Style untuk truncate text dengan ellipsis */
-        .truncate {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Responsif untuk tabel */
-        @media (max-width: 768px) {
-            .table-container {
-                overflow-x: auto;
-            }
-        }
-
-        /* Style untuk ikon aksi */
-        .action-btn {
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* Style untuk empty state */
-        .empty-state {
-            padding: 3rem 1rem;
-            text-align: center;
-            color: #6b7280;
-        }
-
-        /* Style untuk modal Alpine.js */
-        [x-cloak] {
-            display: none !important;
-        }
-
-        /* Style untuk checkbox */
-        input[type="checkbox"] {
-            cursor: pointer;
-        }
-
-        /* Style untuk tombol aksi */
-        .btn-action {
-            transition: all 0.2s ease-in-out;
-        }
-
-        .btn-action:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-    </style>
 @endsection

@@ -1,267 +1,254 @@
 <?php $__env->startSection('pageTitle', 'Admin Dashboard'); ?>
 
 <?php $__env->startSection('content'); ?>
+<div class="min-h-screen bg-gradient-to-br from-[#f5f5e9] to-[#e8e4d5] p-4 md:p-6">
 
-<style>
-    :root {
-        --army-green-dark: #2d5016;
-        --army-green-medium: #4a7c3a;
-        --army-green-light: #6b9c5a;
-        --cream: #f5f5e9;
-        --beige: #e8e4d5;
-    }
-
-    .glass-effect {
-        background: rgba(255, 255, 255, 0.28);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.35)
-    }
-
-    .card-gradient-border {
-        position: relative
-    }
-
-    .card-gradient-border::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 3px;
-        background: linear-gradient(90deg, var(--army-green-medium), var(--army-green-light));
-        border-radius: 6px
-    }
-
-    .text-soft-shadow {
-        text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.9)
-    }
-
-    .fade-in {
-        opacity: 0;
-        transform: translateY(6px);
-        transition: all .45s cubic-bezier(.2, .9, .4, 1)
-    }
-
-    .fade-in.show {
-        opacity: 1;
-        transform: none
-    }
-
-    @media (max-width:640px) {
-        .mobile-stack {
-            flex-direction: column
-        }
-
-        .mobile-center {
-            text-align: center
-        }
-
-        .mobile-gap {
-            gap: .5rem
-        }
-    }
-</style>
-
-<div class="min-h-screen bg-gradient-to-br from-[var(--cream)] to-[var(--beige)] p-4 md:p-6">
-
-    <!-- Header big -->
-    <div class="glass-effect rounded-2xl p-4 md:p-6 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-4">
-            <img src="<?php echo e(asset('/assets_admin/image/sisapa.png')); ?>" alt="logo"
-                class="w-20 h-20 rounded-xl object-contain" />
-            <div>
-                <h1 class="text-2xl md:text-3xl font-extrabold text-[var(--army-green-dark)]">Selamat Datang, Admin 👋</h1>
-                <p class="text-sm text-[#5a6c5d]">Sistem Manajemen Perpustakaan — Silala</p>
+    <!-- Header Section -->
+    <div class="bg-white/70 backdrop-blur-md rounded-2xl p-4 md:p-6 mb-6 border border-white/35 shadow-sm">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <!-- Logo dan Judul -->
+            <div class="flex items-center gap-4">
+                <img src="<?php echo e(asset('/assets_admin/image/sisapa.png')); ?>" alt="logo"
+                    class="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shadow-sm" />
+                <div>
+                    <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-[#2d5016]">Selamat Datang, Admin 👋</h1>
+                    <p class="text-sm text-gray-600 mt-1">Sistem Manajemen Perpustakaan — Silala</p>
+                </div>
             </div>
-        </div>
 
-        <div class="text-center">
-            <div id="current-time" class="text-lg md:text-2xl font-bold text-[var(--army-green-dark)]">00:00:00</div>
-            <div id="current-date" class="text-xs text-[#5a6c5d]">Hari, DD Bulan YYYY</div>
+            <!-- Tanggal dan Waktu -->
+            <div class="text-center mt-4 md:mt-0">
+                <div id="current-time" class="text-lg md:text-xl lg:text-2xl font-bold text-[#2d5016]">00:00:00</div>
+                <div id="current-date" class="text-xs text-gray-600 mt-1">Hari, DD Bulan YYYY</div>
+            </div>
         </div>
     </div>
 
-    <!-- Cards -->
+    <!-- Statistic Cards Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-
-        <!-- card: total buku -->
-        <div class="card card-gradient-border fade-in bg-white/70 rounded-xl p-4 shadow-md">
-            <div class="flex justify-between items-start">
-                <div class="text-xs font-semibold text-[var(--army-green-dark)]">Total Buku</div>
-                <div
-                    class="w-9 h-9 rounded-lg flex items-center justify-center text-white bg-[var(--army-green-medium)] shadow-sm">
-                    <i class="fa-solid fa-book-open"></i>
+        
+        <!-- Card: Total Buku -->
+        <div class="bg-white rounded-xl p-4 shadow-sm border-t-4 border-[#4a7c3a] hover:shadow-md transition-shadow duration-300">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-600">Total Buku</h3>
+                </div>
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-[#4a7c3a] text-white">
+                    <i class="fas fa-book-open text-sm"></i>
                 </div>
             </div>
-            <div class="mt-3 flex items-center justify-between">
+            <div class="flex items-end justify-between">
                 <div>
-                    <div class="text-2xl font-bold text-[var(--army-green-dark)]">2,543</div>
-                    <div class="text-xs text-[#5a6c5d] mt-1 flex items-center">
-                        <i class="fa-solid fa-arrow-up text-[#10b981] mr-1 text-xs"></i>+12 dari bulan lalu
+                    <div class="text-2xl font-bold text-gray-800">2,543</div>
+                    <div class="flex items-center mt-2">
+                        <span class="text-xs text-green-600 flex items-center">
+                            <i class="fas fa-arrow-up mr-1 text-xs"></i>+12
+                        </span>
+                        <span class="text-xs text-gray-500 ml-2">dari bulan lalu</span>
                     </div>
                 </div>
-                <div class="w-20">
-                    <canvas id="sparkTotalBuku" height="50"></canvas>
+                <div class="w-16 h-10">
+                    <canvas id="sparkTotalBuku"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- card: peminjam aktif -->
-        <div class="card card-gradient-border fade-in bg-white/70 rounded-xl p-4 shadow-md">
-            <div class="flex justify-between items-start">
-                <div class="text-xs font-semibold text-[var(--army-green-dark)]">Peminjam Aktif</div>
-                <div
-                    class="w-9 h-9 rounded-lg flex items-center justify-center text-white bg-[rgba(107,156,90,0.95)] shadow-sm">
-                    <i class="fa-solid fa-user-group"></i>
+        <!-- Card: Peminjam Aktif -->
+        <div class="bg-white rounded-xl p-4 shadow-sm border-t-4 border-[#6b9c5a] hover:shadow-md transition-shadow duration-300">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-600">Peminjam Aktif</h3>
+                </div>
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-[#6b9c5a] text-white">
+                    <i class="fas fa-user-group text-sm"></i>
                 </div>
             </div>
-            <div class="mt-3 flex items-center justify-between">
+            <div class="flex items-end justify-between">
                 <div>
-                    <div class="text-2xl font-bold text-[var(--army-green-dark)]">187</div>
-                    <div class="text-xs text-[#5a6c5d] mt-1 flex items-center">
-                        <i class="fa-solid fa-arrow-up text-[#10b981] mr-1 text-xs"></i>+8 dari minggu lalu
+                    <div class="text-2xl font-bold text-gray-800">187</div>
+                    <div class="flex items-center mt-2">
+                        <span class="text-xs text-green-600 flex items-center">
+                            <i class="fas fa-arrow-up mr-1 text-xs"></i>+8
+                        </span>
+                        <span class="text-xs text-gray-500 ml-2">dari minggu lalu</span>
                     </div>
                 </div>
-                <div class="w-20">
-                    <canvas id="sparkPeminjam" height="50"></canvas>
+                <div class="w-16 h-10">
+                    <canvas id="sparkPeminjam"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- card: buku dipinjam -->
-        <div class="card card-gradient-border fade-in bg-white/70 rounded-xl p-4 shadow-md">
-            <div class="flex justify-between items-start">
-                <div class="text-xs font-semibold text-[var(--army-green-dark)]">Buku Dipinjam</div>
-                <div
-                    class="w-9 h-9 rounded-lg flex items-center justify-center text-white bg-[rgba(143,185,130,0.95)] shadow-sm">
-                    <i class="fa-solid fa-book-bookmark"></i>
+        <!-- Card: Buku Dipinjam -->
+        <div class="bg-white rounded-xl p-4 shadow-sm border-t-4 border-[#8fb982] hover:shadow-md transition-shadow duration-300">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-600">Buku Dipinjam</h3>
+                </div>
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-[#8fb982] text-white">
+                    <i class="fas fa-book-bookmark text-sm"></i>
                 </div>
             </div>
-            <div class="mt-3 flex items-center justify-between">
+            <div class="flex items-end justify-between">
                 <div>
-                    <div class="text-2xl font-bold text-[var(--army-green-dark)]">324</div>
-                    <div class="text-xs text-[#5a6c5d] mt-1 flex items-center">
-                        <i class="fa-solid fa-arrow-up text-[#10b981] mr-1 text-xs"></i>+24 dari kemarin
+                    <div class="text-2xl font-bold text-gray-800">324</div>
+                    <div class="flex items-center mt-2">
+                        <span class="text-xs text-green-600 flex items-center">
+                            <i class="fas fa-arrow-up mr-1 text-xs"></i>+24
+                        </span>
+                        <span class="text-xs text-gray-500 ml-2">dari kemarin</span>
                     </div>
                 </div>
-                <div class="w-20">
-                    <canvas id="sparkDipinjam" height="50"></canvas>
+                <div class="w-16 h-10">
+                    <canvas id="sparkDipinjam"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- card: e-book -->
-        <div class="card card-gradient-border fade-in bg-white/70 rounded-xl p-4 shadow-md">
-            <div class="flex justify-between items-start">
-                <div class="text-xs font-semibold text-[var(--army-green-dark)]">E-book Tersedia</div>
-                <div
-                    class="w-9 h-9 rounded-lg flex items-center justify-center text-white bg-[rgba(165,201,152,0.95)] shadow-sm">
-                    <i class="fa-solid fa-tablet-screen-button"></i>
+        <!-- Card: E-book -->
+        <div class="bg-white rounded-xl p-4 shadow-sm border-t-4 border-[#a5c998] hover:shadow-md transition-shadow duration-300">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-600">E-book Tersedia</h3>
+                </div>
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-[#a5c998] text-white">
+                    <i class="fas fa-tablet-screen-button text-sm"></i>
                 </div>
             </div>
-            <div class="mt-3 flex items-center justify-between">
+            <div class="flex items-end justify-between">
                 <div>
-                    <div class="text-2xl font-bold text-[var(--army-green-dark)]">856</div>
-                    <div class="text-xs text-[#5a6c5d] mt-1 flex items-center">
-                        <i class="fa-solid fa-download text-[#10b981] mr-1 text-xs"></i>125 unduhan hari ini
+                    <div class="text-2xl font-bold text-gray-800">856</div>
+                    <div class="flex items-center mt-2">
+                        <span class="text-xs text-green-600 flex items-center">
+                            <i class="fas fa-download mr-1 text-xs"></i>125
+                        </span>
+                        <span class="text-xs text-gray-500 ml-2">unduhan hari ini</span>
                     </div>
                 </div>
-                <div class="w-20">
-                    <canvas id="sparkEbook" height="50"></canvas>
+                <div class="w-16 h-10">
+                    <canvas id="sparkEbook"></canvas>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- Analytics -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div class="lg:col-span-2 bg-white/70 rounded-xl p-4 shadow-md glass-effect">
-            <div class="flex items-center justify-between mb-3">
-                <h3 class="font-semibold text-[var(--army-green-dark)]">Statistik Mingguan</h3>
-                <div class="text-xs text-[#5a6c5d]">Perbandingan 7 hari terakhir</div>
+    <!-- Chart Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+        <!-- Main Chart -->
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800">Statistik Mingguan</h3>
+                    <p class="text-sm text-gray-600 mt-1">Perbandingan 7 hari terakhir</p>
+                </div>
             </div>
-            <canvas id="mainChart" height="140"></canvas>
+            <div class="h-64">
+                <canvas id="mainChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="bg-white rounded-xl p-4 shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Ringkasan Cepat</h3>
+            
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-[#4a7c3a] flex items-center justify-center mr-3">
+                            <i class="fas fa-clock text-white text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Peminjaman Hari Ini</p>
+                        </div>
+                    </div>
+                    <span class="text-lg font-bold text-[#2d5016]">42</span>
+                </div>
+
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-[#6b9c5a] flex items-center justify-center mr-3">
+                            <i class="fas fa-calendar-check text-white text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Pengembalian Besok</p>
+                        </div>
+                    </div>
+                    <span class="text-lg font-bold text-[#2d5016]">28</span>
+                </div>
+
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-[#8fb982] flex items-center justify-center mr-3">
+                            <i class="fas fa-exclamation-triangle text-white text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Keterlambatan</p>
+                        </div>
+                    </div>
+                    <span class="text-lg font-bold text-[#dc2626]">5</span>
+                </div>
+
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-[#a5c998] flex items-center justify-center mr-3">
+                            <i class="fas fa-star text-white text-xs"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Buku Populer</p>
+                        </div>
+                    </div>
+                    <span class="text-lg font-bold text-[#2d5016]">12</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="bg-white rounded-xl p-4 shadow-sm">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Aktivitas Terbaru</h3>
+            <a href="#" class="text-sm text-[#4a7c3a] hover:text-[#2d5016] font-medium">Lihat Semua</a>
+        </div>
+        
+        <div class="space-y-3">
+            <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
+                    <i class="fas fa-user-plus text-blue-600"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-800">Anggota baru terdaftar</p>
+                    <p class="text-xs text-gray-500">Andi Pratama • 10 menit yang lalu</p>
+                </div>
+                <span class="text-xs text-gray-500">Baru</span>
+            </div>
+
+            <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+                <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center mr-3">
+                    <i class="fas fa-book text-green-600"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-800">Peminjaman buku berhasil</p>
+                    <p class="text-xs text-gray-500">"Laskar Pelangi" dipinjam • 1 jam yang lalu</p>
+                </div>
+                <span class="text-xs text-gray-500">Selesai</span>
+            </div>
+
+            <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+                <div class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center mr-3">
+                    <i class="fas fa-exclamation text-yellow-600"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-gray-800">Pengingat pengembalian</p>
+                    <p class="text-xs text-gray-500">3 buku akan jatuh tempo besok • 2 jam yang lalu</p>
+                </div>
+                <span class="text-xs text-yellow-600">Penting</span>
+            </div>
         </div>
     </div>
 
 </div>
-
 <?php $__env->stopSection(); ?>
 
-
 <?php $__env->startPush('scripts'); ?>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-    window.addEventListener('load', () => {
-        document.querySelectorAll('.fade-in').forEach((el, i) => {
-            setTimeout(() => el.classList.add('show'), i * 90);
-        });
-    });
-
-    function updateTime() {
-        const now = new Date();
-        document.getElementById('current-time').textContent = now.toLocaleTimeString('id-ID');
-        document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    function createSpark(id, data, color) {
-        new Chart(document.getElementById(id), {
-            type: 'line',
-            data: {
-                labels: data.map((v, i) => i + 1),
-                datasets: [{
-                    data: data,
-                    borderColor: color,
-                    borderWidth: 2,
-                    pointRadius: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: { x: { display: false }, y: { display: false } },
-                elements: { line: { tension: 0.3 } }
-            }
-        });
-    }
-
-    createSpark('sparkTotalBuku', [10, 12, 9, 14, 13, 16, 18], '#3f6212');
-    createSpark('sparkPeminjam', [2, 4, 3, 5, 6, 5, 7], '#5d8c3a');
-    createSpark('sparkDipinjam', [20, 18, 22, 24, 21, 25, 24], '#7fb56a');
-    createSpark('sparkEbook', [5, 7, 6, 8, 9, 10, 12], '#9ecd88');
-
-    new Chart(document.getElementById('mainChart'), {
-        type: 'bar',
-        data: {
-            labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-            datasets: [{
-                label: 'Peminjaman',
-                data: [50, 65, 70, 60, 80, 95, 75],
-                backgroundColor: '#4a7c3a'
-            }, {
-                label: 'Pengembalian',
-                data: [30, 45, 40, 50, 60, 70, 55],
-                backgroundColor: '#a7c68f'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { position: 'top' } },
-            scales: { y: { beginAtZero: true } }
-        }
-    });
-</script>
 <?php $__env->stopPush(); ?>
-
 <?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

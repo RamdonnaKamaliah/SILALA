@@ -10,4 +10,9 @@ class GambarBuku extends Model
         'nama_file',
         'path_file',
     ];
+    public function buku()
+{
+    return $this->belongsTo(DataBuku::class, 'data_buku_id');
+}
+
 }

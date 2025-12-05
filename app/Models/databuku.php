@@ -124,4 +124,10 @@ class DataBuku extends Model
     return $localPath ?? null;
 }
 
+public function gambar()
+{
+    return $this->hasMany(GambarBuku::class, 'data_buku_id');
+}
+
+
 }

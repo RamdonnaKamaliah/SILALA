@@ -16,13 +16,13 @@
     <a href="#rekomendasi" class="nav-link">Rekomendasi</a>
     <a href="#panduan" class="nav-link">Panduan</a>
 
-    @auth('admin')
-      <a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard Admin</a>
-    @elseauth('web')
-      <a href="{{ url('/dashboard') }}" class="nav-link">Dashboard</a>
-    @else
-      <a href="{{ route('login') }}" class="nav-link text-blue-500">Login</a>
-    @endauth
+    <?php if(auth()->guard('admin')->check()): ?>
+      <a href="<?php echo e(route('admin.dashboard')); ?>" class="nav-link">Dashboard Admin</a>
+    <?php elseif(auth()->guard('web')->check()): ?>
+      <a href="<?php echo e(url('/dashboard')); ?>" class="nav-link">Dashboard</a>
+    <?php else: ?>
+      <a href="<?php echo e(route('login')); ?>" class="nav-link text-blue-500">Login</a>
+    <?php endif; ?>
   </nav>
 
     <!-- Theme toggle -->
@@ -33,7 +33,7 @@
   </div>
 </header>
 
-{{-- Pindahkan sidebar & overlay keluar dari header --}}
+
 <div id="sidebar-overlay" class="sidebar-overlay fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity"></div>
 
 <aside id="sidebar" class="sidebar fixed top-0 left-0 h-full w-64 dark:bg-[#2A320F] bg-[#F5ECD5] dark:text-white text-gray-900 shadow-xl z-50 md:hidden transform -translate-x-full transition-transform duration-300">
@@ -50,12 +50,13 @@
     </ul>
 
     <div class="border-t border-gray-700 mt-6 pt-4 space-y-2">
-      @auth
-        <a href="{{ url('/dashboard') }}" class="flex items-center px-4 py-3 hover:bg-green-700 rounded-lg font-medium transition-all duration-200"><i class="fas fa-tachometer-alt mr-3"></i>Dashboard</a>
-      @else
-        <a href="{{ route('register') }}" class="flex items-center px-4 py-3 hover:bg-green-700 rounded-lg font-medium transition-all duration-200"><i class="fas fa-user-plus mr-3"></i>Register</a>
-        <a href="{{ route('login') }}" class="flex items-center px-4 py-3 text-blue-400 hover:bg-blue-50 rounded-lg font-medium transition-all duration-200"><i class="fas fa-sign-in-alt mr-3"></i>Login</a>
-      @endauth
+      <?php if(auth()->guard()->check()): ?>
+        <a href="<?php echo e(url('/dashboard')); ?>" class="flex items-center px-4 py-3 hover:bg-green-700 rounded-lg font-medium transition-all duration-200"><i class="fas fa-tachometer-alt mr-3"></i>Dashboard</a>
+      <?php else: ?>
+        <a href="<?php echo e(route('register')); ?>" class="flex items-center px-4 py-3 hover:bg-green-700 rounded-lg font-medium transition-all duration-200"><i class="fas fa-user-plus mr-3"></i>Register</a>
+        <a href="<?php echo e(route('login')); ?>" class="flex items-center px-4 py-3 text-blue-400 hover:bg-blue-50 rounded-lg font-medium transition-all duration-200"><i class="fas fa-sign-in-alt mr-3"></i>Login</a>
+      <?php endif; ?>
     </div>
   </nav>
 </aside>
+<?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/components/navbarlanding.blade.php ENDPATH**/ ?>

@@ -120,6 +120,22 @@
 
         <!-- compact card -->
         <div class="mx-auto w-full max-w-md">
+          
+          <!-- TAMBAHKAN: Google Register Button di sini -->
+          <div class="mb-4">
+            <a href="{{ route('google.redirect') }}"  
+               class="flex items-center justify-center gap-3 w-full py-2 px-4 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition mb-3">
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="w-5 h-5">
+              <span class="font-semibold text-black text-sm">Buat akun dengan Google</span>
+            </a>
+          </div>
+
+          <div class="flex items-center my-3">
+            <div class="flex-grow h-px bg-green-200"></div>
+            <span class="px-3 text-green-400 text-xs">atau daftar dengan email</span>
+            <div class="flex-grow h-px bg-green-200"></div>
+          </div>
+
           <!-- UPDATED: responsive scrollable form area -->
           <div class="form-scrollable">
             <form method="POST" action="{{ route('register') }}" class="space-y-4">

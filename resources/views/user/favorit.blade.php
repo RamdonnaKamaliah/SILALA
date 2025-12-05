@@ -15,6 +15,7 @@
   </div>
 </div>
 
+@if($favorites->count() > 0)
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
   @foreach($favorites as $fav)
   <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
@@ -35,6 +36,18 @@
   </div>
   @endforeach
 </div>
+@else
+<div class="text-center py-12">
+  <div class="text-[#626F47] text-lg font-semibold mb-2">
+    @if(request()->has('status'))
+      Tidak ada data untuk status yang dipilih
+    @else
+      Belum ada riwayat peminjaman
+    @endif
+  </div>
+  <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
+</div>
+@endif
 
 <script>
 async function hapusFavorite(id) {

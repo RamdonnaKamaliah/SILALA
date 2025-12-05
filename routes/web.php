@@ -41,6 +41,14 @@ Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGo
 
 Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])
     ->name('google.callback');
+    
+// Setup Password Route (untuk user yang register via Google)
+Route::middleware('auth:web')->group(function () {
+    Route::get('/setup-password', [SetupPasswordController::class, 'index'])
+        ->name('setup.password');
+    Route::post('/setup-password', [SetupPasswordController::class, 'store'])
+        ->name('setup.password.store');
+});
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {

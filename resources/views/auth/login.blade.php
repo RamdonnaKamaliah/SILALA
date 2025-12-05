@@ -145,7 +145,7 @@
 
         <!-- Register Link -->
         <div class="mt-4 text-center">
-          <p class="text-xs text-gray-600 mb-2">
+          <p class="text-base text-gray-600 mb-2">
             Belum punya akun? 
             <a href="{{ route('register') }}" class="font-medium text-green-700 hover:underline">Daftar di sini</a>
           </p>

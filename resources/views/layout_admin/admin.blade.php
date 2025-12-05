@@ -8,31 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @include('layout_admin.partial_admin.link')
 
-    {{-- <style>
-        html,
-        body {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        @media (max-width: 1024px) {
-            main {
-                margin-left: 0 !important;
-                width: 100% !important;
-                padding-top: 6.5rem !important;
-            }
-        }
-
-        @media (max-width: 640px) {
-            main {
-                padding-top: 7.5rem !important;
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-        }
-    </style> --}}
-    {{-- 
-    @stack('styles') --}}
+    @stack('styles')
 
 </head>
 
@@ -50,14 +26,39 @@
         </div>
     </main>
 
+    <!-- Plugins -->
     <script src="{{ asset('/assets_admin/js/plugins/chartjs.min.js') }}" async></script>
     <script src="{{ asset('/assets_admin/js/plugins/perfect-scrollbar.min.js') }}" async></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
-    <script src="{{ asset('assets_admin/js/dataBuku/deleteArsip.js') }}"></script>
-    <script src="{{ asset('assets_admin/js/arsipBuku/deleteArsip.js') }}"></script>
+
+    <!-- Global tidak bercabang -->
+    <script src="{{ asset('assets_admin/js/dashboard/index.js') }}"></script>
+    <script src="{{ asset('assets_admin/js/data_pengguna/pengguna.js') }}"></script>
+    <script src="{{ asset('assets_admin/js/data_peminjam/peminjam.js') }}"></script>
+
+    <!-- Data Buku -->
     <script src="{{ asset('assets_admin/js/dataBuku/ModalPlilhMedia.js') }}"></script>
-    {{-- @stack('scripts') --}}
+    <script src="{{ asset('assets_admin/js/dataBuku/deleteArsip.js') }}"></script>
+    {{-- databuku bagian create --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="{{ asset('/assets_admin/js/create-databuku.js') }}"></script>
+    <script src="{{ asset('assets_admin/js/dataBuku/modalMedia.js') }}"></script>
+    {{-- databuku bagian edit --}}
+    <script src="{{ asset('assets_admin/js/dataBuku/edit.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    {{-- databuku bagian index --}}
+    <script src="{{ asset('assets_admin/js/dataBuku/index.js') }}"></script>
+
+    <!-- Arsip Buku -->
+    <script src="{{ asset('assets_admin/js/arsipBuku/deleteArsip.js') }}"></script>
+    <script src="{{ asset('assets_admin/js/arsipBuku/index.js') }}"></script>
+
+    <!-- Kategori -->
+    <script src="{{ asset('assets_admin/js/data_kategori/create.js') }}"></script>
+
+    @stack('scripts')
 </body>
 
 </html>

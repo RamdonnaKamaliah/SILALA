@@ -1,23 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  @include('layout_dashboard.partial_dashboard.link')
-  <title>SILALA - Riwayat Pinjam</title>
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
-</head>
-<body class="min-h-screen overflow-x-hidden font-[Ubuntu,sans-serif] bg-white">
-  @include('layout_dashboard.partial_dashboard.header')
+@extends('layout_user.user')
 
- <main
-  class="pt-8 pb-6 px-6 bg-cream
-  relative top-[90px] mb-24
-  md:ml-[320px] md:mr-3
-  md:rounded-3xl transition-all duration-300 z-30
-  flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
+@section('title', 'Profil User')
 
+@section('content')
   <div class="min-h-screen bg-[#F3EED9] py-10 px-6">
 
     <!-- Kartu Header -->
@@ -44,29 +29,28 @@
         <div class="md:col-span-2 space-y-4">
             <div class="flex items-center gap-3 rounded-lg px-3 py-2 
             bg-[#F8F8F8] border border-[#626F47]">
-        <i class="fa-solid fa-user text-[#626F47]"></i>
-
+        <span class="iconify" data-icon="fa-solid:user" style="color:#626F47;" data-width="18" data-height="18"></span>
         <input type="text" value="Rifdatul Aisya" readonly
                 class="w-full border-none focus:ring-0 bg-transparent text-sm text-[#2E2E2E]" />
         </div>
 
           <div class="flex items-center gap-3 rounded-lg px-3 py-2 
             bg-[#F8F8F8] border border-[#626F47]">
-            <i class="fa-solid fa-envelope text-[#626F47]"></i>
+            <span class="iconify" data-icon="fa-solid:envelope" style="color:#626F47;" data-width="18" data-height="18"></span>
             <input type="text" value="rifdatul.a12@gmail.com" readonly
                    class="w-full border-none focus:ring-0 text-sm text-[#2E2E2E] bg-transparent" />
           </div>
 
           <div class="flex items-center gap-3 rounded-lg px-3 py-2 
             bg-[#F8F8F8] border border-[#626F47]">
-            <i class="fa-solid fa-phone text-[#626F47]"></i>
+            <span class="iconify" data-icon="fa-solid:phone" style="color:#626F47;" data-width="18" data-height="18"></span>
             <input type="text" value="089567884234" readonly
                    class="w-full border-none focus:ring-0 text-sm text-[#2E2E2E] bg-transparent" />
           </div>
 
           <div class="flex items-center gap-3 rounded-lg px-3 py-2 
             bg-[#F8F8F8] border border-[#626F47]">
-            <i class="fa-solid fa-briefcase text-[#626F47]"></i>
+            <span class="iconify" data-icon="mdi:account-star" style="color:#626F47;" data-width="24" data-height="24"></span>
             <input type="text" value="Magang" readonly
                    class="w-full border-none focus:ring-0 text-sm text-[#2E2E2E] bg-transparent" />
           </div>
@@ -75,35 +59,32 @@
 
           <div class="flex items-center gap-3 rounded-lg px-3 py-2 
             bg-[#F8F8F8] border border-[#626F47]">
-            <i class="fa-solid fa-venus text-[#626F47]"></i>
+            <span class="iconify" data-icon="mdi:gender-male-female" style="color:#626F47;" data-width="24" data-height="24"></span>
             <input type="text" value="Wanita" readonly
                    class="w-full border-none focus:ring-0 text-sm text-[#2E2E2E] bg-transparent" />
           </div>
 
           <div class="flex items-center gap-3 rounded-lg px-3 py-2 
             bg-[#F8F8F8] border border-[#626F47]">
-            <i class="fa-solid fa-calendar text-[#626F47]"></i>
+            <span class="iconify" data-icon="fa-solid:calendar" style="color:#626F47;" data-width="18" data-height="18"></span>
             <input type="text" value="Tanggal Lahir Belum Diisi" readonly
                    class="w-full border-none focus:ring-0 text-sm text-[#2E2E2E] bg-transparent" />
           </div>
         </div>
     </div>
 
-        <!-- Kolom Kanan (Gambar + Button) -->
-        <div class="flex flex-col items-center gap-4">
-          <img src="{{ asset('assets/logoprofil.png') }}" class="w-48 object-contain" />
+       <!-- Kolom Kanan (Gambar + Button) -->
+  <div class="flex flex-col items-center gap-4">
+    <img src="{{ asset('assets/logoprofil.png') }}" class="w-48 object-contain" />
 
-          <button class="bg-[#A4B465] hover:bg-[#8EA653] text-white font-medium px-8 py-2 rounded-full flex items-center gap-2 transition">
-            <i class="fa-solid fa-pen"></i> Edit
-          </button>
-        </div>
-
+    <a href="{{ route('user.editprofil') }}"
+      class="bg-[#A4B465] hover:bg-[#8EA653] text-white font-medium px-8 py-2 rounded-full flex items-center gap-2 transition">
+      <span class="iconify" data-icon="fa-solid:pen" style="color:white;" data-width="16" data-height="16"></span>
+      Edit
+    </a>
+  </div>
       </div>
     </div>
 
   </div>
-</main>
-
-<script src="{{asset('assets_user/js/dashboard.js')}}"></script>
-</body>
-</html>
+@endsection

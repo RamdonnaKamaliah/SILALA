@@ -1,19 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  @include('layout_dashboard.partial_dashboard.link')
-  <title>SILALA - Riwayat Baca</title>
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
-</head>
-<body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white overflow-x-hidden">
+@extends('layout_user.user')
 
-  @include('layout_dashboard.partial_dashboard.header')
+@section('title', 'riwayat baca User')
 
-  <main class="flex-grow pt-8 pb-6 px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-30 flex flex-col overflow-y-auto overflow-x-hidden max-w-full shadow-inner">
-
+@section('content')
     <!-- Filter -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
       <div class="flex flex-col sm:flex-row gap-6">
@@ -47,47 +36,48 @@
     <!-- Grid Buku -->
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
       @forelse($riwayat as $data)
-      <div class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm">
+      <a href="{{ route('user.detailbuku', ['id' => $data->buku->id, 'from' => 'riwayatbaca']) }}" 
+         class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm block hover:no-underline group">
         <div class="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
           <img src="{{ asset($data->buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
                alt="{{ $data->buku->judul_buku }}" 
-               class="w-full h-full object-cover">
+               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
         </div>
 
-        <p class="text-[#2E2E2E] text-center font-semibold text-sm mt-2">
+        <p class="text-[#2E2E2E] text-center font-semibold text-sm mt-2 group-hover:text-[#626F47] transition-colors duration-200">
           {{ $data->buku->judul_buku ?? '-' }}
         </p>
         <p class="text-[#2E2E2E] text-center text-xs">
           By {{ $data->buku->penulis ?? '-' }}
         </p>
 
-        <div class="flex justify-center mt-1 text-yellow-400">
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star"></i>
-          <i class="fa-solid fa-star-half-stroke"></i>
-          <i class="fa-regular fa-star"></i>
+        <div class="flex justify-center mt-1 text-yellow-400 text-xs">
+            @for($i = 1; $i <= 5; $i++)
+                @if($i <= floor($data->buku->average_rating))
+                    <i class="fa-solid fa-star"></i>
+                @elseif($i - 0.5 <= $data->buku->average_rating)
+                    <i class="fa-solid fa-star-half-stroke"></i>
+                @else
+                    <i class="fa-regular fa-star"></i>
+                @endif
+            @endfor
+            @if($data->buku->total_ratings > 0)
+                <span class="text-gray-600 text-xs ml-1">({{ number_format($data->buku->average_rating, 1) }})</span>
+            @endif
         </div>
 
         <p class="text-center text-xs text-gray-500 mt-1">
           Terakhir dibaca: {{ $data->terakhir_dibaca ? $data->terakhir_dibaca->diffForHumans() : '-' }}
         </p>
 
-        <a href="{{ asset($data->buku->file_buku) }}" target="_blank">
-          <button class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
-            Lanjutkan Baca
-          </button>
-        </a>
-      </div>
+        <!-- 🔗 Tombol "Lanjutkan Baca" - gunakan event.stopPropagation() agar tidak trigger link parent -->
+        <button onclick="event.stopPropagation(); window.open('{{ asset($data->buku->file_buku) }}', '_blank');"
+          class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
+          Lanjutkan Baca
+        </button>
+      </a>
       @empty
       <p class="text-gray-500 col-span-full text-center mt-8">Belum ada riwayat baca.</p>
       @endforelse
     </div>
-  </main>
-
-  @include('layout_dashboard.partial_dashboard.footer')
-
-  <script src="{{ asset('assets_user/js/dashboard.js') }}"></script>
-  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
-</body>
-</html>
+  @endsection

@@ -1,0 +1,70 @@
+        .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Custom styles for enabled buttons */
+        #bulkDeleteBtn:not(:disabled) {
+            background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+            cursor: pointer !important;
+        }
+
+        #bulkRestoreBtn:not(:disabled) {
+            background: linear-gradient(135deg, #22c55e, #16a34a) !important;
+            cursor: pointer !important;
+        }
+
+        /* Font Poppins */
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Custom scrollbar */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #A4B465, #8AA24F);
+            border-radius: 10px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #8AA24F, #758742);
+        }
+
+        /* Mobile responsive adjustments */
+        @media (max-width: 768px) {
+            .overflow-x-auto {
+                margin: 0 -1rem;
+                padding: 0 1rem;
+            }
+
+            table {
+                min-width: 800px;
+            }
+        }
+
+        /* Hover effects for table rows */
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(164, 180, 101, 0.1);
+        }

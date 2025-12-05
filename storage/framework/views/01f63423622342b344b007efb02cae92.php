@@ -245,7 +245,6 @@
                                             <?php
                                                 $path = $buku->file_buku;
 
-                                                // Rapikan jika path lama masih mengandung 'storage/'
                                                 $path = str_replace('storage/', '', $path);
                                                 $path = str_replace('public/', '', $path);
                                             ?>
@@ -315,61 +314,6 @@
             </form>
         </div>
     </div>
-
-    <!-- JavaScript untuk fungsi interaktif -->
-    
-
-    <style>
-        /* Style untuk truncate text dengan ellipsis */
-        .truncate {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        /* Responsif untuk tabel */
-        @media (max-width: 768px) {
-            .table-container {
-                overflow-x: auto;
-            }
-        }
-
-        /* Style untuk ikon aksi */
-        .action-btn {
-            transition: all 0.2s ease;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.1);
-        }
-
-        /* Style untuk empty state */
-        .empty-state {
-            padding: 3rem 1rem;
-            text-align: center;
-            color: #6b7280;
-        }
-
-        /* Style untuk modal Alpine.js */
-        [x-cloak] {
-            display: none !important;
-        }
-
-        /* Style untuk checkbox */
-        input[type="checkbox"] {
-            cursor: pointer;
-        }
-
-        /* Style untuk tombol aksi */
-        .btn-action {
-            transition: all 0.2s ease-in-out;
-        }
-
-        .btn-action:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-    </style>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/data_buku/index.blade.php ENDPATH**/ ?>

@@ -25,19 +25,25 @@
         </div>
       </div>
 
-      <!-- Input Pencarian -->
+      <!-- Input Pencarian Riwayat Baca -->
       <div class="relative w-full md:w-64">
-        <input type="text" placeholder="Cari Buku..."
-          class="w-full rounded-full bg-white border border-[#E0D6B8] pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C5B78B]" />
-        <span class="iconify absolute right-3 top-1/2 -translate-y-1/2 text-[#626F47]" data-icon="mdi:magnify" style="font-size:20px;"></span>
+        <input type="text" 
+               placeholder="Cari di riwayat baca..."
+               id="search-riwayat"
+               class="w-full rounded-full bg-white border border-[#E0D6B8] pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C5B78B]" />
+        <span class="iconify absolute right-3 top-1/2 -translate-y-1/2 text-[#626F47]" 
+              data-icon="mdi:magnify" 
+              style="font-size:20px;"></span>
       </div>
     </div>
 
     <!-- Grid Buku -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6" id="riwayat-container">
       @forelse($riwayat as $data)
       <a href="{{ route('user.detailbuku', ['id' => $data->buku->id, 'from' => 'riwayatbaca']) }}" 
-         class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm block hover:no-underline group">
+         class="riwayat-card transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm block hover:no-underline group"
+         data-judul="{{ strtolower($data->buku->judul_buku ?? '') }}"
+         data-penulis="{{ strtolower($data->buku->penulis ?? '') }}">
         <div class="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
           <img src="{{ asset($data->buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
                alt="{{ $data->buku->judul_buku }}" 
@@ -70,23 +76,29 @@
           Terakhir dibaca: {{ $data->terakhir_dibaca ? $data->terakhir_dibaca->diffForHumans() : '-' }}
         </p>
 
-        <!-- 🔗 Tombol "Lanjutkan Baca" - gunakan event.stopPropagation() agar tidak trigger link parent -->
+        <!-- 🔗 Tombol "Lanjutkan Baca" -->
         <button onclick="event.stopPropagation(); window.open('{{ asset($data->buku->file_buku) }}', '_blank');"
           class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
           Lanjutkan Baca
         </button>
       </a>
       @empty
-        <div class="text-center py-12 col-span-full">
+        <!-- Tampilan default saat tidak ada riwayat -->
+        <div class="no-riwayat-default text-center py-12 col-span-full">
           <div class="text-[#626F47] text-lg font-semibold mb-2">
-            @if(request()->has('status'))
-              Tidak ada data untuk status yang dipilih
-            @else
-              Belum ada riwayat peminjaman
-            @endif
+            Belum ada riwayat baca
           </div>
-          <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
+          <p class="text-gray-500 text-sm">Silakan baca buku terlebih dahulu</p>
         </div>
       @endforelse
+      
+      <!-- Tampilan saat pencarian tidak menemukan hasil -->
+      <div id="no-search-results" class="hidden text-center py-12 col-span-full">
+        <div class="text-[#626F47] text-lg font-semibold mb-2">
+          Tidak ada buku yang sesuai
+        </div>
+        <p class="text-gray-500 text-sm">Coba gunakan kata kunci lain</p>
+      </div>
     </div>
-  @endsection
+  
+@endsection

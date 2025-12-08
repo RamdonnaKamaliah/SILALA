@@ -4,7 +4,7 @@
 <div class="max-w-4xl mx-auto px-4">
 
   <!-- ====== FIXED TOMBOL BACA/PINJAM/FAVORIT ====== -->
-  <div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[30] bg-white pt-3">
+  <div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[30] bg-white pt-3 mb-24">
     <div class="max-w-full px-4 md:px-6">
       <div class="flex items-center justify-between mb-2 md:px-0">
 
@@ -250,8 +250,6 @@
 <?php endif; ?>
     </div>
   </div>
-
 </div>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layout_user.detail', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/detailbuku.blade.php ENDPATH**/ ?>

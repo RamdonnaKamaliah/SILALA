@@ -58,6 +58,18 @@
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
         @foreach ($data_bukus as $buku)
+        @php
+            // Ambil rating untuk buku ini
+            $ratingData = $ratings[$buku->id] ?? null;
+            $avgRating = $ratingData ? $ratingData->avg_rating : 0;
+            $totalRatings = $ratingData ? $ratingData->total_ratings : 0;
+            
+            // Hitung bintang penuh, setengah, dan kosong
+            $fullStars = floor($avgRating);
+            $halfStar = ($avgRating - $fullStars) >= 0.5 ? 1 : 0;
+            $emptyStars = 5 - $fullStars - $halfStar;
+        @endphp
+        
         <div class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
     transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] 
     cursor-pointer flex flex-col items-center pt-4"
@@ -89,12 +101,26 @@
 
         <!-- RATING -->
         <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star-half-stroke"></i>
-            <i class="fa-regular fa-star"></i>
+            @for ($i = 0; $i < $fullStars; $i++)
+                <i class="fa-solid fa-star"></i>
+            @endfor
+            
+            @if ($halfStar)
+                <i class="fa-solid fa-star-half-stroke"></i>
+            @endif
+            
+            @for ($i = 0; $i < $emptyStars; $i++)
+                <i class="fa-regular fa-star"></i>
+            @endfor
+            
+            <!-- Tampilkan rating numerik jika ada -->
+            @if($avgRating > 0)
+                <span class="text-gray-600 text-xs ml-1">({{ number_format($avgRating, 1) }})</span>
+            @else
+                <span class="text-gray-400 text-xs ml-1">Belum ada rating</span>
+            @endif
         </div>
+        
 
         <!-- BUTTON -->
         <div class="mt-auto pt-2">

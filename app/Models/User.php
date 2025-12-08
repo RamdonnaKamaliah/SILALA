@@ -17,6 +17,7 @@ class User extends Authenticatable
     'password',
     'membership_type',
     'gender',
+    'foto_profil',
     'google_id',
     'google_token',
     'google_refresh_token',

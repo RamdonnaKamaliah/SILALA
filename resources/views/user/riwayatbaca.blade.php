@@ -77,7 +77,16 @@
         </button>
       </a>
       @empty
-      <p class="text-gray-500 col-span-full text-center mt-8">Belum ada riwayat baca.</p>
+        <div class="text-center py-12 col-span-full">
+          <div class="text-[#626F47] text-lg font-semibold mb-2">
+            @if(request()->has('status'))
+              Tidak ada data untuk status yang dipilih
+            @else
+              Belum ada riwayat peminjaman
+            @endif
+          </div>
+          <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
+        </div>
       @endforelse
     </div>
   @endsection

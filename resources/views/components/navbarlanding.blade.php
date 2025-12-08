@@ -21,7 +21,6 @@
     @elseauth('web')
       <a href="{{ url('/dashboard') }}" class="nav-link">Dashboard</a>
     @else
-      <a href="{{ route('register') }}" class="nav-link">Register</a>
       <a href="{{ route('login') }}" class="nav-link text-blue-500">Login</a>
     @endauth
   </nav>

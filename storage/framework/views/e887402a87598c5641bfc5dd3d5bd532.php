@@ -78,9 +78,17 @@
         </button>
       </a>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-      <p class="text-gray-500 col-span-full text-center mt-8">Belum ada riwayat baca.</p>
+        <div class="text-center py-12 col-span-full">
+          <div class="text-[#626F47] text-lg font-semibold mb-2">
+            <?php if(request()->has('status')): ?>
+              Tidak ada data untuk status yang dipilih
+            <?php else: ?>
+              Belum ada riwayat peminjaman
+            <?php endif; ?>
+          </div>
+          <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
+        </div>
       <?php endif; ?>
     </div>
   <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/riwayatbaca.blade.php ENDPATH**/ ?>

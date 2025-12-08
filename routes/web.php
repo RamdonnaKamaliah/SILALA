@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Admin\DataBukuController;
@@ -21,8 +20,8 @@ use App\Http\Controllers\user\DetailBukuController;
 use App\Http\Controllers\user\RiwayatBukuController;
 use App\Http\Controllers\user\RiwayatBacaController;
 use App\Http\Controllers\user\FavoritController;
-use App\Http\Controllers\user\ProfilController;
-use App\Http\Controllers\user\EditProfilController;
+use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\EditProfilController;
 use App\Http\Controllers\user\RatingController;
 use App\Http\Controllers\Admin\MediaBukuController;
 
@@ -41,37 +40,50 @@ Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGo
 
 Route::get('/auth/google/callback', [GoogleLoginController::class, 'handleGoogleCallback'])
     ->name('google.callback');
-
-// Authenticated Routes
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+// Setup Password Route (untuk user yang register via Google)
+Route::middleware('auth:web')->group(function () {
+    Route::get('/setup-password', [SetupPasswordController::class, 'index'])
+        ->name('setup.password');
+    Route::post('/setup-password', [SetupPasswordController::class, 'store'])
+        ->name('setup.password.store');
 });
 
 // User Routes
 Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
+    // USER
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    //DAFTAR BUKU
     Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
+
+    // DETAIL BUKU
     Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])->name('user.detailbuku');
+
+    // RIWAYAT BUKU & RIWAYAT BACA
     Route::get('/riwayatbuku', [RiwayatBukuController::class, 'index'])->name('user.riwayatbuku');
     Route::post('/riwayatbuku/store', [RiwayatBukuController::class, 'store'])->name('user.riwayatbuku.store');
     Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
-    Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
-    Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
-    
-    // Route baca buku - pastikan hanya ada satu deklarasi
+
+    // PROFIL USER
+Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
+Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
+Route::put('/editprofil', [EditProfilController::class, 'update'])->name('user.updateprofil');
+
+    // BACA
     Route::get('/baca/{id}', [DetailBukuController::class, 'baca'])->name('user.baca');
 
-    // User - Riwayat Buku
+    // PENGEMBALIAN BUKU
     Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalikanBuku'])
         ->name('user.riwayat.kembalikan');
+    Route::post('/kembalikan-buku-foto', [RiwayatBukuController::class, 'kembalikanBukuWithPhoto'])
+    ->name('user.kembalikan.buku.foto');
     Route::get('/check-borrow-status/{bookId}', [RiwayatBukuController::class, 'checkBookBorrowStatus'])
         ->name('user.check.borrow.status');
     Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBorrow'])
         ->name('user.check.active.borrow');
-    
-    // Peminjaman buku
+
+    // PINJAM BUKU
     Route::post('/pinjam', [App\Http\Controllers\Admin\DataPeminjamController::class, 'store'])
         ->name('pinjam.store')
         ->middleware('auth');
@@ -91,7 +103,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
        
     // Data Buku Routes
-        
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
@@ -103,12 +114,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
     ->name('data_buku.restore');
 
-
     // Data Kategori Routes
     Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
     Route::delete('/data-kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
 
-    
     // Data Arsip Routes
     Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');
     Route::post('/data_arsip/bulk-restore', [DataArsipController::class, 'bulkRestore'])
@@ -121,20 +130,17 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
 
     // Data Peminjam Routes
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');
-    Route::put('/data_peminjam/{id}/kembalikan', [DataPeminjamController::class, 'kembalikan'])
-        ->name('data_peminjam.kembalikan');
-    Route::put('/data_peminjam/{id}/masalah', [DataPeminjamController::class, 'masalah'])
+    Route::put('/data_peminjam/{id}/kembalikan', [DataPeminjamController::class, 'kembalikanBuku'])
+        ->name('data_peminjam.kembalikan');  
+    Route::put('/data_peminjam/{id}/konfirmasi', [DataPeminjamController::class, 'konfirmasiPengembalian'])
+        ->name('data_peminjam.konfirmasi');  
+    Route::put('/data_peminjam/{id}/masalah', [DataPeminjamController::class, 'laporkanMasalah'])
         ->name('data_peminjam.masalah');
-
-    // Data Denda Routes
-    Route::resource('/data_denda', DataDendaController::class)->names('data_denda');
- 
+        
     // Media Buku Routes
     Route::get('/media-buku', [MediaBukuController::class, 'index'])->name('media.index');
     Route::delete('/media-buku/{id}', [MediaBukuController::class, 'destroy'])
     ->name('media.destroy');
-
-
 
 });
 

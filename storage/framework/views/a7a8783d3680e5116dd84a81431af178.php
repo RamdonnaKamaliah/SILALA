@@ -58,27 +58,27 @@
     <!-- Form Container -->
     <div class="p-6 md:p-8">
       <!-- Success Message -->
-      @if(session('success'))
+      <?php if(session('success')): ?>
         <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
           <div class="flex items-center">
             <i class="fas fa-check-circle text-green-500 mr-2"></i>
-            <span class="text-sm text-green-600 font-medium">{{ session('success') }}</span>
+            <span class="text-sm text-green-600 font-medium"><?php echo e(session('success')); ?></span>
           </div>
         </div>
-      @endif
+      <?php endif; ?>
 
       <!-- Error Messages -->
-      @if($errors->any())
+      <?php if($errors->any()): ?>
         <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
           <div class="flex items-center">
             <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
             <span class="text-sm text-red-600 font-medium">Periksa password Anda</span>
           </div>
         </div>
-      @endif
+      <?php endif; ?>
 
-      <form method="POST" action="{{ route('setup.password.store') }}" class="space-y-5">
-        @csrf
+      <form method="POST" action="<?php echo e(route('setup.password.store')); ?>" class="space-y-5">
+        <?php echo csrf_field(); ?>
         
         <!-- Password Field -->
         <div>
@@ -100,11 +100,19 @@
               <i id="eye-icon-password" class="fas fa-eye"></i>
             </span>
           </div>
-          @error('password')
+          <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
             <p class="mt-2 text-xs text-red-500 flex items-center">
-              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+              <i class="fas fa-exclamation-circle mr-1"></i><?php echo e($message); ?>
+
             </p>
-          @enderror
+          <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
           <p class="text-xs text-gray-500 mt-2">
             Gunakan Minimal 8 karakter
           </p>
@@ -130,11 +138,19 @@
               <i id="eye-icon-confirm" class="fas fa-eye"></i>
             </span>
           </div>
-          @error('password_confirmation')
+          <?php $__errorArgs = ['password_confirmation'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
             <p class="mt-2 text-xs text-red-500 flex items-center">
-              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+              <i class="fas fa-exclamation-circle mr-1"></i><?php echo e($message); ?>
+
             </p>
-          @enderror
+          <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
         </div>
 
         <!-- Submit Button -->
@@ -212,4 +228,4 @@
     });
   </script>
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/auth/setup-password.blade.php ENDPATH**/ ?>

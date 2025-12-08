@@ -8,6 +8,7 @@ use App\Models\DataPeminjam;
 use App\Models\DataBuku;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class RiwayatBukuController extends Controller
 {
@@ -93,31 +94,89 @@ class RiwayatBukuController extends Controller
     }
 
     public function kembalikanBuku($id)
-{
-    $peminjaman = DataPeminjam::where('id', $id)
-        ->where('user_id', Auth::id())
-        ->firstOrFail();
+    {
+        $peminjaman = DataPeminjam::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
-    // Update keterangan jika terlambat
-    $tanggalKembali = Carbon::parse($peminjaman->tanggal_kembali);
-    $sekarang = Carbon::now();
-    
-    // Reset waktu ke 00:00:00 untuk perhitungan hari murni
-    $tanggalKembali->startOfDay();
-    $sekarang->startOfDay();
-    
-    if ($sekarang->gt($tanggalKembali)) {
-        // PERBAIKAN: GUNAKAN abs() UNTUK NILAI POSITIF
-        $hariTelat = abs($sekarang->diffInDays($tanggalKembali));
-        $peminjaman->keterangan = 'Terlambat ' . $hariTelat . ' hari - Sudah dikembalikan';
-    } else {
-        $peminjaman->keterangan = 'Tepat waktu - Sudah dikembalikan';
+        // Update keterangan jika terlambat
+        $tanggalKembali = Carbon::parse($peminjaman->tanggal_kembali);
+        $sekarang = Carbon::now();
+        
+        // Reset waktu ke 00:00:00 untuk perhitungan hari murni
+        $tanggalKembali->startOfDay();
+        $sekarang->startOfDay();
+        
+        if ($sekarang->gt($tanggalKembali)) {
+            $hariTelat = abs($sekarang->diffInDays($tanggalKembali));
+            $peminjaman->keterangan = 'Terlambat ' . $hariTelat . ' hari - Sudah dikembalikan';
+        } else {
+            $peminjaman->keterangan = 'Tepat waktu - Sudah dikembalikan';
+        }
+
+        // Ubah status menjadi menunggu konfirmasi admin
+        $peminjaman->status = 'menunggu_konfirmasi';
+        $peminjaman->save();
+
+        return redirect()->back()->with('success', 'Buku dikembalikan. Menunggu konfirmasi admin.');
     }
 
-    // Ubah status menjadi menunggu konfirmasi admin
-    $peminjaman->status = 'menunggu_konfirmasi';
-    $peminjaman->save();
+    public function kembalikanBukuWithPhoto(Request $request)
+    {
+        $request->validate([
+            'buku_id' => 'required|exists:data_peminjams,id',
+            'foto' => 'required|image|max:5120' // Maksimal 5MB
+        ]);
 
-    return redirect()->back()->with('success', 'Buku dikembalikan. Menunggu konfirmasi admin.');
-}
+        // Cari data peminjaman
+        $peminjaman = DataPeminjam::where('id', $request->buku_id)
+            ->where('user_id', Auth::id())
+            ->where('status', 'dipinjam')
+            ->firstOrFail();
+
+        // Simpan foto ke storage
+        if ($request->hasFile('foto')) {
+            // Generate nama file yang unik
+            $fileName = 'pengembalian_' . time() . '_' . uniqid() . '.' . $request->file('foto')->getClientOriginalExtension();
+            
+            // Simpan file ke storage
+            $path = $request->file('foto')->storeAs('pengembalian', $fileName, 'public');
+            
+            // Update data peminjaman
+            $peminjaman->foto_bukti_pengembalian = $path;
+        }
+
+        // Hitung keterlambatan
+        $tanggalKembali = Carbon::parse($peminjaman->tanggal_kembali);
+        $sekarang = Carbon::now();
+        
+        // Reset waktu ke 00:00:00 untuk perhitungan hari murni
+        $tanggalKembali->startOfDay();
+        $sekarang->startOfDay();
+        
+        // Update keterangan berdasarkan keterlambatan
+        if ($sekarang->gt($tanggalKembali)) {
+            $hariTelat = abs($sekarang->diffInDays($tanggalKembali));
+            $peminjaman->keterangan = 'Terlambat ' . $hariTelat . ' hari - Menunggu konfirmasi admin';
+        } else {
+            $peminjaman->keterangan = 'Tepat waktu - Menunggu konfirmasi admin';
+        }
+
+        // Update data pengembalian
+        $peminjaman->status = 'menunggu_konfirmasi';
+        $peminjaman->metode_pengembalian = 'mandiri';
+        $peminjaman->waktu_pengembalian_aktual = $sekarang;
+        $peminjaman->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Buku berhasil dikembalikan dengan foto. Menunggu konfirmasi admin.',
+            'data' => [
+                'peminjaman_id' => $peminjaman->id,
+                'buku' => $peminjaman->buku->judul_buku,
+                'waktu_pengembalian' => $sekarang->format('d F Y H:i:s'),
+                'status' => 'menunggu_konfirmasi'
+            ]
+        ]);
+    }
 }

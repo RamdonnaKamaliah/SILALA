@@ -44,71 +44,39 @@
                     <h2 class="text-xl font-semibold text-gray-900">Status Peminjaman</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Status Info -->
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4">
-                            @if($peminjam->status == 'menunggu_konfirmasi')
-                            <div class="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-clock text-yellow-600 text-2xl"></i>
-                            </div>
-                            <div>
-                                <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium border border-yellow-200">
-                                    Menunggu Konfirmasi
-                                </span>
-                                <p class="text-gray-600 text-sm mt-1">Menunggu persetujuan</p>
-                            </div>
-                            @elseif($peminjam->status == 'dipinjam')
-                            <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-book text-blue-600 text-2xl"></i>
-                            </div>
-                            <div>
-                                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200">
-                                    Dipinjam
-                                </span>
-                                <p class="text-gray-600 text-sm mt-1">Buku sedang dipinjam</p>
-                            </div>
-                            @elseif($peminjam->status == 'dikembalikan')
-                            <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-check text-green-600 text-2xl"></i>
-                            </div>
-                            <div>
-                                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium border border-green-200">
-                                    Dikembalikan
-                                </span>
-                                <p class="text-gray-600 text-sm mt-1">Buku sudah dikembalikan</p>
-                            </div>
-                            @elseif($peminjam->status == 'bermasalah')
-                            <div class="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center">
-                                <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
-                            </div>
-                            <div>
-                                <span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium border border-red-200">
-                                    Bermasalah
-                                </span>
-                                <p class="text-gray-600 text-sm mt-1">Perlu perhatian khusus</p>
-                            </div>
-                            @endif
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        @if($peminjam->status == 'menunggu_konfirmasi')
+                        <div class="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-clock text-yellow-600 text-2xl"></i>
                         </div>
-                    </div>
-
-                    <!-- Denda Info -->
-                    <div class="bg-gray-50 rounded-xl p-4">
-                        <div class="text-center">
-                            <p class="text-sm text-gray-600 mb-2">Total Denda</p>
-                            <p class="text-2xl font-bold {{ $peminjam->denda > 0 ? 'text-red-600' : 'text-green-600' }} mb-2">
-                                Rp {{ number_format($peminjam->denda, 0, ',', '.') }}
-                            </p>
-                            @if($peminjam->denda > 0)
-                            <span class="inline-block px-2 py-1 bg-red-100 text-red-800 rounded text-xs">
-                                Perlu pembayaran
+                        <div>
+                            <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium border border-yellow-200">
+                                Menunggu Konfirmasi
                             </span>
-                            @else
-                            <span class="inline-block px-2 py-1 bg-green-100 text-green-800 rounded text-xs">
-                                Tidak ada denda
-                            </span>
-                            @endif
+                            <p class="text-gray-600 text-sm mt-1">Menunggu persetujuan</p>
                         </div>
+                        @elseif($peminjam->status == 'dipinjam')
+                        <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-book text-blue-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium border border-blue-200">
+                                Dipinjam
+                            </span>
+                            <p class="text-gray-600 text-sm mt-1">Buku sedang dipinjam</p>
+                        </div>
+                        @elseif($peminjam->status == 'dikembalikan')
+                        <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-check text-green-600 text-2xl"></i>
+                        </div>
+                        <div>
+                            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium border border-green-200">
+                                Dikembalikan
+                            </span>
+                            <p class="text-gray-600 text-sm mt-1">Buku sudah dikembalikan</p>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -190,65 +158,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Quick Actions -->
-            @if(in_array($peminjam->status, ['menunggu_konfirmasi', 'dipinjam']))
-            <div class="bg-white rounded-xl border border-gray-200 p-6">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 bg-[#A4B465] rounded-lg flex items-center justify-center">
-                        <i class="fas fa-bolt text-white"></i>
-                    </div>
-                    <h2 class="text-xl font-semibold text-gray-900">Aksi Cepat</h2>
-                </div>
-
-                <div class="space-y-3">
-                    @if ($peminjam->status == 'menunggu_konfirmasi')
-                    <form action="{{ route('admin.data_peminjam.konfirmasi', $peminjam->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <button type="submit"
-                            class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 font-medium">
-                            <i class="fas fa-check"></i>
-                            Setujui
-                        </button>
-                    </form>
-                    
-                    <form action="{{ route('admin.data_peminjam.batalkan', $peminjam->id) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit"
-                            class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 font-medium"
-                            onclick="return confirm('Yakin ingin membatalkan peminjaman ini?')">
-                            <i class="fas fa-times"></i>
-                            Tolak
-                        </button>
-                    </form>
-                    
-                    @elseif ($peminjam->status == 'dipinjam')
-                    <form action="{{ route('admin.data_peminjam.kembalikan', $peminjam->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <button type="submit"
-                            class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium">
-                            <i class="fas fa-undo"></i>
-                            Kembalikan
-                        </button>
-                    </form>
-                    
-                    <form action="{{ route('admin.data_peminjam.masalah', $peminjam->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <button type="submit"
-                            class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2 font-medium"
-                            onclick="return confirm('Yakin melaporkan masalah pada peminjaman ini?')">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Laporkan Masalah
-                        </button>
-                    </form>
-                    @endif
-                </div>
-            </div>
-            @endif
         </div>
     </div>
 

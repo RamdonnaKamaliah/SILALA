@@ -17,6 +17,16 @@
                     <input type="file" id="foto_buku" name="foto_buku"
                         class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
         focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200">
+                    <?php $__errorArgs = ['foto_buku'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
 
                     
                     <div class="mb-4">

@@ -24,7 +24,7 @@
                 <div class="p-3 flex flex-col gap-2">
 
                     <p class="text-lg text-gray-700 font-medium truncate">
-                        <?php echo e($item->buku?->judul_buku ?? 'Tidak ada judul'); ?>
+                        <?php echo e($item->buku->judul_buku ?? 'Tidak ada judul'); ?>
 
                     </p>
 

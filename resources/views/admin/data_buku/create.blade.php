@@ -18,6 +18,9 @@
                     <input type="file" id="foto_buku" name="foto_buku"
                         class="w-full border border-gray-300 rounded-xl px-4 py-2 bg-gray-50 
         focus:outline-none focus:ring-2 focus:ring-[#A4B465] transition duration-200">
+                    @error('foto_buku')
+                        <p class="text-red-500 text-sm">{{ $message }}</p>
+                    @enderror
 
                     {{-- GAMBAR BUKU (PICK FROM MEDIA) --}}
                     <div class="mb-4">

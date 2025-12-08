@@ -13,7 +13,6 @@ class MediaBukuController extends Controller
     {
       $media = GambarBuku::with('buku')->get();
       return view('admin.media.index', compact('media'));
-
     }
 
  public function destroy($id)

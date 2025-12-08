@@ -247,7 +247,9 @@
     </div>
 
     <!-- ====== MODAL PENGEMBALIAN MANDIRI (DILUAR NAV & MAIN) ====== -->
-    <div id="pengembalianModal" class="hidden fixed inset-0 z-[1050] flex items-center justify-center bg-black/40 p-4">
+    <div id="pengembalianModal"
+     class="hidden fixed inset-0 z-[3000] flex items-center justify-center
+     bg-black/70 backdrop-blur-[3px] p-4">
       <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative">
         <!-- Header -->
         <div class="bg-[#4C6444] text-white text-center py-3 font-semibold text-lg">

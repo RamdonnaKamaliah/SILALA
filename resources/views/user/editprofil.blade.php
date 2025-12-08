@@ -25,7 +25,7 @@
                             <div class="w-36 h-36 rounded-full bg-[#F3F7EE] border-2 border-[#C9DABF] overflow-hidden 
                                       shadow-[0_6px_12px_rgba(0,0,0,0.12)] flex items-center justify-center">
                                 @if(Auth::user()->foto_profil)
-                                    <img id="preview-foto" src="{{ asset('storage/' . Auth::user()->foto_profil) }}" 
+                                    <img id="preview-foto" src="{{ Storage::url(Auth::user()->foto_profil) }}" 
                                          class="w-full h-full object-cover" alt="Foto profil" />
                                 @else
                                     <img id="preview-foto" src="{{ asset('assets/Profile.jpg') }}" 
@@ -100,25 +100,6 @@
     </div>
 </div>
 
-<script>
-function togglePassword(inputId, eyeIconId) {
-    const passwordInput = document.getElementById(inputId);
-    const eyeIcon = document.getElementById(eyeIconId);
-    
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        eyeIcon.setAttribute('data-icon', 'mdi:eye-outline');
-    } else {
-        passwordInput.type = 'password';
-        eyeIcon.setAttribute('data-icon', 'mdi:eye-off-outline');
-    }
-    
-    // Refresh iconify icon
-    if (window.iconify) {
-        window.iconify.scan(eyeIcon);
-    }
-}
-</script>
                 </div>
 
                 <!-- KANAN: Data Profil -->
@@ -239,18 +220,4 @@ function togglePassword(inputId, eyeIconId) {
         </div>
     </form>
 </div>
-<script>
-function previewImage(input) {
-    const preview = document.getElementById('preview-foto');
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
-
-
 @endsection

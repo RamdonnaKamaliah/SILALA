@@ -11,9 +11,15 @@ use Laravel\Socialite\Facades\Socialite;
 class GoogleLoginController extends Controller
 {
     public function redirectToGoogle()
-    {
-        return Socialite::driver('google')->redirect();
-    }
+{
+    // Ambil URL redirect default dari Socialite
+    $redirectUrl = Socialite::driver('google')->redirect()->getTargetUrl();
+    
+    // Tambahkan parameter prompt ke URL
+    $redirectUrl .= '&prompt=select_account';
+    
+    return redirect($redirectUrl);
+}
 
     public function handleGoogleCallback()
     {
@@ -83,4 +89,6 @@ class GoogleLoginController extends Controller
             return redirect('/login')->with('error', 'Login Google gagal, coba lagi.');
         }
     }
+
+    
 }

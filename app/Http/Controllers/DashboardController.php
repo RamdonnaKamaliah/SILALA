@@ -16,30 +16,31 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // Hitung jumlah buku yang sedang dipinjam
+        // Jumlah Dipinjam
         $dipinjam = DataPeminjam::where('user_id', $user->id)
                     ->where('status', 'dipinjam')
                     ->count();
 
-        // Hitung jumlah buku favorit
+        // Jumlah Favorit
         $favorit = Favorit::where('user_id', $user->id)
                    ->count();
 
-        // Hitung jumlah buku yang telat
+        // Jumlah Telat
         $telat = DataPeminjam::where('user_id', $user->id)
                  ->where('status', 'dipinjam')
                  ->where('tanggal_kembali', '<', Carbon::now())
                  ->count();
 
-        // Ambil buku-buku dengan rating tertinggi (contoh: 5 buku teratas)
+        // Rekomendasi
         $bukuRatingTertinggi = DataBuku::select('data_bukus.*')
             ->leftJoin('ratings', 'data_bukus.id', '=', 'ratings.buku_id')
             ->selectRaw('COALESCE(AVG(ratings.rating), 0) as avg_rating')
             ->selectRaw('COUNT(ratings.id) as total_ratings')
             ->groupBy('data_bukus.id')
+            ->having('avg_rating', '>', 0)
             ->orderBy('avg_rating', 'DESC')
             ->orderBy('total_ratings', 'DESC')
-            ->limit(6) // Ambil 6 buku teratas
+            ->limit(3)
             ->get();
 
         return view('user.dashboard', [

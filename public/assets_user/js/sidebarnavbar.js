@@ -30,10 +30,10 @@ document.getElementById('logoutButton').addEventListener('click', function(e) {
   e.preventDefault(); // mencegah submit langsung
   Swal.fire({
     title: 'Konfirmasi Logout',
-    text: "Apakah Kamu yakin ingin ",
+    text: "Apakah Anda yakin ingin keluar?",
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#3085d6',
+    confirmButtonColor: '#A4B465',
     cancelButtonColor: '#d33',
     confirmButtonText: 'Ya, logout!',
     cancelButtonText: 'Batal'

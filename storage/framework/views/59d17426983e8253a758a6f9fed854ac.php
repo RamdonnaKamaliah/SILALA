@@ -7,7 +7,6 @@
     <title>Admin Dashboard</title>
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <?php echo $__env->make('layout_admin.partial_admin.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-    
     <?php echo $__env->yieldPushContent('styles'); ?>
 
 </head>
@@ -18,9 +17,9 @@
     <?php echo $__env->make('layout_admin.partial_admin.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     
-    <main
-        class="min-h-screen transition-all duration-300 pt-24 px-4 sm:px-6 bg-gray-50 
-             lg:ml-64 lg:w-[calc(100%-16rem)] w-full overflow-hidden">
+   <main
+    class="min-h-screen transition-all duration-300 pt-24 px-4 sm:px-6 bg-gray-50 main-bg
+         lg:ml-64 lg:w-[calc(100%-16rem)] w-full overflow-hidden">
         <div class="max-w-full">
             <?php echo $__env->yieldContent('content'); ?>
         </div>
@@ -57,8 +56,10 @@
     <!-- Kategori -->
     <script src="<?php echo e(asset('assets_admin/js/data_kategori/create.js')); ?>"></script>
 
+    
+    <script src="<?php echo e(asset('assets_admin/js/navbarAdmin.js')); ?>"></script>
+    
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
-
 </html>
 <?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/layout_admin/admin.blade.php ENDPATH**/ ?>

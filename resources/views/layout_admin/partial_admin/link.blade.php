@@ -47,4 +47,6 @@
 <link rel="stylesheet" href="{{ asset('assets_admin/css/dataBuku/index.css') }}">
 {{-- bagian create --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-<link rel="stylesheet" href="{{ asset('/assets_admin/css/create-databuku.css') }}">
+<link rel="stylesheet" href="{{ asset('assets_admin/css/create-databuku.css') }}">
+
+<link rel="stylesheet" href="{{ asset('assets_admin/css/navbarAdmin.css') }}">

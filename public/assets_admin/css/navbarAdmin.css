@@ -1,0 +1,234 @@
+        
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #8a9a55;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .message-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: linear-gradient(135deg, #4dabf7 0%, #339af0 100%);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 2px solid #8a9a55;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .popup-shadow {
+            box-shadow: 0 20px 40px rgba(138, 154, 85, 0.15);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #8a9a55, #A4B465);
+            border-radius: 3px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #A4B465, #b8c685);
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(138, 154, 85, 0.15);
+        }
+        
+        @keyframes subtle-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .pulse-subtle {
+            animation: subtle-pulse 2s infinite;
+        }
+        
+        /* Dropdown Styles - MOBILE OPTIMIZED */
+        .dropdown-container {
+            position: relative;
+        }
+        
+        .dropdown-menu {
+            position: fixed;
+            z-index: 9999;
+            background-color: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        /* Mobile: Full width dropdown */
+        @media (max-width: 639px) {
+            .dropdown-menu {
+                left: 0.5rem !important;
+                right: 0.5rem !important;
+                width: calc(100vw - 1rem) !important;
+                max-width: none !important;
+                top: 5.5rem !important;
+            }
+            
+            .dropdown-menu.show {
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* Tablet */
+        @media (min-width: 640px) and (max-width: 1023px) {
+            .dropdown-menu {
+                position: absolute;
+                top: calc(100% + 0.5rem);
+                right: 0;
+                left: auto;
+                width: 350px;
+                max-width: 90vw;
+            }
+        }
+        
+        /* Desktop */
+        @media (min-width: 1024px) {
+            .dropdown-menu {
+                position: absolute;
+                top: calc(100% + 0.5rem);
+                right: 0;
+                left: auto;
+                width: 380px;
+                max-width: 90vw;
+            }
+        }
+        
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        
+        /* Navbar padding responsive */
+        @media (max-width: 639px) {
+            .navbar-padding {
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            
+            .navbar-icon-spacing {
+                gap: 0.25rem;
+            }
+            
+            .navbar-height {
+                height: 70px;
+            }
+        }
+        
+        @media (min-width: 640px) and (max-width: 1023px) {
+            .navbar-padding {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .navbar-height {
+                height: 80px;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .navbar-padding {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+            
+            .navbar-height {
+                height: 85px;
+            }
+        }
+        
+        /* Optimize dropdown content for mobile */
+        @media (max-width: 639px) {
+            .dropdown-content {
+                max-height: 60vh;
+            }
+            
+            .notification-item,
+            .message-item,
+            .profile-item {
+                padding: 0.875rem 1rem;
+            }
+            
+            .mobile-only {
+                display: block;
+            }
+            
+            .desktop-only {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 640px) {
+            .mobile-only {
+                display: none;
+            }
+            
+            .desktop-only {
+                display: block;
+            }
+        }
+        
+        /* Improve touch targets for mobile */
+        @media (max-width: 639px) {
+            .touch-target {
+                min-height: 44px;
+                min-width: 44px;
+            }
+            
+            .icon-button {
+                padding: 10px;
+            }
+        }
+        
+        /* Smooth animations */
+        .smooth-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }

@@ -7,7 +7,6 @@
     <title>Admin Dashboard</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @include('layout_admin.partial_admin.link')
-    
     @stack('styles')
 
 </head>
@@ -18,9 +17,9 @@
     @include('layout_admin.partial_admin.header')
 
     {{-- MAIN: satu-satunya main di layout --}}
-    <main
-        class="min-h-screen transition-all duration-300 pt-24 px-4 sm:px-6 bg-gray-50 
-             lg:ml-64 lg:w-[calc(100%-16rem)] w-full overflow-hidden">
+   <main
+    class="min-h-screen transition-all duration-300 pt-24 px-4 sm:px-6 bg-gray-50 main-bg
+         lg:ml-64 lg:w-[calc(100%-16rem)] w-full overflow-hidden">
         <div class="max-w-full">
             @yield('content')
         </div>
@@ -57,7 +56,9 @@
     <!-- Kategori -->
     <script src="{{ asset('assets_admin/js/data_kategori/create.js') }}"></script>
 
+    {{-- navbarAdmin --}}
+    <script src="{{ asset('assets_admin/js/navbarAdmin.js') }}"></script>
+    
     @stack('scripts')
 </body>
-
 </html>

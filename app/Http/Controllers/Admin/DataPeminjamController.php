@@ -157,7 +157,7 @@ public function store(Request $request)
             ->whereIn('status', ['dipinjam', 'menunggu_konfirmasi'])
             ->count();
 
-        if ($activeBorrows >= 3) {
+        if ($activeBorrows >= 4) {
             Log::warning('User mencapai batas peminjaman', ['user_id' => $user->id, 'active_borrows' => $activeBorrows]);
             return response()->json([
                 'success' => false,

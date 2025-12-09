@@ -12,24 +12,23 @@ class DaftarBukuController extends Controller
 {
     public function index()
     {
-        // Ambil hanya buku dengan status aktif
+        // Ambil Buku Aktif
         $data_bukus = DataBuku::where('status', 'aktif')->get();
         
-        // Ambil rating rata-rata untuk setiap buku
+        // Ambil Rating Buku
         $ratings = Rating::selectRaw('buku_id, AVG(rating) as avg_rating, COUNT(*) as total_ratings')
             ->groupBy('buku_id')
             ->get()
             ->keyBy('buku_id');
         
-        // Ambil semua kategori
+        // Ambil Kategori
         $data_kategori = DataKategori::all();
 
-        // Kirim ke view
         return view('user.daftarbuku', [
             'title' => 'DAFTAR BUKU',
             'data_bukus' => $data_bukus,
             'data_kategori' => $data_kategori,
-            'ratings' => $ratings, // Kirim data rating ke view
+            'ratings' => $ratings,
         ]);
     }
 }

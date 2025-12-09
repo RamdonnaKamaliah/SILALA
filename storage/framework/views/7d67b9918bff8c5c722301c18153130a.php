@@ -52,13 +52,13 @@
     </div>
   </div>
 
-  <!-- Denda -->
+  <!-- Telat -->
   <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
     <span class="iconify absolute left-2 -top-2 text-[70px] text-cream"
       data-icon="mdi:book-alert"></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
       <p class="text-sm text-white font-medium">Telat Pengembalian</p>
-      <h3 class="text-lg font-mochiy text-white"> Buku</h3>
+      <h3 class="text-lg font-mochiy text-white"><?php echo e($telat); ?> Buku</h3>
     </div>
   </div>
 
@@ -78,37 +78,77 @@
   <!-- BAGIAN KONTEN YANG SCROLL -->
   <div class="mt-6 overflow-y-auto scrollbar-hide flex-1 pr-2 
     pb-10 md:rounded-b-3xl">
-    <!-- Bacaan Anda -->
-    <section class="pb-8">
-      <h2 class="text-lg md:text-xl font-medium text-black mb-4 ml-2">Rekomendasi</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Card Buku 1 -->
-        <div class="flex items-start bg-transparent p-3 hover:scale-[1.03] transition-transform duration-300">
-          <div class="relative w-32 h-44 flex-shrink-0">
-            <div class="absolute inset-0 bg-gradient-to-r from-[#00000020] to-transparent rounded-lg shadow-md"></div>
-            <img src="<?php echo e(asset('assets/buku1.jpg')); ?>" alt="Buku 1"
-                 class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
-            <div class="absolute right-0 top-0 w-1 h-full bg-[#d1cfcf] rounded-r-lg"></div>
-          </div>
-          <div class="ml-4 flex flex-col justify-between h-full">
-            <div>
-              <h3 class="font-bold text-[#1E1E1E] text-base leading-snug">Statistika Peternakan</h3>
-              <p class="text-sm text-gray-600 mb-2">By Indah Hanaco</p>
-              <div class="flex text-yellow-400 text-sm space-x-1 mb-2">
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star-half-stroke"></i>
-                <i class="fa-regular fa-star"></i>
-              </div>
-            </div>
-            <button class="bg-[#626F47] text-white text-xs px-5 py-1.5 rounded-full hover:bg-[#4e5d38] transition w-fit">
-              Baca
-            </button>
-          </div>
-        </div> 
-      </div>
-    </section>
+    <!-- Rekomendasi -->
+<section class="pb-8">
+    <h2 class="text-lg md:text-xl font-medium text-black mb-4 ml-2">Rekomendasi</h2>
+    
+    <?php if($bukuRatingTertinggi->isEmpty()): ?>
+        <p class="text-gray-500 ml-2">Belum ada buku dengan rating.</p>
+    <?php else: ?>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <?php $__currentLoopData = $bukuRatingTertinggi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <!-- Card Buku -->
+                <div class="flex items-start bg-transparent p-3 hover:scale-[1.03] transition-transform duration-300">
+                    <div class="relative w-32 h-44 flex-shrink-0">
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#00000020] to-transparent rounded-lg shadow-md"></div>
+                          <?php if($buku->foto_buku): ?>
+                                <img src="<?php echo e(asset($buku->foto_buku)); ?>" alt="<?php echo e($buku->judul_buku); ?>"
+                                     class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
+                            <?php else: ?>
+                                <img src="<?php echo e(asset('assets/default-cover.jpg')); ?>" alt="<?php echo e($buku->judul_buku); ?>"
+                                     class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
+                          <?php endif; ?>
+                        <div class="absolute right-0 top-0 w-1 h-full bg-[#d1cfcf] rounded-r-lg"></div>
+                    </div>
+                    
+                    <div class="ml-4 flex flex-col justify-between h-full">
+                        <div>
+                            <h3 class="font-bold text-[#1E1E1E] text-base leading-snug"><?php echo e($buku->judul_buku); ?></h3>
+                            <p class="text-sm text-gray-600 mb-2">By <?php echo e($buku->penulis); ?></p>
+                            
+                            <!-- Rating Bintang -->
+                            <?php
+                                // Hitung rating rata-rata
+                                $avgRating = $buku->ratings()->avg('rating') ?? 0;
+                                $fullStars = floor($avgRating);
+                                $hasHalfStar = ($avgRating - $fullStars) >= 0.5;
+                                $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                            ?>
+                            
+                            <div class="flex text-yellow-400 text-sm space-x-1 mb-2">
+                                <?php for($i = 0; $i < $fullStars; $i++): ?>
+                                    <i class="fa-solid fa-star"></i>
+                                <?php endfor; ?>
+                                
+                                <?php if($hasHalfStar): ?>
+                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                <?php endif; ?>
+                                
+                                <?php for($i = 0; $i < $emptyStars; $i++): ?>
+                                    <i class="fa-regular fa-star"></i>
+                                <?php endfor; ?>
+                                
+                                <span class="text-gray-500 text-xs ml-1">
+                                    (<?php echo e(number_format($avgRating, 1)); ?>)
+                                </span>
+                            </div>
+                            
+                            <p class="text-xs text-gray-500 mb-1">
+                                <?php echo e($buku->penerbit); ?> • <?php echo e($buku->tahun_terbit); ?>
+
+                            </p>
+                        </div>
+                        
+                        <a href="<?php echo e(route('user.detailbuku', $buku->id)); ?>" 
+                           class="bg-[#626F47] text-white text-xs px-5 py-1.5 rounded-full hover:bg-[#4e5d38] transition w-fit text-center">
+                            Detail
+                        </a>
+                    </div>
+                </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
+    <?php endif; ?>
+</section>
   </div>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/dashboard.blade.php ENDPATH**/ ?>

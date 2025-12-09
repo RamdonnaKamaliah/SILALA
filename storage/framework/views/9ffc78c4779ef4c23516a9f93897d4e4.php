@@ -1,0 +1,634 @@
+<?php $__env->startSection('pageTitle', 'Data Peminjam'); ?>
+
+<?php $__env->startSection('content'); ?>
+<div class="p-4 md:p-6 lg:p-8 min-h-screen bg-gray-50">
+    <!-- Header Section -->
+    <div class="mb-8">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+            <div class="flex-1">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+                    Data
+                    <span class="relative">
+                        Peminjam
+                        <span class="absolute -top-1 -right-8 text-3xl text-[#A4B465]">✨</span>
+                    </span>
+                </h1>
+
+                <!-- Elegant Description -->
+                <div class="relative">
+                    <p class="text-gray-600 text-lg max-w-2xl leading-relaxed pl-6 border-l-2 border-[#A4B465]">
+                        Sistem manajemen peminjaman buku yang <span class="text-[#A4B465] font-semibold">canggih</span> dan 
+                        <span class="text-[#A4B465] font-semibold">user-friendly</span> untuk pengalaman terbaik.
+                    </p>
+                    <div class="absolute left-0 top-0 w-1 h-full bg-gradient-to-b from-[#A4B465] to-[#8a9a58] rounded-full"></div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="flex items-center gap-3 mt-6">
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <i class="fas fa-shield-alt text-[#A4B465]"></i>
+                        <span>Secure</span>
+                    </div>
+                    <div class="w-1 h-1 bg-gray-300 rounded-full"></div>
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <i class="fas fa-rocket text-[#A4B465]"></i>
+                        <span>Fast</span>
+                    </div>
+                    <div class="w-1 h-1 bg-gray-300 rounded-full"></div>
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <i class="fas fa-infinity text-[#A4B465]"></i>
+                        <span>Reliable</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-[#A4B465] rounded-lg flex items-center justify-center">
+                        <i class="fas fa-users text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Total Peminjaman</p>
+                        <p class="text-xl font-bold text-gray-800"><?php echo e($data_peminjam->count()); ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="mb-6 bg-white rounded-2xl shadow-sm border border-gray-200 p-4 md:p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-filter text-[#A4B465]"></i>
+                <span class="text-sm font-semibold text-gray-700">Filter Status:</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button type="button" data-status="all" 
+                    class="filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-[#A4B465] text-white border border-[#A4B465] hover:bg-[#8a9a58] transition-all duration-200 shadow-sm active transform hover:scale-105 flex items-center gap-2">
+                    <i class="fas fa-layer-group text-xs"></i>
+                    Semua
+                </button>
+                <button type="button" data-status="dipinjam" 
+                    class="filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition-all duration-200 flex items-center gap-2">
+                    <i class="fas fa-book text-xs"></i>
+                    Dipinjam
+                </button>
+                <button type="button" data-status="menunggu_konfirmasi" 
+                    class="filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-yellow-50 text-yellow-700 border border-yellow-200 hover:bg-yellow-100 transition-all duration-200 flex items-center gap-2">
+                    <i class="fas fa-clock text-xs"></i>
+                    Menunggu Konfirmasi
+                </button>
+                <button type="button" data-status="dikembalikan" 
+                    class="filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-all duration-200 flex items-center gap-2">
+                    <i class="fas fa-check text-xs"></i>
+                    Dikembalikan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <?php if($data_peminjam->count() > 0): ?>
+            <!-- Desktop Table -->
+            <div class="hidden lg:block overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-hashtag text-[#A4B465]"></i>
+                                    No
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-user text-[#A4B465]"></i>
+                                    Peminjam
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-book text-[#A4B465]"></i>
+                                    Buku
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-calendar-alt text-[#A4B465]"></i>
+                                    Tanggal
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-tag text-[#A4B465]"></i>
+                                    Status
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-camera text-[#A4B465]"></i>
+                                    Foto Bukti
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-cog text-[#A4B465]"></i>
+                                    Aksi
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200" id="tableBody">
+                        <?php $__currentLoopData = $data_peminjam; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $peminjam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
+                                $isLate = now()->gt($peminjam->tanggal_kembali) && $peminjam->status == 'dipinjam';
+                                $isWaiting = $peminjam->status == 'menunggu_konfirmasi';
+                                $hasPhoto = !empty($peminjam->foto_bukti_pengembalian);
+                                $isMandiri = $peminjam->metode_pengembalian == 'mandiri';
+                            ?>
+                            <tr class="hover:bg-gray-50 transition-colors duration-150" data-status="<?php echo e($peminjam->status); ?>">
+                                <!-- No -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900 text-center">
+                                        <?php echo e($loop->iteration); ?>
+
+                                    </div>
+                                </td>
+                                
+                                <!-- Peminjam -->
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 bg-[#A4B465] rounded-full flex items-center justify-center">
+                                            <i class="fas fa-user text-white text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-semibold text-gray-900"><?php echo e($peminjam->user->name ?? '-'); ?></div>
+                                            <div class="text-xs text-gray-500"><?php echo e($peminjam->user->email ?? ''); ?></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <!-- Buku -->
+                                <td class="px-6 py-4">
+                                    <div class="max-w-xs">
+                                        <div class="font-semibold text-gray-900 truncate"><?php echo e($peminjam->buku->judul_buku ?? '-'); ?></div>
+                                        <div class="text-xs text-gray-500">oleh <?php echo e($peminjam->buku->penulis ?? '-'); ?></div>
+                                    </div>
+                                </td>
+                                
+                                <!-- Tanggal -->
+                                <td class="px-6 py-4">
+                                    <div class="space-y-1">
+                                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                                            <i class="fas fa-sign-out-alt text-[#A4B465] text-xs"></i>
+                                            <?php echo e(\Carbon\Carbon::parse($peminjam->tanggal_pinjam)->translatedFormat('d M Y')); ?>
+
+                                        </div>
+                                        <div class="flex items-center gap-2 text-sm <?php echo e($isLate ? 'text-red-600 font-semibold' : 'text-gray-600'); ?>">
+                                            <i class="fas fa-sign-in-alt text-[#A4B465] text-xs"></i>
+                                            <?php echo e(\Carbon\Carbon::parse($peminjam->tanggal_kembali)->translatedFormat('d M Y')); ?>
+
+                                            <?php if($isLate && $peminjam->status == 'dipinjam'): ?>
+                                                <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
+                                                    Telat <?php echo e($peminjam->hari_telat); ?> hari
+                                                </span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php if($peminjam->waktu_pengembalian_aktual): ?>
+                                            <div class="flex items-center gap-2 text-sm text-gray-500">
+                                                <i class="fas fa-history text-[#A4B465] text-xs"></i>
+                                                Dikembalikan: <?php echo e(\Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y H:i')); ?>
+
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
+                                
+                                <!-- Status -->
+                                <td class="px-6 py-4">
+                                    <?php if($peminjam->status == 'dipinjam'): ?>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold <?php echo e($isLate ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-blue-100 text-blue-800 border border-blue-200'); ?>">
+                                            <i class="fas <?php echo e($isLate ? 'fa-exclamation-triangle' : 'fa-book'); ?> mr-1.5"></i>
+                                            <?php echo e($isLate ? 'Terlambat' : 'Dipinjam'); ?>
+
+                                        </span>
+                                    <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-200">
+                                            <i class="fas fa-clock mr-1.5"></i>
+                                            Menunggu Konfirmasi
+                                            <?php if($isMandiri): ?>
+                                                <span class="ml-1 text-xs bg-[#A4B465] text-white px-2 py-0.5 rounded-full">
+                                                    Mandiri
+                                                </span>
+                                            <?php endif; ?>
+                                        </span>
+                                    <?php elseif($peminjam->status == 'dikembalikan'): ?>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200">
+                                            <i class="fas fa-check mr-1.5"></i>
+                                            Dikembalikan
+                                            <?php if($peminjam->metode_pengembalian == 'mandiri'): ?>
+                                                <span class="ml-1 text-xs bg-[#A4B465] text-white px-2 py-0.5 rounded-full">
+                                                    Mandiri
+                                                </span>
+                                            <?php endif; ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
+                                
+                                <!-- Foto Bukti -->
+                                <td class="px-6 py-4">
+                                    <?php if($hasPhoto): ?>
+                                        <button type="button" onclick="lihatFoto('<?php echo e(asset('storage/' . $peminjam->foto_bukti_pengembalian)); ?>', '<?php echo e($peminjam->buku->judul_buku); ?>')"
+                                            class="bg-[#A4B465] text-white px-3 py-1.5 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105">
+                                            <i class="fas fa-eye text-xs"></i>
+                                            Lihat Foto
+                                        </button>
+                                    <?php else: ?>
+                                        <span class="text-xs text-gray-500 italic">Tidak ada foto</span>
+                                    <?php endif; ?>
+                                </td>
+                                
+                                <!-- Aksi Desktop -->
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-2">
+                                        <?php if($peminjam->status == 'dipinjam'): ?>
+                                            <!-- Konfirmasi Kembali -->
+                                            <form action="<?php echo e(route('admin.data_peminjam.kembalikan', $peminjam->id)); ?>" method="POST" class="inline">
+                                                <?php echo csrf_field(); ?>
+                                                <?php echo method_field('PUT'); ?>
+                                                <button type="submit" 
+                                                    class="bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+                                                    onclick="return confirm('Konfirmasi pengembalian buku?')">
+                                                    <i class="fas fa-undo text-xs"></i>
+                                                    Dikembalikan
+                                                </button>
+                                            </form>
+                                        <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
+                                            <!-- Konfirmasi Pengembalian dari User -->
+                                            <form action="<?php echo e(route('admin.data_peminjam.konfirmasi', $peminjam->id)); ?>" method="POST" class="inline">
+                                                <?php echo csrf_field(); ?>
+                                                <?php echo method_field('PUT'); ?>
+                                                <button type="submit" 
+                                                    class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+                                                    onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
+                                                    <i class="fas fa-check text-xs"></i>
+                                                    Konfirmasi
+                                                </button>
+                                            </form>
+                                        <?php elseif($peminjam->status == 'dikembalikan'): ?>
+                                            <span class="inline-flex items-center px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-semibold">
+                                                <i class="fas fa-check-circle mr-1.5"></i>
+                                                Selesai
+                                            </span>
+                                        <?php endif; ?>
+
+                                        <!-- Tombol Detail -->
+                                        <a href="<?php echo e(route('admin.data_peminjam.show', $peminjam->id)); ?>"
+                                            class="bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+                                            title="Lihat Detail">
+                                            <i class="fas fa-eye text-xs"></i>
+                                            Detail
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Cards -->
+            <div class="lg:hidden space-y-4 p-4">
+                <?php $__currentLoopData = $data_peminjam; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $peminjam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
+                        $isLate = now()->gt($peminjam->tanggal_kembali) && $peminjam->status == 'dipinjam';
+                        $isWaiting = $peminjam->status == 'menunggu_konfirmasi';
+                        $hasPhoto = !empty($peminjam->foto_bukti_pengembalian);
+                        $isMandiri = $peminjam->metode_pengembalian == 'mandiri';
+                    ?>
+                    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200" data-status="<?php echo e($peminjam->status); ?>">
+                        <!-- Header Card -->
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-[#A4B465] rounded-full flex items-center justify-center">
+                                    <i class="fas fa-user text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900"><?php echo e($peminjam->user->name ?? '-'); ?></h3>
+                                    <p class="text-xs text-gray-500"><?php echo e($peminjam->user->email ?? ''); ?></p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <?php if($peminjam->status == 'dipinjam'): ?>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold <?php echo e($isLate ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'); ?>">
+                                        <i class="fas <?php echo e($isLate ? 'fa-exclamation-triangle' : 'fa-book'); ?> mr-1"></i>
+                                        <?php echo e($isLate ? 'Terlambat' : 'Dipinjam'); ?>
+
+                                    </span>
+                                <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-clock mr-1"></i>
+                                        Menunggu
+                                        <?php if($isMandiri): ?>
+                                            <span class="ml-1 text-xs bg-[#A4B465] text-white px-1 py-0.5 rounded-full">
+                                                M
+                                            </span>
+                                        <?php endif; ?>
+                                    </span>
+                                <?php elseif($peminjam->status == 'dikembalikan'): ?>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i>
+                                        Dikembalikan
+                                        <?php if($isMandiri): ?>
+                                            <span class="ml-1 text-xs bg-[#A4B465] text-white px-1 py-0.5 rounded-full">
+                                                M
+                                            </span>
+                                        <?php endif; ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <!-- Book Info -->
+                        <div class="mb-3">
+                            <h4 class="font-semibold text-gray-900 text-sm mb-1"><?php echo e($peminjam->buku->judul_buku ?? '-'); ?></h4>
+                            <p class="text-xs text-gray-600">oleh <?php echo e($peminjam->buku->penulis ?? '-'); ?></p>
+                        </div>
+
+                        <!-- Dates -->
+                        <div class="mb-4 space-y-2">
+                            <div class="flex justify-between">
+                                <p class="text-xs text-gray-500">Tanggal Pinjam:</p>
+                                <p class="text-sm font-medium text-gray-900">
+                                    <?php echo e(\Carbon\Carbon::parse($peminjam->tanggal_pinjam)->translatedFormat('d M Y')); ?>
+
+                                </p>
+                            </div>
+                            <div class="flex justify-between">
+                                <p class="text-xs text-gray-500">Tanggal Kembali:</p>
+                                <p class="text-sm font-medium <?php echo e($isLate && $peminjam->status == 'dipinjam' ? 'text-red-600' : 'text-gray-900'); ?>">
+                                    <?php echo e(\Carbon\Carbon::parse($peminjam->tanggal_kembali)->translatedFormat('d M Y')); ?>
+
+                                    <?php if($isLate && $peminjam->status == 'dipinjam'): ?>
+                                        <span class="text-xs bg-red-100 text-red-800 px-1.5 py-0.5 rounded-full ml-1">
+                                            +<?php echo e($peminjam->hari_telat); ?> hari
+                                        </span>
+                                    <?php endif; ?>
+                                </p>
+                            </div>
+                            <?php if($peminjam->waktu_pengembalian_aktual): ?>
+                                <div class="flex justify-between">
+                                    <p class="text-xs text-gray-500">Dikembalikan:</p>
+                                    <p class="text-sm font-medium text-gray-900">
+                                        <?php echo e(\Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y H:i')); ?>
+
+                                    </p>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Foto Bukti -->
+                        <?php if($hasPhoto): ?>
+                            <div class="mb-4">
+                                <button type="button" onclick="lihatFoto('<?php echo e(asset('storage/' . $peminjam->foto_bukti_pengembalian)); ?>', '<?php echo e($peminjam->buku->judul_buku); ?>')"
+                                    class="w-full bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2">
+                                    <i class="fas fa-eye text-xs"></i>
+                                    Lihat Foto Bukti Pengembalian
+                                </button>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Actions Mobile -->
+                        <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-200">
+                            <?php if($peminjam->status == 'dipinjam'): ?>
+                                <form action="<?php echo e(route('admin.data_peminjam.kembalikan', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('PUT'); ?>
+                                    <button type="submit" 
+                                        class="w-full bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+                                        onclick="return confirm('Konfirmasi pengembalian buku?')">
+                                        <i class="fas fa-undo text-xs"></i>
+                                        Kembalikan
+                                    </button>
+                                </form>
+                            <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
+                                <!-- Konfirmasi Pengembalian dari User -->
+                                <form action="<?php echo e(route('admin.data_peminjam.konfirmasi', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('PUT'); ?>
+                                    <button type="submit" 
+                                        class="w-full bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+                                        onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
+                                        <i class="fas fa-check text-xs"></i>
+                                        Konfirmasi
+                                    </button>
+                                </form>
+                            <?php elseif($peminjam->status == 'dikembalikan'): ?>
+                                <span class="inline-flex items-center px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-semibold w-full justify-center">
+                                    <i class="fas fa-check-circle mr-1.5"></i>
+                                    Selesai
+                                </span>
+                            <?php endif; ?>
+
+                            <a href="<?php echo e(route('admin.data_peminjam.show', $peminjam->id)); ?>"
+                                class="flex-1 min-w-[80px] bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2">
+                                <i class="fas fa-eye text-xs"></i>
+                                Detail
+                            </a>
+                        </div>
+                    </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </div>
+
+            <!-- Empty State untuk Filter -->
+            <div id="emptyFilterState" class="hidden text-center py-12">
+                <div class="mx-auto w-20 h-20 mb-4 text-gray-300">
+                    <i class="fas fa-search text-5xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">Tidak Ada Data</h3>
+                <p class="text-gray-500 max-w-md mx-auto text-sm">
+                    Tidak ada data peminjaman dengan status yang dipilih.
+                </p>
+            </div>
+        <?php else: ?>
+            <!-- Empty State -->
+            <div class="text-center py-16">
+                <div class="mx-auto w-24 h-24 mb-6 text-gray-300">
+                    <i class="fas fa-book-open text-6xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3">Belum Ada Data Peminjaman</h3>
+                <p class="text-gray-500 max-w-md mx-auto mb-6 text-sm">
+                    Saat ini belum ada data peminjaman buku yang tercatat dalam sistem.
+                </p>
+                <div class="text-gray-400 text-4xl">
+                    <i class="fas fa-inbox"></i>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+<!-- Modal untuk Melihat Foto -->
+<div id="fotoModal" class="hidden fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4">
+    <div class="bg-white rounded-xl shadow-xl overflow-hidden w-full max-w-sm sm:max-w-md md:max-w-lg">
+        <!-- Header -->
+        <div class="flex justify-between items-center bg-[#4C6444] text-white px-4 py-3">
+            <h3 class="text-base font-semibold truncate text-white" id="fotoModalTitle">Foto Bukti</h3>
+            <button type="button" onclick="tutupFotoModal()" class="text-white hover:text-gray-200 text-lg">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Content -->
+        <div class="p-4">
+            <!-- Book Info -->
+            <div class="text-center mb-3">
+                <p class="text-gray-600 text-sm truncate" id="fotoModalSubtitle"></p>
+            </div>
+            
+            <!-- Photo -->
+            <div class="flex justify-center mb-4">
+                <img id="fotoModalImage" src="" alt="Foto Bukti" 
+                    class="w-full max-h-[40vh] object-contain rounded-lg border border-gray-200">
+            </div>
+            
+            <!-- Buttons -->
+            <div class="flex justify-center gap-2">
+                <button type="button" onclick="tutupFotoModal()"
+                    class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 text-sm font-medium transition-colors duration-200 flex items-center gap-1">
+                    <i class="fas fa-times text-xs"></i>
+                    Tutup
+                </button>
+                <button type="button" onclick="downloadFoto()"
+                    class="bg-[#A4B465] text-white px-4 py-2 rounded-lg hover:bg-[#8a9a58] text-sm font-medium transition-colors duration-200 flex items-center gap-1">
+                    <i class="fas fa-download text-xs"></i>
+                    Download
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const tableRows = document.querySelectorAll('#tableBody tr, .lg\\:hidden .bg-white[data-status]');
+    const emptyFilterState = document.getElementById('emptyFilterState');
+    const desktopTable = document.querySelector('.hidden.lg\\:block');
+    const mobileCards = document.querySelector('.lg\\:hidden');
+    
+    if (tableRows.length > 0) {
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const status = this.getAttribute('data-status');
+                
+                // Update active button
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'ring-2', 'ring-[#A4B465]', 'ring-offset-2');
+                    if (btn.getAttribute('data-status') === 'all') {
+                        btn.className = 'filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition-all duration-200 flex items-center gap-2';
+                    } else if (btn.getAttribute('data-status') === 'dipinjam') {
+                        btn.className = 'filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition-all duration-200 flex items-center gap-2';
+                    } else if (btn.getAttribute('data-status') === 'menunggu_konfirmasi') {
+                        btn.className = 'filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-yellow-50 text-yellow-700 border border-yellow-200 hover:bg-yellow-100 transition-all duration-200 flex items-center gap-2';
+                    } else if (btn.getAttribute('data-status') === 'dikembalikan') {
+                        btn.className = 'filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 transition-all duration-200 flex items-center gap-2';
+                    }
+                });
+                
+                this.classList.add('active', 'ring-2', 'ring-[#A4B465]', 'ring-offset-2');
+                if (status === 'all') {
+                    this.className = 'filter-btn px-4 py-2.5 rounded-xl text-sm font-medium bg-[#A4B465] text-white border border-[#A4B465] hover:bg-[#8a9a58] transition-all duration-200 shadow-sm active transform hover:scale-105 flex items-center gap-2 ring-2 ring-[#A4B465] ring-offset-2';
+                }
+                
+                let visibleRows = 0;
+                
+                // Filter rows
+                tableRows.forEach(row => {
+                    if (status === 'all') {
+                        row.style.display = '';
+                        visibleRows++;
+                    } else {
+                        const rowStatus = row.getAttribute('data-status');
+                        if (rowStatus === status) {
+                            row.style.display = '';
+                            visibleRows++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+
+                // Tampilkan pesan kosong jika tidak ada baris yang terlihat
+                if (visibleRows === 0) {
+                    if (desktopTable) desktopTable.style.display = 'none';
+                    if (mobileCards) mobileCards.style.display = 'none';
+                    if (emptyFilterState) emptyFilterState.classList.remove('hidden');
+                } else {
+                    if (desktopTable) desktopTable.style.display = '';
+                    if (mobileCards) mobileCards.style.display = '';
+                    if (emptyFilterState) emptyFilterState.classList.add('hidden');
+                }
+            });
+        });
+    }
+});
+
+// Fungsi untuk melihat foto
+function lihatFoto(fotoUrl, judulBuku) {
+    const modal = document.getElementById('fotoModal');
+    const modalImage = document.getElementById('fotoModalImage');
+    const modalTitle = document.getElementById('fotoModalTitle');
+    const modalSubtitle = document.getElementById('fotoModalSubtitle');
+    
+    modalTitle.textContent = 'Foto Bukti Pengembalian';
+    modalSubtitle.textContent = `Buku: ${judulBuku}`;
+    modalImage.src = fotoUrl;
+    modalImage.alt = `Foto bukti pengembalian buku ${judulBuku}`;
+    
+    // Simpan URL untuk download
+    modalImage.dataset.downloadUrl = fotoUrl;
+    
+    modal.classList.remove('hidden');
+}
+
+// Fungsi untuk menutup modal foto
+function tutupFotoModal() {
+    document.getElementById('fotoModal').classList.add('hidden');
+}
+
+// Fungsi untuk download foto
+function downloadFoto() {
+    const fotoUrl = document.getElementById('fotoModalImage').dataset.downloadUrl;
+    const judulBuku = document.getElementById('fotoModalSubtitle').textContent.replace('Buku: ', '');
+    
+    if (fotoUrl) {
+        const link = document.createElement('a');
+        link.href = fotoUrl;
+        link.download = `bukti-pengembalian-${judulBuku.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
+// Close modal when clicking outside
+document.getElementById('fotoModal').addEventListener('click', function(e) {
+    if (e.target.id === 'fotoModal') {
+        tutupFotoModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        tutupFotoModal();
+    }
+});
+</script>
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_peminjam/index.blade.php ENDPATH**/ ?>

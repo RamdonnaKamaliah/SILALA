@@ -12,7 +12,7 @@
 
 <!-- Sidebar -->
 <div id="sidebar"
-  class="fixed w-[300px] h-full bg-[var(--green)] border-l-[10px] border-[var(--green)] transition-all duration-500 overflow-hidden transform -translate-x-full md:translate-x-0 z-50 sidebar">
+  class="fixed w-[300px] h-full bg-[var(--green)] border-l-[10px] border-[var(--green)] transition-all duration-500 overflow-hidden transform -translate-x-full md:translate-x-0 z-30 sidebar">
   
   <!-- Header -->
   <div class="flex items-center justify-between px-4 mt-4 mb-6 text-white">

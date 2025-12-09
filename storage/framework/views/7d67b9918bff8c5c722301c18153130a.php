@@ -52,13 +52,13 @@
     </div>
   </div>
 
-  <!-- Denda -->
+  <!-- Telat -->
   <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
     <span class="iconify absolute left-2 -top-2 text-[70px] text-cream"
       data-icon="mdi:book-alert"></span>
     <div class="ml-[78px] mt-[4px] leading-tight">
       <p class="text-sm text-white font-medium">Telat Pengembalian</p>
-      <h3 class="text-lg font-mochiy text-white"> Buku</h3>
+      <h3 class="text-lg font-mochiy text-white"><?php echo e($telat); ?> Buku</h3>
     </div>
   </div>
 

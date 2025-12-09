@@ -46,8 +46,8 @@ class DashboardController extends Controller
             'title' => 'BERANDA',
             'dipinjam' => $dipinjam,
             'favorit' => $favorit,
+            'telat' => $telat,
             'bukuRatingTertinggi' => $bukuRatingTertinggi,
-            // 'telat' => $telat,
         ]);
     }
 }

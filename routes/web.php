@@ -14,9 +14,9 @@ use App\Http\Controllers\Admin\DataKategoriController;
 use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
-use App\Http\Controllers\Admin\DataDendaController;
 use App\Http\Controllers\Admin\MediaBukuController;
 use App\Http\Controllers\Admin\CmsController;
+use App\Http\Controllers\Admin\AdminProfileController;
 
 // Controllers - Auth
 use App\Http\Controllers\Auth\GoogleLoginController;
@@ -35,6 +35,18 @@ use App\Http\Controllers\user\ProfilController;
 use App\Http\Controllers\user\EditProfilController;
 use App\Http\Controllers\user\RatingController;
 
+// 🌟 ADMIN Profile
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth:admin', AdminMiddleware::class])
+    ->group(function () {
+
+        Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
+        Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    });
+
 
 // ==============================
 // 🌟 ADMIN CMS
@@ -52,6 +64,9 @@ Route::prefix('admin')
 
         Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
             ->name('cms_admin.updateFooterLogo');
+
+        Route::post('/cms/update-sidebar-logo', [CmsController::class, 'updateSidebarLogo'])
+            ->name('cms_admin.updateSidebarLogo');   // ⭐ WAJIB BEGINI!
     });
 
 
@@ -61,7 +76,6 @@ Route::prefix('admin')
 Route::get('/', function () {
     return view('landingpage');
 });
-
 
 // Google OAuth
 Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGoogle'])

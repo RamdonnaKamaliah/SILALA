@@ -17,7 +17,21 @@
     <!-- Header -->
     <div class="flex items-center justify-between px-4 mt-4 mb-6 text-white">
       <div class="flex items-center gap-2">
-        <img src="{{asset('assets/logo_kementan.png')}}" alt="Logo" class="w-12 h-12 rounded-full object-cover" />
+        
+        @php
+          // Ambil nama file dari database
+          $sidebarLogo = \App\Models\Setting::getValue('sidebar_logo', 'logo_kementan.png');
+
+          // Tentuin path-nya (cek storage, kalau ga ada fallback ke assets)
+          $logoPath = \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $sidebarLogo)
+              ? Storage::url('cms/' . $sidebarLogo)
+              : asset('assets/logo_kementan.png');
+      @endphp
+
+      <img src="{{ $logoPath }}" 
+          alt="Logo"
+          class="w-12 h-12 rounded-full object-cover shadow-sm" />
+
         <p class="text-white font-bold text-lg leading-tight">
           PERPUSTAKAAN BPMSPH
         </p>

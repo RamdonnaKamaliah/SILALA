@@ -81,6 +81,15 @@
             </form>
         </div>
 
+        <form action="<?php echo e(route('admin.cms_admin.updateSidebarLogo')); ?>" method="POST" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
+            <label class="block mb-2 font-medium">Upload Logo Sidebar Baru</label>
+            <input type="file" name="sidebar_logo" class="mb-3">
+            <button class="bg-blue-600 text-white px-4 py-2 rounded">
+                Simpan Logo Sidebar
+            </button>
+        </form>
+
         
         
         

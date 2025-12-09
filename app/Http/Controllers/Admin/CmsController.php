@@ -65,4 +65,28 @@ class CmsController extends Controller
         return back()->with('success', 'Footer logo berhasil diperbarui!');
     }
 
+public function updateSidebarLogo(Request $request)
+{
+    $request->validate([
+        'sidebar_logo' => 'required|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
+    ]);
+
+    // Pastikan folder ada
+    Storage::disk('public')->makeDirectory('cms');
+
+    $file = $request->file('sidebar_logo');
+    $filename = 'sidebar_logo_' . time() . '.' . $file->getClientOriginalExtension();
+
+    // SIMPAN KE STORAGE YANG BENAR
+    $file->storeAs('cms', $filename, 'public');
+
+    Setting::updateOrCreate(
+        ['key' => 'sidebar_logo'],
+        ['value' => $filename]
+    );
+
+    return back()->with('success', 'Logo Sidebar berhasil diperbarui!');
+}
+
+
 }

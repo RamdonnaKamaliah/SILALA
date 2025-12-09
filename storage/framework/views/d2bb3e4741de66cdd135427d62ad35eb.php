@@ -456,63 +456,75 @@
 
                     <!-- Profil Dropdown -->
                     <div class="relative dropdown-container">
-                        <button class="flex items-center text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 hover:bg-primary-light/30 px-2 sm:px-3 py-2 transition-all duration-200 group touch-target" id="user-menu-button">
-                            <div class="h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-gradient-to-tl from-white/20 to-white/10 border border-white/30 flex items-center justify-center text-white font-semibold shadow-lg group-hover:scale-105 transition-transform duration-200">
-                                <i class="fas fa-user text-xs sm:text-sm"></i>
+
+                        <!-- BUTTON PROFIL -->
+                        <button class="flex items-center text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 hover:bg-primary-light/30 px-2 sm:px-3 py-2 transition-all duration-200 group touch-target"
+                                id="user-menu-button">
+
+                            <!-- FOTO PROFIL -->
+                            <div class="h-8 w-8 sm:h-9 sm:w-9 rounded-full overflow-hidden border border-white/30 shadow-lg group-hover:scale-105 transition-transform duration-200">
+                                <img src="<?php echo e($admin->foto ? asset('uploads/admin/'.$admin->foto) : asset('default-user.png')); ?>"
+                                    class="w-full h-full object-cover"
+                                    alt="Foto Admin">
                             </div>
+
+                            <!-- NAMA & ROLE -->
                             <div class="ml-2 sm:ml-3 text-left hidden lg:block">
-                                <p class="text-white font-semibold text-sm">Admin User</p>
-                                <p class="text-primary-pale/80 text-xs">Administrator</p>
+                                <p class="text-white font-semibold text-sm truncate"><?php echo e($admin->name); ?></p>
+                                <p class="text-primary-pale/80 text-xs truncate"><?php echo e($admin->role ?? 'Administrator'); ?></p>
                             </div>
-                            <i class="fas fa-chevron-down ml-2 text-primary-pale/80 text-xs hidden lg:block transition-transform duration-200" id="chevron-icon"></i>
+
+                            <!-- ICON CHEVRON -->
+                            <i class="fas fa-chevron-down ml-2 text-primary-pale/80 text-xs hidden lg:block transition-transform duration-200"
+                            id="chevron-icon"></i>
+
                         </button>
-                        
+
+                        <!-- DROPDOWN MENU -->
                         <div class="dropdown-menu shadow-2xl border border-primary-pale/30 glass-effect" id="dropdown-menu">
+
+                            <!-- HEADER DROPDOWN -->
                             <div class="p-4 sm:p-6 bg-gradient-to-br from-primary-dark to-primary-medium rounded-t-2xl text-white">
                                 <div class="flex items-center">
-                                    <div class="h-12 w-12 sm:h-14 sm:w-14 rounded-full bg-white/20 border border-white/30 flex items-center justify-center text-white text-lg sm:text-xl font-bold shadow-lg">
-                                        <i class="fas fa-user-crown"></i>
+                                    <!-- FOTO PROFIL BESAR -->
+                                    <div class="h-12 w-12 sm:h-14 sm:w-14 rounded-full overflow-hidden border border-white/30 shadow-lg">
+                                        <img src="<?php echo e($admin->foto ? asset('uploads/admin/'.$admin->foto) : asset('default-user.png')); ?>"
+                                            class="w-full h-full object-cover"
+                                            alt="Foto Admin">
                                     </div>
+
+                                    <!-- NAMA & EMAIL -->
                                     <div class="ml-3 sm:ml-4 min-w-0 flex-1">
-                                        <h3 class="font-bold text-base sm:text-lg truncate text-white">Admin User</h3>
-                                        <p class="text-white/80 text-xs sm:text-sm truncate">admin@perpustakaan.com</p>
+                                        <h3 class="font-bold text-base sm:text-lg truncate text-white"><?php echo e($admin->name); ?></h3>
+                                        <p class="text-white/80 text-xs sm:text-sm truncate"><?php echo e($admin->email); ?></p>
                                     </div>
-                                </div>
-                                <div class="mt-3 sm:mt-4 flex items-center justify-between">
-                                    <span class="text-white/80 text-sm flex items-center">
-                                        <i class="fas fa-circle text-green-300 mr-2 text-xs"></i>
-                                        Status:
-                                    </span>
-                                    <span class="bg-white/20 px-3 py-1 rounded-full text-xs font-semibold flex items-center pulse-subtle">
-                                        Aktif
-                                    </span>
                                 </div>
                             </div>
-                            
+
+                            <!-- MENU DALAM DROPDOWN -->
                             <div class="p-3 sm:p-4 space-y-2">
-                                <a href="#" class="profile-item flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 text-sm text-gray-700 hover:bg-primary-pale/50 hover:text-primary-dark rounded-xl transition-all duration-200 group">
+
+                                <!-- LINK KE PROFILE -->
+                                <a href="<?php echo e(route('admin.profile')); ?>"
+                                class="profile-item flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 text-sm text-gray-700 hover:bg-primary-pale/50 hover:text-primary-dark rounded-xl transition-all duration-200 group">
+
                                     <div class="flex items-center min-w-0 flex-1">
                                         <div class="w-8 h-8 flex items-center justify-center mr-3 bg-primary-pale rounded-lg group-hover:bg-primary-medium group-hover:text-white transition-all duration-200 flex-shrink-0">
-                                            <i class="fas fa-question-circle text-primary-medium group-hover:text-white text-sm"></i>
+                                            <i class="fas fa-user text-primary-medium group-hover:text-white text-sm"></i>
                                         </div>
+
                                         <div class="min-w-0">
-                                            <span class="font-semibold block truncate">Bantuan & Dukungan</span>
-                                            <p class="text-xs text-gray-500 hidden sm:block truncate">Pusat bantuan</p>
+                                            <span class="font-semibold block truncate">Profile Admin</span>
+                                            <p class="text-xs text-gray-500 hidden sm:block truncate">Lihat atau edit profil</p>
                                         </div>
                                     </div>
+
                                     <i class="fas fa-chevron-right text-gray-400 group-hover:text-primary-dark text-xs ml-2 flex-shrink-0"></i>
                                 </a>
+
                             </div>
-                            
+
                             <div class="border-t border-primary-pale/30 mx-4"></div>
-                            
-                            <div class="p-4">
-                                <p class="text-center text-xs text-gray-500 flex items-center justify-center">
-                                    <i class="fas fa-clock mr-1"></i>
-                                    <span class="hidden sm:inline">Terakhir login: Hari ini, 14:30</span>
-                                    <span class="sm:hidden">Login: Hari ini</span>
-                                </p>
-                            </div>
                         </div>
                     </div>
                 </div>

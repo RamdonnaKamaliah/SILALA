@@ -1,71 +1,175 @@
- :root {
-      --green: #A4B465;
-      --white: #ffffff;
-    }
-
-    /* Hover efek melengkung kanan */
-    .nav-item:hover a::before {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: -50px;
-      width: 50px;
-      height: 50px;
-      border-radius: 9999px;
-      background-color: var(--green);
-      box-shadow: 35px 35px 0 10px var(--white);
-      pointer-events: none;
-    }
-
-    .nav-item:hover a::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      bottom: -50px;
-      width: 50px;
-      height: 50px;
-      border-radius: 9999px;
-      background-color: var(--green);
-      box-shadow: 35px -35px 0 10px var(--white);
-      pointer-events: none;
-    }
-
-   .menu-item.active {
-  background-color: #ffffff !important;  /* warna dasar putih */
-  border-color: #ffffff !important;      
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);  /* sedikit bayangan biar menonjol */
-  color: #626F47 !important;              /* warna teks hijau tua */
-  transform: scale(1.02);                 /* sedikit efek klik */
+:root {
+  --green: #A4B465;
+  --white: #ffffff;
 }
 
-.menu-item.active i,
-.menu-item.active span {
+/* ===== HILANGKAN SEMUA HOVER CURVE ===== */
+/* Curve hanya untuk active state saja, TIDAK untuk hover */
+.nav-item a::before,
+.nav-item a::after {
+  display: none !important;
+}
+
+/* ===== EFEK AKTIF DENGAN CURVE ===== */
+/* Curve hanya muncul saat item aktif */
+.nav-item.active a::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 9999px;
+  background-color: var(--green);
+  box-shadow: 35px 35px 0 10px var(--white);
+  pointer-events: none;
+  z-index: 0;
+  display: block !important;
+}
+
+.nav-item.active a::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 9999px;
+  background-color: var(--green);
+  box-shadow: 35px -35px 0 10px var(--white);
+  pointer-events: none;
+  z-index: 0;
+  display: block !important;
+}
+
+/* ===== HOVER BORDER PUTIH SAJA ===== */
+.nav-item:not(.active) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Border putih yang muncul saat hover */
+.nav-item:not(.active) .menu-item {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Efek border putih solid */
+.nav-item:not(.active) .menu-item::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: white;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.nav-item:not(.active) .menu-item:hover::before {
+  opacity: 1;
+  border-color: white;
+}
+
+/* Efek border putih yang menyebar dari tengah */
+.nav-item:not(.active) .menu-item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: white;
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.4s ease;
+  transform: scale(0.95);
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.nav-item:not(.active) .menu-item:hover::after {
+  opacity: 1;
+  transform: scale(1);
+  animation: whitePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes whitePulse {
+  0%, 100% {
+    opacity: 1;
+    border-width: 2px;
+  }
+  50% {
+    opacity: 0.7;
+    border-width: 3px;
+  }
+}
+
+/* Background putih untuk menu-item saat hover */
+.nav-item:not(.active) .menu-item:hover {
+  background-color: white !important;
+  border-color: transparent !important;
+  transform: translateX(5px);
+}
+
+/* Warna icon & teks saat hover */
+.nav-item:not(.active) .menu-item:hover .iconify,
+.nav-item:not(.active) .menu-item:hover span {
   color: #626F47 !important;
 }
 
-.menu-item:hover {
-  background-color: #ffffff;
-  border-color: #ffffff;
-  transition: all 0.3s ease;
+/* ===== BACKGROUND PUTIH UNTUK ITEM AKTIF ===== */
+.nav-item.active {
+  background-color: white !important;
 }
 
-    .sidebar {
-      transition: transform 0.4s ease, opacity 0.4s ease;
-    }
- 
-  #hamburger {
+.nav-item.active .menu-item {
+  background-color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+.nav-item.active .menu-item .iconify,
+.nav-item.active .menu-item span {
+  color: #626F47 !important;
+}
+
+/* ===== STYLING LAIN (TETAP) ===== */
+.sidebar {
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+/* Hamburger menu animation */
+#hamburger {
   transition: all 0.3s ease;
   z-index: 50;
 }
+
 #hamburger span {
-  transform-origin: center; /* biar rotasi X seimbang */
+  transform-origin: center;
 }
+
 #hamburger.open span:nth-child(1) {
   transform: rotate(45deg) translate(4px, 4px);
 }
+
 #hamburger.open span:nth-child(2) {
   opacity: 0;
 }
+
 #hamburger.open span:nth-child(3) {
   transform: rotate(-45deg) translate(4px, -4px);
 }
@@ -75,30 +179,32 @@
   background-color: rgba(247, 237, 214, 0.6) !important;
   backdrop-filter: brightness(0.8) blur(2px);
 }
- /* Hilangkan scrollbar dari halaman */
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  html, body {
-    scrollbar-width: none; /* Firefox */
-  }
-  .notif-item .indicator {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background-color: transparent;
-    border-radius: 0 6px 6px 0;
-    transition: background-color 0.3s ease;
-  }
 
-  .notif-item.active .indicator {
-    background-color: #A4B465; /* garis berwarna olive di kiri */
-  }
+/* Hilangkan scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
 
-   /* Warna & efek item aktif */
-  .notif-item.active {
-    background-color: #f9f8f3;
-  }
-  
+html, body {
+  scrollbar-width: none;
+}
+
+/* Notifikasi item styling */
+.notif-item .indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: transparent;
+  border-radius: 0 6px 6px 0;
+  transition: background-color 0.3s ease;
+}
+
+.notif-item.active .indicator {
+  background-color: #A4B465;
+}
+
+.notif-item.active {
+  background-color: #f9f8f3;
+}

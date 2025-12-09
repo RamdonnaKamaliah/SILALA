@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!ok) {
           if (status === 419) return Swal.fire({ icon:'warning', title:'Sesi Habis', text:'Silakan refresh halaman lalu coba lagi.'});
           console.error('Pinjam error:', text || json);
-          return Swal.fire({ icon:'error', title:'Gagal', text:'Terjadi kesalahan saat meminjam buku' });
+          return Swal.fire({ icon:'error', title:'Gagal', text:'Anda telah mencapai batas maksimal peminjaman.' });
         }
 
         const result = json;

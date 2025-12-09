@@ -91,7 +91,7 @@ Route::put('/editprofil', [EditProfilController::class, 'update'])->name('user.u
     // FAVORIT
     Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');
     Route::post('/favorit/toggle', [FavoritController::class, 'toggle'])->name('user.favorit.toggle');
-
+    Route::delete('/favorit/remove', [FavoritController::class, 'destroy'])->name('user.favorit.destroy');
     // RATING
     Route::post('/rating', [RatingController::class, 'store'])->name('user.rating.store');
     Route::get('/rating/{bukuId}', [RatingController::class, 'getUserRating'])->name('user.rating.get');

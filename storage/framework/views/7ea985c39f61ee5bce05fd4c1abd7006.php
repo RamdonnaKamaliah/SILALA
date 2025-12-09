@@ -33,6 +33,8 @@
   <script src="<?php echo e(asset('assets_user/js/riwayatbuku.js')); ?>"></script>
   <script src="<?php echo e(asset('assets_user/js/favorit.js')); ?>"></script>
   <script src="<?php echo e(asset('assets_user/js/editprofil.js')); ?>"></script>
+  <script src="<?php echo e(asset('assets_user/js/riwayatbaca.js')); ?>"></script>
+
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   

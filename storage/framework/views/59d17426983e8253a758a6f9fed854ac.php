@@ -58,6 +58,10 @@
 
     
     <script src="<?php echo e(asset('assets_admin/js/navbarAdmin.js')); ?>"></script>
+
+    
+    <script src="<?php echo e(asset('assets_admin/js/profile_Admin/index.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets_admin/js/profile_Admin/edit.js')); ?>"></script>
     
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>

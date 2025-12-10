@@ -3,31 +3,19 @@
 
 @section('content')
 
-{{-- Sweet Alert CDN (Opsional, jika belum ada di layout) --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<div class="min-h-screen bg-gradient-to-br from-[#F9FBF4] via-[#F2F6E9] to-[#E9F0D8]">
+<div class="min-h-screen">
     
     <div class="h-full">
-        
-        {{-- HEADER SECTION - Compact --}}
-        <div class="bg-gradient-to-r from-[#6E7C45] to-[#8C9E55] shadow-lg">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-3">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Profil Saya</span>
-                </h1>
-                <p class="text-white/90 text-sm mt-1">Kelola informasi profil dan keamanan akun Anda</p>
-            </div>
-        </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 
-                {{-- LEFT SIDEBAR - PROFILE CARD (Lebih compact) --}}
+                {{-- LEFT SIDEBAR - PROFILE CARD --}}
                 <div class="lg:col-span-4">
-                    <div class="bg-white rounded-2xl shadow-xl border border-[#DDE6C5] overflow-hidden h-full">
+                    <div class="bg-white/20 backdrop-blur-lg border border-white/30 rounded-2xl shadow-xl overflow-hidden">
+
                         
                         {{-- Header Card dengan Gradient --}}
                         <div class="bg-gradient-to-br from-[#A4B465] to-[#6E7C45] h-24 relative">
@@ -67,7 +55,7 @@
                     </div>
                 </div>
 
-                {{-- RIGHT CONTENT - FORMS (Lebih lebar) --}}
+                {{-- RIGHT CONTENT - FORMS --}}
                 <div class="lg:col-span-8 space-y-6">
                     
                     {{-- FORM UPDATE PROFILE --}}
@@ -140,86 +128,87 @@
 
                     </div>
 
-                    {{-- GANTI PASSWORD --}}
-                    <div class="bg-white rounded-2xl shadow-xl border border-[#DDE6C5] overflow-hidden">
-                        
-                        <div class="bg-gradient-to-r from-[#F9FBF4] to-[#F2F6E9] px-6 py-4 border-b-2 border-[#DDE6C5]">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-gradient-to-br from-[#6E7C45] to-[#5E6A3A] rounded-lg flex items-center justify-center shadow-md">
-                                    <i class="fas fa-lock text-white"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-lg md:text-xl font-bold text-[#6E7C45]">Keamanan Akun</h2>
-                                    <p class="text-xs text-[#8C9E55]">Ubah password untuk keamanan</p>
-                                </div>
+                </div>
+
+            </div>
+
+            {{-- GANTI PASSWORD - FULL WIDTH SECTION --}}
+            <div class="mt-6">
+                <div class="bg-white rounded-2xl shadow-xl border border-[#DDE6C5] overflow-hidden">
+
+                    <div class="bg-gradient-to-r from-[#F9FBF4] to-[#F2F6E9] px-6 py-4 border-b-2 border-[#DDE6C5]">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-[#6E7C45] to-[#5E6A3A] rounded-lg flex items-center justify-center shadow-md">
+                                <i class="fas fa-lock text-white"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg md:text-xl font-bold text-[#6E7C45]">Keamanan Akun</h2>
+                                <p class="text-xs text-[#8C9E55]">Ubah password untuk keamanan</p>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="p-6">
-                            <form id="formPassword" action="{{ route('admin.profile.updatePassword') }}" method="POST">
-                                @csrf
+                    <div class="p-6">
+                        <form id="formPassword" action="{{ route('admin.profile.updatePassword') }}" method="POST">
+                            @csrf
 
-                                <div class="space-y-4">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-                                    {{-- Password Lama --}}
-                                    <div>
-                                        <label class="font-semibold text-[#6E7C45] flex items-center gap-2 mb-2 text-sm">
-                                            <i class="fas fa-key text-[#6E7C45]"></i> 
-                                            <span>Password Sekarang</span>
-                                        </label>
-                                        <input type="password" id="currentPassword" name="current_password"
-                                               class="w-full border-2 border-[#D8E2C0] rounded-lg px-4 py-2.5 bg-[#F9FBF4] focus:ring-2 focus:ring-[#6E7C45] focus:border-[#6E7C45] transition-all text-sm"
-                                               placeholder="Masukkan password saat ini">
-                                    </div>
-
-                                    {{-- Password Baru & Konfirmasi --}}
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label class="font-semibold text-[#6E7C45] flex items-center gap-2 mb-2 text-sm">
-                                                <i class="fas fa-unlock-alt text-[#6E7C45]"></i> 
-                                                <span>Password Baru</span>
-                                            </label>
-                                            <input type="password" id="newPassword" name="password"
-                                                   class="w-full border-2 border-[#D8E2C0] rounded-lg px-4 py-2.5 bg-[#F9FBF4] focus:ring-2 focus:ring-[#6E7C45] focus:border-[#6E7C45] transition-all text-sm"
-                                                   placeholder="Min. 8 karakter">
-                                        </div>
-
-                                        <div>
-                                            <label class="font-semibold text-[#6E7C45] flex items-center gap-2 mb-2 text-sm">
-                                                <i class="fas fa-check-circle text-[#6E7C45]"></i> 
-                                                <span>Konfirmasi Password</span>
-                                            </label>
-                                            <input type="password" id="confirmPassword" name="password_confirmation"
-                                                   class="w-full border-2 border-[#D8E2C0] rounded-lg px-4 py-2.5 bg-[#F9FBF4] focus:ring-2 focus:ring-[#6E7C45] focus:border-[#6E7C45] transition-all text-sm"
-                                                   placeholder="Ulangi password baru">
-                                        </div>
-                                    </div>
-
-                                    {{-- Info Box - Compact --}}
-                                    <div class="bg-gradient-to-r from-[#F9FBF4] to-[#F2F6E9] border-l-4 border-[#A4B465] rounded-lg p-3">
-                                        <div class="flex items-start gap-2">
-                                            <i class="fas fa-info-circle text-[#A4B465] mt-0.5 text-sm"></i>
-                                            <div class="text-xs text-[#6E7C45]">
-                                                <p class="font-semibold mb-1">Tips Password Kuat:</p>
-                                                <p>Min. 8 karakter • Kombinasi huruf, angka & simbol • Hindari info pribadi</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                {{-- Password Lama --}}
+                                <div>
+                                    <label class="font-semibold text-[#6E7C45] flex items-center gap-2 mb-2 text-sm">
+                                        <i class="fas fa-key text-[#6E7C45]"></i> 
+                                        <span>Password Sekarang</span>
+                                    </label>
+                                    <input type="password" id="currentPassword" name="current_password"
+                                           class="w-full border-2 border-[#D8E2C0] rounded-lg px-4 py-2.5 bg-[#F9FBF4] focus:ring-2 focus:ring-[#6E7C45] focus:border-[#6E7C45] transition-all text-sm"
+                                           placeholder="Masukkan password saat ini">
                                 </div>
 
-                                <button type="submit" id="btnSavePassword" disabled
-                                        class="mt-6 w-full py-3 text-white rounded-lg font-bold transition-all duration-300 flex justify-center items-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400">
-                                    <i class="fas fa-sync-alt"></i> 
-                                    <span>Update Password</span>
-                                </button>
-                            </form>
-                        </div>
+                                {{-- Password Baru --}}
+                                <div>
+                                    <label class="font-semibold text-[#6E7C45] flex items-center gap-2 mb-2 text-sm">
+                                        <i class="fas fa-unlock-alt text-[#6E7C45]"></i> 
+                                        <span>Password Baru</span>
+                                    </label>
+                                    <input type="password" id="newPassword" name="password"
+                                           class="w-full border-2 border-[#D8E2C0] rounded-lg px-4 py-2.5 bg-[#F9FBF4] focus:ring-2 focus:ring-[#6E7C45] focus:border-[#6E7C45] transition-all text-sm"
+                                           placeholder="Min. 8 karakter">
+                                </div>
 
+                                {{-- Konfirmasi Password --}}
+                                <div>
+                                    <label class="font-semibold text-[#6E7C45] flex items-center gap-2 mb-2 text-sm">
+                                        <i class="fas fa-check-circle text-[#6E7C45]"></i> 
+                                        <span>Konfirmasi Password</span>
+                                    </label>
+                                    <input type="password" id="confirmPassword" name="password_confirmation"
+                                           class="w-full border-2 border-[#D8E2C0] rounded-lg px-4 py-2.5 bg-[#F9FBF4] focus:ring-2 focus:ring-[#6E7C45] focus:border-[#6E7C45] transition-all text-sm"
+                                           placeholder="Ulangi password baru">
+                                </div>
+
+                            </div>
+
+                            {{-- Info Box --}}
+                            <div class="mt-4 bg-gradient-to-r from-[#F9FBF4] to-[#F2F6E9] border-l-4 border-[#A4B465] rounded-lg p-3">
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-info-circle text-[#A4B465] mt-0.5 text-sm"></i>
+                                    <div class="text-xs text-[#6E7C45]">
+                                        <p class="font-semibold mb-1">Tips Password Kuat:</p>
+                                        <p>Min. 8 karakter • Kombinasi huruf, angka & simbol • Hindari info pribadi</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btnSavePassword" disabled
+                                    class="mt-6 w-full lg:w-auto lg:px-8 py-3 text-white rounded-lg font-bold transition-all duration-300 flex justify-center items-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-400">
+                                <i class="fas fa-sync-alt"></i> 
+                                <span>Update Password</span>
+                            </button>
+                        </form>
                     </div>
 
                 </div>
-
             </div>
 
         </div>
@@ -229,11 +218,7 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // ===========================================
-    // AUTO REDIRECT AFTER SUCCESS dengan Sweet Alert
-    // ===========================================
-    @if(session('success'))
+   @if(session('success'))
         Swal.fire({
             icon: 'success',
             title: 'Berhasil!',
@@ -242,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function() {
             timer: 1500,
             timerProgressBar: true,
         }).then(() => {
-            window.location.href = "{{ route('admin.dashboard') }}"; // Ganti dengan route index/dashboard kamu
+            window.location.href = "{{ route('admin.dashboard') }}";
         });
     @endif
 
@@ -254,121 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
             confirmButtonColor: '#6E7C45'
         });
     @endif
-
-    // ===========================================
-    // PREVIEW FOTO REAL-TIME
-    // ===========================================
-    const fotoInput = document.getElementById('fotoInput');
-    const previewImage = document.getElementById('previewImage');
-    
-    fotoInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                previewImage.src = e.target.result;
-                // Aktifkan tombol simpan
-                checkProfileChanges();
-            }
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // ===========================================
-    // DETECT CHANGES - FORM PROFILE
-    // ===========================================
-    const btnSaveProfile = document.getElementById('btnSaveProfile');
-    const nameInput = document.getElementById('nameInput');
-    const telpInput = document.getElementById('telpInput');
-    
-    // Simpan nilai awal
-    const initialName = nameInput.value;
-    const initialTelp = telpInput.value;
-    let fotoChanged = false;
-    
-    function checkProfileChanges() {
-        const nameChanged = nameInput.value !== initialName;
-        const telpChanged = telpInput.value !== initialTelp;
-        fotoChanged = fotoInput.files.length > 0;
-        
-        const hasChanges = nameChanged || telpChanged || fotoChanged;
-        
-        btnSaveProfile.disabled = !hasChanges;
-        
-        if (hasChanges) {
-            btnSaveProfile.classList.remove('bg-gray-400');
-            btnSaveProfile.classList.add('bg-gradient-to-r', 'from-[#A4B465]', 'to-[#8C9E55]', 'hover:from-[#8C9E55]', 'hover:to-[#6E7C45]', 'hover:scale-[1.02]');
-        } else {
-            btnSaveProfile.classList.add('bg-gray-400');
-            btnSaveProfile.classList.remove('bg-gradient-to-r', 'from-[#A4B465]', 'to-[#8C9E55]', 'hover:from-[#8C9E55]', 'hover:to-[#6E7C45]', 'hover:scale-[1.02]');
-        }
-    }
-    
-    nameInput.addEventListener('input', checkProfileChanges);
-    telpInput.addEventListener('input', checkProfileChanges);
-    fotoInput.addEventListener('change', checkProfileChanges);
-
-    // ===========================================
-    // DETECT CHANGES - FORM PASSWORD
-    // ===========================================
-    const btnSavePassword = document.getElementById('btnSavePassword');
-    const currentPassword = document.getElementById('currentPassword');
-    const newPassword = document.getElementById('newPassword');
-    const confirmPassword = document.getElementById('confirmPassword');
-    
-    function checkPasswordChanges() {
-        const hasChanges = currentPassword.value.length > 0 || 
-                          newPassword.value.length > 0 || 
-                          confirmPassword.value.length > 0;
-        
-        btnSavePassword.disabled = !hasChanges;
-        
-        if (hasChanges) {
-            btnSavePassword.classList.remove('bg-gray-400');
-            btnSavePassword.classList.add('bg-gradient-to-r', 'from-[#6E7C45]', 'to-[#5E6A3A]', 'hover:from-[#5E6A3A]', 'hover:to-[#4E5A2A]', 'hover:scale-[1.02]');
-        } else {
-            btnSavePassword.classList.add('bg-gray-400');
-            btnSavePassword.classList.remove('bg-gradient-to-r', 'from-[#6E7C45]', 'to-[#5E6A3A]', 'hover:from-[#5E6A3A]', 'hover:to-[#4E5A2A]', 'hover:scale-[1.02]');
-        }
-    }
-    
-    currentPassword.addEventListener('input', checkPasswordChanges);
-    newPassword.addEventListener('input', checkPasswordChanges);
-    confirmPassword.addEventListener('input', checkPasswordChanges);
-});
 </script>
 
-<style>
-/* Smooth transitions */
-* {
-    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #F2F6E9;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #A4B465;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #8C9E55;
-}
-
-/* Remove extra padding/margin */
-body {
-    margin: 0;
-    padding: 0;
-}
-</style>
 
 @endsection

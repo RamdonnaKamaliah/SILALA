@@ -58,6 +58,10 @@
 
     {{-- navbarAdmin --}}
     <script src="{{ asset('assets_admin/js/navbarAdmin.js') }}"></script>
+
+    {{-- profile admin --}}
+    <script src="{{ asset('assets_admin/js/profile_Admin/index.js') }}"></script>
+    <script src="{{ asset('assets_admin/js/profile_Admin/edit.js') }}"></script>
     
     @stack('scripts')
 </body>

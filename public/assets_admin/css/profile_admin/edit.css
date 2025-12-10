@@ -1,0 +1,30 @@
+/* Smooth transitions */
+* {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F2F6E9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #A4B465;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #8C9E55;
+}
+
+/* Remove extra padding/margin */
+body {
+    margin: 0;
+    padding: 0;
+}

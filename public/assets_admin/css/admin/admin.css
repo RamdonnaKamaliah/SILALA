@@ -5,13 +5,12 @@
         }
 
         .body-bg, .main-bg {
-    background-image: url("/assets_admin/image/bg.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed; /* optional, biar ga scroll */
-}
-
+            background-image: url("/assets_admin/image/bcg.png");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* optional, biar ga scroll */
+        }
 
         @media (max-width: 1024px) {
             main {

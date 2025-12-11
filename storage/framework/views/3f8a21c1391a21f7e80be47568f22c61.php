@@ -21,7 +21,6 @@
     <?php elseif(auth()->guard('web')->check()): ?>
       <a href="<?php echo e(url('/dashboard')); ?>" class="nav-link">Dashboard</a>
     <?php else: ?>
-      <a href="<?php echo e(route('register')); ?>" class="nav-link">Register</a>
       <a href="<?php echo e(route('login')); ?>" class="nav-link text-blue-500">Login</a>
     <?php endif; ?>
   </nav>

@@ -57,3 +57,15 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
+
+// Login routes dengan middleware 'guest'
+Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+});
+
+// Logout route (tanpa middleware guest)
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');

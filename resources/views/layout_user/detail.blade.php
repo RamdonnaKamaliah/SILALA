@@ -26,7 +26,17 @@
     <x-sidebarUser></x-sidebarUser>
 
     {{-- Navbar Detail --}}
-    @include('layout_user.partial_user.headerdetail')
+    @include('layout_user.partial_user.headerdetail', [
+    'buku' => $buku,
+    'userBorrow' => $userBorrow ?? null,
+    'hasRead' => $hasRead ?? null,
+    'userRating' => $userRating ?? null,
+    'averageRating' => $averageRating ?? 0,
+    'totalRatings' => $totalRatings ?? 0,
+    'stokHabis' => $stokHabis ?? null,
+    'isFavorited' => $isFavorited ?? false
+])
+
 
     {{-- Konten Utama --}}
     <main class="flex-1 ml-0 md:ml-[320px] mr-0 md:mr-3 transition-all duration-300 relative overflow-y-auto pt-[55vh] pb-20">

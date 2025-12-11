@@ -13,6 +13,7 @@
   </div>
 </div>
 
+<?php if($favorites->count() > 0): ?>
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
   <?php $__currentLoopData = $favorites; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fav): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
   <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
@@ -33,6 +34,18 @@
   </div>
   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </div>
+<?php else: ?>
+<div class="text-center py-12">
+  <div class="text-[#626F47] text-lg font-semibold mb-2">
+    <?php if(request()->has('status')): ?>
+      Tidak ada data untuk status yang dipilih
+    <?php else: ?>
+      Belum ada riwayat peminjaman
+    <?php endif; ?>
+  </div>
+  <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
+</div>
+<?php endif; ?>
 
 <script>
 async function hapusFavorite(id) {
@@ -48,5 +61,4 @@ async function hapusFavorite(id) {
 }
 </script>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/user/favorit.blade.php ENDPATH**/ ?>

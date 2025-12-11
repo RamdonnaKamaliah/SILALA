@@ -201,8 +201,8 @@
         </div>
       </div>
 
-      
-   <?php if(($hasRead || $userBorrow) && Schema::hasTable('ratings')): ?>
+     
+<?php if(($hasRead || $userBorrow) && Schema::hasTable('ratings')): ?>
 <div class="w-full flex justify-center mt-8">
   <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
 
@@ -225,8 +225,12 @@
          data-rating-url="<?php echo e(route('user.rating.store')); ?>" 
          data-csrf="<?php echo e(csrf_token()); ?>"
          data-user-rating="<?php echo e($userRating?->rating ?? 0); ?>">
+
       <?php for($i = 1; $i <= 5; $i++): ?>
-        <i class="fa-regular fa-star rating-star text-4xl cursor-pointer" data-star="<?php echo e($i); ?>"></i>
+      <span class="rating-star text-4xl cursor-pointer" data-star="<?php echo e($i); ?>">
+  <span class="iconify text-yellow-500" data-icon="material-symbols:star-outline-rounded"></span>
+</span>
+      </span>
       <?php endfor; ?>
     </div>
 
@@ -240,6 +244,7 @@
 
       </button>
     </div>
+
   </div>
 </div>
 <?php endif; ?>

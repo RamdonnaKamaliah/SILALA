@@ -77,12 +77,12 @@
         </div>
       </div>
 
-      <!-- Input Pencarian -->
-      <div class="relative w-full md:w-64">
-        <input type="text" placeholder="Cari Buku..."
-          class="w-full rounded-full bg-white border border-[#E0D6B8] pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C5B78B]" />
-        <span class="iconify absolute right-3 top-1/2 -translate-y-1/2 text-[#626F47]" data-icon="mdi:magnify" style="font-size:20px;"></span>
-      </div>
+      <button
+        onclick="bukaModalPengembalian()"
+        class="w-full md:w-64 rounded-full bg-[#a4b465] border border-[#a4b465] px-4 py-3 text-sm text-white flex items-center justify-center gap-2 hover:bg-[#8fa055] transition-colors">
+        <span class="iconify" data-icon="mdi:camera" style="font-size:20px;"></span>
+        Pengembalian Mandiri
+      </button>
     </div>
 
     <!-- Table -->
@@ -141,26 +141,59 @@
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
 
-              <td class="py-4 px-4 text-[#2E2E2E] font-medium whitespace-nowrap relative">
-                <?php if($status === 'dipinjam'): ?>
-                  <?php if($isTerlambat): ?>
-                    Telat <?php echo e($hariTelat); ?> Hari
-                    <br><span class="text-xs text-orange-500">Teguran</span>
-                  <?php else: ?>
-                    Masih Dipinjam
-                  <?php endif; ?>
-                <?php elseif($status === 'menunggu_konfirmasi'): ?>
-                  Menunggu Konfirmasi Admin
-                <?php else: ?>
-                  <?php if($data->keterangan && str_contains($data->keterangan, 'Terlambat')): ?>
-                    <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
-                  <?php else: ?>
-                    Tepat Waktu
-                  <?php endif; ?>
-                <?php endif; ?>
-                <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
-              </td>
 
+              <td class="py-4 px-4 text-[#2E2E2E] font-medium whitespace-nowrap relative">
+    <?php if($data->keterangan && str_contains(strtolower($data->keterangan), 'teguran')): ?>
+        <!-- Tampilkan Keterangan Teguran dari Admin -->
+        <div class="mb-1">
+            <div class="flex flex-col">
+                <span class="text-red-600 text-xs font-semibold break-words">
+                    <i class="fas fa-exclamation-triangle mr-1"></i>
+                    <?php echo e($data->keterangan); ?>
+
+                </span>
+                <!-- Status tetap ditampilkan -->
+                <div class="mt-1">
+                    <?php if($status === 'dipinjam'): ?>
+                        <?php if($isTerlambat): ?>
+                            <span class="text-red-600 text-sm">
+                                Telat <?php echo e($hariTelat); ?> Hari
+                            </span>
+                        <?php else: ?>
+                            <span class="text-sm">Masih Dipinjam</span>
+                        <?php endif; ?>
+                    <?php elseif($status === 'menunggu_konfirmasi'): ?>
+                        <span class="text-sm">Menunggu Konfirmasi Admin</span>
+                    <?php else: ?>
+                        <?php if($data->keterangan && str_contains($data->keterangan, 'Terlambat')): ?>
+                            <span class="text-orange-500 text-sm">Tepat Waktu (Setelah Teguran)</span>
+                        <?php else: ?>
+                            <span class="text-sm">Tepat Waktu</span>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php else: ?>
+        <?php if($status === 'dipinjam'): ?>
+            <?php if($isTerlambat): ?>
+                Telat <?php echo e($hariTelat); ?> Hari
+                <br><span class="text-xs text-orange-500">Teguran</span>
+            <?php else: ?>
+                Masih Dipinjam
+            <?php endif; ?>
+        <?php elseif($status === 'menunggu_konfirmasi'): ?>
+            Menunggu Konfirmasi Admin
+        <?php else: ?>
+            <?php if($data->keterangan && str_contains($data->keterangan, 'Terlambat')): ?>
+                <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
+            <?php else: ?>
+                Tepat Waktu
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+    <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
+</td>
               <td class="py-4 px-4 whitespace-nowrap relative">
                 <?php if($status === 'dipinjam'): ?>
                   <?php if($isTerlambat): ?>
@@ -214,6 +247,352 @@
         </div>
       <?php endif; ?>
     </div>
-  <?php $__env->stopSection(); ?>
-  
+
+    <!-- ====== MODAL PENGEMBALIAN MANDIRI (DILUAR NAV & MAIN) ====== -->
+    <div id="pengembalianModal" class="hidden fixed inset-0 z-[1050] flex items-center justify-center bg-black/40 p-4">
+      <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative">
+        <!-- Header -->
+        <div class="bg-[#4C6444] text-white text-center py-3 font-semibold text-lg">
+          Pengembalian Mandiri
+        </div>
+
+        <!-- Isi Modal -->
+        <div class="p-6 space-y-4 text-sm text-[#2E2E2E] max-h-[80vh] overflow-y-auto">
+
+          <!-- Dropdown Pilihan Buku -->
+          <div>
+            <label class="font-semibold mb-1 block">Judul Buku</label>
+            <select id="selectBukuModal" 
+                class="w-full bg-[#F6D776] rounded-full px-4 py-2 text-sm text-center shadow-sm focus:outline-none">
+                <option value="">-- Pilih Buku --</option>
+                <?php $__currentLoopData = $riwayat->where('status','dipinjam'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($item->id); ?>">
+                        <?php echo e($item->buku->judul_buku); ?>
+
+                    </option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+          </div>
+
+          <!-- Pilihan Kamera -->
+          <div>
+            <label class="font-semibold mb-1 block">TAMPILAN LAYAR FOTO</label>
+            <div class="grid grid-cols-2 gap-3">
+              <button id="btnKameraDepan" onclick="pilihKamera('user')"
+                  class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+                  <span class="iconify" data-icon="mdi:camera-front"></span>
+                  Kamera Depan
+              </button>
+              <button id="btnKameraBelakang" onclick="pilihKamera('environment')"
+                  class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+                  <span class="iconify" data-icon="mdi:camera-rear"></span>
+                  Kamera Belakang
+              </button>
+            </div>
+          </div>
+
+          <!-- Area Kamera & Preview -->
+          <div id="kameraArea" class="hidden">
+            <!-- Area Kamera/Preview -->
+            <div class="relative bg-black rounded-xl overflow-hidden mb-4" style="height: 280px;">
+                <!-- Video Kamera -->
+                <video id="kameraStream" autoplay 
+                    class="w-full h-full object-cover absolute inset-0 z-10"></video>
+                
+                <!-- Preview Foto (Muncul Setelah Ambil Foto) -->
+                <div id="previewContainer" class="absolute inset-0 z-20 hidden">
+                    <img id="previewFoto" src="" class="w-full h-full object-cover">
+                </div>
+                
+                <!-- Overlay Teks -->
+                <div class="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
+                    <div class="text-white text-center bg-black/50 px-4 py-3 rounded-lg">
+                        <p class="text-lg font-semibold mb-1" id="judulBukuKamera">Judul Buku</p>
+                        <p class="text-sm opacity-90">Arahkan kamera ke sampul buku</p>
+                    </div>
+                </div>
+                
+                <!-- Canvas untuk Menangkap Foto (Tersembunyi) -->
+                <canvas id="fotoCanvas" class="hidden"></canvas>
+            </div>
+
+            <!-- Peringatan -->
+            <div class="text-[13px] space-y-1 mb-4">
+                <p class="text-[#DC2626] flex items-center gap-1">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  Pastikan sampul buku terlihat jelas
+                </p>
+                <p class="text-[#DC2626] flex items-center gap-1">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  Cahaya cukup untuk hasil foto yang baik
+                </p>
+            </div>
+
+            <!-- Tombol Aksi -->
+            <div class="flex gap-3">
+                <!-- Tombol Ambil Foto (Muncul saat kamera aktif) -->
+                <button id="btnAmbilFoto" onclick="ambilFoto()"
+                    class="flex-1 bg-[#BFEA7C] text-[#2E2E2E] font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1">
+                    <span class="iconify" data-icon="mdi:camera"></span>
+                    Ambil Foto
+                </button>
+                
+                <!-- Tombol Kirim Foto (Muncul setelah ambil foto) -->
+                <button id="btnKirimFoto" onclick="kirimFoto()"
+                    class="flex-1 bg-[#4C6444] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1 hidden">
+                    <span class="iconify" data-icon="mdi:send"></span>
+                    Kirim Foto
+                </button>
+            </div>
+          </div>
+
+          <!-- Tombol Batal (selalu tampil) -->
+          <div class="flex justify-end gap-3 pt-4">
+            <button onclick="tutupModal()" class="bg-[#DC2626] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition">
+              Batal
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script>
+    let streamAktif = null;
+    let fotoDiambil = false;
+    let bukuDipilih = null;
+    let modeKamera = null;
+
+    // Fungsi untuk membuka modal
+    function bukaModalPengembalian() {
+        // Cek apakah ada buku yang sedang dipinjam
+        <?php if($riwayat->where('status','dipinjam')->count() == 0): ?>
+            alert('Tidak ada buku yang sedang dipinjam');
+            return;
+        <?php endif; ?>
+        
+        document.getElementById('pengembalianModal').classList.remove('hidden');
+        resetModal();
+    }
+
+    // Fungsi untuk menutup modal
+    function tutupModal() {
+        document.getElementById('pengembalianModal').classList.add('hidden');
+        hentikanKamera();
+        resetModal();
+    }
+
+    // Reset modal ke kondisi awal
+    function resetModal() {
+        document.getElementById('kameraArea').classList.add('hidden');
+        document.getElementById('previewContainer').classList.add('hidden');
+        
+        // Reset tombol
+        document.getElementById('btnAmbilFoto').classList.remove('hidden');
+        document.getElementById('btnKirimFoto').classList.add('hidden');
+        
+        fotoDiambil = false;
+        bukuDipilih = null;
+        modeKamera = null;
+        
+        // Reset tombol kamera
+        document.getElementById('btnKameraDepan').classList.remove('bg-[#4C6444]', 'text-white');
+        document.getElementById('btnKameraBelakang').classList.remove('bg-[#4C6444]', 'text-white');
+    }
+
+    // Fungsi untuk memilih kamera
+    async function pilihKamera(facingMode) {
+        // Dapatkan buku yang dipilih
+        const selectBuku = document.getElementById('selectBukuModal');
+        bukuDipilih = selectBuku.value;
+        
+        if (!bukuDipilih) {
+            alert('Silakan pilih buku terlebih dahulu');
+            return;
+        }
+        
+        // Update judul buku di overlay
+        const selectedOption = selectBuku.options[selectBuku.selectedIndex];
+        document.getElementById('judulBukuKamera').textContent = selectedOption.text;
+        
+        // Update tampilan tombol kamera
+        document.getElementById('btnKameraDepan').classList.remove('bg-[#4C6444]', 'text-white');
+        document.getElementById('btnKameraBelakang').classList.remove('bg-[#4C6444]', 'text-white');
+        
+        if (facingMode === 'user') {
+            document.getElementById('btnKameraDepan').classList.add('bg-[#4C6444]', 'text-white');
+        } else {
+            document.getElementById('btnKameraBelakang').classList.add('bg-[#4C6444]', 'text-white');
+        }
+        
+        modeKamera = facingMode;
+        
+        // Tampilkan area kamera
+        document.getElementById('kameraArea').classList.remove('hidden');
+        
+        // Sembunyikan preview jika ada
+        document.getElementById('previewContainer').classList.add('hidden');
+        
+        // Tampilkan tombol ambil foto, sembunyikan tombol kirim
+        document.getElementById('btnAmbilFoto').classList.remove('hidden');
+        document.getElementById('btnKirimFoto').classList.add('hidden');
+        
+        // Hentikan kamera sebelumnya jika ada
+        hentikanKamera();
+        
+        // Mulai kamera
+        try {
+            streamAktif = await navigator.mediaDevices.getUserMedia({
+                video: { 
+                    facingMode: facingMode,
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+            const videoElement = document.getElementById('kameraStream');
+            videoElement.srcObject = streamAktif;
+            videoElement.classList.remove('hidden');
+        } catch (error) {
+            console.error('Error mengakses kamera:', error);
+            alert('Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.');
+            document.getElementById('kameraArea').classList.add('hidden');
+        }
+    }
+
+    // Fungsi untuk mengambil foto
+    function ambilFoto() {
+        if (!streamAktif) {
+            alert('Kamera belum aktif');
+            return;
+        }
+        
+        const video = document.getElementById('kameraStream');
+        const canvas = document.getElementById('fotoCanvas');
+        const context = canvas.getContext('2d');
+        
+        // Set ukuran canvas sama dengan video
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        // Gambar frame video ke canvas
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Tampilkan preview foto
+        const previewImg = document.getElementById('previewFoto');
+        previewImg.src = canvas.toDataURL('image/png');
+        document.getElementById('previewContainer').classList.remove('hidden');
+        
+        // Sembunyikan video, tampilkan preview
+        video.classList.add('hidden');
+        
+        // Ganti tombol: sembunyikan ambil foto, tampilkan kirim foto
+        document.getElementById('btnAmbilFoto').classList.add('hidden');
+        document.getElementById('btnKirimFoto').classList.remove('hidden');
+        
+        fotoDiambil = true;
+        
+        // Hentikan kamera setelah mengambil foto
+        hentikanKamera();
+    }
+
+    // Fungsi untuk mengirim foto
+async function kirimFoto() {
+    if (!fotoDiambil || !bukuDipilih) {
+        alert('Silakan ambil foto terlebih dahulu dan pilih buku');
+        return;
+    }
+    
+    const canvas = document.getElementById('fotoCanvas');
+    const imageData = canvas.toDataURL('image/png');
+    
+    // Tampilkan loading pada tombol kirim
+    const btnKirim = document.getElementById('btnKirimFoto');
+    const originalText = btnKirim.innerHTML;
+    btnKirim.innerHTML = '<span class="iconify animate-spin" data-icon="mdi:loading"></span> Mengirim...';
+    btnKirim.disabled = true;
+    
+    try {
+        console.log('Memulai proses pengiriman foto...');
+        
+        // Konversi base64 ke blob
+        const blob = await fetch(imageData).then(res => res.blob());
+        console.log('Blob berhasil dibuat, ukuran:', blob.size, 'bytes');
+        
+        // Buat FormData untuk dikirim
+        const formData = new FormData();
+        formData.append('buku_id', bukuDipilih);
+        formData.append('foto', blob, `pengembalian_${Date.now()}.png`);
+        formData.append('_token', '<?php echo e(csrf_token()); ?>');
+        
+        console.log('Mengirim ke server...');
+        
+        // PERBAIKAN: Ganti dengan route yang benar
+        const response = await fetch('<?php echo e(route("user.kembalikan.buku.foto")); ?>', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        // Cek jika response bukan JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Response bukan JSON:', text.substring(0, 200));
+            throw new Error('Server mengembalikan respons bukan JSON. Status: ' + response.status);
+        }
+        
+        const result = await response.json();
+        console.log('Response JSON:', result);
+        
+        if (result.success) {
+            alert('Foto berhasil dikirim! Menunggu konfirmasi admin.');
+            // Tutup modal dan reload halaman
+            tutupModal();
+            window.location.reload();
+        } else {
+            throw new Error(result.message || 'Gagal mengirim foto');
+        }
+    } catch (error) {
+        console.error('Error detail mengirim foto:', error);
+        alert('Gagal mengirim foto: ' + error.message);
+        
+        // Reset tombol kirim
+        btnKirim.innerHTML = originalText;
+        btnKirim.disabled = false;
+    }
+}
+
+    // Fungsi untuk menghentikan kamera
+    function hentikanKamera() {
+        if (streamAktif) {
+            streamAktif.getTracks().forEach(track => track.stop());
+            streamAktif = null;
+        }
+    }
+
+    // Event listener untuk dropdown buku
+    document.getElementById('selectBukuModal').addEventListener('change', function() {
+        if (streamAktif) {
+            hentikanKamera();
+            document.getElementById('kameraArea').classList.add('hidden');
+            fotoDiambil = false;
+            modeKamera = null;
+        }
+    });
+
+    // Event listener untuk tombol batal di luar modal
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('pengembalianModal');
+        if (e.target === modal) {
+            tutupModal();
+        }
+    });
+    </script>
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/user/riwayatbuku.blade.php ENDPATH**/ ?>

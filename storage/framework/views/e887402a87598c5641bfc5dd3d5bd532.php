@@ -43,7 +43,7 @@
          data-judul="<?php echo e(strtolower($data->buku->judul_buku ?? '')); ?>"
          data-penulis="<?php echo e(strtolower($data->buku->penulis ?? '')); ?>">
         <div class="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
-          <img src="<?php echo e(asset($data->buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
+          <img src="<?php echo e(asset('storage/' . $data->buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
                alt="<?php echo e($data->buku->judul_buku); ?>" 
                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
         </div>

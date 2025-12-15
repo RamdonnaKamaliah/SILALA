@@ -1,0 +1,5 @@
+#pdfViewer {
+  display: grid !important;
+  gap: 20px;
+  justify-content: center; /* halaman tetap center */
+}

@@ -8,11 +8,11 @@
 
 <!-- Overlay gelap -->
 <div id="sidebar-overlay"
-  class="fixed inset-0 bg-black bg-opacity-40 hidden opacity-0 transition-opacity duration-300 z-40 md:hidden"></div>
+  class="fixed inset-0 bg-black bg-opacity-40 hidden opacity-0 transition-opacity duration-300 z-50 md:hidden"></div>
 
 <!-- Sidebar -->
 <div id="sidebar"
-  class="fixed w-[300px] h-full bg-[var(--green)] border-l-[10px] border-[var(--green)] transition-all duration-500 overflow-hidden transform -translate-x-full md:translate-x-0 z-30 sidebar">
+  class="fixed w-[300px] h-full bg-[var(--green)] border-l-[10px] border-[var(--green)] transition-all duration-500 overflow-hidden transform -translate-x-full md:translate-x-0 z-50 sidebar">
   
   <!-- Header -->
   <div class="flex items-center justify-between px-4 mt-4 mb-6 text-white">

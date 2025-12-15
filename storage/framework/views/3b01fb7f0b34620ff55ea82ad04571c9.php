@@ -115,7 +115,7 @@
                 <!-- 🔗 UBAH: Tambahkan link ke detail buku -->
                 <a href="<?php echo e(route('user.detailbuku', ['id' => $buku->id, 'from' => 'riwayatbuku'])); ?>" 
                    class="flex items-center gap-3 hover:no-underline group">
-                  <img src="<?php echo e(asset($buku->foto_buku ?? 'assets/default-cover.jpg')); ?>"
+                  <img src="<?php echo e(asset('storage/' . $buku->foto_buku ?? 'assets/default-cover.jpg')); ?>"
                        alt="Buku"
                        class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0 group-hover:shadow-xl transition-shadow duration-200">
                   <div class="min-w-0">
@@ -262,8 +262,10 @@
           <!-- Dropdown Pilihan Buku -->
           <div>
             <label class="font-semibold mb-1 block">Judul Buku</label>
-            <select id="selectBukuModal" 
-                class="w-full bg-[#F6D776] rounded-full px-4 py-2 text-sm text-center shadow-sm focus:outline-none">
+            <select id="selectBukuModal"
+    class="w-full max-w-full bg-[#F6D776] rounded-full px-3 py-2 text-sm
+    sm:text-sm text-xs text-center shadow-sm focus:outline-none 
+    overflow-hidden truncate">
                 <option value="">-- Pilih Buku --</option>
                 <?php $__currentLoopData = $riwayat->where('status','dipinjam'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($item->id); ?>">

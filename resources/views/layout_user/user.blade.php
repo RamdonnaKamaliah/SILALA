@@ -20,7 +20,7 @@
   @include('layout_user.partial_user.header')
 
   {{-- KONTEN UTAMA --}}
-  <main class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-30 flex flex-col max-w-full shadow-inner">
+  <main class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-50 flex flex-col max-w-full shadow-inner">
     @yield('content')
 </main>
 
@@ -29,6 +29,7 @@
 
   {{-- Script tambahan (kalau ada JS per halaman) --}}
   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="{{asset('assets_user/js/sidebarnavbar.js')}}"></script>
   <script src="{{asset('assets_user/js/daftarbuku.js')}}"></script>
   <script src="{{asset('assets_user/js/riwayatbuku.js')}}"></script>

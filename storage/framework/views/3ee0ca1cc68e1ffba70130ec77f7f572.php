@@ -77,8 +77,8 @@
 
     <!-- COVER -->
     <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-        <?php if($buku->foto_buku): ?>
-            <img src="<?php echo e(asset($buku->foto_buku)); ?>" class="w-full h-full object-cover rounded-lg">
+        <?php if($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)): ?>
+            <img src="<?php echo e(asset('storage/' . $buku->foto_buku)); ?>" class="w-full h-full object-cover rounded-lg">
         <?php else: ?>
             <img src="<?php echo e(asset('assets/default-cover.jpg')); ?>" class="w-full h-full object-cover rounded-lg">
             <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>

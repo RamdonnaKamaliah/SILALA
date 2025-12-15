@@ -45,7 +45,7 @@
          data-judul="{{ strtolower($data->buku->judul_buku ?? '') }}"
          data-penulis="{{ strtolower($data->buku->penulis ?? '') }}">
         <div class="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
-          <img src="{{ asset($data->buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
+          <img src="{{ asset('storage/' . $data->buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
                alt="{{ $data->buku->judul_buku }}" 
                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
         </div>

@@ -4,5 +4,7 @@
 <link rel="stylesheet" href="{{ asset('assets_user/css/dashboard.css') }}">
 <link rel="stylesheet" href="{{ asset('assets_user/css/daftarbuku.css') }}">
 <link rel="stylesheet" href="{{ asset('assets_user/css/detailbuku.css') }}">
+<link rel="stylesheet" href="{{ asset('assets_user/css/riwayatbuku.css') }}">
+<link rel="stylesheet" href="{{ asset('assets_user/css/favorit.css') }}">
 
 

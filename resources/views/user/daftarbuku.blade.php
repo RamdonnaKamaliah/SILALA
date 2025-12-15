@@ -78,8 +78,8 @@
 
     <!-- COVER -->
     <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-        @if ($buku->foto_buku)
-            <img src="{{ asset($buku->foto_buku) }}" class="w-full h-full object-cover rounded-lg">
+        @if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku))
+            <img src="{{ asset('storage/' . $buku->foto_buku) }}" class="w-full h-full object-cover rounded-lg">
         @else
             <img src="{{ asset('assets/default-cover.jpg') }}" class="w-full h-full object-cover rounded-lg">
             <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>

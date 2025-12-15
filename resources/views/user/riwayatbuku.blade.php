@@ -142,56 +142,56 @@
 
 
               <td class="py-4 px-4 text-[#2E2E2E] font-medium whitespace-nowrap relative">
-    @if($data->keterangan && str_contains(strtolower($data->keterangan), 'teguran'))
-        <!-- Tampilkan Keterangan Teguran dari Admin -->
-        <div class="mb-1">
-            <div class="flex flex-col">
-                <span class="text-red-600 text-xs font-semibold break-words">
-                    <i class="fas fa-exclamation-triangle mr-1"></i>
-                    {{ $data->keterangan }}
-                </span>
-                <!-- Status tetap ditampilkan -->
-                <div class="mt-1">
-                    @if ($status === 'dipinjam')
-                        @if ($isTerlambat)
-                            <span class="text-red-600 text-sm">
-                                Telat {{ $hariTelat }} Hari
-                            </span>
-                        @else
-                            <span class="text-sm">Masih Dipinjam</span>
-                        @endif
-                    @elseif ($status === 'menunggu_konfirmasi')
-                        <span class="text-sm">Menunggu Konfirmasi Admin</span>
-                    @else
-                        @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
-                            <span class="text-orange-500 text-sm">Tepat Waktu (Setelah Teguran)</span>
-                        @else
-                            <span class="text-sm">Tepat Waktu</span>
-                        @endif
-                    @endif
-                </div>
-            </div>
-        </div>
-    @else
-        @if ($status === 'dipinjam')
-            @if ($isTerlambat)
-                Telat {{ $hariTelat }} Hari
-                <br><span class="text-xs text-orange-500">Teguran</span>
-            @else
-                Masih Dipinjam
-            @endif
-        @elseif ($status === 'menunggu_konfirmasi')
-            Menunggu Konfirmasi Admin
-        @else
-            @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
-                <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
-            @else
-                Tepat Waktu
-            @endif
-        @endif
-    @endif
-    <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
-</td>
+                  @if($data->keterangan && str_contains(strtolower($data->keterangan), 'teguran'))
+                      <!-- Tampilkan Keterangan Teguran dari Admin -->
+                      <div class="mb-1">
+                          <div class="flex flex-col">
+                              <span class="text-red-600 text-xs font-semibold break-words">
+                                  <i class="fas fa-exclamation-triangle mr-1"></i>
+                                  {{ $data->keterangan }}
+                              </span>
+                              <!-- Status tetap ditampilkan -->
+                              <div class="mt-1">
+                                  @if ($status === 'dipinjam')
+                                      @if ($isTerlambat)
+                                          <span class="text-red-600 text-sm">
+                                              Telat {{ $hariTelat }} Hari
+                                          </span>
+                                      @else
+                                          <span class="text-sm">Masih Dipinjam</span>
+                                      @endif
+                                  @elseif ($status === 'menunggu_konfirmasi')
+                                      <span class="text-sm">Menunggu Konfirmasi Admin</span>
+                                  @else
+                                      @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
+                                          <span class="text-orange-500 text-sm">Tepat Waktu (Setelah Teguran)</span>
+                                      @else
+                                          <span class="text-sm">Tepat Waktu</span>
+                                      @endif
+                                  @endif
+                              </div>
+                          </div>
+                      </div>
+                  @else
+                      @if ($status === 'dipinjam')
+                          @if ($isTerlambat)
+                              Telat {{ $hariTelat }} Hari
+                              <br><span class="text-xs text-orange-500">Teguran</span>
+                          @else
+                              Masih Dipinjam
+                          @endif
+                      @elseif ($status === 'menunggu_konfirmasi')
+                          Menunggu Konfirmasi Admin
+                      @else
+                          @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
+                              <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
+                          @else
+                              Tepat Waktu
+                          @endif
+                      @endif
+                  @endif
+                  <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
+              </td>
               <td class="py-4 px-4 whitespace-nowrap relative">
                 @if ($status === 'dipinjam')
                   @if ($isTerlambat)

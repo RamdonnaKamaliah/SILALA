@@ -1,0 +1,49 @@
+/* Font dasar */
+body {
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+}
+
+/* Background desktop / layar besar */
+@media (min-width: 769px) {
+    body {
+        background: url("/assets/bg.png") no-repeat center center fixed !important;
+        background-size: cover !important;
+    }
+}
+
+/* Background mobile portrait */
+@media (max-width: 768px) and (orientation: portrait) {
+    body {
+        background: url("/assets/big.png") no-repeat center center fixed !important;
+        background-size: cover !important;
+    }
+}
+
+/* Background mobile landscape */
+@media (max-width: 768px) and (orientation: landscape) {
+    body {
+        background: url("/assets/bg.png") no-repeat center center fixed !important;
+        background-size: cover !important;
+    }
+}
+
+/* Overlay ijo transparan */
+body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 128, 0, 0.15);
+    z-index: 0;
+}
+
+/* Animasi ilustrasi */
+.floating {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CmsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
@@ -66,9 +67,9 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
 
     // PROFIL USER
-Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
-Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
-Route::put('/editprofil', [EditProfilController::class, 'update'])->name('user.updateprofil');
+    Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
+    Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
+    Route::put('/editprofil', [EditProfilController::class, 'update'])->name('user.updateprofil');
 
     // BACA
     Route::get('/baca/{id}', [DetailBukuController::class, 'baca'])->name('user.baca');
@@ -141,6 +142,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::get('/media-buku', [MediaBukuController::class, 'index'])->name('media.index');
     Route::delete('/media-buku/{id}', [MediaBukuController::class, 'destroy'])
     ->name('media.destroy');
+
+     
+        Route::get('/cms', [CmsController::class, 'editHero'])
+            ->name('cms_admin.index');
+
+        Route::post('/cms/update-hero', [CmsController::class, 'updateHero'])
+            ->name('cms_admin.updateHero');
+
+        Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
+            ->name('cms_admin.updateFooterLogo');
+
+
 
 });
 

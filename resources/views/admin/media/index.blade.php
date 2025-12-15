@@ -24,7 +24,7 @@
                 <div class="p-3 flex flex-col gap-2">
 
                     <p class="text-lg text-gray-700 font-medium truncate">
-                        {{ $item->buku?->judul_buku ?? 'Tidak ada judul' }}
+                        {{ $item->buku->judul_buku ?? 'Tidak ada judul' }}
                     </p>
 
                     {{-- Filename --}}

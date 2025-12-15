@@ -9,7 +9,7 @@ class GambarBuku extends Model
      protected $fillable = [
         'nama_file',
         'path_file',
-        'data_buku_id'
+        'judul_buku',
     ];
     
     public function buku()

@@ -24,13 +24,7 @@
                 <div class="p-3 flex flex-col gap-2">
 
                     <p class="text-lg text-gray-700 font-medium truncate">
-                        <?php echo e($item->buku->judul_buku ?? 'Tidak ada judul'); ?>
-
-                    </p>
-
-                    
-                    <p class="text-xs text-gray-700 font-medium truncate">
-                        <?php echo e(basename($item->path_file)); ?>
+                        <?php echo e($item->judul_buku ?? 'Tidak ada judul'); ?>
 
                     </p>
 

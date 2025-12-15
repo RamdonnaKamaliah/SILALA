@@ -19,9 +19,6 @@ class MediaBukuController extends Controller
 {
     $gambar = GambarBuku::findOrFail($id);
 
-    // hapus file di storage
-    Storage::disk('public')->delete($gambar->path_file);
-
     // hapus row di database
     $gambar->delete();
 

@@ -19,7 +19,7 @@ class CmsController extends Controller
 
     public function updateHero(Request $request)
     {
-        $request->validate([
+        $request->validate([    
             'hero_image' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048'
         ]);
 

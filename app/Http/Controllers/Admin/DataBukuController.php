@@ -55,7 +55,7 @@ public function store(Request $request)
         'edisi' => 'required',
         'deskripsi' => 'required',
         'stok' => 'required',
-        'file_buku' => 'nullable|mimes:pdf|max:5120',
+        'file_buku' => 'required|mimes:pdf|max:10240',
     ]);
 
     $foto_buku_path = null;
@@ -72,6 +72,7 @@ public function store(Request $request)
         GambarBuku::create([
             'nama_file' => $file->getClientOriginalName(),
             'path_file' => $path,
+            'judul_buku' => $request->judul_buku,
         ]);
     }
 
@@ -96,8 +97,8 @@ public function store(Request $request)
         'stok' => $request->stok,
 
         'file_buku' => $request->file_buku
-            ? 'storage/' . $request->file_buku->store('uploads/file_buku', 'public')
-            : null,
+    ? $request->file_buku->store('uploads/file_buku', 'public')
+    : null,
 
         'foto_buku' => $foto_buku_path,
 
@@ -148,7 +149,7 @@ public function store(Request $request)
         'edisi' => 'required|string|max:100',
         'deskripsi' => 'required|string',
         'stok' => 'required|integer|min:0',
-        'file_buku' => 'nullable|mimes:pdf|max:255',
+        'file_buku' => 'required|mimes:pdf|max:255',
     ]);
 
     $buku = DataBuku::findOrFail($id);

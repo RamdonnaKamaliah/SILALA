@@ -1,8 +1,6 @@
-@extends('layout_user.user')
+<?php $__env->startSection('title', 'Beranda User'); ?>
 
-@section('title', 'Beranda User')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <!-- Filter dan Pencarian -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div class="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 w-full md:w-auto">
@@ -38,7 +36,7 @@
             <div id="dropdownMenu"
               class="absolute z-50 mt-2 left-0 w-52 shadow-lg rounded-lg overflow-hidden hidden">
 
-              <a href="{{ route('user.riwayatbuku') }}" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-white text-[#626F47] hover:bg-gray-100 cursor-pointer">
+              <a href="<?php echo e(route('user.riwayatbuku')); ?>" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-white text-[#626F47] hover:bg-gray-100 cursor-pointer">
                 <span class="iconify" data-icon="mdi:format-list-bulleted" style="font-size:18px;"></span>
                 Semua Status
               </a>
@@ -61,21 +59,21 @@
           </div>
 
           <!-- ✅ Badge Hanya Muncul Jika Ada request()->status -->
-          @if(request()->has('status'))
-            @if(request()->status == 'sudah')
+          <?php if(request()->has('status')): ?>
+            <?php if(request()->status == 'sudah'): ?>
               <span class="inline-flex items-center gap-1 bg-[#98E690] text-[#1C4B1A] px-3 py-2 rounded-lg text-sm font-semibold">
                 <span class="iconify" data-icon="mdi:check"></span> Sudah Dikembalikan
               </span>
-            @elseif(request()->status == 'pinjam')
+            <?php elseif(request()->status == 'pinjam'): ?>
               <span class="inline-flex items-center gap-1 bg-[#E8D26E] text-[#5F5311] px-3 py-2 rounded-lg text-sm font-semibold">
                 <span class="iconify" data-icon="mdi:clock-outline"></span> Sedang Dipinjam
               </span>
-            @elseif(request()->status == 'belum')
+            <?php elseif(request()->status == 'belum'): ?>
               <span class="inline-flex items-center gap-1 bg-[#F19E9E] text-[#7E1D1D] px-3 py-2 rounded-lg text-sm font-semibold">
                 <span class="iconify" data-icon="mdi:close"></span> Terlambat
               </span>
-            @endif
-          @endif
+            <?php endif; ?>
+          <?php endif; ?>
         </div>
       </div>
 
@@ -89,7 +87,7 @@
 
     <!-- Table -->
     <div class="mt-6 bg-white rounded-3xl shadow-sm overflow-x-auto">
-      @if($riwayat->count() > 0)
+      <?php if($riwayat->count() > 0): ?>
       <table class="min-w-full text-sm text-[#2E2E2E] border-collapse border border-[#F0EAD2]">
         <thead class="bg-cream text-[#626F47] font-semibold text-left">
           <tr>
@@ -101,8 +99,8 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-[#F0EAD2]">
-          @foreach ($riwayat as $data)
-            @php
+          <?php $__currentLoopData = $riwayat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php
               $buku = $data->buku;
               $status = strtolower($data->status);
               $tanggalPinjam = \Carbon\Carbon::parse($data->tanggal_pinjam)->translatedFormat('d F Y');
@@ -111,104 +109,108 @@
               // Gunakan accessor dari model
               $hariTelat = $data->hari_telat;
               $isTerlambat = $data->is_terlambat;
-            @endphp
+            ?>
             <tr class="hover:bg-[#FFF8E8] transition">
               <td class="py-4 px-4 relative min-w-[220px]">
                 <!-- 🔗 UBAH: Tambahkan link ke detail buku -->
-                <a href="{{ route('user.detailbuku', ['id' => $buku->id, 'from' => 'riwayatbuku']) }}" 
+                <a href="<?php echo e(route('user.detailbuku', ['id' => $buku->id, 'from' => 'riwayatbuku'])); ?>" 
                    class="flex items-center gap-3 hover:no-underline group">
-                  <img src="{{ asset($buku->foto_buku ?? 'assets/default-cover.jpg') }}"
+                  <img src="<?php echo e(asset($buku->foto_buku ?? 'assets/default-cover.jpg')); ?>"
                        alt="Buku"
                        class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0 group-hover:shadow-xl transition-shadow duration-200">
                   <div class="min-w-0">
                     <p class="font-semibold text-sm leading-snug group-hover:text-[#626F47] transition-colors duration-200">
-                      {{ $buku->judul_buku }}
+                      <?php echo e($buku->judul_buku); ?>
+
                     </p>
-                    <p class="text-[#626F47] text-xs font-medium">{{ $buku->penulis }}</p>
+                    <p class="text-[#626F47] text-xs font-medium"><?php echo e($buku->penulis); ?></p>
                   </div>
                 </a>
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
 
               <td class="py-4 px-4 whitespace-nowrap relative">
-                {{ $tanggalPinjam }}
+                <?php echo e($tanggalPinjam); ?>
+
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
 
               <td class="py-4 px-4 whitespace-nowrap relative">
-                {{ $tanggalKembali }}
+                <?php echo e($tanggalKembali); ?>
+
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
 
 
               <td class="py-4 px-4 text-[#2E2E2E] font-medium whitespace-nowrap relative">
-    @if($data->keterangan && str_contains(strtolower($data->keterangan), 'teguran') && $data->metode_pengembalian == 'mandiri')
+    <?php if($data->keterangan && str_contains(strtolower($data->keterangan), 'teguran') && $data->metode_pengembalian == 'mandiri'): ?>
         <!-- Tampilkan Keterangan Teguran dari Admin (Hanya untuk pengembalian mandiri) -->
         <div class="mb-1">
             <div class="flex flex-col">
                 <span class="text-red-600 text-xs font-semibold break-words bg-red-50 px-2 py-1 rounded border border-red-200">
                     <i class="fas fa-exclamation-triangle mr-1"></i>
-                    {{ $data->keterangan }}
+                    <?php echo e($data->keterangan); ?>
+
                 </span>
                 <!-- Status tetap ditampilkan -->
                 <div class="mt-1">
-                    @if ($status === 'dipinjam')
-                        @if ($isTerlambat)
+                    <?php if($status === 'dipinjam'): ?>
+                        <?php if($isTerlambat): ?>
                             <span class="text-red-600 text-sm">
-                                Telat {{ $hariTelat }} Hari
+                                Telat <?php echo e($hariTelat); ?> Hari
                             </span>
-                        @else
+                        <?php else: ?>
                             <span class="text-sm">Masih Dipinjam</span>
-                        @endif
-                    @elseif ($status === 'menunggu_konfirmasi')
+                        <?php endif; ?>
+                    <?php elseif($status === 'menunggu_konfirmasi'): ?>
                         <span class="text-sm text-yellow-600">Menunggu Konfirmasi Admin</span>
-                    @else
-                        @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
+                    <?php else: ?>
+                        <?php if($data->keterangan && str_contains($data->keterangan, 'Terlambat')): ?>
                             <span class="text-orange-500 text-sm">Tepat Waktu (Setelah Teguran)</span>
-                        @else
+                        <?php else: ?>
                             <span class="text-sm text-green-600">Tepat Waktu</span>
-                        @endif
-                    @endif
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
-    @else
+    <?php else: ?>
         <!-- Tampilkan informasi normal -->
-        @if ($status === 'dipinjam')
-            @if ($isTerlambat)
+        <?php if($status === 'dipinjam'): ?>
+            <?php if($isTerlambat): ?>
                 <div class="text-red-600">
-                    Telat {{ $hariTelat }} Hari
+                    Telat <?php echo e($hariTelat); ?> Hari
                 </div>
                 <div class="text-xs text-orange-500 mt-1">
                     <i class="fas fa-exclamation-circle mr-1"></i>
                     Harap segera kembalikan
                 </div>
-            @else
+            <?php else: ?>
                 <span class="text-sm">Masih Dipinjam</span>
-            @endif
-        @elseif ($status === 'menunggu_konfirmasi')
+            <?php endif; ?>
+        <?php elseif($status === 'menunggu_konfirmasi'): ?>
             <span class="text-yellow-600 text-sm">
                 <i class="fas fa-clock mr-1"></i>
                 Menunggu Konfirmasi Admin
-                @if($data->metode_pengembalian == 'mandiri')
+                <?php if($data->metode_pengembalian == 'mandiri'): ?>
                     <span class="text-xs bg-[#A4B465] text-white px-2 py-0.5 rounded-full ml-1">
                         Mandiri
                     </span>
-                @endif
+                <?php endif; ?>
             </span>
-        @else
-            @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
+        <?php else: ?>
+            <?php if($data->keterangan && str_contains($data->keterangan, 'Terlambat')): ?>
                 <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
-            @else
+            <?php else: ?>
                 <span class="text-green-600">Tepat Waktu</span>
-            @endif
-        @endif
-    @endif
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
     <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
 </td>
               <td class="py-4 px-4 whitespace-nowrap relative">
-                @if ($status === 'dipinjam')
-                  @if ($isTerlambat)
+                <?php if($status === 'dipinjam'): ?>
+                  <?php if($isTerlambat): ?>
                     <div class="flex items-start relative">
                       <span class="iconify text-[#B43131] w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:alert-circle-outline"></span>
                       <div>
@@ -218,46 +220,46 @@
                         <span class="block mt-1 text-[11px] text-orange-500 italic">*Peringatan keterlambatan</span>
                       </div>
                     </div>
-                  @else
+                  <?php else: ?>
                     <div class="flex items-center relative">
                       <span class="iconify text-[#A78C1E] w-4 h-4 absolute -left-4 self-center" data-icon="mdi:clock-outline"></span>
                       <span class="inline-flex items-center bg-[#FFF4C6] text-[#A78C1E] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
                         Sedang Dipinjam
                       </span>
                     </div>
-                  @endif
-                @elseif ($status === 'menunggu_konfirmasi')
+                  <?php endif; ?>
+                <?php elseif($status === 'menunggu_konfirmasi'): ?>
                   <div class="flex items-center relative">
                     <span class="iconify text-[#5F5311] w-4 h-4 absolute -left-4 self-center" data-icon="mdi:clock-alert-outline"></span>
                     <span class="inline-flex items-center bg-[#FFEBC6] text-[#5F5311] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
                       Menunggu Konfirmasi
                     </span>
                   </div>
-                @else
+                <?php else: ?>
                   <div class="flex items-center relative">
                     <span class="iconify text-[#2F7A2F] w-4 h-4 absolute -left-4 self-center" data-icon="mdi:check"></span>
                     <span class="inline-flex items-center bg-[#CCF6C2] text-[#2F7A2F] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
                       Sudah Dikembalikan
                     </span>
                   </div>
-                @endif
+                <?php endif; ?>
               </td>
             </tr>
-          @endforeach
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>
-      @else
+      <?php else: ?>
         <div class="text-center py-12">
           <div class="text-[#626F47] text-lg font-semibold mb-2">
-            @if(request()->has('status'))
+            <?php if(request()->has('status')): ?>
               Tidak ada data untuk status yang dipilih
-            @else
+            <?php else: ?>
               Belum ada riwayat peminjaman
-            @endif
+            <?php endif; ?>
           </div>
           <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
         </div>
-      @endif
+      <?php endif; ?>
     </div>
 
     <!-- ====== MODAL PENGEMBALIAN MANDIRI (DILUAR NAV & MAIN) ====== -->
@@ -277,11 +279,12 @@
             <select id="selectBukuModal" 
                 class="w-full bg-[#F6D776] rounded-full px-4 py-2 text-sm text-center shadow-sm focus:outline-none">
                 <option value="">-- Pilih Buku --</option>
-                @foreach($riwayat->where('status','dipinjam') as $item)
-                    <option value="{{ $item->id }}">
-                        {{ $item->buku->judul_buku }}
+                <?php $__currentLoopData = $riwayat->where('status','dipinjam'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($item->id); ?>">
+                        <?php echo e($item->buku->judul_buku); ?>
+
                     </option>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
           </div>
 
@@ -367,4 +370,5 @@
         </div>
       </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/riwayatbuku.blade.php ENDPATH**/ ?>

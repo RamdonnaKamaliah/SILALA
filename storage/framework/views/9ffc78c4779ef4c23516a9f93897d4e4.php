@@ -1,23 +1,21 @@
-@extends('layout_admin.admin')
+<?php $__env->startSection('pageTitle', 'Data Peminjam'); ?>
 
-@section('pageTitle', 'Data Peminjam')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <!-- Header Section -->
-    {{-- Tampilkan pesan flash --}}
-    @if(session('success'))
+    
+    <?php if(session('success')): ?>
         <div class="fixed top-4 right-4 z-[10001] bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
             <i class="fas fa-check-circle"></i>
-            <span>{{ session('success') }}</span>
+            <span><?php echo e(session('success')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
         <div class="fixed top-4 right-4 z-[10001] bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
             <i class="fas fa-exclamation-circle"></i>
-            <span>{{ session('error') }}</span>
+            <span><?php echo e(session('error')); ?></span>
         </div>
-    @endif
+    <?php endif; ?>
     <div class="mb-8">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
             <div class="flex-1">
@@ -64,7 +62,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Total Peminjaman</p>
-                        <p class="text-xl font-bold text-gray-800">{{ $data_peminjam->count() }}</p>
+                        <p class="text-xl font-bold text-gray-800"><?php echo e($data_peminjam->count()); ?></p>
                     </div>
                 </div>
             </div>
@@ -105,7 +103,7 @@
 
     <!-- Table Section -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-        @if($data_peminjam->count() > 0)
+        <?php if($data_peminjam->count() > 0): ?>
             <!-- Desktop Table -->
             <div class="hidden lg:block overflow-x-auto">
                 <table class="w-full text-sm">
@@ -156,8 +154,8 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200" id="tableBody">
-                        @foreach ($data_peminjam as $peminjam)
-                        @php
+                        <?php $__currentLoopData = $data_peminjam; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $peminjam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
                             $isLate = now()->gt($peminjam->tanggal_kembali) && $peminjam->status == 'dipinjam';
                             $isWaiting = $peminjam->status == 'menunggu_konfirmasi';
                             $hasPhoto = !empty($peminjam->foto_bukti_pengembalian);
@@ -165,18 +163,19 @@
                             
                             // Tambahkan kondisi untuk menampilkan tombol teguran
                             $showTeguranButton = $isWaiting && $isMandiri && $hasPhoto;
-                        @endphp
-                            @php
+                        ?>
+                            <?php
                                 $isLate = now()->gt($peminjam->tanggal_kembali) && $peminjam->status == 'dipinjam';
                                 $isWaiting = $peminjam->status == 'menunggu_konfirmasi';
                                 $hasPhoto = !empty($peminjam->foto_bukti_pengembalian);
                                 $isMandiri = $peminjam->metode_pengembalian == 'mandiri';
-                            @endphp
-                            <tr class="hover:bg-gray-50 transition-colors duration-150" data-status="{{ $peminjam->status }}">
+                            ?>
+                            <tr class="hover:bg-gray-50 transition-colors duration-150" data-status="<?php echo e($peminjam->status); ?>">
                                 <!-- No -->
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900 text-center">
-                                        {{ $loop->iteration }}
+                                        <?php echo e($loop->iteration); ?>
+
                                     </div>
                                 </td>
                                 
@@ -187,8 +186,8 @@
                                             <i class="fas fa-user text-white text-xs"></i>
                                         </div>
                                         <div>
-                                            <div class="font-semibold text-gray-900">{{ $peminjam->user->name ?? '-' }}</div>
-                                            <div class="text-xs text-gray-500">{{ $peminjam->user->email ?? '' }}</div>
+                                            <div class="font-semibold text-gray-900"><?php echo e($peminjam->user->name ?? '-'); ?></div>
+                                            <div class="text-xs text-gray-500"><?php echo e($peminjam->user->email ?? ''); ?></div>
                                         </div>
                                     </div>
                                 </td>
@@ -196,8 +195,8 @@
                                 <!-- Buku -->
                                 <td class="px-6 py-4">
                                     <div class="max-w-xs">
-                                        <div class="font-semibold text-gray-900 truncate">{{ $peminjam->buku->judul_buku ?? '-' }}</div>
-                                        <div class="text-xs text-gray-500">oleh {{ $peminjam->buku->penulis ?? '-' }}</div>
+                                        <div class="font-semibold text-gray-900 truncate"><?php echo e($peminjam->buku->judul_buku ?? '-'); ?></div>
+                                        <div class="text-xs text-gray-500">oleh <?php echo e($peminjam->buku->penulis ?? '-'); ?></div>
                                     </div>
                                 </td>
                                 
@@ -206,77 +205,81 @@
                                     <div class="space-y-1">
                                         <div class="flex items-center gap-2 text-sm text-gray-600">
                                             <i class="fas fa-sign-out-alt text-[#A4B465] text-xs"></i>
-                                            {{ \Carbon\Carbon::parse($peminjam->tanggal_pinjam)->translatedFormat('d M Y') }}
+                                            <?php echo e(\Carbon\Carbon::parse($peminjam->tanggal_pinjam)->translatedFormat('d M Y')); ?>
+
                                         </div>
-                                        <div class="flex items-center gap-2 text-sm {{ $isLate ? 'text-red-600 font-semibold' : 'text-gray-600' }}">
+                                        <div class="flex items-center gap-2 text-sm <?php echo e($isLate ? 'text-red-600 font-semibold' : 'text-gray-600'); ?>">
                                             <i class="fas fa-sign-in-alt text-[#A4B465] text-xs"></i>
-                                            {{ \Carbon\Carbon::parse($peminjam->tanggal_kembali)->translatedFormat('d M Y') }}
-                                            @if($isLate && $peminjam->status == 'dipinjam')
+                                            <?php echo e(\Carbon\Carbon::parse($peminjam->tanggal_kembali)->translatedFormat('d M Y')); ?>
+
+                                            <?php if($isLate && $peminjam->status == 'dipinjam'): ?>
                                                 <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
-                                                    Telat {{ $peminjam->hari_telat }} hari
+                                                    Telat <?php echo e($peminjam->hari_telat); ?> hari
                                                 </span>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
-                                        @if($peminjam->waktu_pengembalian_aktual)
+                                        <?php if($peminjam->waktu_pengembalian_aktual): ?>
                                             <div class="flex items-center gap-2 text-sm text-gray-500">
                                                 <i class="fas fa-history text-[#A4B465] text-xs"></i>
-                                                Dikembalikan: {{ \Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y H:i') }}
+                                                Dikembalikan: <?php echo e(\Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y H:i')); ?>
+
                                             </div>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 
                                 <!-- Status -->
                                 <td class="px-6 py-4">
-                                    @if($peminjam->status == 'dipinjam')
-                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold {{ $isLate ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-blue-100 text-blue-800 border border-blue-200' }}">
-                                            <i class="fas {{ $isLate ? 'fa-exclamation-triangle' : 'fa-book' }} mr-1.5"></i>
-                                            {{ $isLate ? 'Terlambat' : 'Dipinjam' }}
+                                    <?php if($peminjam->status == 'dipinjam'): ?>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold <?php echo e($isLate ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-blue-100 text-blue-800 border border-blue-200'); ?>">
+                                            <i class="fas <?php echo e($isLate ? 'fa-exclamation-triangle' : 'fa-book'); ?> mr-1.5"></i>
+                                            <?php echo e($isLate ? 'Terlambat' : 'Dipinjam'); ?>
+
                                         </span>
-                                    @elseif($peminjam->status == 'menunggu_konfirmasi')
+                                    <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
                                         <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-200">
                                             <i class="fas fa-clock mr-1.5"></i>
                                             Menunggu Konfirmasi
-                                            @if($isMandiri)
+                                            <?php if($isMandiri): ?>
                                                 <span class="ml-1 text-xs bg-[#A4B465] text-white px-2 py-0.5 rounded-full">
                                                     Mandiri
                                                 </span>
-                                            @endif
+                                            <?php endif; ?>
                                         </span>
-                                    @elseif($peminjam->status == 'dikembalikan')
+                                    <?php elseif($peminjam->status == 'dikembalikan'): ?>
                                         <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200">
                                             <i class="fas fa-check mr-1.5"></i>
                                             Dikembalikan
-                                            @if($peminjam->metode_pengembalian == 'mandiri')
+                                            <?php if($peminjam->metode_pengembalian == 'mandiri'): ?>
                                                 <span class="ml-1 text-xs bg-[#A4B465] text-white px-2 py-0.5 rounded-full">
                                                     Mandiri
                                                 </span>
-                                            @endif
+                                            <?php endif; ?>
                                         </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 
                                 <!-- Foto Bukti -->
                                 <td class="px-6 py-4">
-                                    @if($hasPhoto)
-                                        <button type="button" onclick="lihatFoto('{{ asset('storage/' . $peminjam->foto_bukti_pengembalian) }}', '{{ $peminjam->buku->judul_buku }}')"
+                                    <?php if($hasPhoto): ?>
+                                        <button type="button" onclick="lihatFoto('<?php echo e(asset('storage/' . $peminjam->foto_bukti_pengembalian)); ?>', '<?php echo e($peminjam->buku->judul_buku); ?>')"
                                             class="bg-[#A4B465] text-white px-3 py-1.5 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105">
                                             <i class="fas fa-eye text-xs"></i>
                                             Lihat Foto
                                         </button>
-                                    @else
+                                    <?php else: ?>
                                         <span class="text-xs text-gray-500 italic">Tidak ada foto</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 
                                 <!-- Aksi Desktop -->
 <td class="px-6 py-4">
     <div class="flex items-center gap-2">
-        @if ($peminjam->status == 'dipinjam')
+        <?php if($peminjam->status == 'dipinjam'): ?>
             <!-- Konfirmasi Kembali -->
-            <form action="{{ route('admin.data_peminjam.kembalikan', $peminjam->id) }}" method="POST" class="inline">
-                @csrf
-                @method('PUT')
+            <form action="<?php echo e(route('admin.data_peminjam.kembalikan', $peminjam->id)); ?>" method="POST" class="inline">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
                 <button type="submit" 
                     class="bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
                     onclick="return confirm('Konfirmasi pengembalian buku?')">
@@ -285,21 +288,21 @@
                 </button>
             </form>
             
-        @elseif ($peminjam->status == 'menunggu_konfirmasi')
-            @if($showTeguranButton)
+        <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
+            <?php if($showTeguranButton): ?>
                 <!-- Tombol Teguran -->
-                <button type="button" onclick="showTeguranModal({{ $peminjam->id }}, '{{ addslashes($peminjam->user->name) }}')"
+                <button type="button" onclick="showTeguranModal(<?php echo e($peminjam->id); ?>, '<?php echo e(addslashes($peminjam->user->name)); ?>')"
                     class="bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
                     title="Kirim Teguran">
                     <i class="fas fa-exclamation-triangle text-xs"></i>
                     Teguran
                 </button>
-            @endif
+            <?php endif; ?>
             
             <!-- Konfirmasi Pengembalian dari User -->
-            <form action="{{ route('admin.data_peminjam.konfirmasi', $peminjam->id) }}" method="POST" class="inline">
-                @csrf
-                @method('PUT')
+            <form action="<?php echo e(route('admin.data_peminjam.konfirmasi', $peminjam->id)); ?>" method="POST" class="inline">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
                 <button type="submit" 
                     class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
                     onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
@@ -308,17 +311,17 @@
                 </button>
             </form>
             
-        @elseif ($peminjam->status == 'dikembalikan')
+        <?php elseif($peminjam->status == 'dikembalikan'): ?>
             <span class="inline-flex items-center px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-semibold">
                 <i class="fas fa-check-circle mr-1.5"></i>
                 Selesai
             </span>
             
             <!-- Tombol Batalkan Teguran jika ada teguran -->
-            @if($peminjam->keterangan && str_contains($peminjam->keterangan, 'Teguran:'))
-                <form action="{{ route('admin.data_peminjam.batalkan-teguran', $peminjam->id) }}" method="POST" class="inline">
-                    @csrf
-                    @method('DELETE')
+            <?php if($peminjam->keterangan && str_contains($peminjam->keterangan, 'Teguran:')): ?>
+                <form action="<?php echo e(route('admin.data_peminjam.batalkan-teguran', $peminjam->id)); ?>" method="POST" class="inline">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
                     <button type="submit" 
                         class="bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
                         onclick="return confirm('Batalkan teguran ini?')">
@@ -326,11 +329,11 @@
                         Batalkan Teguran
                     </button>
                 </form>
-            @endif
-        @endif
+            <?php endif; ?>
+        <?php endif; ?>
 
         <!-- Tombol Detail -->
-        <a href="{{ route('admin.data_peminjam.show', $peminjam->id) }}"
+        <a href="<?php echo e(route('admin.data_peminjam.show', $peminjam->id)); ?>"
             class="bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
             title="Lihat Detail">
             <i class="fas fa-eye text-xs"></i>
@@ -339,21 +342,21 @@
     </div>
 </td>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
 
             <!-- Mobile Cards -->
             <div class="lg:hidden space-y-4 p-4">
-                @foreach ($data_peminjam as $peminjam)
-                    @php
+                <?php $__currentLoopData = $data_peminjam; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $peminjam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
                         $isLate = now()->gt($peminjam->tanggal_kembali) && $peminjam->status == 'dipinjam';
                         $isWaiting = $peminjam->status == 'menunggu_konfirmasi';
                         $hasPhoto = !empty($peminjam->foto_bukti_pengembalian);
                         $isMandiri = $peminjam->metode_pengembalian == 'mandiri';
-                    @endphp
-                    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200" data-status="{{ $peminjam->status }}">
+                    ?>
+                    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm hover:shadow-md transition-all duration-200" data-status="<?php echo e($peminjam->status); ?>">
                         <!-- Header Card -->
                         <div class="flex items-start justify-between mb-3">
                             <div class="flex items-center gap-3">
@@ -361,44 +364,45 @@
                                     <i class="fas fa-user text-white"></i>
                                 </div>
                                 <div>
-                                    <h3 class="font-semibold text-gray-900">{{ $peminjam->user->name ?? '-' }}</h3>
-                                    <p class="text-xs text-gray-500">{{ $peminjam->user->email ?? '' }}</p>
+                                    <h3 class="font-semibold text-gray-900"><?php echo e($peminjam->user->name ?? '-'); ?></h3>
+                                    <p class="text-xs text-gray-500"><?php echo e($peminjam->user->email ?? ''); ?></p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                @if($peminjam->status == 'dipinjam')
-                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold {{ $isLate ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' }}">
-                                        <i class="fas {{ $isLate ? 'fa-exclamation-triangle' : 'fa-book' }} mr-1"></i>
-                                        {{ $isLate ? 'Terlambat' : 'Dipinjam' }}
+                                <?php if($peminjam->status == 'dipinjam'): ?>
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold <?php echo e($isLate ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'); ?>">
+                                        <i class="fas <?php echo e($isLate ? 'fa-exclamation-triangle' : 'fa-book'); ?> mr-1"></i>
+                                        <?php echo e($isLate ? 'Terlambat' : 'Dipinjam'); ?>
+
                                     </span>
-                                @elseif($peminjam->status == 'menunggu_konfirmasi')
+                                <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
                                     <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800">
                                         <i class="fas fa-clock mr-1"></i>
                                         Menunggu
-                                        @if($isMandiri)
+                                        <?php if($isMandiri): ?>
                                             <span class="ml-1 text-xs bg-[#A4B465] text-white px-1 py-0.5 rounded-full">
                                                 M
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </span>
-                                @elseif($peminjam->status == 'dikembalikan')
+                                <?php elseif($peminjam->status == 'dikembalikan'): ?>
                                     <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
                                         <i class="fas fa-check mr-1"></i>
                                         Dikembalikan
-                                        @if($isMandiri)
+                                        <?php if($isMandiri): ?>
                                             <span class="ml-1 text-xs bg-[#A4B465] text-white px-1 py-0.5 rounded-full">
                                                 M
                                             </span>
-                                        @endif
+                                        <?php endif; ?>
                                     </span>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
 
                         <!-- Book Info -->
                         <div class="mb-3">
-                            <h4 class="font-semibold text-gray-900 text-sm mb-1">{{ $peminjam->buku->judul_buku ?? '-' }}</h4>
-                            <p class="text-xs text-gray-600">oleh {{ $peminjam->buku->penulis ?? '-' }}</p>
+                            <h4 class="font-semibold text-gray-900 text-sm mb-1"><?php echo e($peminjam->buku->judul_buku ?? '-'); ?></h4>
+                            <p class="text-xs text-gray-600">oleh <?php echo e($peminjam->buku->penulis ?? '-'); ?></p>
                         </div>
 
                         <!-- Dates -->
@@ -406,47 +410,50 @@
                             <div class="flex justify-between">
                                 <p class="text-xs text-gray-500">Tanggal Pinjam:</p>
                                 <p class="text-sm font-medium text-gray-900">
-                                    {{ \Carbon\Carbon::parse($peminjam->tanggal_pinjam)->translatedFormat('d M Y') }}
+                                    <?php echo e(\Carbon\Carbon::parse($peminjam->tanggal_pinjam)->translatedFormat('d M Y')); ?>
+
                                 </p>
                             </div>
                             <div class="flex justify-between">
                                 <p class="text-xs text-gray-500">Tanggal Kembali:</p>
-                                <p class="text-sm font-medium {{ $isLate && $peminjam->status == 'dipinjam' ? 'text-red-600' : 'text-gray-900' }}">
-                                    {{ \Carbon\Carbon::parse($peminjam->tanggal_kembali)->translatedFormat('d M Y') }}
-                                    @if($isLate && $peminjam->status == 'dipinjam')
+                                <p class="text-sm font-medium <?php echo e($isLate && $peminjam->status == 'dipinjam' ? 'text-red-600' : 'text-gray-900'); ?>">
+                                    <?php echo e(\Carbon\Carbon::parse($peminjam->tanggal_kembali)->translatedFormat('d M Y')); ?>
+
+                                    <?php if($isLate && $peminjam->status == 'dipinjam'): ?>
                                         <span class="text-xs bg-red-100 text-red-800 px-1.5 py-0.5 rounded-full ml-1">
-                                            +{{ $peminjam->hari_telat }} hari
+                                            +<?php echo e($peminjam->hari_telat); ?> hari
                                         </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </p>
                             </div>
-                            @if($peminjam->waktu_pengembalian_aktual)
+                            <?php if($peminjam->waktu_pengembalian_aktual): ?>
                                 <div class="flex justify-between">
                                     <p class="text-xs text-gray-500">Dikembalikan:</p>
                                     <p class="text-sm font-medium text-gray-900">
-                                        {{ \Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y H:i') }}
+                                        <?php echo e(\Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y H:i')); ?>
+
                                     </p>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
                         <!-- Foto Bukti -->
-                        @if($hasPhoto)
+                        <?php if($hasPhoto): ?>
                             <div class="mb-4">
-                                <button type="button" onclick="lihatFoto('{{ asset('storage/' . $peminjam->foto_bukti_pengembalian) }}', '{{ $peminjam->buku->judul_buku }}')"
+                                <button type="button" onclick="lihatFoto('<?php echo e(asset('storage/' . $peminjam->foto_bukti_pengembalian)); ?>', '<?php echo e($peminjam->buku->judul_buku); ?>')"
                                     class="w-full bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2">
                                     <i class="fas fa-eye text-xs"></i>
                                     Lihat Foto Bukti Pengembalian
                                 </button>
                             </div>
-                        @endif
+                        <?php endif; ?>
 
                         <!-- Actions Mobile -->
 <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-200">
-    @if ($peminjam->status == 'dipinjam')
-        <form action="{{ route('admin.data_peminjam.kembalikan', $peminjam->id) }}" method="POST" class="flex-1 min-w-[120px]">
-            @csrf
-            @method('PUT')
+    <?php if($peminjam->status == 'dipinjam'): ?>
+        <form action="<?php echo e(route('admin.data_peminjam.kembalikan', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
             <button type="submit" 
                 class="w-full bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
                 onclick="return confirm('Konfirmasi pengembalian buku?')">
@@ -455,21 +462,21 @@
             </button>
         </form>
         
-    @elseif ($peminjam->status == 'menunggu_konfirmasi')
+    <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
         <!-- Hanya tampilkan tombol teguran jika metode pengembalian mandiri -->
-        @if($peminjam->metode_pengembalian == 'mandiri' && $hasPhoto)
+        <?php if($peminjam->metode_pengembalian == 'mandiri' && $hasPhoto): ?>
             <!-- Teguran Button Mobile -->
-            <button type="button" onclick="showTeguranModal({{ $peminjam->id }}, '{{ addslashes($peminjam->user->name) }}')"
+            <button type="button" onclick="showTeguranModal(<?php echo e($peminjam->id); ?>, '<?php echo e(addslashes($peminjam->user->name)); ?>')"
                 class="flex-1 min-w-[100px] bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2">
                 <i class="fas fa-exclamation-triangle text-xs"></i>
                 Teguran
             </button>
-        @endif
+        <?php endif; ?>
         
         <!-- Konfirmasi Pengembalian dari User -->
-        <form action="{{ route('admin.data_peminjam.konfirmasi', $peminjam->id) }}" method="POST" class="flex-1 min-w-[120px]">
-            @csrf
-            @method('PUT')
+        <form action="<?php echo e(route('admin.data_peminjam.konfirmasi', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
             <button type="submit" 
                 class="w-full bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
                 onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
@@ -478,17 +485,17 @@
             </button>
         </form>
         
-    @elseif ($peminjam->status == 'dikembalikan')
+    <?php elseif($peminjam->status == 'dikembalikan'): ?>
         <span class="inline-flex items-center px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-semibold w-full justify-center">
             <i class="fas fa-check-circle mr-1.5"></i>
             Selesai
         </span>
         
         <!-- Batalkan Teguran Button Mobile -->
-        @if($peminjam->keterangan && str_contains($peminjam->keterangan, 'Teguran:'))
-            <form action="{{ route('admin.data_peminjam.batalkan-teguran', $peminjam->id) }}" method="POST" class="flex-1 min-w-[120px]">
-                @csrf
-                @method('DELETE')
+        <?php if($peminjam->keterangan && str_contains($peminjam->keterangan, 'Teguran:')): ?>
+            <form action="<?php echo e(route('admin.data_peminjam.batalkan-teguran', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('DELETE'); ?>
                 <button type="submit" 
                     class="w-full bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
                     onclick="return confirm('Batalkan teguran ini?')">
@@ -496,17 +503,17 @@
                     Batalkan Teguran
                 </button>
             </form>
-        @endif
-    @endif
+        <?php endif; ?>
+    <?php endif; ?>
 
-    <a href="{{ route('admin.data_peminjam.show', $peminjam->id) }}"
+    <a href="<?php echo e(route('admin.data_peminjam.show', $peminjam->id)); ?>"
         class="flex-1 min-w-[80px] bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2">
         <i class="fas fa-eye text-xs"></i>
         Detail
     </a>
 </div>
                     </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 
             <!-- Empty State untuk Filter -->
@@ -519,7 +526,7 @@
                     Tidak ada data peminjaman dengan status yang dipilih.
                 </p>
             </div>
-        @else
+        <?php else: ?>
             <!-- Empty State -->
             <div class="text-center py-16">
                 <div class="mx-auto w-24 h-24 mb-6 text-gray-300">
@@ -533,7 +540,7 @@
                     <i class="fas fa-inbox"></i>
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
     </div>
 </div>
 
@@ -590,7 +597,7 @@
         
         <!-- Content - FORM BIASA -->
         <form id="teguranForm" method="POST" action="" class="p-4">
-            @csrf
+            <?php echo csrf_field(); ?>
             
             <!-- Info Peminjam -->
             <div class="mb-4">
@@ -650,9 +657,9 @@
         </form>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -817,4 +824,5 @@ document.addEventListener('keydown', function(e) {
     }
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_peminjam/index.blade.php ENDPATH**/ ?>

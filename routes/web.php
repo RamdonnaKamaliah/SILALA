@@ -137,6 +137,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
         ->name('data_peminjam.konfirmasi');  
     Route::put('/data_peminjam/{id}/masalah', [DataPeminjamController::class, 'laporkanMasalah'])
         ->name('data_peminjam.masalah');
+
+    //  Teguran dan Batalkan Teguran
+    Route::post('/data_peminjam/{id}/teguran', [DataPeminjamController::class, 'kirimTeguran'])
+    ->name('admin.data_peminjam.teguran');
+    Route::delete('/data_peminjam/{id}/batalkan-teguran', [DataPeminjamController::class, 'batalkanTeguran'])
+    ->name('admin.data_peminjam.batalkan-teguran');
         
     // Media Buku Routes
     Route::get('/media-buku', [MediaBukuController::class, 'index'])->name('media.index');

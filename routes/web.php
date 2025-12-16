@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Admin\DataBukuController;
 use App\Http\Controllers\Admin\DataKategoriController;
@@ -25,6 +24,8 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\EditProfilController;
 use App\Http\Controllers\user\RatingController;
 use App\Http\Controllers\Admin\MediaBukuController;
+use App\Http\Controllers\Admin\DashboardController;
+
 
 
 // Public Routes
@@ -101,7 +102,7 @@ Route::put('/editprofil', [EditProfilController::class, 'update'])->name('user.u
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
        
     // Data Buku Routes
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
@@ -152,8 +153,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
 
         Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
             ->name('cms_admin.updateFooterLogo');
+    
+        //statistik peminjaman pengembalian
+        Route::get('/statistik-peminjaman', [DashboardController::class, 'Statistik'])
+            ->name('dashboard');
 
-
+    
 
 });
 

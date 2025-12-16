@@ -3,7 +3,7 @@
 <?php $__env->startSection('content'); ?>
     <div class="halaman-daftar-buku">
         <!-- Filter & Search -->
-        <div class="bg-cream px-4 md:px-6 py-3 sticky top-0 z-40">
+        <div class=" px-4 md:px-6 py-3 sticky top-0 z-40">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
 
                 <!-- Dropdown Kategori -->
@@ -103,9 +103,8 @@
                             <!-- BUTTON -->
                             <div class="mt-auto pt-2">
                                 <a href="<?php echo e(route('user.detailbuku', $buku->id)); ?>">
-                                    <button
-                                        class="bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-                               hover:bg-[#6e8a50] hover:scale-105">
+                                    <button class="text-white text-xs md:text-sm px-5 py-1.5 rounded-full"
+                                        style="background-color: rgb(var(--primary));">
                                         Lihat Detail
                                     </button>
                                 </a>

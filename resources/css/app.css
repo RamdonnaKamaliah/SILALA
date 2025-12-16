@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --primary: 164 180 101;
+    }
+
+    html.theme-green {
+        --primary: 164 180 101;
+    }
+
+    html.theme-blue {
+        --primary: 59 130 246;
+    }
+
+    html.theme-orange {
+        --primary: 249 115 22;
+    }
+
+    html.theme-purple {
+        --primary: 168 85 247;
+    }
+}

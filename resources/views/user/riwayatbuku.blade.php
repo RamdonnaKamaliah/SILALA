@@ -79,12 +79,23 @@
         </div>
       </div>
 
-      <button
+      @php
+    $bukuSedangDipinjam = $riwayat->where('status', 'dipinjam')->count() > 0;
+@endphp
+
+<button
+    @if($bukuSedangDipinjam)
         onclick="bukaModalPengembalian()"
-        class="w-full md:w-64 rounded-full bg-[#a4b465] border border-[#a4b465] px-4 py-3 text-sm text-white flex items-center justify-center gap-2 hover:bg-[#8fa055] transition-colors">
-        <span class="iconify" data-icon="mdi:camera" style="font-size:20px;"></span>
-        Pengembalian Mandiri
-      </button>
+    @endif
+    class="w-full md:w-64 rounded-full border px-4 py-3 text-sm flex items-center justify-center gap-2 transition-colors
+           @if($bukuSedangDipinjam)
+               bg-[#a4b465] border-[#a4b465] text-white hover:bg-[#8fa055] cursor-pointer
+           @else
+               bg-gray-400 text-white font-semibold cursor-not-allowed
+           @endif">
+    <span class="iconify" data-icon="mdi:camera" style="font-size:20px;"></span>
+    Pengembalian Mandiri
+</button>
     </div>
 
     <!-- Table -->
@@ -139,73 +150,65 @@
                 {{ $tanggalKembali }}
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
               </td>
-
-
               <td class="py-4 px-4 text-[#2E2E2E] font-medium whitespace-nowrap relative">
-    @if($data->keterangan && str_contains(strtolower($data->keterangan), 'teguran') && $data->metode_pengembalian == 'mandiri')
-        <!-- Tampilkan Keterangan Teguran dari Admin (Hanya untuk pengembalian mandiri) -->
-        <div class="mb-1">
-            <div class="flex flex-col">
-                <span class="text-red-600 text-xs font-semibold break-words bg-red-50 px-2 py-1 rounded border border-red-200">
-                    <i class="fas fa-exclamation-triangle mr-1"></i>
-                    {{ $data->keterangan }}
-                </span>
-                <!-- Status tetap ditampilkan -->
-                <div class="mt-1">
+                @if($data->keterangan && str_contains(strtolower($data->keterangan), 'teguran') && $data->metode_pengembalian == 'mandiri')
+                    <!-- Tampilkan Keterangan Teguran dari Admin (Hanya untuk pengembalian mandiri) -->
+                    <div class="flex flex-col gap-2">
+                        <span class="text-red-600 text-xs font-semibold break-words bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                            <div class="flex items-center gap-2 mb-1">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span class="font-bold">PERLU FOTO ULANG</span>
+                            </div>
+                            <div class="text-[11px] text-gray-600">
+                                {{ $data->keterangan }}
+                            </div>
+                        </span>
+                        
+                        <!-- Status dengan teks "lakukan foto kembali" -->
+                        <div class="flex items-center gap-2 text-sm">
+                            @if ($status === 'menunggu_konfirmasi')
+                                <button onclick="bukaModalFotoUlang({{ $data->id }}, '{{ addslashes($data->buku->judul_buku) }}')"
+                                    class="bg-[#A4B465] text-white px-3 py-1.5 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center gap-2">
+                                    <i class="fas fa-camera"></i>
+                                    lakukan foto kembali
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                @else
+                    <!-- Tampilkan informasi normal -->
                     @if ($status === 'dipinjam')
                         @if ($isTerlambat)
-                            <span class="text-red-600 text-sm">
+                            <div class="text-red-600">
                                 Telat {{ $hariTelat }} Hari
-                            </span>
+                            </div>
+                            <div class="text-xs text-orange-500 mt-1">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                Harap segera kembalikan
+                            </div>
                         @else
                             <span class="text-sm">Masih Dipinjam</span>
                         @endif
                     @elseif ($status === 'menunggu_konfirmasi')
-                        <span class="text-sm text-yellow-600">Menunggu Konfirmasi Admin</span>
+                        <span class="text-yellow-600 text-sm">
+                            <i class="fas fa-clock mr-1"></i>
+                            Menunggu Konfirmasi Admin
+                            @if($data->metode_pengembalian == 'mandiri')
+                                <span class="text-xs bg-[#A4B465] text-white px-2 py-0.5 rounded-full ml-1">
+                                    Mandiri
+                                </span>
+                            @endif
+                        </span>
                     @else
                         @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
-                            <span class="text-orange-500 text-sm">Tepat Waktu (Setelah Teguran)</span>
+                            <span class="text-red-500">Tepat Waktu (terlambat)</span>
                         @else
-                            <span class="text-sm text-green-600">Tepat Waktu</span>
+                            <span class="text-green-600">Tepat Waktu</span>
                         @endif
                     @endif
-                </div>
-            </div>
-        </div>
-    @else
-        <!-- Tampilkan informasi normal -->
-        @if ($status === 'dipinjam')
-            @if ($isTerlambat)
-                <div class="text-red-600">
-                    Telat {{ $hariTelat }} Hari
-                </div>
-                <div class="text-xs text-orange-500 mt-1">
-                    <i class="fas fa-exclamation-circle mr-1"></i>
-                    Harap segera kembalikan
-                </div>
-            @else
-                <span class="text-sm">Masih Dipinjam</span>
-            @endif
-        @elseif ($status === 'menunggu_konfirmasi')
-            <span class="text-yellow-600 text-sm">
-                <i class="fas fa-clock mr-1"></i>
-                Menunggu Konfirmasi Admin
-                @if($data->metode_pengembalian == 'mandiri')
-                    <span class="text-xs bg-[#A4B465] text-white px-2 py-0.5 rounded-full ml-1">
-                        Mandiri
-                    </span>
                 @endif
-            </span>
-        @else
-            @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
-                <span class="text-orange-500">Tepat Waktu (Setelah Teguran)</span>
-            @else
-                <span class="text-green-600">Tepat Waktu</span>
-            @endif
-        @endif
-    @endif
-    <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
-</td>
+                <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
+              </td>
               <td class="py-4 px-4 whitespace-nowrap relative">
                 @if ($status === 'dipinjam')
                   @if ($isTerlambat)
@@ -367,4 +370,107 @@
         </div>
       </div>
     </div>
+    <!-- ====== MODAL FOTO ULANG PENGEMBALIAN ====== -->
+<div id="fotoUlangModal" class="hidden fixed inset-0 z-[1050] flex items-center justify-center bg-black/40 p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative">
+        <!-- Header -->
+        <div class="bg-yellow-600 text-white text-center py-3 font-semibold text-lg" id="fotoUlangTitle">
+            Foto Ulang Pengembalian
+        </div>
+
+        <!-- Isi Modal -->
+        <div class="p-6 space-y-4 text-sm text-[#2E2E2E] max-h-[80vh] overflow-y-auto">
+
+            <!-- Info Buku untuk Foto Ulang -->
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-exclamation-triangle text-yellow-600"></i>
+                    <span class="font-semibold text-yellow-800">Foto Ulang Diperlukan</span>
+                </div>
+                <p class="text-sm font-semibold text-gray-700" id="judulBukuUlang">Judul Buku</p>
+                <p class="text-xs text-gray-600 mt-1" id="keteranganTeguran"></p>
+            </div>
+
+            <!-- Pilihan Kamera -->
+            <div>
+                <label class="font-semibold mb-1 block">TAMPILAN LAYAR FOTO</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btnKameraDepanUlang" onclick="pilihKameraUlang('user')"
+                        class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+                        <span class="iconify" data-icon="mdi:camera-front"></span>
+                        Kamera Depan
+                    </button>
+                    <button id="btnKameraBelakangUlang" onclick="pilihKameraUlang('environment')"
+                        class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+                        <span class="iconify" data-icon="mdi:camera-rear"></span>
+                        Kamera Belakang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Area Kamera & Preview -->
+            <div id="kameraAreaUlang" class="hidden">
+                <!-- Area Kamera/Preview -->
+                <div class="relative bg-black rounded-xl overflow-hidden mb-4" style="height: 280px;">
+                    <!-- Video Kamera -->
+                    <video id="kameraStreamUlang" autoplay 
+                        class="w-full h-full object-cover absolute inset-0 z-10"></video>
+                    
+                    <!-- Preview Foto (Muncul Setelah Ambil Foto) -->
+                    <div id="previewContainerUlang" class="absolute inset-0 z-20 hidden">
+                        <img id="previewFotoUlang" src="" class="w-full h-full object-cover">
+                    </div>
+                    
+                    <!-- Overlay Teks -->
+                    <div class="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
+                        <div class="text-white text-center bg-black/50 px-4 py-3 rounded-lg">
+                            <p class="text-lg font-semibold mb-1" id="judulBukuKameraUlang">Judul Buku</p>
+                            <p class="text-sm opacity-90">Arahkan kamera ke sampul buku</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Canvas untuk Menangkap Foto (Tersembunyi) -->
+                    <canvas id="fotoCanvasUlang" class="hidden"></canvas>
+                </div>
+
+                <!-- Peringatan -->
+                <div class="text-[13px] space-y-1 mb-4">
+                    <p class="text-[#DC2626] flex items-center gap-1">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Pastikan sampul buku terlihat jelas
+                    </p>
+                    <p class="text-[#DC2626] flex items-center gap-1">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Cahaya cukup untuk hasil foto yang baik
+                    </p>
+                </div>
+
+                <!-- Tombol Aksi -->
+                <div class="flex gap-3">
+                    <!-- Tombol Ambil Foto (Muncul saat kamera aktif) -->
+                    <button id="btnAmbilFotoUlang" onclick="ambilFotoUlang()"
+                        class="flex-1 bg-[#BFEA7C] text-[#2E2E2E] font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1">
+                        <span class="iconify" data-icon="mdi:camera"></span>
+                        Ambil Foto
+                    </button>
+                    
+                    <!-- Tombol Kirim Foto (Muncul setelah ambil foto) -->
+                    <button id="btnKirimFotoUlang" onclick="kirimFotoUlang()"
+                        class="flex-1 bg-yellow-600 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1 hidden">
+                        <span class="iconify" data-icon="mdi:send"></span>
+                        Kirim Foto Ulang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tombol Batal (selalu tampil) -->
+            <div class="flex justify-end gap-3 pt-4">
+                <button onclick="tutupModalUlang()" class="bg-[#DC2626] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition">
+                    Batal
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
 @endsection

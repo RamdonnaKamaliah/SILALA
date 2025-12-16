@@ -9,6 +9,7 @@ use App\Models\DataBuku;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class DataPeminjamController extends Controller
 {
@@ -84,6 +85,11 @@ class DataPeminjamController extends Controller
         $peminjam = DataPeminjam::findOrFail($id);
 
         if ($peminjam->status == 'menunggu_konfirmasi') {
+            // Hapus foto jika ada
+            if ($peminjam->foto_bukti_pengembalian && Storage::disk('public')->exists($peminjam->foto_bukti_pengembalian)) {
+                Storage::disk('public')->delete($peminjam->foto_bukti_pengembalian);
+            }
+            
             // Kembalikan stok buku
             $buku = DataBuku::find($peminjam->buku_id);
             if ($buku) {
@@ -225,6 +231,8 @@ class DataPeminjamController extends Controller
         // Update keterangan
         if (strpos($peminjaman->keterangan, 'Menunggu konfirmasi admin') !== false) {
             $peminjaman->keterangan = str_replace('Menunggu konfirmasi admin', 'Terkonfirmasi admin', $peminjaman->keterangan);
+        } else if (strpos($peminjaman->keterangan, 'Teguran:') !== false) {
+            $peminjaman->keterangan = str_replace('Teguran:', 'Terkonfirmasi setelah teguran:', $peminjaman->keterangan);
         } else {
             $peminjaman->keterangan .= ' - Terkonfirmasi admin';
         }
@@ -246,12 +254,17 @@ class DataPeminjamController extends Controller
     {
         $peminjaman = DataPeminjam::findOrFail($id);
         
+        // Hapus foto jika ada
+        if ($peminjaman->foto_bukti_pengembalian && Storage::disk('public')->exists($peminjaman->foto_bukti_pengembalian)) {
+            Storage::disk('public')->delete($peminjaman->foto_bukti_pengembalian);
+        }
+        
         // Update status dan keterangan
         $tanggalKembali = Carbon::parse($peminjaman->tanggal_kembali);
         $sekarang = Carbon::now();
         
         if ($sekarang->gt($tanggalKembali)) {
-            $hariTelat = abs($sekarang->diffInDays($tanggalKembali));
+            $hariTelat = $peminjaman->hari_telat;
             $peminjaman->keterangan = 'Terlambat ' . $hariTelat . ' hari - Dikembalikan oleh admin';
         } else {
             $peminjaman->keterangan = 'Tepat waktu - Dikembalikan oleh admin';
@@ -285,39 +298,39 @@ class DataPeminjamController extends Controller
     }
 
     public function kirimTeguran(Request $request, $id)
-{
-    $request->validate([
-        'pesan_teguran' => 'required|string|max:255'
-    ]);
-
-    try {
-        $peminjaman = DataPeminjam::findOrFail($id);
-        
-        // VALIDASI: Hanya bisa kirim teguran untuk pengembalian mandiri
-        if ($peminjaman->status !== 'menunggu_konfirmasi' || $peminjaman->metode_pengembalian !== 'mandiri') {
-            return redirect()->back()->with('error', 'Teguran hanya bisa dikirim untuk pengembalian mandiri yang menunggu konfirmasi.');
-        }
-        
-        // VALIDASI: Harus ada foto bukti
-        if (empty($peminjaman->foto_bukti_pengembalian)) {
-            return redirect()->back()->with('error', 'Teguran hanya bisa dikirim untuk pengembalian dengan foto bukti.');
-        }
-        
-        // Tambahkan keterangan teguran
-        $peminjaman->keterangan = 'Teguran: ' . $request->pesan_teguran;
-        $peminjaman->save();
-
-        return redirect()->back()->with('success', 'Teguran berhasil dikirim ke peminjam.');
-
-    } catch (\Exception $e) {
-        Log::error('Error kirim teguran: ' . $e->getMessage(), [
-            'id' => $id,
-            'request' => $request->all()
+    {
+        $request->validate([
+            'pesan_teguran' => 'required|string|max:255'
         ]);
-        
-        return redirect()->back()->with('error', 'Gagal mengirim teguran: ' . $e->getMessage());
+
+        try {
+            $peminjaman = DataPeminjam::findOrFail($id);
+            
+            // VALIDASI: Hanya bisa kirim teguran untuk pengembalian mandiri
+            if ($peminjaman->status !== 'menunggu_konfirmasi' || $peminjaman->metode_pengembalian !== 'mandiri') {
+                return redirect()->back()->with('error', 'Teguran hanya bisa dikirim untuk pengembalian mandiri yang menunggu konfirmasi.');
+            }
+            
+            // VALIDASI: Harus ada foto bukti
+            if (empty($peminjaman->foto_bukti_pengembalian)) {
+                return redirect()->back()->with('error', 'Teguran hanya bisa dikirim untuk pengembalian dengan foto bukti.');
+            }
+            
+            // Tambahkan keterangan teguran
+            $peminjaman->keterangan = 'Teguran: ' . $request->pesan_teguran;
+            $peminjaman->save();
+
+            return redirect()->back()->with('success', 'Teguran berhasil dikirim ke peminjam. User diminta untuk mengupload foto ulang.');
+
+        } catch (\Exception $e) {
+            Log::error('Error kirim teguran: ' . $e->getMessage(), [
+                'id' => $id,
+                'request' => $request->all()
+            ]);
+            
+            return redirect()->back()->with('error', 'Gagal mengirim teguran: ' . $e->getMessage());
+        }
     }
-}
 
     public function batalkanTeguran($id)
     {
@@ -326,6 +339,7 @@ class DataPeminjamController extends Controller
         // Hapus bagian teguran dari keterangan
         if (str_contains($peminjaman->keterangan, 'Teguran:')) {
             $peminjaman->keterangan = str_replace('Teguran: ', '', $peminjaman->keterangan);
+            $peminjaman->keterangan = str_replace(' - lakukan foto kembali', '', $peminjaman->keterangan);
             
             // Jika hanya tersisa teks kosong, set ke null
             if (empty(trim($peminjaman->keterangan))) {

@@ -33,6 +33,23 @@ class DataPeminjam extends Model
         'waktu_pengembalian_aktual' => 'datetime',
     ];
 
+    // Accessor untuk mengecek apakah ada teguran
+public function getAdaTeguranAttribute()
+{
+    return str_contains($this->keterangan, 'Teguran:') && 
+           $this->status === 'menunggu_konfirmasi' &&
+           $this->metode_pengembalian === 'mandiri';
+}
+
+// Accessor untuk status display dengan teguran
+public function getStatusDisplayAttribute()
+{
+    if ($this->status === 'menunggu_konfirmasi' && str_contains($this->keterangan, 'Teguran:')) {
+        return 'perlu_foto_ulang';
+    }
+    return $this->status;
+}
+
     // Hitung keterlambatan untuk teguran
     public function hitungKeterlambatan()
     {
@@ -45,44 +62,36 @@ class DataPeminjam extends Model
         }
     }
 
-    // Method untuk menghitung hari telat
-    private function hitungHariTelat()
-    {
-        if ($this->status === 'dipinjam' && now()->gt($this->tanggal_kembali)) {
-            $tanggalKembali = Carbon::parse($this->tanggal_kembali);
-            $sekarang = Carbon::now();
-            
-            // Reset waktu ke 00:00:00 untuk perhitungan hari murni
-            $tanggalKembali->startOfDay();
-            $sekarang->startOfDay();
-            
-            // GUNAKAN abs() UNTUK MENGHILANGKAN TANDA MINUS
-            return abs($sekarang->diffInDays($tanggalKembali));
-        }
+
+public function getHariTelatAttribute(): int
+{
+    if ($this->status !== 'dipinjam') {
         return 0;
     }
 
-    // Accessor untuk hari telat - PERBAIKAN DENGAN abs()
-    public function getHariTelatAttribute()
-    {
-        if ($this->status === 'dipinjam' && now()->gt($this->tanggal_kembali)) {
-            $tanggalKembali = Carbon::parse($this->tanggal_kembali);
-            $sekarang = Carbon::now();
-            
-            // Reset waktu ke 00:00:00 untuk perhitungan hari murni
-            $tanggalKembali->startOfDay();
-            $sekarang->startOfDay();
-            
-            // PERBAIKAN: GUNAKAN abs() UNTUK NILAI POSITIF
-            return abs($sekarang->diffInDays($tanggalKembali));
-        }
+    $tanggalKembali = Carbon::parse($this->tanggal_kembali)->startOfDay();
+    $hariIni = now()->startOfDay();
+
+    if ($hariIni->lte($tanggalKembali)) {
         return 0;
     }
 
-    public function getIsTerlambatAttribute()
-    {
-        return $this->status === 'dipinjam' && now()->gt($this->tanggal_kembali);
-    }
+    // ⛔ JANGAN abs()
+    // ⛔ JANGAN endOfDay()
+    return $tanggalKembali->diffInDays($hariIni);
+}
+
+
+
+public function getIsTerlambatAttribute(): bool
+{
+    return $this->status === 'dipinjam'
+        && now()->startOfDay()->gt(
+            Carbon::parse($this->tanggal_kembali)->startOfDay()
+        );
+}
+
+
 
     // Accessor untuk foto bukti pengembalian (full URL)
     public function getFotoBuktiPengembalianUrlAttribute()
@@ -122,7 +131,7 @@ class DataPeminjam extends Model
     public function scopeLate($query)
     {
         return $query->where('status', 'dipinjam')
-                    ->where('tanggal_kembali', '<', now());
+                    ->where('tanggal_kembali', '<', now()->startOfDay());
     }
 
     // Scope untuk peminjaman yang sudah dikembalikan

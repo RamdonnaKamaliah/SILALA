@@ -221,7 +221,7 @@
                                         <?php if($peminjam->waktu_pengembalian_aktual): ?>
                                             <div class="flex items-center gap-2 text-sm text-gray-500">
                                                 <i class="fas fa-history text-[#A4B465] text-xs"></i>
-                                                Dikembalikan: <?php echo e(\Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y H:i')); ?>
+                                                Dikembalikan: <?php echo e(\Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y')); ?>
 
                                             </div>
                                         <?php endif; ?>

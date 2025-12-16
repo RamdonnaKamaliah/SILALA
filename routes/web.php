@@ -13,8 +13,6 @@ use App\Http\Controllers\Admin\DataKategoriController;
 use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
-use App\Http\Controllers\Admin\DataDendaController;
-use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\user\DaftarBukuController;
 use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
@@ -74,20 +72,25 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     // BACA
     Route::get('/baca/{id}', [DetailBukuController::class, 'baca'])->name('user.baca');
 
-    // PENGEMBALIAN BUKU
+     // PENGEMBALIAN BUKU
     Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalikanBuku'])
         ->name('user.riwayat.kembalikan');
     Route::post('/kembalikan-buku-foto', [RiwayatBukuController::class, 'kembalikanBukuWithPhoto'])
-    ->name('user.kembalikan.buku.foto');
+        ->name('user.kembalikan.buku.foto');
     Route::get('/check-borrow-status/{bookId}', [RiwayatBukuController::class, 'checkBookBorrowStatus'])
         ->name('user.check.borrow.status');
     Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBorrow'])
         ->name('user.check.active.borrow');
+    Route::get('/peminjaman-teguran/{id}', [RiwayatBukuController::class, 'getPeminjamanTeguran'])
+        ->name('user.peminjaman.teguran');
 
     // PINJAM BUKU
     Route::post('/pinjam', [App\Http\Controllers\Admin\DataPeminjamController::class, 'store'])
         ->name('pinjam.store')
         ->middleware('auth');
+    
+        Route::get('/peminjaman-terlambat', [RiwayatBukuController::class, 'getPeminjamanTerlambat'])
+    ->name('user.peminjaman.terlambat');
     
     // FAVORIT
     Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');

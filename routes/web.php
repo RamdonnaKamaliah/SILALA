@@ -157,9 +157,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
         //statistik peminjaman pengembalian
         Route::get('/statistik-peminjaman', [DashboardController::class, 'Statistik'])
             ->name('dashboard');
-
-    
-
 });
 
 // Home Redirect Route

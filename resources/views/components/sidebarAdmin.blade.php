@@ -333,6 +333,22 @@
                     </a>
                 </li>
 
+                <!-- CMS -->
+                <li class="mt-0.5 w-full">
+                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                        href="{{ route('admin.cms_admin.index') }}">
+
+                        <div
+                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-user-gear text-lg"></i>
+                        </div>
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                            CMS
+                        </span>
+                    </a>
+                </li>
+
                 <!-- Data Buku -->
                 <li class="mt-0.5 w-full">
                     <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"

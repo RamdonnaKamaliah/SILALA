@@ -10,14 +10,14 @@
         <!-- Kolom Riwayat -->
         <div class="flex flex-col gap-2">
           <div class="flex items-center gap-2">
-            <input type="radio" name="riwayat" id="pinjam" checked class="accent-[#626F47]"
+            <input type="radio" name="riwayat" id="pinjam" checked class="accent-green"
                    onclick="window.location.href='/riwayatbuku'">
-            <label for="pinjam" class="text-[#626F47] font-semibold text-sm">Riwayat Pinjam</label>
+            <label for="pinjam" class="text-green font-semibold text-sm">Riwayat Pinjam</label>
           </div>
           <div class="flex items-center gap-2">
-            <input type="radio" name="riwayat" id="baca" class="accent-[#626F47]"
+            <input type="radio" name="riwayat" id="baca" class="accent-green"
                    onclick="window.location.href='/riwayatbaca'">
-            <label for="baca" class="text-[#626F47] font-semibold text-sm">Riwayat Baca</label>
+            <label for="baca" class="text-green font-semibold text-sm">Riwayat Baca</label>
           </div>
         </div>
 
@@ -28,7 +28,7 @@
             <!-- Tombol -->
             <button id="dropdownButton"
               class="bg-white border border-[#E0D6B8] px-4 py-3 rounded-xl 
-                     text-[#626F47] text-sm font-semibold flex items-center gap-2
+                     text-green text-sm font-semibold flex items-center gap-2
                      shadow-lg shadow-[#C5B78B]/50">
               Status Peminjaman
               <span class="iconify w-6 h-6 transition duration-200" data-icon="mdi:chevron-down"></span>
@@ -38,7 +38,7 @@
             <div id="dropdownMenu"
               class="absolute z-50 mt-2 left-0 w-52 shadow-lg rounded-lg overflow-hidden hidden">
 
-              <a href="{{ route('user.riwayatbuku') }}" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-white text-[#626F47] hover:bg-gray-100 cursor-pointer">
+              <a href="{{ route('user.riwayatbuku') }}" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-white text-green hover:bg-gray-100 cursor-pointer">
                 <span class="iconify" data-icon="mdi:format-list-bulleted" style="font-size:18px;"></span>
                 Semua Status
               </a>
@@ -91,7 +91,7 @@
     <div class="mt-6 bg-white rounded-3xl shadow-sm overflow-x-auto">
       @if($riwayat->count() > 0)
       <table class="min-w-full text-sm text-[#2E2E2E] border-collapse border border-[#F0EAD2]">
-        <thead class="bg-cream text-[#626F47] font-semibold text-left">
+        <thead class="bg-cream text-green font-semibold text-left">
           <tr>
             <th class="py-3 px-4 border-[#E6E6E6]">Buku</th>
             <th class="py-3 px-4 border-[#E6E6E6]">Tanggal Pinjam</th>
@@ -121,10 +121,10 @@
                        alt="Buku"
                        class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0 group-hover:shadow-xl transition-shadow duration-200">
                   <div class="min-w-0">
-                    <p class="font-semibold text-sm leading-snug group-hover:text-[#626F47] transition-colors duration-200">
+                    <p class="font-semibold text-sm leading-snug group-hover:text-green transition-colors duration-200">
                       {{ $buku->judul_buku }}
                     </p>
-                    <p class="text-[#626F47] text-xs font-medium">{{ $buku->penulis }}</p>
+                    <p class="text-green text-xs font-medium">{{ $buku->penulis }}</p>
                   </div>
                 </a>
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-[#F0EAD2]"></span>
@@ -234,7 +234,7 @@
       </table>
       @else
         <div class="text-center py-12">
-          <div class="text-[#626F47] text-lg font-semibold mb-2">
+          <div class="text-green text-lg font-semibold mb-2">
             @if(request()->has('status'))
               Tidak ada data untuk status yang dipilih
             @else
@@ -247,112 +247,89 @@
     </div>
 
     <!-- ====== MODAL PENGEMBALIAN MANDIRI (DILUAR NAV & MAIN) ====== -->
-    <div id="pengembalianModal" class="hidden fixed inset-0 z-[1050] flex items-center justify-center bg-black/40 p-4">
-      <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative">
-        <!-- Header -->
-        <div class="bg-[#4C6444] text-white text-center py-3 font-semibold text-lg">
-          Pengembalian Mandiri
-        </div>
+<!-- Overlay untuk gelapin seluruh halaman -->
+<div id="modalOverlay" class="hidden fixed inset-0 bg-black/40 z-[1040]"></div>
 
-        <!-- Isi Modal -->
-        <div class="p-6 space-y-4 text-sm text-[#2E2E2E] max-h-[80vh] overflow-y-auto">
+<!-- Modal Pengembalian -->
+<div id="pengembalianModal" class="hidden fixed inset-0 z-[1050] flex items-center justify-center">
+  <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden p-0">
+    <!-- Header -->
+    <div class="bg-green text-white text-center py-3 font-semibold text-lg">
+      Pengembalian Mandiri
+    </div>
 
-          <!-- Dropdown Pilihan Buku -->
-          <div>
-            <label class="font-semibold mb-1 block">Judul Buku</label>
-            <select id="selectBukuModal"
-    class="w-full max-w-full bg-[#F6D776] rounded-full px-3 py-2 text-sm
-    sm:text-sm text-xs text-center shadow-sm focus:outline-none 
-    overflow-hidden truncate">
-                <option value="">-- Pilih Buku --</option>
-                @foreach($riwayat->where('status','dipinjam') as $item)
-                    <option value="{{ $item->id }}">
-                        {{ $item->buku->judul_buku }}
-                    </option>
-                @endforeach
-            </select>
-          </div>
+    <!-- Isi Modal -->
+    <div class="p-6 space-y-4 text-sm text-[#2E2E2E] max-h-[80vh] overflow-y-auto">
+      
+      <!-- Dropdown Buku -->
+      <div>
+        <label class="font-semibold mb-1 block">Judul Buku</label>
+        <select id="selectBukuModal"
+          class="w-full bg-[#F6D776] rounded-full px-3 py-2 text-sm text-center shadow-sm focus:outline-none">
+          <option value="">-- Pilih Buku --</option>
+          @foreach($riwayat->where('status','dipinjam') as $item)
+            <option value="{{ $item->id }}">{{ $item->buku->judul_buku }}</option>
+          @endforeach
+        </select>
+      </div>
 
-          <!-- Pilihan Kamera -->
-          <div>
-            <label class="font-semibold mb-1 block">TAMPILAN LAYAR FOTO</label>
-            <div class="grid grid-cols-2 gap-3">
-              <button id="btnKameraDepan" onclick="pilihKamera('user')"
-                  class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
-                  <span class="iconify" data-icon="mdi:camera-front"></span>
-                  Kamera Depan
-              </button>
-              <button id="btnKameraBelakang" onclick="pilihKamera('environment')"
-                  class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
-                  <span class="iconify" data-icon="mdi:camera-rear"></span>
-                  Kamera Belakang
-              </button>
-            </div>
-          </div>
-
-          <!-- Area Kamera & Preview -->
-          <div id="kameraArea" class="hidden">
-            <!-- Area Kamera/Preview -->
-            <div class="relative bg-black rounded-xl overflow-hidden mb-4" style="height: 280px;">
-                <!-- Video Kamera -->
-                <video id="kameraStream" autoplay 
-                    class="w-full h-full object-cover absolute inset-0 z-10"></video>
-                
-                <!-- Preview Foto (Muncul Setelah Ambil Foto) -->
-                <div id="previewContainer" class="absolute inset-0 z-20 hidden">
-                    <img id="previewFoto" src="" class="w-full h-full object-cover">
-                </div>
-                
-                <!-- Overlay Teks -->
-                <div class="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
-                    <div class="text-white text-center bg-black/50 px-4 py-3 rounded-lg">
-                        <p class="text-lg font-semibold mb-1" id="judulBukuKamera">Judul Buku</p>
-                        <p class="text-sm opacity-90">Arahkan kamera ke sampul buku</p>
-                    </div>
-                </div>
-                
-                <!-- Canvas untuk Menangkap Foto (Tersembunyi) -->
-                <canvas id="fotoCanvas" class="hidden"></canvas>
-            </div>
-
-            <!-- Peringatan -->
-            <div class="text-[13px] space-y-1 mb-4">
-                <p class="text-[#DC2626] flex items-center gap-1">
-                  <i class="fa-solid fa-triangle-exclamation"></i>
-                  Pastikan sampul buku terlihat jelas
-                </p>
-                <p class="text-[#DC2626] flex items-center gap-1">
-                  <i class="fa-solid fa-triangle-exclamation"></i>
-                  Cahaya cukup untuk hasil foto yang baik
-                </p>
-            </div>
-
-            <!-- Tombol Aksi -->
-            <div class="flex gap-3">
-                <!-- Tombol Ambil Foto (Muncul saat kamera aktif) -->
-                <button id="btnAmbilFoto" onclick="ambilFoto()"
-                    class="flex-1 bg-[#BFEA7C] text-[#2E2E2E] font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1">
-                    <span class="iconify" data-icon="mdi:camera"></span>
-                    Ambil Foto
-                </button>
-                
-                <!-- Tombol Kirim Foto (Muncul setelah ambil foto) -->
-                <button id="btnKirimFoto" onclick="kirimFoto()"
-                    class="flex-1 bg-[#4C6444] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1 hidden">
-                    <span class="iconify" data-icon="mdi:send"></span>
-                    Kirim Foto
-                </button>
-            </div>
-          </div>
-
-          <!-- Tombol Batal (selalu tampil) -->
-          <div class="flex justify-end gap-3 pt-4">
-            <button onclick="tutupModal()" class="bg-[#DC2626] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition">
-              Batal
-            </button>
-          </div>
-
+      <!-- Pilihan Kamera -->
+      <div>
+        <label class="font-semibold mb-1 block">Tampilan Kamera</label>
+        <div class="grid grid-cols-2 gap-3">
+          <button id="btnKameraDepan" onclick="pilihKamera('user')"
+              class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+              <span class="iconify" data-icon="mdi:camera-front"></span>
+              Depan
+          </button>
+          <button id="btnKameraBelakang" onclick="pilihKamera('environment')"
+              class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+              <span class="iconify" data-icon="mdi:camera-rear"></span>
+              Belakang
+          </button>
         </div>
       </div>
+
+      <!-- Area Kamera & Preview -->
+      <div id="kameraArea" class="hidden">
+        <div class="relative bg-black rounded-xl overflow-hidden mb-4" style="height: 280px;">
+          <video id="kameraStream" autoplay class="w-full h-full object-cover absolute inset-0 z-10"></video>
+          <div id="previewContainer" class="absolute inset-0 z-20 hidden">
+            <img id="previewFoto" src="" class="w-full h-full object-cover">
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
+            <div class="text-white text-center bg-black/50 px-4 py-3 rounded-lg">
+              <p class="text-lg font-semibold mb-1" id="judulBukuKamera">Judul Buku</p>
+              <p class="text-sm opacity-90">Arahkan kamera ke sampul buku</p>
+            </div>
+          </div>
+          <canvas id="fotoCanvas" class="hidden"></canvas>
+        </div>
+
+        <!-- Tombol Aksi -->
+        <div class="flex gap-3">
+          <button id="btnAmbilFoto" onclick="ambilFoto()"
+              class="flex-1 bg-[#BFEA7C] text-[#2E2E2E] font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1">
+              <span class="iconify" data-icon="mdi:camera"></span>
+              Ambil Foto
+          </button>
+          <button id="btnKirimFoto" onclick="kirimFoto()"
+              class="flex-1 bg-[#4C6444] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1 hidden">
+              <span class="iconify" data-icon="mdi:send"></span>
+              Kirim Foto
+          </button>
+        </div>
+      </div>
+
+      <!-- Tombol Batal -->
+      <div class="flex justify-end pt-4">
+        <button onclick="tutupModal()" class="bg-[#DC2626] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition">
+          Batal
+        </button>
+      </div>
+
     </div>
+  </div>
+</div>
+
 @endsection

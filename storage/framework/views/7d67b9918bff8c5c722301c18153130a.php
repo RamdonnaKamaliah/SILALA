@@ -3,7 +3,7 @@
 <?php $__env->startSection('content'); ?>
 
   <!-- Kartu Sambutan -->
-<section class="relative bg-gradient-to-r from-green to-[#A4B465] text-white 
+<section class="relative bg-gradient-to-r from-green to-primary text-white 
   px-3 py-3 sm:px-4 sm:py-3 md:px-8 md:py-3 rounded-2xl shadow-md 
   flex items-center justify-between overflow-hidden flex-shrink-0">
 
@@ -17,7 +17,7 @@
 
   <!-- Teks sambutan -->
   <div class="z-10 max-w-[70%] sm:max-w-[65%] md:max-w-none">
-    <h2 class="text-base sm:text-lg md:text-3xl font-medium text-[#F7EDD6] font-mochiy leading-tight">
+    <h2 class="text-base sm:text-lg md:text-3xl font-medium text-white font-mochiy leading-tight">
       Hallo Rifdah,
     </h2> 
     <p class="text-xs sm:text-sm md:text-base mt-1 text-[#F7EDD6]/90 leading-snug">

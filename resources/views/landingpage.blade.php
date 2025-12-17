@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('layout_landing.patrial_landing.link')
-    <link rel="icon" href="{{ asset('assets/logo 1.png') }}" type="image/x-icon">
+
     <title>SILALA</title>
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -51,11 +51,18 @@
                 </p>
             </div>
 
-            <!-- Gambar di batas section -->
-            <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
-                <img src="{{ asset('assets/hero1.png') }}" alt="Ilustrasi Buku"
-                    class="hero-image w-48 h-auto md:w-80 md:h-auto object-contain">
-            </div>
+           <!-- Gambar di batas section -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
+            @php
+            $heroImage = \App\Models\Setting::getValue('hero_image', 'hero1.png');
+        @endphp
+
+        <img src="{{ asset('storage/cms/' . $heroImage) }}"
+            class="hero-image w-48 md:w-80 object-contain"
+            alt="Hero Image">
+
+</div>
+
 
         </div>
     </section>

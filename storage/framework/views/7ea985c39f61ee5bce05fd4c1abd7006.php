@@ -20,7 +20,7 @@
   <?php echo $__env->make('layout_user.partial_user.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
   
-  <main class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-50 flex flex-col max-w-full shadow-inner">
+  <main class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-10 flex flex-col max-w-full shadow-inner">
     <?php echo $__env->yieldContent('content'); ?>
 </main>
 

@@ -1,13 +1,13 @@
 <!-- NAVBAR -->
 <nav id="navbar"
-  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-30 bg-[#f7edd6]
+  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-30 bg-cream
   rounded-b-3xl shadow-sm flex justify-between items-center
   px-4 md:px-6 py-4 md:py-6 transition-all duration-300">
 
   <!-- Judul -->
   <h1
     class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0
-    text-lg md:text-xl font-semibold text-[#626F47]">
+    text-lg md:text-xl font-semibold text-green">
     <?php echo e($title ?? 'BERANDA'); ?>
 
   </h1>
@@ -16,7 +16,7 @@
 
     <!-- Notifikasi -->
     <div class="relative">
-      <button id="notifBtn" class="text-[#626F47] text-lg">
+      <button id="notifBtn" class="text-green text-lg">
         <i class="fa-solid fa-bell"></i>
       </button>
 
@@ -29,7 +29,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100">
           <div class="flex items-center gap-2">
-            <i class="fa-solid fa-bell text-[#A4B465]"></i>
+            <i class="fa-solid fa-bell text-primary"></i>
             <h3 class="font-semibold text-gray-700 text-sm">Notifikasi</h3>
           </div>
           <button id="closeNotif" class="text-gray-400 hover:text-gray-600">
@@ -41,10 +41,10 @@
         <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
           <!-- item contoh -->
           <div class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer group">
-            <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
-            <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full"></div>
+            <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-primary rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
+            <div class="w-2 h-2 mt-1 bg-primary rounded-full"></div>
             <div class="flex-1">
-              <p class="text-sm font-semibold text-[#626F47]">Admin</p>
+              <p class="text-sm font-semibold text-green">Admin</p>
               <p class="text-xs text-gray-600">Contoh notifikasi.</p>
             </div>
             <span class="text-[10px] text-gray-400">1m</span>
@@ -53,7 +53,7 @@
 
         <!-- Footer -->
         <div class="text-center py-3 border-t border-gray-100">
-          <a href="#" class="text-[#626F47] text-sm font-medium hover:text-[#A4B465]">
+          <a href="#" class="text-greentext-sm font-medium hover:text-primary">
             Lihat semua aktivitas
           </a>
         </div>
@@ -61,7 +61,7 @@
     </div>
 
     <!-- Darkmode -->
-    <button onclick="toggleDarkMode()" class="text-[#626F47] text-lg">
+    <button onclick="toggleDarkMode()" class="text-green text-lg">
       <span class="iconify text-2xl dark:hidden" data-icon="mdi:weather-sunny"></span>
       <span class="iconify text-2xl hidden dark:inline" data-icon="mdi:weather-night"></span>
     </button>

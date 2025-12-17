@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php echo $__env->make('layout_landing.patrial_landing.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-    <link rel="icon" href="<?php echo e(asset('assets/logo 1.png')); ?>" type="image/x-icon">
+
     <title>SILALA</title>
     <!-- Vite -->
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
@@ -51,11 +51,18 @@
                 </p>
             </div>
 
-            <!-- Gambar di batas section -->
-            <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
-                <img src="<?php echo e(asset('assets/hero1.png')); ?>" alt="Ilustrasi Buku"
-                    class="hero-image w-48 h-auto md:w-80 md:h-auto object-contain">
-            </div>
+           <!-- Gambar di batas section -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
+            <?php
+            $heroImage = \App\Models\Setting::getValue('hero_image', 'hero1.png');
+        ?>
+
+        <img src="<?php echo e(asset('storage/cms/' . $heroImage)); ?>"
+            class="hero-image w-48 md:w-80 object-contain"
+            alt="Hero Image">
+
+</div>
+
 
         </div>
     </section>

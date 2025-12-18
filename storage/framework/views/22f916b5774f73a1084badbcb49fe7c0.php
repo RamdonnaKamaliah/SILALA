@@ -70,9 +70,8 @@
 
     
     <script src="<?php echo e(asset('assets_user/js/sidebarnavbar.js')); ?>"></script>
-
-    
     <script src="<?php echo e(asset('assets_user/js/detailbuku.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets_user/js/notif.js')); ?>"></script>
 
     
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>

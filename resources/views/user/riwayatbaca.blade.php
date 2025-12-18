@@ -30,7 +30,7 @@
         <input type="text" 
                placeholder="Cari di riwayat baca..."
                id="search-riwayat"
-               class="w-full rounded-full bg-white border border-[#E0D6B8] pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C5B78B]" />
+               class="w-full rounded-full bg-white border border-yellow-100 pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-200" />
         <span class="iconify absolute right-3 top-1/2 -translate-y-1/2 text-green" 
               data-icon="mdi:magnify" 
               style="font-size:20px;"></span>

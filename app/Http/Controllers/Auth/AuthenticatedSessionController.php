@@ -31,7 +31,8 @@ class AuthenticatedSessionController extends Controller
         // Jika bukan admin, coba sebagai user
         if (Auth::guard('web')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('dashboard'))
+             ->with('success', 'Berhasil login! Selamat datang');
         }
 
         // Jika semua gagal

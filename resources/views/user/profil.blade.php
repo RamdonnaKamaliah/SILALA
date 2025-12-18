@@ -4,7 +4,6 @@
 
 @section('content')
   <div class="min-h-screen bg-[#F3EED9] py-10 px-6">
-    
     @auth
       <!-- Kartu Header -->
       <div class="bg-white rounded-2xl shadow-md px-8 py-6 flex justify-between items-center max-w-5xl mx-auto -mt-6">
@@ -99,3 +98,18 @@
 
   </div>
 @endsection
+@push('scripts')
+
+@if(session('success'))
+<script>
+    showNotification(@json(session('success')), 'success');
+</script>
+@endif
+
+@if(session('error'))
+<script>
+    showNotification(@json(session('error')), 'error');
+</script>
+@endif
+
+@endpush

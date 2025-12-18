@@ -87,13 +87,12 @@
 
       <!-- Tampilkan pesan sukses jika ada (setelah registrasi dll) -->
       @if(session('success'))
-        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-          <div class="flex items-center">
-            <i class="fas fa-check-circle text-green-500 mr-2"></i>
-            <span class="text-sm text-green-600 font-medium">{{ session('success') }}</span>
-          </div>
-        </div>
-      @endif
+  <div id="loginAlert"
+       class="fixed top-5 right-5 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 z-50 transition-opacity duration-500">
+    <i class="fa-solid fa-circle-check"></i>
+    <span class="text-sm font-medium">{{ session('success') }}</span>
+  </div>
+@endif
 
       <!-- Google Login -->
       <div class="mb-4">

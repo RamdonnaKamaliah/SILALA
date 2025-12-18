@@ -8,7 +8,8 @@
 
 <!-- Overlay Sidebar -->
 <div id="sidebar-overlay"
-     class="fixed inset-0 bg-black/40 hidden opacity-0 transition-opacity duration-300 z-40 md:hidden"></div>
+  class="fixed inset-0 bg-black/40 hidden opacity-0 transition-opacity duration-300 z-40 md:hidden pointer-events-none">
+</div>
 
 <!-- Sidebar -->
 <div id="sidebar"

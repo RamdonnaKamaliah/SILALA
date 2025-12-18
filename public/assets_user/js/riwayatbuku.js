@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    function lockBody() {
+    document.body.classList.add('overflow-hidden');
+}
+
+function unlockBody() {
+    document.body.classList.remove('overflow-hidden');
+}
+
     /* ==========================
        DROPDOWN PROFILE
        ========================== */
@@ -22,287 +31,258 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* ==========================
-       MODAL PENGEMBALIAN BUKU
-       ========================== */
-    let streamAktif = null;
-    let fotoDiambil = false;
-    let bukuDipilih = null;
-    let modeKamera = null;
-    
-    // Fungsi untuk mendapatkan CSRF token
-    function getCsrfToken() {
-        // Cari dari meta tag
-        const metaToken = document.querySelector('meta[name="csrf-token"]');
-        if (metaToken) {
-            return metaToken.getAttribute('content');
-        }
-        
-        // Cari dari input hidden
-        const inputToken = document.querySelector('input[name="_token"]');
-        if (inputToken) {
-            return inputToken.value;
-        }
-        
-        // Fallback ke token dari Laravel jika ada
-        if (window.Laravel && window.Laravel.csrfToken) {
-            return window.Laravel.csrfToken;
-        }
-        
-        console.warn('CSRF token tidak ditemukan');
-        return '';
-    }
+   /* ==========================
+   MODAL PENGEMBALIAN BUKU
+   ========================== */
+/* ==========================
+   STATE GLOBAL
+   ========================== */
+let streamAktif = null;
+let fotoDiambil = false;
+let bukuDipilih = null;
+let modeKamera = null;
+let sedangUpload = false;
 
-    // Fungsi untuk membuka modal
-    window.bukaModalPengembalian = function() {
-        // Cek apakah ada buku yang sedang dipinjam
-        const bukuDipinjam = document.querySelectorAll('#selectBukuModal option').length > 1;
-        
-        if (!bukuDipinjam) {
-            alert('Tidak ada buku yang sedang dipinjam');
-            return;
-        }
-        
-        document.getElementById('pengembalianModal').classList.remove('hidden');
-        resetModal();
-    };
-
-    // Fungsi untuk menutup modal
-    window.tutupModal = function() {
-        document.getElementById('pengembalianModal').classList.add('hidden');
-        hentikanKamera();
-        resetModal();
-    };
-
-    // Reset modal ke kondisi awal
-    function resetModal() {
-        document.getElementById('kameraArea').classList.add('hidden');
-        document.getElementById('previewContainer').classList.add('hidden');
-        
-        // Reset tombol
-        document.getElementById('btnAmbilFoto').classList.remove('hidden');
-        document.getElementById('btnKirimFoto').classList.add('hidden');
-        
-        fotoDiambil = false;
-        bukuDipilih = null;
-        modeKamera = null;
-        
-        // Reset tombol kamera
-        document.getElementById('btnKameraDepan').classList.remove('bg-[#4C6444]', 'text-white');
-        document.getElementById('btnKameraBelakang').classList.remove('bg-[#4C6444]', 'text-white');
-    }
-
-    // Fungsi untuk memilih kamera
-    window.pilihKamera = async function(facingMode) {
-        // Dapatkan buku yang dipilih
-        const selectBuku = document.getElementById('selectBukuModal');
-        bukuDipilih = selectBuku.value;
-        
-        if (!bukuDipilih) {
-            alert('Silakan pilih buku terlebih dahulu');
-            return;
-        }
-        
-        // Update judul buku di overlay
-        const selectedOption = selectBuku.options[selectBuku.selectedIndex];
-        document.getElementById('judulBukuKamera').textContent = selectedOption.text;
-        
-        // Update tampilan tombol kamera
-        document.getElementById('btnKameraDepan').classList.remove('bg-[#4C6444]', 'text-white');
-        document.getElementById('btnKameraBelakang').classList.remove('bg-[#4C6444]', 'text-white');
-        
-        if (facingMode === 'user') {
-            document.getElementById('btnKameraDepan').classList.add('bg-[#4C6444]', 'text-white');
-        } else {
-            document.getElementById('btnKameraBelakang').classList.add('bg-[#4C6444]', 'text-white');
-        }
-        
-        modeKamera = facingMode;
-        
-        // Tampilkan area kamera
-        document.getElementById('kameraArea').classList.remove('hidden');
-        
-        // Sembunyikan preview jika ada
-        document.getElementById('previewContainer').classList.add('hidden');
-        
-        // Tampilkan tombol ambil foto, sembunyikan tombol kirim
-        document.getElementById('btnAmbilFoto').classList.remove('hidden');
-        document.getElementById('btnKirimFoto').classList.add('hidden');
-        
-        // Hentikan kamera sebelumnya jika ada
-        hentikanKamera();
-        
-        // Mulai kamera
-        try {
-            streamAktif = await navigator.mediaDevices.getUserMedia({
-                video: { 
-                    facingMode: facingMode,
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                }
-            });
-            const videoElement = document.getElementById('kameraStream');
-            videoElement.srcObject = streamAktif;
-            videoElement.classList.remove('hidden');
-        } catch (error) {
-            console.error('Error mengakses kamera:', error);
-            alert('Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.');
-            document.getElementById('kameraArea').classList.add('hidden');
-        }
-    };
-
-    // Fungsi untuk mengambil foto
-    window.ambilFoto = function() {
-        if (!streamAktif) {
-            alert('Kamera belum aktif');
-            return;
-        }
-        
-        const video = document.getElementById('kameraStream');
-        const canvas = document.getElementById('fotoCanvas');
-        const context = canvas.getContext('2d');
-        
-        // Set ukuran canvas sama dengan video
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        
-        // Gambar frame video ke canvas
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
-        // Tampilkan preview foto
-        const previewImg = document.getElementById('previewFoto');
-        previewImg.src = canvas.toDataURL('image/png');
-        document.getElementById('previewContainer').classList.remove('hidden');
-        
-        // Sembunyikan video, tampilkan preview
-        video.classList.add('hidden');
-        
-        // Ganti tombol: sembunyikan ambil foto, tampilkan kirim foto
-        document.getElementById('btnAmbilFoto').classList.add('hidden');
-        document.getElementById('btnKirimFoto').classList.remove('hidden');
-        
-        fotoDiambil = true;
-        
-        // Hentikan kamera setelah mengambil foto
-        hentikanKamera();
-    };
-
-    // Fungsi untuk mengirim foto
-    window.kirimFoto = async function() {
-        if (!fotoDiambil || !bukuDipilih) {
-            alert('Silakan ambil foto terlebih dahulu dan pilih buku');
-            return;
-        }
-        
-        const canvas = document.getElementById('fotoCanvas');
-        const imageData = canvas.toDataURL('image/png');
-        
-        // Tampilkan loading pada tombol kirim
-        const btnKirim = document.getElementById('btnKirimFoto');
-        const originalText = btnKirim.innerHTML;
-        btnKirim.innerHTML = '<span class="iconify animate-spin" data-icon="mdi:loading"></span> Mengirim...';
-        btnKirim.disabled = true;
-        
-        try {
-            console.log('Memulai proses pengiriman foto...');
-            
-            // Konversi base64 ke blob
-            const blob = await fetch(imageData).then(res => res.blob());
-            console.log('Blob berhasil dibuat, ukuran:', blob.size, 'bytes');
-            
-            // Dapatkan CSRF token
-            const csrfToken = getCsrfToken();
-            if (!csrfToken) {
-                throw new Error('CSRF token tidak ditemukan');
-            }
-            
-            // Buat FormData untuk dikirim
-            const formData = new FormData();
-            formData.append('buku_id', bukuDipilih);
-            formData.append('foto', blob, `pengembalian_${Date.now()}.png`);
-            formData.append('_token', csrfToken);
-            
-            console.log('Mengirim ke server dengan CSRF token...');
-            
-            // Kirim ke endpoint yang sesuai - gunakan URL yang benar
-            // Sesuaikan route dengan yang ada di Laravel
-            const url = '/kembalikan-buku-foto'; // Ganti dengan route yang benar
-            const response = await fetch(url, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    // Jangan tambahkan Content-Type header untuk FormData,
-                    // browser akan mengatur sendiri dengan boundary yang sesuai
-                },
-                credentials: 'same-origin' // Penting untuk mengirim cookie session
-            });
-            
-            console.log('Response status:', response.status);
-            
-            // Cek jika response bukan JSON
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-                console.error('Response bukan JSON:', text.substring(0, 500));
-                
-                // Coba untuk mengekstrak pesan error jika ada
-                if (text.includes('CSRF token mismatch')) {
-                    throw new Error('CSRF token tidak valid. Silakan refresh halaman dan coba lagi.');
-                }
-                throw new Error('Server mengembalikan respons tidak valid. Status: ' + response.status);
-            }
-            
-            const result = await response.json();
-            console.log('Response JSON:', result);
-            
-            if (result.success) {
-                alert('Foto berhasil dikirim! Menunggu konfirmasi admin.');
-                // Tutup modal dan reload halaman
-                tutupModal();
-                window.location.reload();
-            } else {
-                throw new Error(result.message || 'Gagal mengirim foto');
-            }
-        } catch (error) {
-            console.error('Error detail mengirim foto:', error);
-            alert('Gagal mengirim foto: ' + error.message);
-            
-            // Reset tombol kirim
-            btnKirim.innerHTML = originalText;
-            btnKirim.disabled = false;
-        }
-    };
-
-    // Fungsi untuk menghentikan kamera
-    function hentikanKamera() {
-        if (streamAktif) {
-            streamAktif.getTracks().forEach(track => track.stop());
-            streamAktif = null;
-        }
-    }
-
-    // Event listener untuk dropdown buku
-    const selectBukuModal = document.getElementById('selectBukuModal');
-    if (selectBukuModal) {
-        selectBukuModal.addEventListener('change', function() {
-            if (streamAktif) {
-                hentikanKamera();
-                document.getElementById('kameraArea').classList.add('hidden');
-                fotoDiambil = false;
-                modeKamera = null;
-            }
-        });
-    }
-
-    // Event listener untuk tombol batal di luar modal
-    document.addEventListener('click', function(e) {
-        const modal = document.getElementById('pengembalianModal');
-        if (e.target === modal) {
-            tutupModal();
-        }
+/* ==========================
+   SWEETALERT HELPERS
+   ========================== */
+function swalInfo(text) {
+    return Swal.fire({
+        icon: 'info',
+        title: 'Informasi',
+        text
     });
+}
+
+function swalError(text) {
+    return Swal.fire({
+        icon: 'error',
+        title: 'Oops!',
+        text
+    });
+}
+
+function swalAutoSuccess(text, duration = 2000) {
+    return Swal.fire({
+        icon: 'success',
+        title: text,
+        showConfirmButton: false,
+        timer: duration,
+        timerProgressBar: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+    });
+}
+
+function swalConfirmCancel() {
+    return Swal.fire({
+        title: 'Batalkan Pengembalian?',
+        text: 'Foto dan proses akan dibatalkan.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Batalkan',
+        cancelButtonText: 'Tidak'
+    });
+}
+
+/* ==========================
+   CSRF TOKEN
+   ========================== */
+function getCsrfToken() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    if (meta) return meta.content;
+
+    const input = document.querySelector('input[name="_token"]');
+    if (input) return input.value;
+
+    return '';
+}
+
+/* ==========================
+   OPEN MODAL
+   ========================== */
+window.bukaModalPengembalian = function () {
+    lockBody();
+
+    const hasBuku = document.querySelectorAll('#selectBukuModal option').length > 1;
+    if (!hasBuku) {
+        swalInfo('Tidak ada buku yang sedang dipinjam');
+        unlockBody();
+        return;
+    }
+
+    resetModal();
+    document.getElementById('pengembalianModal').classList.remove('hidden');
+};
+
+/* ==========================
+   CLOSE MODAL (USER BATAL)
+   ========================== */
+window.tutupModal = async function () {
+    if (sedangUpload) return;
+
+    const res = await swalConfirmCancel();
+    if (!res.isConfirmed) return;
+
+    closeModalTanpaAlert();
+};
+
+/* ==========================
+   CLOSE MODAL TANPA ALERT
+   ========================== */
+function closeModalTanpaAlert() {
+    document.getElementById('pengembalianModal').classList.add('hidden');
+    hentikanKamera();
+    resetModal();
+    unlockBody();
+}
+
+/* ==========================
+   RESET MODAL
+   ========================== */
+function resetModal() {
+    fotoDiambil = false;
+    bukuDipilih = null;
+    modeKamera = null;
+    sedangUpload = false;
+
+    document.getElementById('kameraArea').classList.add('hidden');
+    document.getElementById('previewContainer').classList.add('hidden');
+
+    document.getElementById('btnAmbilFoto').classList.remove('hidden');
+    document.getElementById('btnKirimFoto').classList.add('hidden');
+
+    document.getElementById('btnKameraDepan')?.classList.remove('bg-[#4C6444]', 'text-white');
+    document.getElementById('btnKameraBelakang')?.classList.remove('bg-[#4C6444]', 'text-white');
+}
+
+/* ==========================
+   PILIH KAMERA
+   ========================== */
+window.pilihKamera = async function (facingMode) {
+    const select = document.getElementById('selectBukuModal');
+    bukuDipilih = select.value;
+
+    if (!bukuDipilih) {
+        swalInfo('Silakan pilih buku terlebih dahulu');
+        return;
+    }
+
+    document.getElementById('judulBukuKamera').innerText =
+        select.options[select.selectedIndex].text;
+
+    document.getElementById('btnKameraDepan').classList.remove('bg-[#4C6444]', 'text-white');
+    document.getElementById('btnKameraBelakang').classList.remove('bg-[#4C6444]', 'text-white');
+
+    document.getElementById(
+        facingMode === 'user' ? 'btnKameraDepan' : 'btnKameraBelakang'
+    ).classList.add('bg-[#4C6444]', 'text-white');
+
+    modeKamera = facingMode;
+    document.getElementById('kameraArea').classList.remove('hidden');
+    document.getElementById('previewContainer').classList.add('hidden');
+
+    document.getElementById('btnAmbilFoto').classList.remove('hidden');
+    document.getElementById('btnKirimFoto').classList.add('hidden');
+
+    hentikanKamera();
+
+    try {
+        streamAktif = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode }
+        });
+
+        const video = document.getElementById('kameraStream');
+        video.srcObject = streamAktif;
+        video.classList.remove('hidden');
+    } catch {
+        swalError('Tidak dapat mengakses kamera');
+        document.getElementById('kameraArea').classList.add('hidden');
+    }
+};
+
+/* ==========================
+   AMBIL FOTO
+   ========================== */
+window.ambilFoto = function () {
+    if (!streamAktif) {
+        swalError('Kamera belum aktif');
+        return;
+    }
+
+    const video = document.getElementById('kameraStream');
+    const canvas = document.getElementById('fotoCanvas');
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+
+    document.getElementById('previewFoto').src =
+        canvas.toDataURL('image/png');
+
+    video.classList.add('hidden');
+    document.getElementById('previewContainer').classList.remove('hidden');
+    document.getElementById('btnAmbilFoto').classList.add('hidden');
+    document.getElementById('btnKirimFoto').classList.remove('hidden');
+
+    fotoDiambil = true;
+    hentikanKamera();
+};
+
+/* ==========================
+   KIRIM FOTO
+   ========================== */
+window.kirimFoto = async function () {
+    if (!fotoDiambil || !bukuDipilih || sedangUpload) return;
+
+    sedangUpload = true;
+
+    const btn = document.getElementById('btnKirimFoto');
+    btn.disabled = true;
+    btn.innerText = 'Mengirim...';
+
+    try {
+        const blob = await fetch(
+            document.getElementById('fotoCanvas').toDataURL()
+        ).then(r => r.blob());
+
+        const formData = new FormData();
+        formData.append('buku_id', bukuDipilih);
+        formData.append('foto', blob);
+        formData.append('_token', getCsrfToken());
+
+        const res = await fetch('/kembalikan-buku-foto', {
+            method: 'POST',
+            body: formData,
+            headers: { Accept: 'application/json' }
+        });
+
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+
+        await swalAutoSuccess(
+            'Foto berhasil dikirim. Menunggu konfirmasi admin.'
+        );
+
+        closeModalTanpaAlert();
+        location.reload();
+
+    } catch (err) {
+        swalError(err.message || 'Gagal mengirim foto');
+        btn.disabled = false;
+        btn.innerText = 'Kirim Foto';
+        sedangUpload = false;
+    }
+};
+
+/* ==========================
+   STOP KAMERA
+   ========================== */
+function hentikanKamera() {
+    if (!streamAktif) return;
+    streamAktif.getTracks().forEach(track => track.stop());
+    streamAktif = null;
+}
 
     /* ==========================
    MODAL FOTO ULANG PENGEMBALIAN
@@ -315,18 +295,21 @@ let modeKameraUlang = null;
 // Fungsi untuk membuka modal foto ulang
 window.bukaModalFotoUlang = function(peminjamanId, judulBuku, keterangan = '') {
     console.log('Membuka modal foto ulang untuk peminjaman ID:', peminjamanId);
-    
+
+    lockBody(); // ⬅️ TAMBAH INI
+
     // Set buku yang dipilih
     bukuDipilihUlang = peminjamanId;
-    
+
     // Set info buku
     document.getElementById('judulBukuUlang').textContent = judulBuku;
     document.getElementById('judulBukuKameraUlang').textContent = judulBuku;
-    document.getElementById('keteranganTeguran').textContent = keterangan || 'Admin meminta foto ulang pengembalian';
-    
+    document.getElementById('keteranganTeguran').textContent =
+        keterangan || 'Admin meminta foto ulang pengembalian';
+
     // Reset modal
     resetModalUlang();
-    
+
     // Buka modal
     document.getElementById('fotoUlangModal').classList.remove('hidden');
 };
@@ -336,7 +319,10 @@ window.tutupModalUlang = function() {
     document.getElementById('fotoUlangModal').classList.add('hidden');
     hentikanKameraUlang();
     resetModalUlang();
+
+    unlockBody(); // ⬅️ TAMBAH INI
 };
+ 
 
 // Reset modal foto ulang ke kondisi awal
 function resetModalUlang() {
@@ -567,12 +553,10 @@ function cekNotifikasiTeguran() {
 }
 
 // Jalankan cek saat halaman dimuat
-document.addEventListener('DOMContentLoaded', function() {
     const hasTeguran = cekNotifikasiTeguran();
     
     if (hasTeguran) {
         console.log('Ada peminjaman yang memerlukan foto ulang');
         // Anda bisa tambahkan notifikasi toast di sini jika diperlukan
     }
-});
 });

@@ -100,7 +100,7 @@
     <div class="relative w-32 sm:w-40 md:w-52 mx-auto md:mx-0 -mt-4 md:mt-0 z-10">
       <div class="w-full aspect-[3/4] overflow-hidden rounded-md shadow-2xl shadow-gray-500/60">
         <img 
-          src="<?php echo e(asset($buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
+          src="<?php echo e(asset('storage/' . $buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
           alt="<?php echo e($buku->judul_buku); ?>"
           class="w-full h-full object-cover">
       </div>

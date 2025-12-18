@@ -231,54 +231,80 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   const renderPages = async () => {
-    pdfViewer.innerHTML = "";
-    for (const item of pageCanvases) {
-      const page = await pdfDoc.getPage(item.page);
-      const viewport = page.getViewport({ scale: zoom });
-      const canvas = item.canvas;
-      const ctx = canvas.getContext("2d");
+  pdfViewer.innerHTML = "";
 
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
+  const isMobile = window.innerWidth <= 1024;
 
-      await page.render({ canvasContext: ctx, viewport }).promise;
+  for (const item of pageCanvases) {
+    const page = await pdfDoc.getPage(item.page);
 
-      if (zoom <= 1) {
-      canvas.className = "w-full max-w-full mx-auto block";
+    let scale = zoom;
+
+    if (isMobile) {
+      const viewport1 = page.getViewport({ scale: 1 });
+      const fitScale = pdfViewer.clientWidth / viewport1.width;
+
+      if (zoom === 1) {
+        // mobile default 100%: muat container
+        scale = fitScale;
+        pdfViewer.style.overflowX = "hidden"; // disable scroll horizontal
+      } else {
+        // zoom > 100%: scale sesuai zoom, bisa scroll
+        scale = fitScale * zoom;
+        pdfViewer.style.overflowX = "auto"; // enable scroll horizontal
+      }
     } else {
-      canvas.className = "block mx-auto";
-      canvas.style.width = viewport.width + "px";
+      pdfViewer.style.overflowX = "auto"; // desktop tetap
     }
 
-      pdfViewer.appendChild(canvas);
-    }
+    const viewport = page.getViewport({ scale });
+    const canvas = item.canvas;
+    const ctx = canvas.getContext("2d");
 
-    zoomLabel && (zoomLabel.innerText = Math.round(zoom * 100) + "%");
-    pageTotal && (pageTotal.innerText = pdfDoc.numPages);
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
 
-    updateLayout();
-    updatePageTracking();
-  };
+    await page.render({ canvasContext: ctx, viewport }).promise;
 
-  window.openPdfGlobal = async (url) => {
-    pdfModal.classList.remove("hidden");
-    pdfViewer.innerHTML = "Memuat PDF...";
+    canvas.style.width = viewport.width + "px";
+    canvas.style.height = viewport.height + "px";
+    canvas.className = "block mx-auto";
 
-    const pdf = await pdfjsLib.getDocument(url).promise;
-    pdfDoc = pdf;
-    zoom = 1;
-    pageCanvases = [];
+    pdfViewer.appendChild(canvas);
+  }
 
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const canvas = document.createElement("canvas");
-      canvas.dataset.page = i;
-      canvas.style.borderRadius = "12px";
-      canvas.style.background = "#fff";
-      pageCanvases.push({ page: i, canvas });
-    }
+  zoomLabel && (zoomLabel.innerText = Math.round(zoom * 100) + "%");
+  pageTotal && (pageTotal.innerText = pdfDoc.numPages);
 
-    await renderPages();
-  };
+  updateLayout();
+  updatePageTracking();
+};
+
+
+  window.openPdfGlobal = async (url, title = "Preview Dokumen") => {
+  const pdfTitle = document.getElementById("pdfTitle");
+  if (pdfTitle) {
+    pdfTitle.lastChild.textContent = title;
+  }
+
+  pdfModal.classList.remove("hidden");
+  pdfViewer.innerHTML = "Memuat PDF...";
+
+  const pdf = await pdfjsLib.getDocument(url).promise;
+  pdfDoc = pdf;
+  zoom = 1;
+  pageCanvases = [];
+
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const canvas = document.createElement("canvas");
+    canvas.dataset.page = i;
+    canvas.style.borderRadius = "12px";
+    canvas.style.background = "#fff";
+    pageCanvases.push({ page: i, canvas });
+  }
+
+  await renderPages();
+};
 
   on(closePdfModal, "click", () => {
     pdfModal.classList.add("hidden");
@@ -298,11 +324,12 @@ document.addEventListener('DOMContentLoaded', function() {
   on(window, "resize", updateLayout);
 
   document.querySelectorAll(".open-pdf").forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const url = btn.getAttribute("data-url");
-      url && openPdfGlobal(url);
-    });
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const url = btn.dataset.url;
+    const title = btn.dataset.title; // dari ADMIN
+    if (url) openPdfGlobal(url, title);
   });
+});
 })();
 });

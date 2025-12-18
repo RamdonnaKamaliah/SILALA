@@ -8,8 +8,8 @@
   <div class="relative w-full mb-8">
     <input id="searchBuku" type="text" placeholder="Cari Buku..." 
       class="w-full bg-white border border-white rounded-full py-3 px-5 
-             text-sm text-[#626F47] focus:outline-none shadow-sm">
-    <span class="absolute right-4 top-3 text-[#626F47] text-lg">
+             text-sm text-green focus:outline-none shadow-sm">
+    <span class="absolute right-4 top-3 text-green text-lg">
       <i class="fa-solid fa-magnifying-glass"></i>
     </span>
   </div>
@@ -20,7 +20,7 @@
   @if($favorites->count() > 0)
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="favorites-grid">
     @foreach($favorites as $fav)
-    <div class="book-card bg-white rounded-xl shadow-md border border-[#E0D6B8] overflow-hidden p-3 flex gap-3 
+    <div class="book-card bg-white rounded-xl shadow-md border border-white overflow-hidden p-3 flex gap-3 
             hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
      data-url="{{ route('user.detailbuku', $fav->buku->id) }}"
      data-book-id="{{ $fav->buku->id }}"
@@ -31,15 +31,16 @@
      alt="{{ $fav->buku->judul_buku }}">
       <div class="flex flex-col justify-between flex-grow">
         <div>
-          <p class="book-title text-[#2E2E2E] text-sm font-semibold leading-tight">{{ $fav->buku->judul_buku }}</p>
-          <p class="text-[#626F47] text-xs font-semibold mt-1">{{ $fav->buku->penulis }}</p>
+          <p class="book-title text-gray-800 text-sm font-semibold leading-tight">{{ $fav->buku->judul_buku }}</p>
+          <p class="text-green text-xs font-semibold mt-1">{{ $fav->buku->penulis }}</p>
         </div>
-        <div class="border-t border-[#E0D6B8] my-2"></div>
+        <div class="border-t border-yellow-100 my-2"></div>
         <div class="flex items-center justify-between">
           <button
             type="button"
             class="open-pdf bg-green hover:bg-primary text-white text-xs font-semibold px-6 py-[5px] rounded-full transition z-10 relative"
             data-url="{{ route('user.baca', $fav->buku->id) }}"
+            data-title="{{ $fav->buku->judul_buku }}"
             onclick="event.stopPropagation()">
             Baca
           </button>
@@ -56,10 +57,13 @@
   </div>
   
   <!-- ====== MODAL PDF ====== -->
-  <div id="pdfModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4">
+  <div
+  id="pdfModal"
+  class="
+    fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 {{ $showPdfModal ?? false ? '' : 'hidden' }} ">
     <div class="bg-white w-full max-w-6xl h-[93vh] rounded-[32px] shadow-2xl overflow-hidden flex flex-col border border-gray-300 sm:p-0 p-2">
       <div class="w-full bg-gradient-to-r from-gray-50 to-gray-200 px-6 py-4 border-b flex justify-between items-center shadow-sm">
-        <h2 class="text-xl font-bold text-gray-700 flex items-center gap-3">
+        <h2 id="pdfTitle" class="text-xl font-bold text-gray-700 flex items-center gap-3">
           <span class="iconify" data-icon="mdi:file-document-outline" data-width="26"></span>
           Preview Dokumen
         </h2>
@@ -89,7 +93,7 @@
   
   <!-- Pesan saat tidak ada hasil pencarian -->
   <div id="no-favorites-search" class="hidden text-center py-12">
-    <div class="text-[#626F47] text-lg font-semibold mb-2">
+    <div class="text-green text-lg font-semibold mb-2">
       Tidak ada buku yang sesuai
     </div>
     <p class="text-gray-500 text-sm">Coba gunakan kata kunci lain</p>
@@ -98,7 +102,7 @@
   @else
   <!-- Pesan default saat tidak ada favorit sama sekali -->
   <div id="no-favorites-default" class="text-center py-12">
-    <div class="text-[#626F47] text-lg font-semibold mb-2">
+    <div class="text-green text-lg font-semibold mb-2">
       Belum ada buku favorit
     </div>
     <p class="text-gray-500 text-sm">Tambahkan buku ke favorit untuk melihatnya di sini</p>

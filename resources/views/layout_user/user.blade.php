@@ -20,10 +20,10 @@
     @include('layout_user.partial_user.header')
 
     {{-- KONTEN UTAMA --}}
-    <main
-        class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300 z-10 flex flex-col max-w-full shadow-inner">
-        @yield('content')
-    </main>
+      <main class="pt-8 pb-6 px-4 md:px-6 bg-cream relative top-[90px] mb-24 md:ml-[320px] md:mr-3 md:rounded-3xl transition-all duration-300
+   flex flex-col max-w-full shadow-inner">
+    @yield('content')
+</main>
 
     {{-- FOOTER USER --}}
     @include('layout_user.partial_user.footer')
@@ -36,6 +36,7 @@
     <script src="{{ asset('assets_user/js/riwayatbuku.js') }}"></script>
     <script src="{{ asset('assets_user/js/favorit.js') }}"></script>
     <script src="{{ asset('assets_user/js/editprofil.js') }}"></script>
+    <script src="{{ asset('assets_user/js/profil.js') }}"></script>
     <script src="{{ asset('assets_user/js/riwayatbaca.js') }}"></script>
     <script src="{{ asset('assets_user/js/notif.js') }}"></script>
     <!-- SweetAlert2 -->

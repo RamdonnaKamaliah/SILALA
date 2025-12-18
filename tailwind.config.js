@@ -21,6 +21,7 @@ darkMode: 'class',
             colors: {
                 primary: '#A4B465',
                 green: '#626F47', 
+                green_dark: '#2F7A2F',
                 cream: '#F5ECD5', 
                 white: '#ffffff',
                 kuning: '#F0BB78',

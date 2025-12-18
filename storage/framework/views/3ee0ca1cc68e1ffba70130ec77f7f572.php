@@ -61,9 +61,8 @@
             <div id="pesanKosong" class="col-span-full text-center text-gray-500 py-10 hidden">
                 <p class="text-green text-lg font-semibold mb-2">
                     Tidak ada buku dengan judul ini
-                </p>        
+                </p>
             </div>
-
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
                 <?php $__empty_1 = true; $__currentLoopData = $data_bukus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
@@ -145,22 +144,22 @@
                         </div>
                     </div>
 
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-            <!-- 🔴 JIKA TIDAK ADA BUKU -->
-            <div class="col-span-full text-center py-14">
-                <p class="text-green text-lg font-semibold mb-2">
-                    Tidak ada buku dengan kategori ini
-                </p>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <!-- 🔴 JIKA TIDAK ADA BUKU -->
+                    <div class="col-span-full text-center py-14">
+                        <p class="text-green text-lg font-semibold mb-2">
+                            Tidak ada buku dengan kategori ini
+                        </p>
 
-                <?php if(request('kategori')): ?>
-                    <p class="text-gray-500 text-sm">
-                        Kategori: <span class="font-medium"><?php echo e(request('kategori')); ?></span>
-                    </p>
+                        <?php if(request('kategori')): ?>
+                            <p class="text-gray-500 text-sm">
+                                Kategori: <span class="font-medium"><?php echo e(request('kategori')); ?></span>
+                            </p>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
             </div>
-            <?php endif; ?>
-        </div>
- 
-    <?php $__env->stopSection(); ?>
+
+        <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/daftarbuku.blade.php ENDPATH**/ ?>

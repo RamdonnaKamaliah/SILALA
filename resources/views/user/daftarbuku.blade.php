@@ -61,9 +61,8 @@
             <div id="pesanKosong" class="col-span-full text-center text-gray-500 py-10 hidden">
                 <p class="text-green text-lg font-semibold mb-2">
                     Tidak ada buku dengan judul ini
-                </p>        
+                </p>
             </div>
-
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
                 @forelse ($data_bukus as $buku)
@@ -143,20 +142,20 @@
                         </div>
                     </div>
 
-            @empty
-            <!-- 🔴 JIKA TIDAK ADA BUKU -->
-            <div class="col-span-full text-center py-14">
-                <p class="text-green text-lg font-semibold mb-2">
-                    Tidak ada buku dengan kategori ini
-                </p>
+                @empty
+                    <!-- 🔴 JIKA TIDAK ADA BUKU -->
+                    <div class="col-span-full text-center py-14">
+                        <p class="text-green text-lg font-semibold mb-2">
+                            Tidak ada buku dengan kategori ini
+                        </p>
 
-                @if (request('kategori'))
-                    <p class="text-gray-500 text-sm">
-                        Kategori: <span class="font-medium">{{ request('kategori') }}</span>
-                    </p>
-                @endif
+                        @if (request('kategori'))
+                            <p class="text-gray-500 text-sm">
+                                Kategori: <span class="font-medium">{{ request('kategori') }}</span>
+                            </p>
+                        @endif
+                    </div>
+                @endforelse
             </div>
-            @endforelse
-        </div>
- 
-    @endsection
+
+        @endsection

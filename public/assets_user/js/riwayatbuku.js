@@ -67,12 +67,31 @@ document.addEventListener("DOMContentLoaded", () => {
         resetModal();
     };
 
-    // Fungsi untuk menutup modal
-    window.tutupModal = function() {
-        document.getElementById('pengembalianModal').classList.add('hidden');
-        hentikanKamera();
-        resetModal();
-    };
+    window.tutupModal = function () {
+    Swal.fire({
+        title: 'Yakin ingin keluar?',
+        text: 'Foto yang belum dikirim akan hilang.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, keluar',
+        cancelButtonText: 'Batal',
+        confirmButtonColor: '#DC2626',
+        cancelButtonColor: '#4C6444',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            forceTutupModal(); // ✅ pakai force
+        }
+    });
+};
+
+
+window.forceTutupModal = function () {
+    document.getElementById('pengembalianModal').classList.add('hidden');
+    hentikanKamera();
+    resetModal();
+};
+
+
 
     // Reset modal ke kondisi awal
     function resetModal() {
@@ -99,9 +118,16 @@ document.addEventListener("DOMContentLoaded", () => {
         bukuDipilih = selectBuku.value;
         
         if (!bukuDipilih) {
-            alert('Silakan pilih buku terlebih dahulu');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Buku belum dipilih',
+                text: 'Silakan pilih buku terlebih dahulu sebelum melanjutkan.',
+                confirmButtonText: 'Mengerti',
+                confirmButtonColor: '#4C6444',
+            });
             return;
         }
+
         
         // Update judul buku di overlay
         const selectedOption = selectBuku.options[selectBuku.selectedIndex];
@@ -154,9 +180,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fungsi untuk mengambil foto
     window.ambilFoto = function() {
         if (!streamAktif) {
-            alert('Kamera belum aktif');
+            Swal.fire({
+                icon: 'error',
+                title: 'Kamera belum aktif',
+                text: 'Silakan aktifkan kamera terlebih dahulu sebelum mengambil foto.',
+                confirmButtonText: 'Aktifkan Kamera',
+                confirmButtonColor: '#4C6444',
+            });
             return;
         }
+
         
         const video = document.getElementById('kameraStream');
         const canvas = document.getElementById('fotoCanvas');
@@ -258,13 +291,22 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log('Response JSON:', result);
             
             if (result.success) {
-                alert('Foto berhasil dikirim! Menunggu konfirmasi admin.');
-                // Tutup modal dan reload halaman
-                tutupModal();
-                window.location.reload();
-            } else {
-                throw new Error(result.message || 'Gagal mengirim foto');
-            }
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Foto berhasil dikirim. Menunggu konfirmasi admin.',
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+    }).then(() => {
+    forceTutupModal(); // 🔥 tanpa SweetAlert
+    window.location.reload();
+});
+
+} else {
+    throw new Error(result.message || 'Gagal mengirim foto');
+}
+
         } catch (error) {
             console.error('Error detail mengirim foto:', error);
             alert('Gagal mengirim foto: ' + error.message);
@@ -331,12 +373,30 @@ window.bukaModalFotoUlang = function(peminjamanId, judulBuku, keterangan = '') {
     document.getElementById('fotoUlangModal').classList.remove('hidden');
 };
 
-// Fungsi untuk menutup modal foto ulang
-window.tutupModalUlang = function() {
+window.tutupModalUlang = function () {
+    Swal.fire({
+        title: 'Yakin ingin keluar?',
+        text: 'Foto ulang yang belum dikirim akan dibatalkan.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, keluar',
+        cancelButtonText: 'Lanjutkan',
+        confirmButtonColor: '#DC2626',
+        cancelButtonColor: '#CA8A04',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            forceTutupModalUlang(); // ✅ tutup tanpa alert
+        }
+    });
+};
+
+
+window.forceTutupModalUlang = function () {
     document.getElementById('fotoUlangModal').classList.add('hidden');
     hentikanKameraUlang();
     resetModalUlang();
 };
+
 
 // Reset modal foto ulang ke kondisi awal
 function resetModalUlang() {
@@ -509,13 +569,22 @@ window.kirimFotoUlang = async function() {
         console.log('Response JSON foto ulang:', result);
         
         if (result.success) {
-            alert('Foto ulang berhasil dikirim! Menunggu konfirmasi admin.');
-            // Tutup modal dan reload halaman
-            tutupModalUlang();
-            window.location.reload();
-        } else {
-            throw new Error(result.message || 'Gagal mengirim foto ulang');
-        }
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Foto ulang berhasil dikirim. Menunggu konfirmasi admin.',
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+    }).then(() => {
+    forceTutupModalUlang(); // 🔥 tanpa SweetAlert
+    window.location.reload();
+});
+
+} else {
+    throw new Error(result.message || 'Gagal mengirim foto ulang');
+}
+
     } catch (error) {
         console.error('Error detail mengirim foto ulang:', error);
         alert('Gagal mengirim foto ulang: ' + error.message);

@@ -94,7 +94,7 @@
                                     class="absolute inset-0 bg-gradient-to-r from-[#00000020] to-transparent rounded-lg shadow-md">
                                 </div>
                                 <?php if($buku->foto_buku): ?>
-                                    <img src="<?php echo e(asset($buku->foto_buku)); ?>" alt="<?php echo e($buku->judul_buku); ?>"
+                                    <img src="<?php echo e(asset('storage/' . $buku->foto_buku)); ?>" alt="<?php echo e($buku->judul_buku); ?>"
                                         class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
                                 <?php else: ?>
                                     <img src="<?php echo e(asset('assets/default-cover.jpg')); ?>" alt="<?php echo e($buku->judul_buku); ?>"

@@ -77,8 +77,8 @@ document.addEventListener('DOMContentLoaded', function () {
   showCancelButton: true,
   confirmButtonText: 'Ya, hapus',
   cancelButtonText: 'Batal',
-  confirmButtonColor: '#16a34a', // hijau
-  cancelButtonColor: '#dc2626',  // merah
+  confirmButtonColor: '#8CA47E', // hijau
+  cancelButtonColor: '#d33',  // merah
   reverseButtons: true
 });
 
@@ -144,8 +144,6 @@ showNotification('Buku berhasil dihapus dari favorit', 'success');
     showConfirmButton: false,
     allowOutsideClick: false,
     didOpen: () => {
-      // ❌ JANGAN panggil Swal.showLoading()
-      // otomatis hanya progress bar
     }
   });
 }

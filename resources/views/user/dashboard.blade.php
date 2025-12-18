@@ -96,7 +96,7 @@
                                     class="absolute inset-0 bg-gradient-to-r from-[#00000020] to-transparent rounded-lg shadow-md">
                                 </div>
                                 @if ($buku->foto_buku)
-                                    <img src="{{ asset($buku->foto_buku) }}" alt="{{ $buku->judul_buku }}"
+                                    <img src="{{ asset('storage/' . $buku->foto_buku) }}" alt="{{ $buku->judul_buku }}"
                                         class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
                                 @else
                                     <img src="{{ asset('assets/default-cover.jpg') }}" alt="{{ $buku->judul_buku }}"

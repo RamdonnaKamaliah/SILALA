@@ -152,7 +152,13 @@
                 <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
               </td>
               <td class="py-4 px-4 text-gray-800 font-medium whitespace-nowrap relative">
-                <?php if($data->keterangan && str_contains(strtolower($data->keterangan), 'teguran') && $data->metode_pengembalian == 'mandiri'): ?>
+                <?php if(
+    $status === 'menunggu_konfirmasi' &&
+    $data->metode_pengembalian == 'mandiri' &&
+    $data->keterangan &&
+    str_contains(strtolower($data->keterangan), 'teguran')
+): ?>
+
                     <!-- Tampilkan Keterangan Teguran dari Admin (Hanya untuk pengembalian mandiri) -->
                     <div class="flex flex-col gap-2">
                         <span class="text-red-600 text-xs font-semibold break-words bg-red-50 px-3 py-2 rounded-lg border border-red-200">
@@ -192,15 +198,19 @@
                             <span class="text-sm">Masih Dipinjam</span>
                         <?php endif; ?>
                     <?php elseif($status === 'menunggu_konfirmasi'): ?>
-                        <span class="text-yellow-600 text-sm">
-                            <i class="fas fa-clock mr-1"></i>
-                            Menunggu Konfirmasi Admin
-                            <?php if($data->metode_pengembalian == 'mandiri'): ?>
-                                <span class="text-xs bg-primary text-white px-2 py-0.5 rounded-full ml-1">
-                                    Mandiri
-                                </span>
-                            <?php endif; ?>
-                        </span>
+                        <span class="text-yellow-600 text-sm flex flex-col items-start">
+    <span>
+        <i class="fas fa-clock mr-1"></i>
+        Menunggu Konfirmasi Admin
+    </span>
+
+    <?php if($data->metode_pengembalian == 'mandiri'): ?>
+        <span class="mt-1 text-xs bg-primary text-white px-2 py-0.5 rounded-full inline-block">
+            Mandiri
+        </span>
+    <?php endif; ?>
+</span>
+
                     <?php else: ?>
                         <?php if($data->keterangan && str_contains($data->keterangan, 'Terlambat')): ?>
                             <span class="text-red-500">Terlambat</span>

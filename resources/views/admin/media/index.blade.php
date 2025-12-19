@@ -24,12 +24,7 @@
                 <div class="p-3 flex flex-col gap-2">
 
                     <p class="text-lg text-gray-700 font-medium truncate">
-                        {{ $item->buku?->judul_buku ?? 'Tidak ada judul' }}
-                    </p>
-
-                    {{-- Filename --}}
-                    <p class="text-xs text-gray-700 font-medium truncate">
-                        {{ basename($item->path_file) }}
+                        {{ $item->judul_buku ?? 'Tidak ada judul' }}
                     </p>
 
                     {{-- Delete Button --}}

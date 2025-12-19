@@ -120,9 +120,4 @@
         // Add event listeners
         document.getElementById('foto_buku').addEventListener('change', previewImage);
         document.getElementById('file_buku').addEventListener('change', previewPDF);
-        
-        // Generate thumbnail for current PDF
-        @if($buku->file_buku)
-            generateCurrentPdfThumbnail();
-        @endif
     });

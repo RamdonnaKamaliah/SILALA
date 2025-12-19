@@ -1,5 +1,4 @@
 <?php
-// app/Http\Controllers\User\DetailBukuController.php
 
 namespace App\Http\Controllers\User;
 

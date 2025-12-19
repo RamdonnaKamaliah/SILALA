@@ -6,7 +6,7 @@
 <div class="max-w-4xl mx-auto px-4">
 
   <!-- ====== FIXED TOMBOL BACA/PINJAM/FAVORIT ====== -->
-  <div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[30] bg-white pt-3">
+  <div class="fixed left-0 right-0 md:left-[320px] md:right-3 z-[30] bg-white pt-3 mb-24">
     <div class="max-w-full px-4 md:px-6">
       <div class="flex items-center justify-between mb-2 md:px-0">
 
@@ -202,8 +202,8 @@
         </div>
       </div>
 
-      {{-- RATING --}}
-   @if(($hasRead || $userBorrow) && Schema::hasTable('ratings'))
+     {{-- RATING --}}
+@if(($hasRead || $userBorrow) && Schema::hasTable('ratings'))
 <div class="w-full flex justify-center mt-8">
   <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
 
@@ -226,8 +226,12 @@
          data-rating-url="{{ route('user.rating.store') }}" 
          data-csrf="{{ csrf_token() }}"
          data-user-rating="{{ $userRating?->rating ?? 0 }}">
+
       @for ($i = 1; $i <= 5; $i++)
-        <i class="fa-regular fa-star rating-star text-4xl cursor-pointer" data-star="{{ $i }}"></i>
+      <span class="rating-star text-4xl cursor-pointer" data-star="{{ $i }}">
+  <span class="iconify text-yellow-500" data-icon="material-symbols:star-outline-rounded"></span>
+</span>
+      </span>
       @endfor
     </div>
 
@@ -240,11 +244,11 @@
         {{ $userRating ? 'Update Rating' : 'Kirim Rating' }}
       </button>
     </div>
+
   </div>
 </div>
 @endif
     </div>
   </div>
-
 </div>
 @endsection

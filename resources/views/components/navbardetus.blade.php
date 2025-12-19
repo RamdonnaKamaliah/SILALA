@@ -17,24 +17,27 @@
 
     <!-- NAV TITLE + BACK -->
     <div class="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-3 md:static md:transform-none">
-      <button id="backBtn"
-              class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
-        <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
-      </button>
+  <button id="backBtn"
+          class="text-[#626F47] hover:text-[#A4B465] transition-colors duration-300">
+    <i class="fa-solid fa-arrow-left text-base md:text-lg"></i>
+  </button>
 
-      <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
-        {{ $title }}
-      </h1>
-    </div>
+  <h1 class="text-lg md:text-xl font-semibold text-[#626F47]">
+    {{ $title ?? 'Detail Buku' }}
+  </h1>
+</div>
 
     <!-- IKON KANAN -->
     <div class="relative flex items-center gap-4 ml-auto">
 
-      <!-- Notifikasi -->
-      <button id="notifBtn" class="text-[#626F47] text-lg focus:outline-none">
+      <!-- Button dengan badge counter -->
+      <button id="notifButton" class="relative text-netral text-lg">
         <i class="fa-solid fa-bell"></i>
+        <!-- Badge untuk jumlah notifikasi -->
+        <span id="notificationBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">
+          0
+        </span>
       </button>
-
       <!-- Popup Notifikasi -->
       <div id="notifBox"
            class="absolute right-0 top-full mt-3 w-72 sm:w-80 bg-white rounded-2xl shadow-2xl 
@@ -55,34 +58,24 @@
 
         <!-- List Notifikasi -->
         <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
-
-          <!-- NOTIF 1 -->
-          <div class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
-            <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
-            <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full"></div>
-            <div class="flex-1">
-              <p class="text-sm font-semibold text-[#626F47]">Admin</p>
-              <p class="text-xs text-gray-600">Buku <b>Buku Saku</b> berhasil disimpan oleh Wildan.</p>
-            </div>
-            <span class="text-[10px] text-gray-400">1m</span>
-          </div>
-
-          <!-- NOTIF 2 -->
-          <div class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
+          <!-- Notifikasi default (jika tidak ada telat) -->
+          <div id="defaultNotif" class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer group">
             <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
             <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full"></div>
             <div class="flex-1">
               <p class="text-sm font-semibold text-[#626F47]">Sistem</p>
-              <p class="text-xs text-gray-600">Perpustakaan diperbarui ke versi terbaru.</p>
+              <p class="text-xs text-gray-600">Tidak ada notifikasi baru.</p>
             </div>
-            <span class="text-[10px] text-gray-400">10m</span>
+            <span class="text-[10px] text-gray-400">Baru saja</span>
           </div>
-
+          
+          <!-- Container untuk notifikasi telat (akan diisi via JS) -->
+          <div id="notifikasiTelatContainer"></div>
         </div>
 
         <!-- Footer -->
         <div class="text-center py-3 border-t border-gray-100">
-          <a href="#" class="text-[#626F47] text-sm font-medium hover:text-[#A4B465]">
+          <a href="{{ route('user.riwayatbuku')}}" class="text-[#626F47] text-sm font-medium hover:text-[#A4B465]">
             Lihat semua aktivitas
           </a>
         </div>
@@ -106,7 +99,7 @@
     <div class="relative w-32 sm:w-40 md:w-52 mx-auto md:mx-0 -mt-4 md:mt-0 z-10">
       <div class="w-full aspect-[3/4] overflow-hidden rounded-md shadow-2xl shadow-gray-500/60">
         <img 
-          src="{{ asset($buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
+          src="{{ asset('storage/' . $buku->foto_buku ?? 'assets/default-cover.jpg') }}" 
           alt="{{ $buku->judul_buku }}"
           class="w-full h-full object-cover">
       </div>
@@ -130,7 +123,7 @@
 <div class="flex justify-center md:justify-start items-center text-[#FACC15] text-sm mb-2 navbar-rating"
     data-average-rating="{{ $averageRating }}"
     data-total-ratings="{{ $totalRatings }}"
-    data-user-rating="{{ $userRating?->rating ?? 0 }}">   {{-- ⬅⬅ WAJIB ADA --}}
+    data-user-rating="{{ $userRating?->rating ?? 0 }}"> 
     
   @for($i = 1; $i <= 5; $i++)
     @if($i <= floor($averageRating))

@@ -1,7 +1,9 @@
 @extends('layout_admin.admin')
 @section('pageTitle', 'Admin Dashboard - Data Arsip')
 
+
 @section('content')
+
     <div class="p-4 md:p-6 font-poppins">
         <!-- Header Section -->
         <div class="mb-6 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-xl p-6 text-white shadow-lg">
@@ -90,7 +92,6 @@
                         class="bg-gradient-to-r from-[#A4B465]/10 to-[#8AA24F]/10 text-gray-700 border-b border-gray-200">
                         <tr>
                             <th class="w-12 px-3 py-4 text-center">
-                                <!-- Checkbox column -->
                             </th>
                             <th class="px-4 py-4 text-center font-bold text-gray-900 text-xs uppercase tracking-wider">
                                 No
@@ -205,18 +206,16 @@
                                     </span>
                                 </td>
                                 <td class="px-4 py-4 text-center">
-                                    @if ($buku->file_buku)
-                                        <a href="{{ asset($buku->file_buku) }}" target="_blank"
-                                            class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-200 text-purple-600 rounded-full hover:from-purple-200 hover:to-purple-300 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-110"
-                                            title="Lihat File PDF">
-                                            <i class="fas fa-file-pdf text-sm"></i>
-                                        </a>
-                                    @else
-                                        <div
-                                            class="inline-flex items-center justify-center w-10 h-10 bg-gray-100 text-gray-400 rounded-full shadow-sm">
-                                            <i class="fas fa-file text-sm"></i>
-                                        </div>
-                                    @endif
+                                    @php
+                                        $path = $buku->file_buku;
+                                        $url = Storage::url($path);
+                                    @endphp
+
+                                    <a href="{{ $url }}" target="_blank"
+                                        class="inline-block bg-blue-600 text-white px-3 py-3 rounded-lg shadow hover:bg-blue-700 text-xs">
+                                        <i class="fas fa-file-pdf text-sm"></i>
+                                    </a>
+
                                 </td>
                                 <td class="px-4 py-4">
                                     <div class="flex items-center justify-center space-x-2">
@@ -316,4 +315,4 @@
             @endif
         </div>
     </div>
-    @endsection
+@endsection

@@ -13,15 +13,11 @@ class MediaBukuController extends Controller
     {
       $media = GambarBuku::with('buku')->get();
       return view('admin.media.index', compact('media'));
-
     }
 
  public function destroy($id)
 {
     $gambar = GambarBuku::findOrFail($id);
-
-    // hapus file di storage
-    Storage::disk('public')->delete($gambar->path_file);
 
     // hapus row di database
     $gambar->delete();

@@ -9,7 +9,9 @@ class GambarBuku extends Model
      protected $fillable = [
         'nama_file',
         'path_file',
+        'judul_buku',
     ];
+    
     public function buku()
 {
     return $this->belongsTo(DataBuku::class, 'data_buku_id');

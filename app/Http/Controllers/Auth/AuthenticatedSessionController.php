@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -11,12 +9,10 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-
     public function create(): View
-{
-    return view('auth.login');
-}
-
+    {
+        return view('auth.login');
+    }
 
     /**
      * Handle an incoming authentication request.
@@ -25,12 +21,6 @@ class AuthenticatedSessionController extends Controller
     {
         $credentials = $request->only('email', 'password');
         $remember = $request->boolean('remember');
-
-        // Clear any existing session first
-        Auth::guard('web')->logout();
-        Auth::guard('admin')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
 
         // Coba login sebagai admin terlebih dahulu
         if (Auth::guard('admin')->attempt($credentials, $remember)) {
@@ -41,9 +31,11 @@ class AuthenticatedSessionController extends Controller
         // Jika bukan admin, coba sebagai user
         if (Auth::guard('web')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'));
+            return redirect()->intended(route('dashboard'))
+             ->with('success', 'Berhasil login! Selamat datang');
         }
 
+        // Jika semua gagal
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
@@ -53,16 +45,15 @@ class AuthenticatedSessionController extends Controller
      * Destroy an authenticated session.
      */
     public function destroy(Request $request): RedirectResponse
-{
-    // Logout dari semua guard
-    Auth::guard('web')->logout();
-    Auth::guard('admin')->logout();
+    {
+        // Logout dari semua guard
+        Auth::guard('web')->logout();
+        Auth::guard('admin')->logout();
 
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    // Arahkan ke landing page
-    return redirect('/');
-}
-
+        // Arahkan ke landing page
+        return redirect('/login');
+    }
 }

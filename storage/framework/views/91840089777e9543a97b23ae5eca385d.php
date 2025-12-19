@@ -1,2 +1,0 @@
-
-<link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/login/login.css')); ?>"><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/auth/layouts/partial_portal/link.blade.php ENDPATH**/ ?>

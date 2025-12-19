@@ -1,5 +1,19 @@
 // detailbuku.js
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ====== PANAH TITLE ======
+  const backBtn = document.getElementById("backBtn");
+
+    if (!backBtn) return;
+
+    backBtn.addEventListener("click", () => {
+        if (document.referrer && document.referrer.includes(window.location.hostname)) {
+            window.history.back();
+        } else {
+            window.location.href = "{{ route('user.daftarbuku') }}";
+        }
+    });
+    
   // ====== GLOBAL DATA ======
   const body = document.body;
   const bukuId = body.dataset.bukuId;
@@ -116,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!ok) {
           if (status === 419) return Swal.fire({ icon:'warning', title:'Sesi Habis', text:'Silakan refresh halaman lalu coba lagi.'});
           console.error('Pinjam error:', text || json);
-          return Swal.fire({ icon:'error', title:'Gagal', text:'Terjadi kesalahan saat meminjam buku' });
+          return Swal.fire({ icon:'error', title:'Gagal', text:'Anda telah mencapai batas maksimal peminjaman.' });
         }
 
         const result = json;
@@ -138,294 +152,253 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   // ====== RATING ======
-    const starContainer = document.getElementById("starContainer");
-    const submitRatingBtn = document.getElementById("submitRating");
-    const navbar = document.querySelector(".navbar-rating");
+   const starContainer = document.getElementById("starContainer");
+const submitRatingBtn = document.getElementById("submitRating");
+const navbar = document.querySelector(".navbar-rating");
 
-    if (!starContainer || !submitRatingBtn) return;
+if (!starContainer || !submitRatingBtn) return;
 
-    const initialRating = parseInt(starContainer.dataset.userRating) || 0;
-    const stars = starContainer.querySelectorAll(".rating-star");
-    let selectedRating = initialRating;
+const initialRating = parseInt(starContainer.dataset.userRating) || 0;
+const stars = starContainer.querySelectorAll(".rating-star");
+let selectedRating = initialRating;
 
-    function updateStars(rating, permanent = false) {
-        stars.forEach((star, index) => {
-            if (index < rating) {
-                star.classList.remove('fa-regular', 'text-[#d5ccb8]');
-                star.classList.add('fa-solid', 'text-yellow-500');
-            } else {
-                star.classList.remove('fa-solid', 'text-yellow-500');
-                star.classList.add('fa-regular', 'text-[#d5ccb8]');
-            }
-        });
-        if (permanent) selectedRating = rating;
-    }
-
-    function updateNavbar(avgRating, totalRatings) {
-        if (!navbar) return;
-        let html = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= Math.floor(avgRating)) html += '<i class="fa-solid fa-star"></i>';
-            else if (i - 0.5 <= avgRating) html += '<i class="fa-solid fa-star-half-stroke"></i>';
-            else html += '<i class="fa-regular fa-star"></i>';
+function updateStars(rating, permanent = false) {
+    stars.forEach((star, index) => {
+        const icon = star.querySelector(".iconify");
+        if (index < rating) {
+            icon.dataset.icon = "mdi:star"; // ⭐ penuh
+        } else {
+            icon.dataset.icon = "mdi:star-outline"; // ☆ kosong
         }
-        if (totalRatings > 0) html += `<span class="text-xs text-gray-600 ml-2">(${avgRating.toFixed(1)})</span>`;
-        navbar.innerHTML = html;
-    }
-
-    // Set awal bintang dan tombol
-    updateStars(initialRating, true);
-    if (initialRating > 0) {
-        submitRatingBtn.disabled = false;
-        submitRatingBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-    }
-
-    stars.forEach(star => {
-        star.addEventListener("mouseover", () => updateStars(parseInt(star.dataset.star)));
-        star.addEventListener("click", () => {
-            const rating = parseInt(star.dataset.star);
-            updateStars(rating, true);
-            submitRatingBtn.disabled = false;
-            submitRatingBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-        });
     });
 
-    starContainer.addEventListener("mouseleave", () => updateStars(selectedRating, true));
+    if (permanent) selectedRating = rating;
+}
 
-    submitRatingBtn.addEventListener("click", async () => {
-        if (selectedRating === 0) return Swal.fire({ icon: "warning", title: "Pilih rating dulu!" });
+function updateNavbar(avgRating, totalRatings) {
+    if (!navbar) return;
 
-        submitRatingBtn.disabled = true;
-        submitRatingBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+        if (i <= Math.floor(avgRating)) {
+            html += `<span class="iconify text-yellow-500" data-icon="mdi:star"></span>`;
+        } else {
+            html += `<span class="iconify text-yellow-500" data-icon="mdi:star-outline"></span>`;
+        }
+    }
 
-        try {
-            const res = await fetch(starContainer.dataset.ratingUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": starContainer.dataset.csrf,
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({ buku_id: starContainer.dataset.bukuId, rating: selectedRating })
+    if (totalRatings > 0) {
+        html += `<span class="text-xs text-gray-600 ml-2">(${avgRating.toFixed(1)})</span>`;
+    }
+
+    navbar.innerHTML = html;
+}
+
+// Set awal bintang
+updateStars(initialRating, true);
+
+if (initialRating > 0) {
+    submitRatingBtn.disabled = false;
+    submitRatingBtn.classList.remove("opacity-50", "cursor-not-allowed");
+}
+
+stars.forEach(star => {
+    star.addEventListener("mouseover", () => {
+        updateStars(parseInt(star.dataset.star));
+    });
+
+    star.addEventListener("click", () => {
+        const rating = parseInt(star.dataset.star);
+        updateStars(rating, true);
+
+        submitRatingBtn.disabled = false;
+        submitRatingBtn.classList.remove("opacity-50", "cursor-not-allowed");
+    });
+});
+
+starContainer.addEventListener("mouseleave", () => {
+    updateStars(selectedRating, true);
+});
+
+submitRatingBtn.addEventListener("click", async () => {
+    if (selectedRating === 0)
+        return Swal.fire({ icon: "warning", title: "Pilih rating dulu!" });
+
+    submitRatingBtn.disabled = true;
+    submitRatingBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+
+    try {
+        const res = await fetch(starContainer.dataset.ratingUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": starContainer.dataset.csrf,
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                buku_id: starContainer.dataset.bukuId,
+                rating: selectedRating
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: data.message,
+                timer: 1500,
+                showConfirmButton: false
             });
 
-            const data = await res.json();
-
-            if (data.success) {
-                Swal.fire({ icon: "success", title: "Berhasil!", text: data.message, timer: 1500, showConfirmButton: false });
-                
-                // Update navbar live jika ada
-                if (navbar) {
-                    const avgRating = selectedRating; // sementara ambil rating user sebagai avg
-                    const totalRatings = parseInt(navbar.dataset.totalRatings) || 1;
-                    updateNavbar(avgRating, totalRatings);
-                }
-            } else {
-                Swal.fire({ icon: "error", title: "Gagal", text: data.message });
+            if (navbar) {
+                const avgRating = selectedRating;
+                const totalRatings = parseInt(navbar.dataset.totalRatings) || 1;
+                updateNavbar(avgRating, totalRatings);
             }
-        } catch (err) {
-            console.error(err);
-            Swal.fire({ icon: "error", title: "Error", text: "Kesalahan sistem" });
-        } finally {
-            submitRatingBtn.disabled = false;
-            submitRatingBtn.innerHTML = submitRatingBtn.dataset.defaultText || "Kirim Rating";
+        } else {
+            Swal.fire({ icon: "error", title: "Gagal", text: data.message });
         }
-    });
+    } catch (err) {
+        console.error(err);
+        Swal.fire({ icon: "error", title: "Error", text: "Kesalahan sistem" });
+    } finally {
+        submitRatingBtn.disabled = false;
+        submitRatingBtn.innerHTML = submitRatingBtn.dataset.defaultText;
+    }
+});
 
-  // ====== PDF VIEWER (multi-page, stable) ======
-  (function initPdfViewer() {
-    const pdfViewer = document.getElementById("pdfViewer");
-    const pdfModal = document.getElementById("pdfModal");
-    const zoomInBtn = document.getElementById("zoomIn");
-    const zoomOutBtn = document.getElementById("zoomOut");
-    const zoomLabel = document.getElementById("zoomLabel");
-    const closePdfModal = document.getElementById("closePdfModal");
-    const openPdfBtn = document.getElementById("openPdfModal");
-    const pageCurrent = document.getElementById("pageCurrent");
-    const pageTotal = document.getElementById("pageTotal");
+  // ====== PDF VIEWER (GLOBAL & SAFE) ======
+(function () {
+  const pdfViewer = document.getElementById("pdfViewer");
+  const pdfModal = document.getElementById("pdfModal");
+  const zoomInBtn = document.getElementById("zoomIn");
+  const zoomOutBtn = document.getElementById("zoomOut");
+  const zoomLabel = document.getElementById("zoomLabel");
+  const closePdfModal = document.getElementById("closePdfModal");
+  const pageCurrent = document.getElementById("pageCurrent");
+  const pageTotal = document.getElementById("pageTotal");
 
-    if (!pdfViewer || !pdfModal || !openPdfBtn) return;
+  if (!pdfViewer || !pdfModal) return;
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-    let pdfDoc = null;
-    let totalPages = 0;
-    let zoom = 1.0;
-    let pageCanvases = [];
-    let observer = null;
+  let pdfDoc = null;
+  let zoom = 1;
+  let pageCanvases = [];
+  let observer = null;
 
-    /* =========================================================
-       AUTO MULTI-COLUMN LIKE GOOGLE DOCS
-    ========================================================== */
-    const updateLayout = () => {
+  // ================= SAFE EVENT =================
+  const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
+
+  // ================= LAYOUT =================
+  const updateLayout = () => {
     if (!pageCanvases.length) return;
 
-    const firstCanvas = pageCanvases[0].canvas;
-    const pageWidth = firstCanvas.width + 40;
-    const containerWidth = pdfViewer.clientWidth;
-
-    // Kalau zoom > 1.2, pakai 1 kolom supaya scroll horizontal muncul
-    const cols = zoom > 1.2 ? 1 : Math.max(1, Math.floor(containerWidth / pageWidth));
-
+    const isMobile = window.innerWidth <= 1024;
     pdfViewer.style.display = "grid";
-    pdfViewer.style.gridTemplateColumns = `repeat(${cols}, auto)`;
-    
-    // Jika zoom > 1.2, scroll horizontal aktif (justify start)
-    // Jika zoom <= 1.2, tetap di tengah (justify center)
-    pdfViewer.style.justifyContent = zoom > 1.2 ? "start" : "center";
-
+    pdfViewer.style.gridTemplateColumns = "1fr";
     pdfViewer.style.gap = "24px";
     pdfViewer.style.padding = "24px";
-};
 
-    /* =========================================================
-       PAGE TRACKING SAAT SCROLL (LIKE GOOGLE PDF VIEWER)
-    ========================================================== */
-    const activatePageTracking = () => {
+    if (!isMobile && zoom <= 1.2) {
+      const w = pageCanvases[0].canvas.width + 40;
+      const c = Math.max(
+        1,
+        Math.floor(pdfViewer.parentElement.clientWidth / w)
+      );
+      pdfViewer.style.gridTemplateColumns = `repeat(${c}, auto)`;
+    }
+  };
+
+  // ================= PAGE TRACK =================
+  const activatePageTracking = () => {
+    if (!pageCurrent) return;
     if (observer) observer.disconnect();
 
     observer = new IntersectionObserver(
-        (entries) => {
-            // Pilih entry yang paling terlihat
-            let maxRatio = 0;
-            let visiblePage = 1;
-
-            entries.forEach((entry) => {
-                if (entry.intersectionRatio > maxRatio) {
-                    maxRatio = entry.intersectionRatio;
-                    visiblePage = parseInt(entry.target.dataset.page);
-                }
-            });
-
-            pageCurrent.innerText = visiblePage;
-        },
-        {
-            root: pdfViewer,       // scroll container
-            threshold: Array.from({ length: 101 }, (_, i) => i / 100) // 0, 0.01, ..., 1
-        }
+      entries => {
+        let max = 0, page = 1;
+        entries.forEach(e => {
+          if (e.intersectionRatio > max) {
+            max = e.intersectionRatio;
+            page = e.target.dataset.page;
+          }
+        });
+        pageCurrent.innerText = page;
+      },
+      { root: pdfViewer, threshold: [0.6] }
     );
 
-    pageCanvases.forEach((item) => observer.observe(item.canvas));
-};
+    pageCanvases.forEach(p => observer.observe(p.canvas));
+  };
 
-
-    /* =========================================================
-       RENDER SEMUA HALAMAN (DIPAKAI UNTUK ZOOM)
-    ========================================================== */
-   const renderPages = async () => {
-    if (!pdfDoc) return;
-
+  // ================= RENDER =================
+  const renderPages = async () => {
     pdfViewer.innerHTML = "";
 
-    for (let item of pageCanvases) {
-        try {
-            const page = await pdfDoc.getPage(item.pageNumber);
-            const viewport = page.getViewport({ scale: zoom });
-            const canvas = item.canvas;
-            const ctx = canvas.getContext("2d");
+    for (const item of pageCanvases) {
+      const page = await pdfDoc.getPage(item.page);
+      const viewport = page.getViewport({ scale: zoom });
+      const canvas = item.canvas;
+      const ctx = canvas.getContext("2d");
 
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            await page.render({ canvasContext: ctx, viewport }).promise;
+      await page.render({ canvasContext: ctx, viewport }).promise;
 
-            pdfViewer.appendChild(canvas);
-        } catch (err) {
-            console.error("Render gagal:", err);
-        }
+      canvas.style.width = zoom <= 1 ? "100%" : "auto";
+      canvas.style.maxWidth = zoom <= 1 ? "100%" : "none";
+
+      pdfViewer.appendChild(canvas);
     }
 
-    zoomLabel.innerText = Math.round(zoom * 100) + "%";
-    pageTotal.innerText = totalPages;
+    zoomLabel && (zoomLabel.innerText = Math.round(zoom * 100) + "%");
+    pageTotal && (pageTotal.innerText = pageCanvases.length);
 
     updateLayout();
     activatePageTracking();
+  };
 
-    // 🔹 posisi scroll awal ke kiri atas
-    pdfViewer.scrollLeft = 0;
-    pdfViewer.scrollTop = 0;
-};
+  // ================= OPEN PDF =================
+  window.openPdfGlobal = async (url) => {
+    pdfModal.classList.remove("hidden");
+    pdfViewer.innerHTML = "Memuat PDF...";
 
+    const pdf = await pdfjsLib.getDocument(url).promise;
+    pdfDoc = pdf;
+    zoom = 1;
+    pageCanvases = [];
 
-    /* =========================================================
-       BUKA PDF
-    ========================================================== */
-    const openPdf = async (url) => {
-        try {
-            pdfViewer.innerHTML =
-                "<p class='text-center mt-6 text-gray-500'>Memuat PDF...</p>";
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const canvas = document.createElement("canvas");
+      canvas.dataset.page = i;
+      canvas.style.borderRadius = "12px";
+      canvas.style.background = "#fff";
+      pageCanvases.push({ page: i, canvas });
+    }
 
-            const pdf = await pdfjsLib.getDocument(url).promise;
-            pdfDoc = pdf;
-            totalPages = pdf.numPages;
-            zoom = 1.0;
-            pageCanvases = [];
+    await renderPages();
+  };
 
-            for (let i = 1; i <= totalPages; i++) {
-                const canvas = document.createElement("canvas");
-                canvas.dataset.page = i;              // WAJIB untuk tracking
-                canvas.style.display = "block";
-                canvas.style.border = "1px solid #ddd";
-                canvas.style.borderRadius = "12px";
-                canvas.style.background = "white";
-                canvas.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)";
-                pageCanvases.push({ pageNumber: i, canvas });
-            }
+  // ================= EVENTS =================
+  on(closePdfModal, "click", () => {
+    pdfModal.classList.add("hidden");
+    pdfViewer.innerHTML = "";
+    pdfDoc = null;
+  });
 
-            await renderPages();
-        } catch (err) {
-            pdfViewer.innerHTML =
-                `<p class="text-center text-red-500 mt-6">Gagal memuat PDF: ${err.message}</p>`;
-            console.error("PDF load error:", err);
-        }
-    };
+  on(zoomInBtn, "click", () => {
+    zoom < 3 && (zoom += 0.2, renderPages());
+  });
 
-    /* =========================================================
-       EVENT LISTENERS
-    ========================================================== */
-    openPdfBtn.addEventListener("click", () => {
-        const url = openPdfBtn.dataset.url;
-        if (!url)
-            return Swal.fire({
-                icon: "warning",
-                title: "Error",
-                text: "URL PDF tidak ditemukan",
-            });
+  on(zoomOutBtn, "click", () => {
+    zoom > 0.4 && (zoom -= 0.2, renderPages());
+  });
 
-        pdfModal.classList.remove("hidden");
-        openPdf(url);
-    });
-
-    closePdfModal.addEventListener("click", () => {
-        pdfModal.classList.add("hidden");
-        pdfViewer.innerHTML = "";
-        pdfDoc = null;
-        zoom = 1;
-        totalPages = 0;
-        pageCurrent.innerText = "1";
-        pageTotal.innerText = "0";
-    });
-
-    zoomInBtn.addEventListener("click", () => {
-        if (zoom < 3) {
-            zoom = +(zoom + 0.2).toFixed(2);
-            renderPages();
-        }
-    });
-
-    zoomOutBtn.addEventListener("click", () => {
-        if (zoom > 0.4) {
-            zoom = +(zoom - 0.2).toFixed(2);
-            renderPages();
-        }
-    });
-
-    window.addEventListener("resize", updateLayout);
-
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closePdfModal.click();
-    });
+  on(window, "resize", updateLayout);
 })();
 }); // DOMContentLoaded

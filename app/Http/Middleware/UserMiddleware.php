@@ -19,11 +19,12 @@ class UserMiddleware
             return redirect()->route('admin.dashboard');
         }
 
-        // Jika bukan user biasa, redirect ke login
-        if (!Auth::guard('web')->check()) {
-            return redirect('/login');
+        // Jika user biasa sudah login, lanjutkan
+        if (Auth::guard('web')->check()) {
+            return $next($request);
         }
 
-        return $next($request);
+        // Jika belum login sama sekali, redirect ke login
+        return redirect('/login');
     }
 }

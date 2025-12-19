@@ -7,6 +7,7 @@
     <title>Admin Dashboard</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @include('layout_admin.partial_admin.link')
+    
     @stack('styles')
 
 </head>
@@ -54,12 +55,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script src="{{ asset('/assets_admin/js/create-databuku.js') }}"></script>
+    <script src="{{ asset('assets_admin/js/dataBuku/modalMedia.js') }}"></script>
     {{-- databuku bagian edit --}}
     <script src="{{ asset('assets_admin/js/dataBuku/edit.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     {{-- databuku bagian index --}}
     <script src="{{ asset('assets_admin/js/dataBuku/index.js') }}"></script>
-    
+
     <!-- Arsip Buku -->
     <script src="{{ asset('assets_admin/js/arsipBuku/deleteArsip.js') }}"></script>
     <script src="{{ asset('assets_admin/js/arsipBuku/index.js') }}"></script>

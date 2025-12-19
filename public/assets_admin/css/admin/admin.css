@@ -5,7 +5,7 @@
         }
 
         .body-bg, .main-bg {
-            background-image: url("/assets_admin/image/bcg.png");
+            background-image: url("/assets_admin/image/bg.png");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;

@@ -65,28 +65,53 @@ class CmsController extends Controller
         return back()->with('success', 'Footer logo berhasil diperbarui!');
     }
 
-public function updateSidebarLogo(Request $request)
-{
-    $request->validate([
-        'sidebar_logo' => 'required|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
-    ]);
+    public function updateSidebarLogo(Request $request)
+    {
+        $request->validate([
+            'sidebar_logo' => 'required|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
+        ]);
 
-    // Pastikan folder ada
-    Storage::disk('public')->makeDirectory('cms');
+        // Pastikan folder ada
+        Storage::disk('public')->makeDirectory('cms');
 
-    $file = $request->file('sidebar_logo');
-    $filename = 'sidebar_logo_' . time() . '.' . $file->getClientOriginalExtension();
+        $file = $request->file('sidebar_logo');
+        $filename = 'sidebar_logo_' . time() . '.' . $file->getClientOriginalExtension();
 
-    // SIMPAN KE STORAGE YANG BENAR
-    $file->storeAs('cms', $filename, 'public');
+        // SIMPAN KE STORAGE YANG BENAR
+        $file->storeAs('cms', $filename, 'public');
 
-    Setting::updateOrCreate(
-        ['key' => 'sidebar_logo'],
-        ['value' => $filename]
-    );
+        Setting::updateOrCreate(
+            ['key' => 'sidebar_logo'],
+            ['value' => $filename]
+        );
 
-    return back()->with('success', 'Logo Sidebar berhasil diperbarui!');
-}
+        return back()->with('success', 'Logo Sidebar berhasil diperbarui!');
+    }
 
+        public function updateHeroBg(Request $request)
+        {
+            $request->validate([
+                'hero_bg' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
+            ]);
+
+            // pastiin folder ada
+            Storage::disk('public')->makeDirectory('cms');
+
+            $file = $request->file('hero_bg');
+
+            // nama aman & unik
+            $filename = 'hero_bg_' . time() . '.' . $file->getClientOriginalExtension();
+
+            // simpan ke storage/app/public/cms
+            $file->storeAs('cms', $filename, 'public');
+
+            // simpan ke DB
+            Setting::updateOrCreate(
+                ['key' => 'hero_bg'],
+                ['value' => $filename]
+            );
+
+            return back()->with('success', 'Background hero berhasil diubah!');
+        }
 
 }

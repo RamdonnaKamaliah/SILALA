@@ -47,7 +47,6 @@ Route::prefix('admin')
         Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
     });
 
-
 // ==============================
 // 🌟 ADMIN CMS
 // ==============================
@@ -66,7 +65,10 @@ Route::prefix('admin')
             ->name('cms_admin.updateFooterLogo');
 
         Route::post('/cms/update-sidebar-logo', [CmsController::class, 'updateSidebarLogo'])
-            ->name('cms_admin.updateSidebarLogo');   // ⭐ WAJIB BEGINI!
+            ->name('cms_admin.updateSidebarLogo');   
+
+         Route::post('/cms/update-hero-bg', [CmsController::class, 'updateHeroBg'])
+            ->name('cms_admin.updateHeroBg');
     });
 
 

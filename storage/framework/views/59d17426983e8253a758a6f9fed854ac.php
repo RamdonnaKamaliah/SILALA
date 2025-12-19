@@ -30,6 +30,17 @@
     <script src="<?php echo e(asset('/assets_admin/js/plugins/perfect-scrollbar.min.js')); ?>" async></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="<?php echo e(asset('assets_admin/js/data table/dataTable.js')); ?>"></script>
+    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+    
+    <!-- Analytics -->
+    <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- DataTable -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <!-- Global tidak bercabang -->
     <script src="<?php echo e(asset('assets_admin/js/dashboard/index.js')); ?>"></script>

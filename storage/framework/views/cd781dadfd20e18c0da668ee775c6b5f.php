@@ -90,6 +90,36 @@
             </button>
         </form>
 
+        <?php
+    $heroBg = \App\Models\Setting::getValue('hero_bg', 'background.png');
+?>
+
+<div class="p-4 bg-white rounded-lg shadow border">
+    <h2 class="font-semibold mb-3 text-sm">Background Hero Landing</h2>
+
+    
+    <img 
+        src="<?php echo e(Storage::disk('public')->exists('cms/' . $heroBg) 
+            ? Storage::url('cms/' . $heroBg) 
+            : asset('assets/background.png')); ?>"
+        class="w-full h-32 object-cover rounded bg-gray-100 mb-3"
+    >
+
+    
+    <form action="<?php echo e(route('admin.cms_admin.updateHeroBg')); ?>" 
+          method="POST" 
+          enctype="multipart/form-data"
+          class="space-y-2">
+        <?php echo csrf_field(); ?>
+
+        <input type="file" name="hero_bg" accept="image/*" class="text-sm">
+
+        <button class="w-full bg-blue-600 text-white py-1.5 rounded text-sm">
+            Simpan
+        </button>
+    </form>
+</div>
+
         
         
         

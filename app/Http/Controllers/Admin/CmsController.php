@@ -114,4 +114,28 @@ class CmsController extends Controller
             return back()->with('success', 'Background hero berhasil diubah!');
         }
 
+        public function updateAdminSidebarLogo(Request $request)
+            {
+                $request->validate([
+                    'admin_sidebar_logo' => 'required|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
+                ]);
+
+                // pastikan folder cms ada
+                Storage::disk('public')->makeDirectory('cms');
+
+                $file = $request->file('admin_sidebar_logo');
+                $filename = 'admin_sidebar_' . time() . '.' . $file->getClientOriginalExtension();
+
+                // simpan ke storage/app/public/cms
+                $file->storeAs('cms', $filename, 'public');
+
+                // simpan ke DB
+                Setting::updateOrCreate(
+                    ['key' => 'admin_sidebar_logo'],
+                    ['value' => $filename]
+                );
+
+                return back()->with('success', 'Logo sidebar admin berhasil diperbarui!');
+            }
+
 }

@@ -120,6 +120,36 @@
     </form>
 </div>
 
+<div class="p-4 bg-white rounded-lg shadow border">
+    <h2 class="font-semibold mb-3 text-sm">Logo Sidebar Admin</h2>
+
+    @php
+        $adminSidebarLogo = \App\Models\Setting::getValue('admin_sidebar_logo', null);
+    @endphp
+
+    @if ($adminSidebarLogo && Storage::disk('public')->exists('cms/' . $adminSidebarLogo))
+        <img src="{{ Storage::url('cms/' . $adminSidebarLogo) }}"
+             class="w-full h-32 object-contain bg-gray-100 rounded mb-3">
+    @else
+        <div class="w-full h-32 bg-gray-100 flex items-center justify-center rounded text-gray-500 text-sm">
+            Logo default digunakan
+        </div>
+    @endif
+
+    <form action="{{ route('admin.cms_admin.updateAdminSidebarLogo') }}"
+          method="POST"
+          enctype="multipart/form-data"
+          class="space-y-2">
+        @csrf
+
+        <input type="file" name="admin_sidebar_logo" accept="image/*" class="text-sm">
+
+        <button class="w-full bg-blue-600 text-white py-1.5 text-sm rounded">
+            Simpan
+        </button>
+    </form>
+</div>
+
         {{-- =============== --}}
         {{--   KOTAK LAIN?   --}}
         {{-- =============== --}}

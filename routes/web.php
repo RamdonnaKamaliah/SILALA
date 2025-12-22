@@ -70,6 +70,10 @@ Route::prefix('admin')
 
          Route::post('/cms/update-hero-bg', [CmsController::class, 'updateHeroBg'])
             ->name('cms_admin.updateHeroBg');
+
+        Route::post('/cms/update-admin-sidebar-logo',  [CmsController::class, 'updateAdminSidebarLogo']
+            )->name('cms_admin.updateAdminSidebarLogo');
+
     });
 
 

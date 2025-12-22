@@ -293,9 +293,17 @@
         </button>
 
         <!-- Sidebar Header dengan Logo (Fixed) -->
-        <div class="logo-container">
-            <img src="<?php echo e(asset('/assets_admin/image/BPMSPH-logo.png')); ?>" alt="BPMS Logo" class="logo-img">
-        </div>
+        <?php
+        $adminSidebarLogo = \App\Models\Setting::getValue('admin_sidebar_logo', null);
+
+        $logoPath = $adminSidebarLogo &&
+            \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $adminSidebarLogo)
+            ? Storage::url('cms/' . $adminSidebarLogo)
+            : asset('/assets_admin/image/BPMSPH-logo.png');
+    ?>
+
+    <img src="<?php echo e($logoPath); ?>" alt="BPMS Logo" class="logo-img">
+
 
         <!-- Sidebar Content (Scrollable) -->
         <div class="sidebar-content">

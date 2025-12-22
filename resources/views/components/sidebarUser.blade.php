@@ -19,9 +19,12 @@
   <div class="sidebar-header flex items-center justify-between px-4 mt-4 mb-6 text-white">
     <div class="flex items-center gap-2">
       <img src="{{asset('assets/logo_kementan.png')}}" alt="Logo" class="w-12 h-12 rounded-full object-cover" />
-      <p class="text-white font-bold text-lg leading-tight">
-        PERPUSTAKAAN BPMSPH
-      </p>
+     <p class="text-white font-bold text-lg leading-tight">
+      PERPUSTAKAAN BPMSPH
+      <span class="block text-xs font-normal opacity-90 mt-1">
+       SILALA (Sistem Informasi Layanan Literasi & Arsip)<br>
+      </span>
+</p>
     </div>
   </div>
 
@@ -57,12 +60,13 @@
           class="menu-item flex items-center gap-3 border-[2px] border-cream bg-cream rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
           group-hover:border-transparent group-hover:bg-white">
           <span class="iconify text-green" data-icon="mdi:view-grid" data-width="32"></span>
-          <span class="whitespace-nowrap text-base font-bold text-green text-green">Dashboard</span>
+          <span class="whitespace-nowrap text-base font-bold text-green">Dashboard</span>
         </div>
       </a>
     </li>
 
-    <li class="relative nav-item {{ request()->routeIs('user.daftarbuku') ? 'active' : '' }} rounded-l-[30px] hover:bg-white list-none">
+    <li class="relative nav-item {{
+    request()->routeIs('user.daftarbuku', 'user.detailbuku') ? 'active' : ''}} rounded-l-[30px] hover:bg-white list-none">
       <a href="{{ route('user.daftarbuku') }}" class="group relative flex items-center w-full text-greentransition-colors duration-300">
         <div
           class="menu-item flex items-center gap-3 border-[2px] border-cream bg-cream rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300

@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Silala</title>
+    <title>SILALA (Sistem Informasi Layanan Literasi & Arsip)</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- Include link (CSS, font, dsb) --}}
@@ -16,21 +16,6 @@
 </head>
 
 <body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white">
-@if(session('success'))
-  <div id="toast-success"
-       class="fixed top-5 right-5 z-50
-              bg-primary
-              text-white
-              border-l-4 border-white
-              px-4 py-3 rounded-xl shadow-md
-              flex items-center gap-2
-              transition-opacity duration-500">
-    <i class="fa-solid fa-circle-check text-white"></i>
-    <span class="text-sm font-medium">
-      {{ session('success') }}
-    </span>
-  </div>
-@endif
 
     {{-- HEADER USER --}}
     @include('layout_user.partial_user.header')

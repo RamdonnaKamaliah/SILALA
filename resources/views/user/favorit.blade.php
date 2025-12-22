@@ -25,7 +25,7 @@
         @if ($favorites->count() === 0) style="display:none" @endif
     >
         @foreach ($favorites as $fav)
-            <div class="book-card bg-white rounded-xl shadow-md border border-yellow-200 overflow-hidden p-3 flex gap-3 
+            <div class="book-card bg-white rounded-xl shadow-md border border-white overflow-hidden p-3 flex gap-3 
                 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 data-url="{{ route('user.detailbuku', $fav->buku->id) }}"
                 data-book-id="{{ $fav->buku->id }}"

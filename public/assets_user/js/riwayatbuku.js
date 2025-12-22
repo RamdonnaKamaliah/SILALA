@@ -179,21 +179,23 @@ window.forceTutupModal = function () {
 
     // Fungsi untuk mengambil foto
     window.ambilFoto = function() {
-        if (!streamAktif) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Kamera belum aktif',
-                text: 'Silakan aktifkan kamera terlebih dahulu sebelum mengambil foto.',
-                confirmButtonText: 'Aktifkan Kamera',
-                confirmButtonColor: '#4C6444',
-            });
-            return;
-        }
+    if (!streamAktif) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Kamera belum aktif',
+            text: 'Silakan aktifkan kamera terlebih dahulu sebelum mengambil foto.',
+            confirmButtonText: 'Aktifkan Kamera',
+            confirmButtonColor: '#4C6444',
+        });
+        return;
+    }
 
-        
-        const video = document.getElementById('kameraStream');
-        const canvas = document.getElementById('fotoCanvas');
-        const context = canvas.getContext('2d');
+    // ✅ FIX WARNING
+    console.log('Mode kamera:', modeKamera);
+
+    const video = document.getElementById('kameraStream');
+    const canvas = document.getElementById('fotoCanvas');
+    const context = canvas.getContext('2d');
         
         // Set ukuran canvas sama dengan video
         canvas.width = video.videoWidth;
@@ -472,7 +474,7 @@ window.ambilFotoUlang = function() {
         alert('Kamera belum aktif');
         return;
     }
-    
+    console.log('Mode kamera ulang:', modeKameraUlang);
     const video = document.getElementById('kameraStreamUlang');
     const canvas = document.getElementById('fotoCanvasUlang');
     const context = canvas.getContext('2d');
@@ -607,9 +609,10 @@ function hentikanKameraUlang() {
 document.addEventListener('click', function(e) {
     const modalUlang = document.getElementById('fotoUlangModal');
     if (e.target === modalUlang) {
-        tutupModalUlang();
+        window.tutupModalUlang(); // ✅ pakai window.
     }
 });
+
 
 // Hapus fungsi cekPeminjamanTeguran yang tidak perlu
 // Karena kita sudah menggunakan tombol langsung di table
@@ -636,12 +639,10 @@ function cekNotifikasiTeguran() {
 }
 
 // Jalankan cek saat halaman dimuat
-document.addEventListener('DOMContentLoaded', function() {
     const hasTeguran = cekNotifikasiTeguran();
     
     if (hasTeguran) {
         console.log('Ada peminjaman yang memerlukan foto ulang');
         // Anda bisa tambahkan notifikasi toast di sini jika diperlukan
     }
-});
 });

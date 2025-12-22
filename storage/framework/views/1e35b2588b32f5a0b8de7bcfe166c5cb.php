@@ -1,6 +1,6 @@
 <!-- ====== NAVBAR ====== -->
 <nav id="navbar"
-  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-40 
+  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-30 
   bg-[#f7edd6] rounded-b-3xl shadow-sm
   px-4 md:px-6 py-6 transition-all duration-300
   h-[55vh] flex flex-col justify-start">

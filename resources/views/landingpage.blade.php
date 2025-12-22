@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('layout_landing.patrial_landing.link')
 
-    <title>SILALA</title>
+    <title>SILALA (Sistem Informasi Layanan Literasi & Arsip)</title>
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- style -->

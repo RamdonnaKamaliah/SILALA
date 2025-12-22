@@ -5,7 +5,7 @@
 @section('content')
     <div class="halaman-daftar-buku">
         <!-- Filter & Search -->
-        <div class="bg-cream px-4 md:px-6 py-3 sticky top-0 z-40">
+        <div class="bg-cream px-4 md:px-6 py-3 sticky top-0 z-20">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
 
                 <!-- Dropdown Kategori -->
@@ -25,7 +25,7 @@
 
                     <!-- Menu -->
                     <div id="kategoriMenu"
-                        class="hidden absolute left-0 w-full md:w-48 mt-2 z-[9999] bg-primary rounded-xl shadow-xl p-2 border border-[#E2DAC3]">
+                        class="hidden absolute left-0 w-full md:w-48 mt-2 z-50 bg-primary rounded-xl shadow-xl p-2 border border-stone-200">
 
                         <a href="{{ route('user.daftarbuku') }}"
                             class="block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
@@ -47,7 +47,7 @@
                 <div class="relative w-full sm:w-auto flex justify-center md:justify-end">
                     <input type="text" placeholder="Cari Buku..."
                         class="px-5 py-2 w-full sm:w-56 md:w-72 rounded-full bg-white text-gray-900 placeholder-gray-900
-                   focus:outline-none focus:ring-2 focus:ring-[#8CA86C] pr-10 text-sm md:text-base transition-all duration-300">
+                   focus:outline-none focus:ring-2 focus:ring-primary pr-10 text-sm md:text-base transition-all duration-300">
                     <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-900"></i>
                 </div>
 
@@ -78,7 +78,7 @@
                         $emptyStars = 5 - $fullStars - $halfStar;
                     @endphp
 
-                    <div class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4"
+                    <div class="group bg-amber-50 border border-amber-100 rounded-2xl shadow-md overflow-hidden transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-amber-50 cursor-pointer flex flex-col items-center pt-4"
                         data-kategori-buku="{{ $buku->nama_kategori }}" data-judul="{{ strtolower($buku->judul_buku) }}">
 
                         <!-- COVER -->
@@ -89,7 +89,7 @@
                             @else
                                 <img src="{{ asset('assets/default-cover.jpg') }}"
                                     class="w-full h-full object-cover rounded-lg">
-                                <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
+                                <div class="absolute right-0 top-0 w-[6px] h-full bg-gray-300 shadow-inner"></div>
                             @endif
                         </div>
 
@@ -97,7 +97,7 @@
                         <div class="p-4 flex flex-col items-center text-center flex-1 w-full min-h-[150px]">
 
                             <!-- JUDUL -->
-                            <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base line-clamp-2 h-10">
+                            <h3 class="font-bold text-gray-900 text-sm md:text-base line-clamp-2 h-10">
                                 {{ $buku->judul_buku }}
                             </h3>
 
@@ -133,8 +133,8 @@
                             <div class="mt-auto pt-2">
                                 <a href="{{ route('user.detailbuku', $buku->id) }}">
                                     <button
-                                        class="bg-[#8CA86C] text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
-                               hover:bg-[#6e8a50] hover:scale-105">
+                                        class="bg-primary text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
+                               hover:bg-green hover:scale-105">
                                         Lihat Detail
                                     </button>
                                 </a>

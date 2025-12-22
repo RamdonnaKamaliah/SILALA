@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\CmsController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
@@ -18,7 +15,6 @@ use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\Admin\AdminProfileController;
 
 // Controllers - Auth
-use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
 use App\Http\Controllers\user\RiwayatBukuController;
@@ -27,6 +23,18 @@ use App\Http\Controllers\user\FavoritController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\EditProfilController;
 use App\Http\Controllers\user\RatingController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+Route::post('/logout', function () {
+    Auth::guard('admin')->logout();
+    Auth::guard('web')->logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect('/login');
+})->name('logout');
 
 // 🌟 ADMIN Profile
 Route::prefix('admin')
@@ -201,8 +209,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
         Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
             ->name('cms_admin.updateFooterLogo');
 
-
-
 });
 
 // Home Redirect Route
@@ -217,3 +223,5 @@ Route::get('/home', function () {
     
     return redirect()->route('login');
 })->name('home');
+
+require __DIR__.'/auth.php';

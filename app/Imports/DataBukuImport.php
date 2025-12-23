@@ -49,7 +49,8 @@ class DataBukuImport implements ToModel, WithStartRow
                         GambarBuku::create([
                             // 'data_buku' =>$buku->id,
                             'nama_file' => $fileName,
-                            'path_file' => $path
+                            'path_file' => $path,
+                            
                         ]);
                     }
                 } catch (\Exception $e) {

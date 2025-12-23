@@ -12,6 +12,7 @@ use App\Models\GambarBuku;
 use Illuminate\Support\Facades\Storage;
 
 
+
 class DataBukuController extends Controller
 {
     /**
@@ -42,7 +43,7 @@ class DataBukuController extends Controller
 public function store(Request $request)
 {
     $validated = $request->validate([
-        'foto_buku' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+        'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         'foto_id'   => 'nullable|exists:gambar_bukus,id',
         'judul_buku' => 'required',
         'penulis' => 'required',
@@ -54,8 +55,10 @@ public function store(Request $request)
         'edisi' => 'required',
         'deskripsi' => 'required',
         'stok' => 'required',
-        'file_buku' => 'required|mimes:pdf|max:5120',
+        'file_buku' => 'required|mimes:pdf|max:10240',
     ]);
+
+   
 
     $foto_buku_path = null;
 
@@ -71,6 +74,7 @@ public function store(Request $request)
         GambarBuku::create([
             'nama_file' => $file->getClientOriginalName(),
             'path_file' => $path,
+            'judul_buku' => $request->judul_buku,
         ]);
     }
 
@@ -95,13 +99,14 @@ public function store(Request $request)
         'stok' => $request->stok,
 
         'file_buku' => $request->file_buku
-            ? 'storage/' . $request->file_buku->store('uploads/file_buku', 'public')
-            : null,
+    ? $request->file_buku->store('uploads/file_buku', 'public')
+    : null,
 
         'foto_buku' => $foto_buku_path,
 
         'kategori_ids' => implode(',', $request->kategori_id),
     ]);
+
 
     // 4️⃣ Pivot kategori
     $buku->kategoris()->attach($request->kategori_id);
@@ -109,6 +114,7 @@ public function store(Request $request)
     return redirect()->route('admin.data_buku.index')
         ->with('success', 'Data buku berhasil ditambahkan!');
 }
+
 
     /**
      * Display the specified resource.
@@ -146,28 +152,28 @@ public function store(Request $request)
         'edisi' => 'required|string|max:100',
         'deskripsi' => 'required|string',
         'stok' => 'required|integer|min:0',
-        'file_buku' => 'nullable|mimes:pdf|max:255',
+        'file_buku' => 'required|mimes:pdf|max:255',
     ]);
 
     $buku = DataBuku::findOrFail($id);
 
     if ($request->hasFile('foto_buku')) {
-        if ($buku->foto_buku && file_exists(public_path($buku->foto_buku))) {
-            unlink(public_path($buku->foto_buku));
-        }
-        $imageName = time() . '.' . $request->foto_buku->extension();
-        $request->foto_buku->move(public_path('uploads/buku'), $imageName);
-        $validated['foto_buku'] = 'uploads/buku/' . $imageName;
+    if ($buku->foto_buku && file_exists(storage_path('app/public/' . $buku->foto_buku))) {
+        unlink(storage_path('app/public/' . $buku->foto_buku));
     }
 
-    if ($request->hasFile('file_buku')) {
-        if ($buku->file_buku && file_exists(public_path($buku->file_buku))) {
-            unlink(public_path($buku->file_buku));
-        }
-        $fileName = time() . '.' . $request->file_buku->extension();
-        $request->file_buku->move(public_path('uploads/file_buku'), $fileName);
-        $validated['file_buku'] = 'uploads/file_buku/' . $fileName;
+    $path = $request->file('foto_buku')->store('upload/foto_buku', 'public');
+    $validated['foto_buku'] = $path;
+}
+
+   if ($request->hasFile('file_buku')) {
+    if ($buku->file_buku && file_exists(storage_path('app/public/' . $buku->file_buku))) {
+        unlink(storage_path('app/public/' . $buku->file_buku));
     }
+
+    $path = $request->file('file_buku')->store('upload/file_buku', 'public');
+    $validated['file_buku'] = $path;
+}
 
     // Simpan ulang kategori_ids dalam bentuk string
     $validated['kategori_ids'] = implode(',', $request->kategori_id);
@@ -195,18 +201,32 @@ public function store(Request $request)
     }
 
        public function bulkDelete(Request $request)
-    {
-        $selectedIds = $request->selected_ids;
+{
+    $selectedIds = $request->selected_ids ?? [];
 
-        if (empty($selectedIds)) {
-            return redirect()->back()->with('error', 'Tidak ada kategori yang dipilih.');
-        }
-
-        DataBuku::whereIn('id', $selectedIds)->delete();
-
-        return redirect()->route('admin.data_buku.index')
-            ->with('success', count($selectedIds) . ' buku berhasil dihapus.');
+    // Jika dikirim sebagai string "1,2,3"
+    if (!is_array($selectedIds)) {
+        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
     }
+
+    // Hapus semua yang bukan angka (termasuk "on")
+    $selectedIds = array_filter($selectedIds, function ($id) {
+        return is_numeric($id);
+    });
+
+    // Ubah ke integer
+    $selectedIds = array_map('intval', $selectedIds);
+
+    if (empty($selectedIds)) {
+        return redirect()->back()->with('error', 'Tidak ada kategori yang dipilih.');
+    }
+
+    DataBuku::whereIn('id', $selectedIds)->delete();
+
+    return redirect()->route('admin.data_buku.index')
+        ->with('success', count($selectedIds) . ' buku berhasil dihapus.');
+}
+
 
     public function downloadTemplate()
     {
@@ -252,9 +272,19 @@ public function store(Request $request)
     return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
 }
 
-public function bulkArchive(Request $request) {
+public function bulkArchive(Request $request)
+{
+    $selectedIds = $request->input('selected_ids', []);
 
-    $selectedIds = explode(',', $request->input('selected_ids', ''));
+    if (!is_array($selectedIds)) {
+        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
+    }
+
+    $selectedIds = array_filter($selectedIds, function ($id) {
+        return is_numeric($id);
+    });
+
+    $selectedIds = array_map('intval', $selectedIds);
 
     if (empty($selectedIds)) {
         return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');

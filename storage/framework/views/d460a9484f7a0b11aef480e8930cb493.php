@@ -1,16 +1,15 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Tambah Buku')
-@section('content')
+<?php $__env->startSection('pageTitle', 'Tambah Buku'); ?>
+<?php $__env->startSection('content'); ?>
 
     <!-- AOS CSS -->
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" /> --}}
-    <link rel="stylesheet" href="{{ asset('/assets_admin/css/create-databuku.css') }}">
+    
+    <link rel="stylesheet" href="<?php echo e(asset('/assets_admin/css/create-databuku.css')); ?>">
 
     <div class="py-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <!-- Page Header -->
             <div class="mb-8" data-aos="fade-down" data-aos-duration="800">
-                <a href="{{ route('admin.data_buku.index') }}" class="back-link inline-flex items-center mb-4">
+                <a href="<?php echo e(route('admin.data_buku.index')); ?>" class="back-link inline-flex items-center mb-4">
                     <i class="fas fa-arrow-left mr-2"></i>
                     <span>Kembali ke Daftar Buku</span>
                 </a>
@@ -25,9 +24,9 @@
             </div>
 
             <!-- Form -->
-            <form action="{{ route('admin.data_buku.store') }}" method="POST" enctype="multipart/form-data"
+            <form action="<?php echo e(route('admin.data_buku.store')); ?>" method="POST" enctype="multipart/form-data"
                 class="space-y-6" enctype="multipart/form-data">
-                @csrf
+                <?php echo csrf_field(); ?>
 
 
                 <!-- Upload Section -->
@@ -57,30 +56,37 @@
                                 <span>Pilih Foto Cover</span>
                             </label>
 
-                            @error('foto_buku')
-                                <p class="text-red-500 text-sm">{{ $message }}</p>
-                            @enderror
+                            <?php $__errorArgs = ['foto_buku'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <p class="text-red-500 text-sm"><?php echo e($message); ?></p>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
 
-                            {{-- GAMBAR BUKU (PICK FROM MEDIA) --}}
+                            
                             <div class="mb-4">
                                 <label class="block font-medium">Gambar Buku</label>
 
                                 <div class="flex items-center gap-4">
                                     <img id="previewImage" class="w-24 h-24 object-cover rounded border"
-                                        src="{{ old('foto_url', 'https://placehold.co/100x100?text=No+Image') }}">
+                                        src="<?php echo e(old('foto_url', 'https://placehold.co/100x100?text=No+Image')); ?>">
 
                                     <button type="button" id="openModalBtn"
                                         class="px-4 py-2 bg-indigo-600 text-white rounded">Pilih dari Media</button>
                                 </div>
 
-                                {{-- input hidden untuk simpan path_file --}}
-                                <input type="hidden" name="foto_id" id="foto_id" value="{{ old('foto_id') }}">
+                                
+                                <input type="hidden" name="foto_id" id="foto_id" value="<?php echo e(old('foto_id')); ?>">
                             </div>
 
                         </div>
                     </div>
 
-                    {{-- ================= MODAL PILIH GAMBAR ================= --}}
+                    
                     <div id="modalGambar"
                         class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
                         <div class="bg-white rounded-lg w-10/12 md:w-6/12 p-6 shadow-lg">
@@ -89,14 +95,7 @@
 
                             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-80 overflow-y-auto">
 
-                                {{-- @foreach ($media as $g)
-                                    <div class="cursor-pointer border rounded p-1 hover:border-indigo-600 transition"
-                                        onclick="pilihGambar('{{ $g->id }}', '{{ asset('storage/' . $g->path_file) }}')">
-
-                                        <img src="{{ asset('storage/' . $g->path_file) }}"
-                                            class="w-full h-32 object-cover rounded">
-                                    </div>
-                                @endforeach --}}
+                                
 
                             </div>
 
@@ -118,10 +117,17 @@
                         </label>
 
                         <input type="file" id="file_buku" name="file_buku" accept=".pdf" onchange="previewPDF(event)"
-                            class="hidden" value="{{ old('file_buku') }}">
-                        @error('file_buku')
-                            <span class="text-red-600 text-sm">{{ $message }}</span>
-                        @enderror
+                            class="hidden" value="<?php echo e(old('file_buku')); ?>">
+                        <?php $__errorArgs = ['file_buku'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                            <span class="text-red-600 text-sm"><?php echo e($message); ?></span>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         <label for="file_buku" class="file-upload-btn">
                             <i class="fas fa-file-upload"></i>
                             <span>Pilih File PDF</span>
@@ -154,13 +160,27 @@
                         <span>Judul Buku</span>
                     </label>
                     <input type="text" id="judul_buku" name="judul_buku" placeholder="Masukkan judul buku"
-                        class="form-input w-full rounded-lg px-4 py-3 @error('judul_buku')
+                        class="form-input w-full rounded-lg px-4 py-3 <?php $__errorArgs = ['judul_buku'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror"
-                        value="{{ old('judul_buku') }}"
-                        @error('file_buku')
-                                border-red-500 @else border-gray-300
-                            @enderror>
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                        value="<?php echo e(old('judul_buku')); ?>"
+                        <?php $__errorArgs = ['file_buku'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                border-red-500 <?php else: ?> border-gray-300
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>>
                 </div>
 
                 <!-- Penulis -->
@@ -170,13 +190,27 @@
                         <span>Penulis</span>
                     </label>
                     <input type="text" id="penulis" name="penulis" placeholder="Masukkan nama penulis"
-                        class="form-input w-full rounded-lg px-4 py-3 @error('penulis')
+                        class="form-input w-full rounded-lg px-4 py-3 <?php $__errorArgs = ['penulis'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror"
-                        value="{{ old('penulis') }}">
-                    @error('penulis')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                    @enderror
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                        value="<?php echo e(old('penulis')); ?>">
+                    <?php $__errorArgs = ['penulis'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Penerbit -->
@@ -186,10 +220,17 @@
                         <span>Penerbit</span>
                     </label>
                     <input type="text" id="penerbit" name="penerbit" placeholder="Masukkan nama penerbit"
-                        class="form-input w-full rounded-lg px-4 py-3 @error('penerbit')
+                        class="form-input w-full rounded-lg px-4 py-3 <?php $__errorArgs = ['penerbit'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror"
-                        value="{{ old('penerbit') }}">
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                        value="<?php echo e(old('penerbit')); ?>">
                 </div>
 
                 <!-- Tahun Terbit -->
@@ -199,10 +240,17 @@
                         <span>Tahun Terbit</span>
                     </label>
                     <input type="number" id="tahun_terbit" name="tahun_terbit" placeholder="Contoh: 2024"
-                        class="form-input w-full rounded-lg px-4 py-3 @error('tahun_terbit')
+                        class="form-input w-full rounded-lg px-4 py-3 <?php $__errorArgs = ['tahun_terbit'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror"
-                        value="{{ old('tahun_terbit') }}">
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                        value="<?php echo e(old('tahun_terbit')); ?>">
 
                 </div>
 
@@ -213,10 +261,17 @@
                         <span>Bahasa</span>
                     </label>
                     <input type="text" id="bahasa" name="bahasa" placeholder="Contoh: Indonesia"
-                        class="form-input w-full rounded-lg px-4 py-3 @error('bahasa')
+                        class="form-input w-full rounded-lg px-4 py-3 <?php $__errorArgs = ['bahasa'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror"
-                        value="{{ old('bahasa') }}">
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                        value="<?php echo e(old('bahasa')); ?>">
                 </div>
 
                 <!-- Kategori -->
@@ -226,16 +281,30 @@
                         <span>Kategori</span>
                     </label>
                     <select name="kategori_id[]" id="kategori_id" multiple class="form-input w-full rounded-lg px-4 py-3"
-                        class=" @error('kategori_id')
+                        class=" <?php $__errorArgs = ['kategori_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror">
-                        @foreach ($kategoris as $kategori)
-                            <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                        @endforeach
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                        <?php $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($kategori->id); ?>"><?php echo e($kategori->nama_kategori); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
-                    @error('kategori_id')
-                        <p class="text-red-500 text-sm">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['kategori_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="text-red-500 text-sm"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                     <small class="text-gray-600 text-xs mt-1 flex items-center gap-1">
                         <i class="fas fa-info-circle"></i>
                         <span>Tekan Ctrl (Windows) atau Cmd (Mac) untuk pilih lebih dari satu</span>
@@ -259,10 +328,17 @@
                         <span>Jumlah Halaman</span>
                     </label>
                     <input type="number" id="jumlah_halaman" name="jumlah_halaman" placeholder="0"
-                        class="form-input w-full rounded-lg px-4 py-3 @error('jumlah_halaman')
+                        class="form-input w-full rounded-lg px-4 py-3 <?php $__errorArgs = ['jumlah_halaman'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror"
-                        value="{{ old('jumlah_halaman') }}">
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                        value="<?php echo e(old('jumlah_halaman')); ?>">
                 </div>
 
                 <!-- Edisi -->
@@ -272,10 +348,17 @@
                         <span>Edisi</span>
                     </label>
                     <input type="text" id="edisi" name="edisi" placeholder="Contoh: Edisi 1"
-                        class="form-input w-full rounded-lg px-4 py-3 @error('edisi')
+                        class="form-input w-full rounded-lg px-4 py-3 <?php $__errorArgs = ['edisi'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror"
-                        value="{{ old('edisi') }}">
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                        value="<?php echo e(old('edisi')); ?>">
                 </div>
 
                 <!-- Stok -->
@@ -285,10 +368,17 @@
                         <span>Stok Tersedia</span>
                     </label>
                     <input type="number" id="stok" name="stok" placeholder="0"
-                        class="form-input w-full rounded-lg px-4 py-3 @error('stok')
+                        class="form-input w-full rounded-lg px-4 py-3 <?php $__errorArgs = ['stok'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                             border-red-500
-                        @enderror"
-                        value="{{ old('stok') }}">
+                        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                        value="<?php echo e(old('stok')); ?>">
                 </div>
             </div>
         </div>
@@ -307,16 +397,23 @@
                 </label>
                 <textarea id="deskripsi" name="deskripsi" rows="6"
                     placeholder="Tuliskan deskripsi lengkap mengenai buku, sinopsis, atau ringkasan isi buku..."
-                    class="form-input w-full rounded-lg px-4 py-3 resize-none @error('deskripsi')
+                    class="form-input w-full rounded-lg px-4 py-3 resize-none <?php $__errorArgs = ['deskripsi'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                         border-red-500
-                    @enderror">{{ old('deskripsi') }}</textarea>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"><?php echo e(old('deskripsi')); ?></textarea>
             </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="bg-white rounded-lg p-6 shadow-md" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
             <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                <a href="{{ route('admin.data_buku.index') }}"
+                <a href="<?php echo e(route('admin.data_buku.index')); ?>"
                     class="bg-gray-300 hover:bg-gray-400 text-center inline-flex items-center justify-center gap-2 min-w-[150px] rounded-lg px-4 py-3">
                     <i class="fas fa-times"></i>
                     <span>Batal</span>
@@ -338,4 +435,6 @@
     <!-- AOS JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/data_buku/create.blade.php ENDPATH**/ ?>

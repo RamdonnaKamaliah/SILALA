@@ -23,7 +23,7 @@
     /* Desktop / landscape */
     @media (min-width: 769px) {
       body {
-        background: url("{{ asset('assets/bg.png') }}") no-repeat center center fixed;
+        background: url("<?php echo e(asset('assets/bg.png')); ?>") no-repeat center center fixed;
         background-size: cover;
       }
     }
@@ -31,7 +31,7 @@
     /* Mobile / portrait */
     @media (max-width: 768px) and (orientation: portrait) {
       body {
-        background: url("{{ asset('assets/big.png') }}") no-repeat center center fixed;
+        background: url("<?php echo e(asset('assets/big.png')); ?>") no-repeat center center fixed;
         background-size: cover;
       }
     }
@@ -39,7 +39,7 @@
     /* Mobile / landscape tetap pakai bg.png */
     @media (max-width: 768px) and (orientation: landscape) {
       body {
-        background: url("{{ asset('assets/bg.png') }}") no-repeat center center fixed;
+        background: url("<?php echo e(asset('assets/bg.png')); ?>") no-repeat center center fixed;
         background-size: cover;
       }
     }
@@ -70,7 +70,7 @@
 
     <!-- Left Side: Illustration (hilang di mobile) -->
     <div class="hidden md:flex items-center justify-center bg-green-50 p-6">
-      <img src="{{ asset('assets/libey.png') }}" alt="Library Illustration" class="w-3/4 mx-auto floating">
+      <img src="<?php echo e(asset('assets/libey.png')); ?>" alt="Library Illustration" class="w-3/4 mx-auto floating">
     </div>
 
     <!-- Right Side: Login Form -->
@@ -87,7 +87,7 @@
 
       <!-- Google Login -->
       <div class="mb-4">
-       <a href="{{ route('google.redirect') }}"  
+       <a href="<?php echo e(route('google.redirect')); ?>"  
           class="flex items-center justify-center gap-3 w-full py-2 px-4 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Logo" class="w-5 h-5">
           <span class="font-semibold text-black text-sm">Login dengan Google</span>
@@ -101,21 +101,29 @@
       </div>
 
       <!-- Form Laravel -->
-      <form method="POST" action="{{ route('login') }}" class="space-y-4">
-        @csrf
+      <form method="POST" action="<?php echo e(route('login')); ?>" class="space-y-4">
+        <?php echo csrf_field(); ?>
 
         <!-- Email -->
         <div>
           <label for="email" class="block text-sm font-medium text-green-700 mb-1">
             <i class="fa-solid fa-envelope mr-2"></i>Email
           </label>
-          <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
-            class="block w-full px-3 py-2 border {{ $errors->has('email') ? 'border-red-400' : 'border-green-200' }} rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
-          @error('email')
+          <input id="email" type="email" name="email" value="<?php echo e(old('email')); ?>" required autofocus autocomplete="username"
+            class="block w-full px-3 py-2 border <?php echo e($errors->has('email') ? 'border-red-400' : 'border-green-200'); ?> rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
+          <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
             <p class="mt-1 text-xs text-red-500">
-              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+              <i class="fas fa-exclamation-circle mr-1"></i><?php echo e($message); ?>
+
             </p>
-          @enderror
+          <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
         </div>
 
         <!-- Password -->
@@ -125,16 +133,24 @@
           </label>
           <div class="relative flex items-center">
             <input id="password" type="password" name="password" required autocomplete="current-password"
-              class="block w-full px-3 py-2 border {{ $errors->has('password') ? 'border-red-400' : 'border-green-200' }} rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm pr-10">
+              class="block w-full px-3 py-2 border <?php echo e($errors->has('password') ? 'border-red-400' : 'border-green-200'); ?> rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm pr-10">
             <span class="absolute right-3 cursor-pointer text-gray-400" onclick="togglePassword()">
               <i id="eyeIcon" class="fa-solid fa-eye"></i>
             </span>
           </div>
-          @error('password')
+          <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
             <p class="mt-1 text-xs text-red-500">
-              <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+              <i class="fas fa-exclamation-circle mr-1"></i><?php echo e($message); ?>
+
             </p>
-          @enderror
+          <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
         </div>
 
         <!-- Remember Me -->
@@ -146,7 +162,7 @@
 
         <!-- Actions -->
         <div class="flex items-center justify-between">
-          <a href="{{ route('password.request') }}" class="text-xs text-green-700 hover:underline">Lupa Password?</a>
+          <a href="<?php echo e(route('password.request')); ?>" class="text-xs text-green-700 hover:underline">Lupa Password?</a>
           <button type="submit"
             class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition flex items-center text-sm">
             <i class="fa-solid fa-right-to-bracket mr-2"></i>Login
@@ -157,7 +173,7 @@
         <div class="mt-4 text-center">
           <p class="text-base text-gray-600 mb-2">
             Belum punya akun? 
-            <a href="{{ route('register') }}" class="font-medium text-green-700 hover:underline">Daftar di sini</a>
+            <a href="<?php echo e(route('register')); ?>" class="font-medium text-green-700 hover:underline">Daftar di sini</a>
           </p>
           <p class="text-xs text-gray-500">
             Dengan masuk, kamu menyetujui 
@@ -185,4 +201,4 @@
     }
   </script>
 </body>
-</html>
+</html><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/auth/login.blade.php ENDPATH**/ ?>

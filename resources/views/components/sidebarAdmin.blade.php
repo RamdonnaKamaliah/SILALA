@@ -280,7 +280,7 @@
     <!-- Overlay -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden lg:hidden z-30"></div>
 
-    <!-- Sidebar -->
+    <!-- Sidebar -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
     <aside id="sidebar"
         class="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-primary-dark to-primary-medium shadow-lg z-50 overflow-hidden sidebar-transition sidebar-desktop sidebar-mobile -translate-x-full lg:translate-x-0">
         <!-- Tombol Close (hanya muncul di mobile) -->
@@ -293,9 +293,17 @@
         </button>
 
         <!-- Sidebar Header dengan Logo (Fixed) -->
-        <div class="logo-container">
-            <img src="{{ asset('/assets_admin/image/BPMSPH-logo.png') }}" alt="BPMS Logo" class="logo-img">
-        </div>
+        @php
+            $adminSidebarLogo = \App\Models\Setting::getValue('admin_sidebar_logo', null);
+
+            $logoPath = $adminSidebarLogo &&
+                \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $adminSidebarLogo)
+                ? Storage::url('cms/' . $adminSidebarLogo)
+                : asset('/assets_admin/image/BPMSPH-logo.png');
+        @endphp
+
+        <img src="{{ $logoPath }}" alt="BPMS Logo" class="logo-img">
+
 
         <!-- Sidebar Content (Scrollable) -->
         <div class="sidebar-content">
@@ -430,22 +438,6 @@
                 <!-- Divider -->
                 <li class="w-full mt-4">
                     <h6 class="pl-2 text-xs font-bold leading-tight uppercase divider-text">Account pages</h6>
-                </li>
-
-                <!-- E-book -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all"
-                        href="#e-book">
-
-                        <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-book-open-reader text-lg"></i>
-                        </div>
-
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
-                            E-book
-                        </span>
-                    </a>
                 </li>
 
                 <!-- Logout Menu -->

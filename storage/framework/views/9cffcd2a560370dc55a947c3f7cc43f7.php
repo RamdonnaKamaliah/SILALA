@@ -11,19 +11,19 @@
   class="fixed inset-0 bg-black/40 hidden opacity-0 transition-opacity duration-300 z-40 md:hidden pointer-events-none">
 </div>
 
-<!-- Sidebar -->
-<div id="sidebar"
-  class="user-sidebar fixed w-[300px] h-full bg-primary border-l-[10px] border-primary transition-transform duration-500 transform -translate-x-full md:translate-x-0 z-40 md:z-40">
-  
-  <!-- Header -->
-  <div class="sidebar-header flex items-center justify-between px-4 mt-4 mb-6 text-white">
-    <div class="flex items-center gap-2">
-      <img src="<?php echo e(asset('assets/logo_kementan.png')); ?>" alt="Logo" class="w-12 h-12 rounded-full object-cover" />
-      <p class="text-white font-bold text-lg leading-tight">
-        PERPUSTAKAAN BPMSPH
-      </p>
+  <!-- Sidebar -->
+  <div id="sidebar"
+    class="fixed w-[300px] h-full bg-[var(--green)] border-l-[10px] border-[var(--green)] transition-all duration-500 overflow-hidden transform -translate-x-full md:translate-x-0 z-50 sidebar">
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between px-4 mt-4 mb-6 text-white">
+      <div class="flex items-center gap-2">
+        <img src="<?php echo e(asset('assets/logo_kementan.png')); ?>" alt="Logo" class="w-12 h-12 rounded-full object-cover" />
+        <p class="text-white font-bold text-lg leading-tight">
+          PERPUSTAKAAN BPMSPH
+        </p>
+      </div>
     </div>
-  </div>
 
   <!-- Profil -->
   <ul id="sidebar-menu" class="space-y-3">

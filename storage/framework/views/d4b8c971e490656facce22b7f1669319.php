@@ -1,7 +1,7 @@
 <?php $__env->startSection('pageTitle', 'Admin Dashboard'); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="min-h-screen bg-gradient-to-br from-[#f5f5e9] to-[#e8e4d5] p-4 md:p-6">
+<div class="min-h-screen p-4 md:p-6">
 
     <!-- Header Section -->
     <div class="bg-white/70 backdrop-blur-md rounded-2xl p-4 md:p-6 mb-6 border border-white/35 shadow-sm">
@@ -247,8 +247,5 @@
     </div>
 
 </div>
-<?php $__env->startPush('scripts'); ?>
-<?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

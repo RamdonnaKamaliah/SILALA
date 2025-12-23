@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\CmsController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminController;
@@ -13,7 +10,11 @@ use App\Http\Controllers\Admin\DataKategoriController;
 use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
-use App\Http\Controllers\user\DaftarBukuController;
+use App\Http\Controllers\Admin\MediaBukuController;
+use App\Http\Controllers\Admin\CmsController;
+use App\Http\Controllers\Admin\AdminProfileController;
+
+// Controllers - Auth
 use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
 use App\Http\Controllers\user\RiwayatBukuController;
@@ -22,16 +23,66 @@ use App\Http\Controllers\user\FavoritController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\EditProfilController;
 use App\Http\Controllers\user\RatingController;
-use App\Http\Controllers\Admin\MediaBukuController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
+Route::post('/logout', function () {
+    Auth::guard('admin')->logout();
+    Auth::guard('web')->logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect('/login');
+})->name('logout');
+
+// 🌟 ADMIN Profile
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth:admin', AdminMiddleware::class])
+    ->group(function () {
+
+        Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
+        Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+    });
+
+// ==============================
+// 🌟 ADMIN CMS
+// ==============================
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth:admin', AdminMiddleware::class])
+    ->group(function () {
+
+        Route::get('/cms', [CmsController::class, 'editHero'])
+            ->name('cms_admin.index');
+
+        Route::post('/cms/update-hero', [CmsController::class, 'updateHero'])
+            ->name('cms_admin.updateHero');
+
+        Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
+            ->name('cms_admin.updateFooterLogo');
+
+        Route::post('/cms/update-sidebar-logo', [CmsController::class, 'updateSidebarLogo'])
+            ->name('cms_admin.updateSidebarLogo');   
+
+         Route::post('/cms/update-hero-bg', [CmsController::class, 'updateHeroBg'])
+            ->name('cms_admin.updateHeroBg');
+
+        Route::post('/cms/update-admin-sidebar-logo',  [CmsController::class, 'updateAdminSidebarLogo']
+            )->name('cms_admin.updateAdminSidebarLogo');
+
+    });
 
 
-// Public Routes
+// ==============================
+// 🌟 PUBLIC ROUTES
+// ==============================
 Route::get('/', function () {
     return view('landingpage');
 });
-
-// Authentication Routes
-require __DIR__.'/auth.php';
 
 // Google OAuth Routes
 Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGoogle'])
@@ -162,8 +213,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
         Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
             ->name('cms_admin.updateFooterLogo');
 
-
-
 });
 
 // Home Redirect Route
@@ -178,3 +227,5 @@ Route::get('/home', function () {
     
     return redirect()->route('login');
 })->name('home');
+
+require __DIR__.'/auth.php';

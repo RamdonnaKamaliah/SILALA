@@ -3,7 +3,7 @@
 @section('pageTitle', 'Admin Dashboard')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#f5f5e9] to-[#e8e4d5] p-4 md:p-6">
+<div class="min-h-screen p-4 md:p-6">
 
     <!-- Header Section -->
     <div class="bg-white/70 backdrop-blur-md rounded-2xl p-4 md:p-6 mb-6 border border-white/35 shadow-sm">
@@ -249,6 +249,4 @@
     </div>
 
 </div>
-@push('scripts')
-@endpush
 @endsection

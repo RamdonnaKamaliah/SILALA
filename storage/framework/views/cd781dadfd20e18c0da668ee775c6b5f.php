@@ -150,6 +150,38 @@
     </form>
 </div>
 
+
+<?php
+    $footerdash = \App\Models\Setting::getValue(
+        'footerdash',
+        'logo_kementan.png'
+    );
+
+    $footerdashPath = Storage::disk('public')->exists('cms/' . $footerdash)
+        ? Storage::url('cms/' . $footerdash)
+        : asset('assets/logo_kementan.png');
+?>
+
+<div class="p-4 bg-white rounded-lg shadow border">
+    <h2 class="font-semibold mb-3 text-sm">Logo Footer Dashboard</h2>
+
+    <img src="<?php echo e($footerdashPath); ?>"
+         class="w-16 h-16 mx-auto object-contain bg-gray-100 rounded mb-3">
+
+    <form action="<?php echo e(route('admin.cms_admin.updateFooterDash')); ?>"
+      method="POST"
+      enctype="multipart/form-data">
+
+        <?php echo csrf_field(); ?>
+
+        <input type="file" name="footerdash" accept="image/*" class="text-sm w-full">
+
+        <button class="w-full bg-blue-600 text-white py-1.5 text-sm rounded">
+            Simpan
+        </button>
+    </form>
+</div>
+
         
         
         

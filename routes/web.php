@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\Admin\AdminProfileController;
 
 // Controllers - Auth
+use App\Http\Controllers\user\DaftarBukuController;
 use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
 use App\Http\Controllers\user\RiwayatBukuController;
@@ -74,6 +75,12 @@ Route::prefix('admin')
         Route::post('/cms/update-admin-sidebar-logo',  [CmsController::class, 'updateAdminSidebarLogo']
             )->name('cms_admin.updateAdminSidebarLogo');
 
+            Route::post(
+    '/cms/update-footerdash',
+    [CmsController::class, 'updateFooterDash']
+)->name('cms_admin.updateFooterDash');
+
+
     });
 
 
@@ -105,7 +112,8 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     //DAFTAR BUKU
-    Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
+    Route::get('/daftar-buku', [DaftarBukuController::class, 'index']);
+
 
     // DETAIL BUKU
     Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])->name('user.detailbuku');

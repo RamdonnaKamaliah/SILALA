@@ -137,5 +137,27 @@ class CmsController extends Controller
 
                 return back()->with('success', 'Logo sidebar admin berhasil diperbarui!');
             }
+            
+public function updateFooterDash(Request $request)
+{
+    $request->validate([
+        'footerdash' => 'required|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
+    ]);
+
+    Storage::disk('public')->makeDirectory('cms');
+
+    $file = $request->file('footerdash');
+
+    // nama FIX biar replace
+    $filename = 'footerdash.' . $file->getClientOriginalExtension();
+
+    $file->storeAs('cms', $filename, 'public');
+
+    Setting::setValue('footerdash', $filename);
+
+    return back()->with('success', 'Logo footer dashboard berhasil diupdate 🔥');
+}
+
+
 
 }

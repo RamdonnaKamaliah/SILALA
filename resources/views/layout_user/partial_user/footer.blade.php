@@ -4,8 +4,26 @@
     <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-3 md:gap-0">
 
       <!-- Kiri -->
-      <div class="flex items-center space-x-3">
-        <img src="{{asset('assets/logo_kementan.png')}}" alt="Logo BPMSPH" class="w-12 h-12 object-contain">
+    @php
+    $footerdash = \App\Models\Setting::getValue(
+        'footerdash',
+        'logo_kementan.png'
+    );
+
+    $logoPath = Storage::disk('public')->exists('cms/' . $footerdash)
+        ? Storage::url('cms/' . $footerdash)
+        : asset('assets/logo_kementan.png');
+@endphp
+
+<img src="{{ $logoPath }}"
+     alt="Logo Footer Dashboard"
+     class="w-12 h-12 object-contain">
+
+
+      <img src="{{ $logoPath }}"
+          alt="Logo BPMSPH"
+          class="w-12 h-12 object-contain mx-auto">
+
         <div class="leading-tight">
           <p class="text-[12px] sm:text-sm font-semibold">
             BALAI PENGUJIAN MUTU DAN SERTIFIKASI PRODUK HEWAN

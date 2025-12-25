@@ -13,7 +13,7 @@
                 <img src="{{ asset('/assets_admin/image/sisapa.png') }}" alt="logo"
                     class="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shadow-sm" />
                 <div>
-                    <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-[#2d5016]">Selamat Datang, Admin 👋</h1>
+                    <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-[#2d5016]">Selamat Datang, {{ $admin->name }} 👋</h1>
                     <p class="text-sm text-gray-600 mt-1">Sistem Manajemen Perpustakaan — Silala</p>
                 </div>
             </div>

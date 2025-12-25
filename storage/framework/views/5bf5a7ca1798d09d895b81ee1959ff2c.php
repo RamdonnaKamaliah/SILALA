@@ -280,7 +280,7 @@
     <!-- Overlay -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden lg:hidden z-30"></div>
 
-    <!-- Sidebar -->
+    <!-- Sidebar -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
     <aside id="sidebar"
         class="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-primary-dark to-primary-medium shadow-lg z-50 overflow-hidden sidebar-transition sidebar-desktop sidebar-mobile -translate-x-full lg:translate-x-0">
         <!-- Tombol Close (hanya muncul di mobile) -->
@@ -294,15 +294,15 @@
 
         <!-- Sidebar Header dengan Logo (Fixed) -->
         <?php
-        $adminSidebarLogo = \App\Models\Setting::getValue('admin_sidebar_logo', null);
+            $adminSidebarLogo = \App\Models\Setting::getValue('admin_sidebar_logo', null);
 
-        $logoPath = $adminSidebarLogo &&
-            \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $adminSidebarLogo)
-            ? Storage::url('cms/' . $adminSidebarLogo)
-            : asset('/assets_admin/image/BPMSPH-logo.png');
-    ?>
+            $logoPath = $adminSidebarLogo &&
+                \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $adminSidebarLogo)
+                ? Storage::url('cms/' . $adminSidebarLogo)
+                : asset('/assets_admin/image/BPMSPH-logo.png');
+        ?>
 
-    <img src="<?php echo e($logoPath); ?>" alt="BPMS Logo" class="logo-img">
+        <img src="<?php echo e($logoPath); ?>" alt="BPMS Logo" class="logo-img">
 
 
         <!-- Sidebar Content (Scrollable) -->

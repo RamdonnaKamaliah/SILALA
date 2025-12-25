@@ -17,7 +17,7 @@ class DataBukuController extends Controller
      */
     public function index()
     {
-        $data = databuku::with('kategoris')->get(); 
+        $data = databuku::with('kategoris')->where('status', 'aktif')->get(); 
         
         return response()->json([
             'status' => true,
@@ -60,27 +60,30 @@ class DataBukuController extends Controller
 
         $foto_buku_path = null;
 
-        // Upload manual
-        if ($request->hasFile('foto_buku')) {
-            $file = $request->file('foto_buku');
-            $path = $file->store('uploads/buku', 'public');
-            $foto_buku_path = $path;
+        // 1️⃣ Upload manual
+    if ($request->hasFile('foto_buku')) {
 
-            // Simpan ke tabel media
-            GambarBuku::create([
-                'nama_file' => $file->getClientOriginalName(),
-                'path_file' => $path,
-                'judul_buku' => $request->judul_buku,
-            ]);
-        }
+        $file = $request->file('foto_buku');
 
-        // Ambil dari foto yang sudah ada
-        if ($request->foto_id) {
-            $media = GambarBuku::find($request->foto_id);
-            if ($media) {
-                $foto_buku_path = $media->path_file;
-            }
+        $path = $file->store('uploads/buku', 'public');  
+        $foto_buku_path = $path;
+
+        // Simpan ke tabel media
+        GambarBuku::create([
+            'nama_file' => $file->getClientOriginalName(),
+            'path_file' => $path,
+            'judul_buku' => $request->judul_buku,
+        ]);
+    }
+
+    // 2️⃣ Pilih dari galeri
+    if ($request->foto_id) {
+        $media = GambarBuku::find($request->foto_id);
+        if ($media) {
+            $foto_buku_path = $media->path_file;
         }
+    }
+
 
         // Simpan kategori_ids sebagai string
         $kategori_ids = implode(',', $request->kategori_id);
@@ -91,7 +94,6 @@ class DataBukuController extends Controller
             'penerbit' => $request->penerbit,
             'tahun_terbit' => $request->tahun_terbit,
             'bahasa' => $request->bahasa,
-            'kategori_ids' => $kategori_ids, // ← Simpan di kolom kategori_ids
             'jumlah_halaman' => $request->jumlah_halaman,
             'edisi' => $request->edisi,
             'deskripsi' => $request->deskripsi,
@@ -111,7 +113,7 @@ class DataBukuController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Data Berhasil dibuat',
-            'data' => $buku // ← Return data buku dengan relasi
+            'data' => $buku 
         ], 201);
     }
 
@@ -206,7 +208,7 @@ class DataBukuController extends Controller
      */
     public function destroy(string $id)
     {
-        // ✅ FIX: Ganti databuku jadi DataBuku
+    
         $buku = databuku::find($id);
         
         if(empty($buku)){
@@ -214,11 +216,6 @@ class DataBukuController extends Controller
                 'status' => false,
                 'message' => 'Data tidak ditemukan'
             ], 404);
-        }
-
-        // Hapus file foto jika ada
-        if ($buku->foto_buku && file_exists(storage_path('app/public/' . $buku->foto_buku))) {
-            unlink(storage_path('app/public/' . $buku->foto_buku));
         }
 
         // Hapus file buku jika ada
@@ -250,4 +247,91 @@ class DataBukuController extends Controller
             'message' => 'Data berhasil diimport'
         ], 200);
     }
+
+    public function archive(Request $request, $id = null)
+    {
+    if ($id) {
+        $buku = DataBuku::findOrFail($id);
+        $buku->status = 'arsip';
+        $buku->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Data berhasil di arsip'
+        ], 200);
+    }else{
+        return response()->json([
+            'status' => false,
+            'message' => 'data gagal di arsipkan'
+        ]);
+    }
+}
+
+    public function restore ($id)
+    {
+        $buku = databuku::findOrFail($id);
+        $buku->status = 'aktif';
+        $buku->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'data berhasil diarsipkan'
+        ], 200);
+    }
+
+    public function bulkArchive(Request $request)
+{
+    $selectedIds = $request->input('selected_ids', []);
+
+    if (!is_array($selectedIds)) {
+        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
+    }
+
+    $selectedIds = array_filter($selectedIds, function ($id) {
+        return is_numeric($id);
+    });
+
+    $selectedIds = array_map('intval', $selectedIds);
+
+    if (empty($selectedIds)) {
+        return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+    }
+
+    databuku::whereIn('id', $selectedIds)->update(['status' => 'arsip']);
+
+    return response()->json([
+        'status' => true,
+        'message' => 'data yang terpilih sukses di arsipkan'
+    ]);
+
+
+}
+
+ public function bulkDelete(Request $request)
+{
+    $selectedIds = $request->input('selected_ids', []);
+
+    if (!is_array($selectedIds)) {
+        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
+    }
+
+    $selectedIds = array_filter($selectedIds, function ($id) {
+        return is_numeric($id);
+    });
+
+    $selectedIds = array_map('intval', $selectedIds);
+
+    if (empty($selectedIds)) {
+        return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+    }
+
+    databuku::whereIn('id', $selectedIds)->delete();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'data yang terpilih sukses di hapus'
+    ]);
+
+
+}
 }

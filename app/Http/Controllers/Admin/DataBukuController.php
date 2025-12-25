@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\DataBukuImport;
+use App\Models\DataBuku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DataBukuController extends Controller
 {
@@ -88,7 +91,6 @@ class DataBukuController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validasi di frontend
             $request->validate([
                 'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
                 'judul_buku' => 'required',
@@ -117,6 +119,7 @@ class DataBukuController extends Controller
                     'filename' => $request->file('file_buku')->getClientOriginalName()],
                 
                 // Text fields
+                ['name' => 'media_id', 'contents' => $request->foto_id ?? ''],
                 ['name' => 'judul_buku', 'contents' => $request->judul_buku],
                 ['name' => 'penulis', 'contents' => $request->penulis],
                 ['name' => 'penerbit', 'contents' => $request->penerbit],
@@ -126,6 +129,7 @@ class DataBukuController extends Controller
                 ['name' => 'edisi', 'contents' => $request->edisi],
                 ['name' => 'deskripsi', 'contents' => $request->deskripsi],
                 ['name' => 'stok', 'contents' => $request->stok],
+                
                 
                 // Kategori (array)
                 ...collect($request->kategori_id)->map(function($id, $index) {
@@ -253,7 +257,7 @@ class DataBukuController extends Controller
                 ['name' => '_method', 'contents' => 'PUT'], // Method spoofing
             ];
 
-            // Tambahkan file jika ada
+            // Tambahkan
             if ($request->hasFile('foto_buku')) {
                 $multipart[] = [
                     'name' => 'foto_buku',
@@ -310,4 +314,93 @@ class DataBukuController extends Controller
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+        public function downloadTemplate()
+    {
+        return response()->download(public_path('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx'));
+    }
+
+     public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        Excel::import(new DataBukuImport, $request->file('file'));
+
+        return redirect()->route('admin.data_buku.index')->with('succes', 'Data buku berhasil di import');
+    }
+    
+    public function archive(Request $request, $id = null)
+    {
+    if ($id) {
+        $buku = databuku::findOrFail($id);
+        $buku->status = 'arsip';
+        $buku->save();
+
+        return redirect()->route('admin.data_arsip.index')
+            ->with('success', 'Buku "' . $buku->judul_buku . '" berhasil diarsipkan!');
+    }
+
+    return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+}
+
+    public function restore ($id)
+    {
+        $buku = DataBuku::findOrFail($id);
+        $buku->status = 'aktif';
+        $buku->save();
+
+        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
+    }
+
+    public function bulkArchive(Request $request)
+{
+    $selectedIds = $request->input('selected_ids', []);
+
+    if (!is_array($selectedIds)) {
+        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
+    }
+
+    $selectedIds = array_filter($selectedIds, function ($id) {
+        return is_numeric($id);
+    });
+
+    $selectedIds = array_map('intval', $selectedIds);
+
+    if (empty($selectedIds)) {
+        return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+    }
+
+    DataBuku::whereIn('id', $selectedIds)->update(['status' => 'arsip']);
+
+    return redirect()->route('admin.data_arsip.index')
+        ->with('success', count($selectedIds) . ' buku berhasil diarsipkan.');
+}
+
+     public function bulkDelete(Request $request)
+{
+    $selectedIds = $request->input('selected_ids', []);
+
+    if (!is_array($selectedIds)) {
+        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
+    }
+
+    $selectedIds = array_filter($selectedIds, function ($id) {
+        return is_numeric($id);
+    });
+
+    $selectedIds = array_map('intval', $selectedIds);
+
+    if (empty($selectedIds)) {
+        return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+    }
+
+    databuku::whereIn('id', $selectedIds)->delete();
+
+   return redirect()->route('admin.data_buku.index')->with('succes', count($selectedIds). 'buku berhasil di hapus');
+
+
+}
+
 }

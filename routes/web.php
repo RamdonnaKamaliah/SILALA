@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Admin\DataBukuController;
 use App\Http\Controllers\Admin\DataKategoriController;

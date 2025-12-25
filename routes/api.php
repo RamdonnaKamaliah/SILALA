@@ -23,7 +23,7 @@ Route::get('/media', [MediaBukuController::class, 'index']);
 Route::post('/media', [MediaBukuController::class, 'store']);
 Route::delete('/media/{id}', [MediaBukuController::class, 'destroy']);
 Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']);
-Route::put('/kategori', [KategoriController::class, 'index']);
+Route::get('/kategori', [KategoriController::class, 'index']);
 Route::put('/kategori', [KategoriController::class, 'store']);
 Route::put('/kategori/{id}', [KategoriController::class, 'show']);
 Route::put('/kategori/{id}', [KategoriController::class, 'update']);

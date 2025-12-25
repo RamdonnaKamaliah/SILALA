@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @include('layout_admin.partial_admin.link')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     @stack('styles')
 
@@ -27,6 +27,7 @@
     </main>
 
     <!-- Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.js"></script>
     <script src="{{ asset('/assets_admin/js/plugins/chartjs.min.js') }}" async></script>
     <script src="{{ asset('/assets_admin/js/plugins/perfect-scrollbar.min.js') }}" async></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
@@ -58,7 +59,6 @@
     <script src="{{ asset('assets_admin/js/dataBuku/modalMedia.js') }}"></script>
     {{-- databuku bagian edit --}}
     <script src="{{ asset('assets_admin/js/dataBuku/edit.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     {{-- databuku bagian index --}}
     <script src="{{ asset('assets_admin/js/dataBuku/index.js') }}"></script>
 
@@ -72,6 +72,7 @@
 
     {{-- navbarAdmin --}}
     <script src="{{ asset('assets_admin/js/navbarAdmin.js') }}"></script>
+    <script src="{{ asset('assets_admin/js/sidebar-admin.js') }}"></script>
 
     {{-- profile admin --}}
     <script src="{{ asset('assets_admin/js/profile_Admin/index.js') }}"></script>

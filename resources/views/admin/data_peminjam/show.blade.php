@@ -174,7 +174,7 @@
             <!-- Book Cover -->
             <div class="flex-shrink-0">
                 @if($peminjam->buku->foto_buku ?? false)
-                <img src="{{ asset($peminjam->buku->foto_buku) }}" 
+                <img src="{{ asset('storage/' . $peminjam->buku->foto_buku) }}" 
                      alt="{{ $peminjam->buku->judul_buku }}" 
                      class="w-48 h-64 object-cover rounded-xl shadow-md">
                 @else

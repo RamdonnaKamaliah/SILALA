@@ -10,13 +10,11 @@
 <link rel="stylesheet" href="{{ asset('assets_admin/css/nucleo-icons.css') }}">
 <link rel="stylesheet" href="{{ asset('assets_admin/css/nucleo-svg.css') }}">
 
-<!-- ================= CORE DASHBOARD ================= -->
-<link rel="stylesheet" href="{{ asset('assets_admin/css/soft-ui-dashboard-tailwind.css') }}">
-
 <!-- ================= DATATABLE (GLOBAL) ================= -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
 <!-- ================= ADMIN GLOBAL ================= -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.css">
 <link rel="stylesheet" href="{{ asset('assets_admin/css/admin/admin.css') }}">
 <link rel="stylesheet" href="{{ asset('assets_admin/css/navbarAdmin.css') }}">
 <link rel="stylesheet" href="{{ asset('assets_admin/css/sidebar.css') }}">

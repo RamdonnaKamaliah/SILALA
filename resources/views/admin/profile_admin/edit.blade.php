@@ -23,7 +23,7 @@
                                 <div class="relative group">
                                     <div class="absolute inset-0 bg-white rounded-full blur-md opacity-50"></div>
                                     <img id="previewImage" 
-                                         src="{{ $admin->foto ? asset('uploads/admin/'.$admin->foto) : asset('default.png') }}"
+                                         src="{{ $admin->foto ? asset('storage/'.'uploads/admin/'.$admin->foto) : asset('default.png') }}"
                                          class="relative w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl ring-4 ring-[#A4B465]/30 bg-white">
                                     <div class="absolute inset-0 rounded-full bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                         <i class="fas fa-camera text-white text-2xl"></i>

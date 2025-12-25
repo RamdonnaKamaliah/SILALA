@@ -1,10 +1,13 @@
 <!-- Tombol Hamburger -->
 <button id="hamburger"
-  class="fixed top-4 left-4 z-50 flex flex-col justify-between w-8 h-6 focus:outline-none md:hidden">
-  <span class="block w-full h-[3px] bg-green rounded transition-all duration-300"></span>
-  <span class="block w-full h-[3px] bg-green rounded transition-all duration-300"></span>
-  <span class="block w-full h-[3px] bg-green rounded transition-all duration-300"></span>
+  class="fixed top-4 left-4 z-50 flex flex-col justify-between w-8 h-6
+         focus:outline-none md:hidden transition-all duration-300">
+
+  <span class="block w-full h-[3px] bg-green rounded transition-all duration-300 transform"></span>
+  <span class="block w-full h-[3px] bg-green rounded transition-all duration-300 transform"></span>
+  <span class="block w-full h-[3px] bg-green rounded transition-all duration-300 transform"></span>
 </button>
+
 
 <!-- Overlay Sidebar -->
 <div id="sidebar-overlay"
@@ -39,10 +42,10 @@
           <!-- Foto Profil -->
           <?php if(Auth::user()->foto_profil): ?>
             <img src="<?php echo e(asset('storage/' . Auth::user()->foto_profil)); ?>" alt="Foto Profil"
-              class="w-20 h-20 rounded-full border-2 border-greenobject-cover shadow-md flex-shrink-0" />
+              class="w-20 h-20 rounded-full border-2 border-green nobject-cover shadow-md flex-shrink-0" />
           <?php else: ?>
             <img src="<?php echo e(asset('assets/Profile.jpg')); ?>" alt="Foto Profil"
-              class="w-20 h-20 rounded-full border-2 border-greenobject-cover shadow-md flex-shrink-0" />
+              class="w-20 h-20 rounded-full border-2 border-green object-cover shadow-md flex-shrink-0" />
           <?php endif; ?>
           
           <div class="leading-tight flex-1 min-w-0">

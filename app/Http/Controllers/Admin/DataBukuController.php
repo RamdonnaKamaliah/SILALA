@@ -43,8 +43,8 @@ class DataBukuController extends Controller
 public function store(Request $request)
 {
     $validated = $request->validate([
-        'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-        'foto_id'   => 'nullable|exists:gambar_bukus,id',
+        'foto_buku' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+        'foto_id'   => 'required|exists:gambar_bukus,id',
         'judul_buku' => 'required',
         'penulis' => 'required',
         'penerbit' => 'required',

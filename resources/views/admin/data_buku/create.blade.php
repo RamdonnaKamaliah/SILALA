@@ -35,6 +35,11 @@
                         </div>
 
                         <input type="hidden" name="foto_id" id="foto_id" value="{{ old('foto_id') }}">
+                    @error('foto_id')
+    <p class="text-red-500 text-sm mt-2">
+        {{ $message }}
+    </p>
+@enderror
                     </div>
 
                 </div>

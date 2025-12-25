@@ -48,7 +48,7 @@
                         </p>
                     </div>
 
-                    <div class="border-t border-yellow-100 my-2"></div>
+                    <div class="border-t border-gray-400 my-2"></div>
 
                     <div class="flex items-center justify-between">
                         <button type="button"

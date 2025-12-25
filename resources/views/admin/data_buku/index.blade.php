@@ -177,7 +177,7 @@
                             </thead>
 
                             <tbody class="divide-y divide-gray-100">
-                                @forelse ($data_buku as $buku)
+                                @forelse ($bukus as $buku)
                                     <tr class="hover:bg-[#F5F7ED] transition">
                                         <td class="px-4 py-3 text-center">
                                             <input type="checkbox" name="selected_ids[]" value="{{ $buku->id }}"

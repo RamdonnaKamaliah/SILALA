@@ -10,6 +10,7 @@ use App\Imports\DataBukuImport;
 use App\Models\DataKategori;
 use App\Models\GambarBuku;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
 
 
 
@@ -18,11 +19,23 @@ class DataBukuController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    private $apiUrl = 'http://127.0.0.1:8000/api/dataBuku';
+
     public function index()
     {
-        $data_buku = DataBuku::all();
-        return view('admin.data_buku.index', compact('data_buku'));
+        $response = Http::get($this->apiUrl);
+        if($response->successful()){
+            $bukus = $response->json()['data'] ?? [];
+            return view('admin.data_buku.index', compact('bukus'));
+        }
+        
+        return view('admin.data_buku.index', [
+            'bukus' => [],
+            'error' => 'gagal mengambil data buku'
+        ]);
     }
+    
 
     /**
      * Show the form for creating a new resource.

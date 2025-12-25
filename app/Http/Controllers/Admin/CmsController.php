@@ -159,5 +159,4 @@ public function updateFooterDash(Request $request)
 }
 
 
-
 }

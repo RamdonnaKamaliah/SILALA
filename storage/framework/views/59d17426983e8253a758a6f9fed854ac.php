@@ -26,11 +26,6 @@
         </div>
     </main>
 
-    <!-- Plugins -->
-    <script src="<?php echo e(asset('/assets_admin/js/plugins/chartjs.min.js')); ?>" async></script>
-    <script src="<?php echo e(asset('/assets_admin/js/plugins/perfect-scrollbar.min.js')); ?>" async></script>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script src="https://unpkg.com/alpinejs" defer></script>
     <script src="<?php echo e(asset('assets_admin/js/data table/dataTable.js')); ?>"></script>
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     

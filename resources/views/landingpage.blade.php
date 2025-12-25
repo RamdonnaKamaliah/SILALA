@@ -20,8 +20,19 @@
     @include('layout_landing.patrial_landing.header')
 
     <!-- Hero Section -->
-    <section class="pt-24 md:pt-32 pb-32 md:pb-40 relative bg-cover bg-center hero-section" id="/"
-        style="background-image: url('{{ asset('assets/background.png') }}');">
+   @php
+    $heroBg = \App\Models\Setting::getValue('hero_bg', 'background.png');
+
+    $heroBgPath = \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $heroBg)
+        ? Storage::url('cms/' . $heroBg)
+        : asset('assets/background.png');
+        @endphp
+
+        <section
+            class="pt-24 md:pt-32 pb-32 md:pb-40 relative 
+                bg-cover bg-[center_50%] hero-section"
+            style="background-image: url('{{ $heroBgPath }}');">
+
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-4 md:px-6">
 
             <!-- Judul + Icon -->

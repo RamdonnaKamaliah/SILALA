@@ -1,0 +1,1 @@
+<?php /**PATH C:\laragon\www\silala_bpmsph\resources\views\layout_login\master.blade.php ENDPATH**/ ?>

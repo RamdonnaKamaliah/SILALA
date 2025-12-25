@@ -1,50 +1,25 @@
-{{-- Icons --}}
-{{-- <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png" /> --}}
-{{-- <link rel="icon" type="image/png" href="./assets/img/favicon.png" /> --}}
-
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<!-- ================= FONTS ================= -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- Font Awesome -->
-<script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+<!-- ================= ICON ================= -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-<!-- Nucleo -->
-<link href="./assets_admin/css/nucleo-icons.css" rel="stylesheet" />
-<link href="./assets_admin/css/nucleo-svg.css" rel="stylesheet" />
+<!-- ================= NUCLEO ================= -->
+<link rel="stylesheet" href="{{ asset('assets_admin/css/nucleo-icons.css') }}">
+<link rel="stylesheet" href="{{ asset('assets_admin/css/nucleo-svg.css') }}">
 
-<!-- Main CSS -->
-<link href="{{ asset('assets_admin/css/soft-ui-dashboard-tailwind.css?v=1.0.5') }}" rel="stylesheet" />
+<!-- ================= CORE DASHBOARD ================= -->
+<link rel="stylesheet" href="{{ asset('assets_admin/css/soft-ui-dashboard-tailwind.css') }}">
 
-<!-- Analytics -->
-<script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
-
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<!-- DataTable -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<!-- ================= DATATABLE (GLOBAL) ================= -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
-<!-- Delete & Arsip -->
-<link rel="stylesheet" href="{{ asset('assets_admin/css/dataBuku/deleteArsip.css') }}">
-<script src="{{ asset('assets_admin/js/data table/dataTable.js') }}"></script>
-
-<!-- Admin Global CSS -->
+<!-- ================= ADMIN GLOBAL ================= -->
 <link rel="stylesheet" href="{{ asset('assets_admin/css/admin/admin.css') }}">
+<link rel="stylesheet" href="{{ asset('assets_admin/css/navbarAdmin.css') }}">
+<link rel="stylesheet" href="{{ asset('assets_admin/css/sidebar.css') }}">
 
-<!-- Data Arsip -->
-<link rel="stylesheet" href="{{ asset('assets_admin/css/data_arsip/arsip.css') }}">
-
-<!-- Data Kategori -->
-<link rel="stylesheet" href="{{ asset('assets_admin/css/data_kategori/create.css') }}">
-
-{{-- Databuku --}}
-<link rel="stylesheet" href="{{ asset('assets_admin/css/dataBuku/index.css') }}">
-{{-- bagian create --}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
-<link rel="stylesheet" href="{{ asset('/assets_admin/css/create-databuku.css') }}">
+{{-- SLOT CSS PAGE --}}
+@stack('styles')

@@ -39,7 +39,7 @@
             color: #8a9a55;
             border-left: 4px solid #ffffff;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transform: translateY(-2px);
+            transform: translateX(8px);
             position: relative;
             z-index: 1;
             font-weight: 700;
@@ -78,21 +78,28 @@
         .icon-container {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
         /* Active menu icon styling - LEBIH MENONJOL */
         .menu-item.active .icon-container {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             box-shadow: 0 4px 12px rgba(255, 255, 255, 0.4);
-            transform: scale(1.05);
+            transform: scale(1.1);
         }
 
-        /* Hover effects */
-        .menu-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+        /* Hover effects - LEBIH JELAS DAN SMOOTH */
+        .menu-item:not(.active):hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.1) 100%);
             color: #ffffff;
-            transform: translateX(5px);
-            transition: all 0.2s ease;
+            transform: translateX(8px);
+            border-left: 3px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item:not(.active):hover .icon-container {
+            transform: scale(1.08);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
         }
 
         /* Active menu dengan efek yang lebih menonjol */
@@ -158,24 +165,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
+            padding: 1.5rem;
             background: linear-gradient(135deg, #8a9a55 0%, #A4B465 100%);
-            z-index: 10;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .logo-img {
-            max-width: 120px;
-            max-height: 60px;
+            max-width: 140px;
+            max-height: 70px;
             object-fit: contain;
         }
 
         /* Sidebar content yang bisa di-scroll */
         .sidebar-content {
-            height: calc(100vh - 80px);
+            height: calc(100vh - 110px);
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         /* Custom scrollbar untuk sidebar dengan warna putih */
@@ -229,25 +234,6 @@
             color: #8a9a55;
         }
 
-        /* Badge notifikasi untuk menu aktif */
-        .active-badge {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: linear-gradient(135deg, #ffffff, #f8f9fa);
-            color: #8a9a55;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
         /* Text color for normal menu items */
         .menu-item {
             color: rgba(255, 255, 255, 0.9);
@@ -280,7 +266,7 @@
     <!-- Overlay -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden lg:hidden z-30"></div>
 
-    <!-- Sidebar -->
+    <!-- Sidebar -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
     <aside id="sidebar"
         class="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-primary-dark to-primary-medium shadow-lg z-50 overflow-hidden sidebar-transition sidebar-desktop sidebar-mobile -translate-x-full lg:translate-x-0">
         <!-- Tombol Close (hanya muncul di mobile) -->
@@ -292,41 +278,45 @@
             </svg>
         </button>
 
-        <!-- Sidebar Header dengan Logo (Fixed) -->
+        <!-- Sidebar Header dengan Logo -->
         <div class="logo-container">
-            <img src="{{ asset('/assets_admin/image/BPMSPH-logo.png') }}" alt="BPMS Logo" class="logo-img">
+            @php
+                $adminSidebarLogo = \App\Models\Setting::getValue('admin_sidebar_logo', null);
+
+                $logoPath = $adminSidebarLogo &&
+                    \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $adminSidebarLogo)
+                    ? Storage::url('cms/' . $adminSidebarLogo)
+                    : asset('/assets_admin/image/BPMSPH-logo.png');
+            @endphp
+
+            <img src="{{ $logoPath }}" alt="BPMS Logo" class="logo-img">
         </div>
 
         <!-- Sidebar Content (Scrollable) -->
         <div class="sidebar-content">
-            <ul class="mt-4 space-y-1 px-4 pb-4">
+            <ul class="mt-4 space-y-2 px-4 pb-4">
                 <!-- Dashboard -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li class="w-full">
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="{{ route('admin.dashboard') }}">
-
                         <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
                             <i class="fa-solid fa-house-chimney-window text-lg"></i>
                         </div>
-
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
                             Dashboard
                         </span>
                     </a>
                 </li>
 
-
                 <!-- Akun Pengguna -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li class="w-full">
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="{{ route('admin.data_pengguna.index') }}">
-
                         <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
                             <i class="fa-solid fa-user-gear text-lg"></i>
                         </div>
-
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
                             Akun Pengguna
                         </span>
@@ -334,15 +324,13 @@
                 </li>
 
                 <!-- CMS -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li class="w-full">
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="{{ route('admin.cms_admin.index') }}">
-
                         <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-user-gear text-lg"></i>
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-gear text-lg"></i>
                         </div>
-
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
                             CMS
                         </span>
@@ -350,29 +338,27 @@
                 </li>
 
                 <!-- Data Buku -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li class="w-full">
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="{{ route('admin.data_buku.index') }}">
-
                         <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
                             <i class="fa-solid fa-book-bookmark text-lg"></i>
                         </div>
-
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
                             Data Buku
                         </span>
                     </a>
                 </li>
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+
+                <!-- Media Buku -->
+                <li class="w-full">
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="{{ route('admin.media.index') }}">
-
                         <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-book-bookmark text-lg"></i>
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            <i class="fa-solid fa-photo-film text-lg"></i>
                         </div>
-
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
                             Media Buku
                         </span>
@@ -380,15 +366,13 @@
                 </li>
 
                 <!-- Data Kategori -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li class="w-full">
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="{{ route('admin.data_kategori.index') }}">
-
                         <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
                             <i class="fa-solid fa-layer-group text-lg"></i>
                         </div>
-
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
                             Data Kategori
                         </span>
@@ -396,15 +380,13 @@
                 </li>
 
                 <!-- Data Arsip -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li class="w-full">
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="{{ route('admin.data_arsip.index') }}">
-
                         <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
                             <i class="fa-solid fa-box-archive text-lg"></i>
                         </div>
-
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
                             Data Arsip
                         </span>
@@ -412,15 +394,13 @@
                 </li>
 
                 <!-- Data Peminjam -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li class="w-full">
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
                         href="{{ route('admin.data_peminjam.index') }}">
-
                         <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
                             <i class="fa-solid fa-id-card text-lg"></i>
                         </div>
-
                         <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
                             Data Peminjam
                         </span>
@@ -428,58 +408,23 @@
                 </li>
 
                 <!-- Divider -->
-                <li class="w-full mt-4">
+                <li class="w-full mt-6 pt-3">
                     <h6 class="pl-2 text-xs font-bold leading-tight uppercase divider-text">Account pages</h6>
                 </li>
 
-                <!-- E-book -->
-                <li class="mt-0.5 w-full">
-                    <a class="menu-item py-2.7 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all"
-                        href="#e-book">
-
-                        <div
-                            class="icon-container shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-book-open-reader text-lg"></i>
-                        </div>
-
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
-                            E-book
-                        </span>
-                    </a>
-                </li>
-
                 <!-- Logout Menu -->
-                <li class="mt-0.5 w-full">
+                <li class="w-full mt-2">
                     <a id="logout-btn"
-                        class="menu-item py-2.7 text-sm my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all duration-200 cursor-pointer group bg-transparent hover:bg-gradient-to-r from-red-500 to-pink-500 hover:text-white shadow-none hover:shadow-lg active:scale-95">
-
+                        class="menu-item py-3 text-sm my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all duration-200 cursor-pointer group hover:bg-gradient-to-r from-red-500 to-pink-500 hover:text-white shadow-none hover:shadow-lg active:scale-95">
                         <div
-                            class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm bg-center text-center xl:p-2.5 group-hover:bg-white/20 transition-all duration-300 text-white">
+                            class="shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm bg-center text-center xl:p-2.5 group-hover:bg-white/20 transition-all duration-300 text-white">
                             <i class="fa-solid fa-right-from-bracket text-[15px]"></i>
                         </div>
-
                         <span class="ml-1 duration-300 ease-soft">Logout</span>
                     </a>
                 </li>
             </ul>
         </div>
-        <li class="mt-0.5 w-full">
-            <a id="logout-btn"
-                class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all duration-200 text-slate-700 cursor-pointer group bg-transparent hover:bg-gradient-to-r from-red-500 to-pink-500 hover:text-white shadow-none hover:shadow-lg active:scale-95">
-                <div
-                    class="shadow-soft-2xl mr-2 flex h-8 w-8 items-center justify-center rounded-lg bg-white/40 bg-center stroke-0 text-center xl:p-2.5 group-hover:bg-white/20 transition-all duration-300">
-                    <svg class="text-red-600 group-hover:text-white transition-colors duration-200" width="16px"
-                        height="16px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M17 16L21 12M21 12L17 8M21 12H7M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                </div>
-
-                <span class="ml-1 duration-300 ease-soft">Logout</span>
-            </a>
-        </li>
-        </ul>
     </aside>
 
     <!-- Logout Form (Hidden) -->

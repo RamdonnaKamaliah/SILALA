@@ -1,0 +1,81 @@
+
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Optimized spacing - reduced margins */
+        .space-y-6>*+* {
+            margin-top: 1rem;
+        }
+
+        .space-y-4>*+* {
+            margin-top: 0.75rem;
+        }
+
+        /* Smooth animations */
+        * {
+            transition-property: all;
+            transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            transition-duration: 200ms;
+        }
+
+        /* PDF Modal Animation */
+        #pdfModal {
+            transition: opacity 0.3s ease;
+        }
+
+        #pdfModal:not(.hidden) {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .p-6 {
+                padding: 1rem;
+            }
+
+            .text-2xl {
+                font-size: 1.5rem;
+            }
+
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Custom scrollbar for better UX */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #A4B465, #8AA24F);
+            border-radius: 10px;
+        }
+
+        /* Ensure containers align perfectly */
+        .xl\:col-span-2 .space-y-6 {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .xl\:col-span-2 .space-y-6>* {
+            flex: 1;
+        }

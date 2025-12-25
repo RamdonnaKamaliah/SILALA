@@ -12,19 +12,34 @@ class Admin extends Authenticatable
     protected $table = 'admins';
 
     protected $fillable = [
-        'name', 'phone', 'email', 'membership_type', 'gender',
-        'email_verified_at', 'password',
-        'google_id', 'google_token', 'google_refresh_token',
-        'remember_token' // Pastikan ini ada
+        // Data dasar admin
+        'name',
+        'email',
+        'phone',        // ← ganti dari telp, sesuai DB
+        'foto',         // ← buat foto profile
+
+        // Authentication
+        'password',
+        'remember_token',
+
+        // Google Login (AMAN! TETAP ADA)
+        'google_id',
+        'google_token',
+        'google_refresh_token',
+
+        // Field tambahan lain
+        'membership_type',
+        'gender',
+        'email_verified_at',
     ];
 
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'google_token',
+        'google_refresh_token',
+    ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

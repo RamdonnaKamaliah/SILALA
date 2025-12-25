@@ -31,7 +31,12 @@ darkMode: 'class',
                 black: '#000000',
                 pearl: '#F8F8F8',
                 twetterdark: '#15202B',
-                netral: '#192734'
+                netral: '#192734',
+                primary_dark: '#8a9a55',
+                primary_medium: '#A4B465',
+                primary_light: '#b8c685',
+                primary_pale: '#f0f4e0',
+                primary_bg: '#f8faf0'
             }
         },
     },

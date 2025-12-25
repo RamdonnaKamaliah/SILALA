@@ -3,7 +3,7 @@
 @section('pageTitle', 'Admin Dashboard')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-[#f5f5e9] to-[#e8e4d5] p-4 md:p-6">
+<div class="min-h-screen p-4 md:p-6">
 
     <!-- Header Section -->
     <div class="bg-white/70 backdrop-blur-md rounded-2xl p-4 md:p-6 mb-6 border border-white/35 shadow-sm">
@@ -13,7 +13,7 @@
                 <img src="{{ asset('/assets_admin/image/sisapa.png') }}" alt="logo"
                     class="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shadow-sm" />
                 <div>
-                    <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-[#2d5016]">Selamat Datang, Admin 👋</h1>
+                    <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-[#2d5016]">Selamat Datang, {{ $admin->name }} 👋</h1>
                     <p class="text-sm text-gray-600 mt-1">Sistem Manajemen Perpustakaan — Silala</p>
                 </div>
             </div>
@@ -249,6 +249,4 @@
     </div>
 
 </div>
-@push('scripts')
-@endpush
 @endsection

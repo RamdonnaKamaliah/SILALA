@@ -65,4 +65,99 @@ class CmsController extends Controller
         return back()->with('success', 'Footer logo berhasil diperbarui!');
     }
 
+    public function updateSidebarLogo(Request $request)
+    {
+        $request->validate([
+            'sidebar_logo' => 'required|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
+        ]);
+
+        // Pastikan folder ada
+        Storage::disk('public')->makeDirectory('cms');
+
+        $file = $request->file('sidebar_logo');
+        $filename = 'sidebar_logo_' . time() . '.' . $file->getClientOriginalExtension();
+
+        // SIMPAN KE STORAGE YANG BENAR
+        $file->storeAs('cms', $filename, 'public');
+
+        Setting::updateOrCreate(
+            ['key' => 'sidebar_logo'],
+            ['value' => $filename]
+        );
+
+        return back()->with('success', 'Logo Sidebar berhasil diperbarui!');
+    }
+
+        public function updateHeroBg(Request $request)
+        {
+            $request->validate([
+                'hero_bg' => 'required|image|mimes:png,jpg,jpeg,webp|max:2048',
+            ]);
+
+            // pastiin folder ada
+            Storage::disk('public')->makeDirectory('cms');
+
+            $file = $request->file('hero_bg');
+
+            // nama aman & unik
+            $filename = 'hero_bg_' . time() . '.' . $file->getClientOriginalExtension();
+
+            // simpan ke storage/app/public/cms
+            $file->storeAs('cms', $filename, 'public');
+
+            // simpan ke DB
+            Setting::updateOrCreate(
+                ['key' => 'hero_bg'],
+                ['value' => $filename]
+            );
+
+            return back()->with('success', 'Background hero berhasil diubah!');
+        }
+
+        public function updateAdminSidebarLogo(Request $request)
+            {
+                $request->validate([
+                    'admin_sidebar_logo' => 'required|image|mimes:png,jpg,jpeg,svg,webp|max:2048',
+                ]);
+
+                // pastikan folder cms ada
+                Storage::disk('public')->makeDirectory('cms');
+
+                $file = $request->file('admin_sidebar_logo');
+                $filename = 'admin_sidebar_' . time() . '.' . $file->getClientOriginalExtension();
+
+                // simpan ke storage/app/public/cms
+                $file->storeAs('cms', $filename, 'public');
+
+                // simpan ke DB
+                Setting::updateOrCreate(
+                    ['key' => 'admin_sidebar_logo'],
+                    ['value' => $filename]
+                );
+
+                return back()->with('success', 'Logo sidebar admin berhasil diperbarui!');
+            }
+            
+public function updateFooterDash(Request $request)
+{
+    $request->validate([
+        'footerdash' => 'required|image|mimes:png,jpg,jpeg,webp,svg|max:2048',
+    ]);
+
+    Storage::disk('public')->makeDirectory('cms');
+
+    $file = $request->file('footerdash');
+
+    // nama FIX biar replace
+    $filename = 'footerdash.' . $file->getClientOriginalExtension();
+
+    $file->storeAs('cms', $filename, 'public');
+
+    Setting::setValue('footerdash', $filename);
+
+    return back()->with('success', 'Logo footer dashboard berhasil diupdate 🔥');
+}
+
+
+
 }

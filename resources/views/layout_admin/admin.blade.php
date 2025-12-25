@@ -27,13 +27,10 @@
     </main>
 
     <!-- Plugins -->
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.0/dist/sweetalert2.min.js"></script>
-    <script src="{{ asset('/assets_admin/js/plugins/chartjs.min.js') }}" async></script>
-    <script src="{{ asset('/assets_admin/js/plugins/perfect-scrollbar.min.js') }}" async></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://unpkg.com/alpinejs" defer></script>
-    <script src="{{ asset('assets_admin/js/data table/dataTable.js') }}"></script>
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     
     <!-- Analytics -->
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
@@ -45,12 +42,12 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <!-- Global tidak bercabang -->
+    <script src="{{ asset('assets_admin/js/data table/dataTable.js') }}"></script>
     <script src="{{ asset('assets_admin/js/dashboard/index.js') }}"></script>
     <script src="{{ asset('assets_admin/js/data_pengguna/pengguna.js') }}"></script>
     <script src="{{ asset('assets_admin/js/data_peminjam/peminjam.js') }}"></script>
 
     <!-- Data Buku -->
-    <script src="{{ asset('assets_admin/js/dataBuku/ModalPlilhMedia.js') }}"></script>
     <script src="{{ asset('assets_admin/js/dataBuku/deleteArsip.js') }}"></script>
     {{-- databuku bagian create --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>

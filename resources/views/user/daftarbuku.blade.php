@@ -13,7 +13,10 @@
 
                     <button
                         class="w-full md:w-48 px-4 py-2 bg-primary text-white rounded-xl shadow-md font-semibold flex justify-between items-center hover:bg-kuning hover:text-gray-700 transition-all duration-300">
-                        <span id="kategoriText">Semua Kategori</span>
+                        <span id="kategoriText">
+                            {{ request('kategori') ?? 'Semua Kategori' }}
+                        </span>
+
                         <svg class="w-4 h-4 transition-transform duration-200" id="kategoriIcon" fill="none"
                             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -24,17 +27,19 @@
                     <div id="kategoriMenu"
                         class="hidden absolute left-0 w-full md:w-48 mt-2 z-[9999] bg-primary rounded-xl shadow-xl p-2 border border-[#E2DAC3]">
 
-                        <button data-kategori="Semua"
-                            class="kategori-btn block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
+                        <a href="{{ route('user.daftarbuku') }}"
+                            class="block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
                             Semua Kategori
-                        </button>
+                        </a>
+
 
                         @foreach ($data_kategori as $kat)
-                            <button data-kategori="{{ $kat->nama_kategori }}"
-                                class="kategori-btn block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all rounded-lg">
+                            <a href="{{ route('user.daftarbuku', ['kategori' => $kat->nama_kategori]) }}"
+                                class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all rounded-lg">
                                 {{ $kat->nama_kategori }}
-                            </button>
+                            </a>
                         @endforeach
+
                     </div>
                 </div>
 
@@ -54,15 +59,26 @@
 
             <!-- Tampilkan pesan jika kosong -->
             <div id="pesanKosong" class="col-span-full text-center text-gray-500 py-10 hidden">
-                Tidak ada buku pada kategori ini.
+                <p class="text-green text-lg font-semibold mb-2">
+                    Tidak ada buku dengan judul ini
+                </p>
             </div>
-
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
-                @foreach ($data_bukus as $buku)
-                    <div class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden 
-    transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] 
-    cursor-pointer flex flex-col items-center pt-4"
+                @forelse ($data_bukus as $buku)
+                    @php
+                        // Ambil rating untuk buku ini
+                        $ratingData = $ratings[$buku->id] ?? null;
+                        $avgRating = $ratingData ? $ratingData->avg_rating : 0;
+                        $totalRatings = $ratingData ? $ratingData->total_ratings : 0;
+
+                        // Hitung bintang penuh, setengah, dan kosong
+                        $fullStars = floor($avgRating);
+                        $halfStar = $avgRating - $fullStars >= 0.5 ? 1 : 0;
+                        $emptyStars = 5 - $fullStars - $halfStar;
+                    @endphp
+
+                    <div class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4"
                         data-kategori-buku="{{ $buku->nama_kategori }}" data-judul="{{ strtolower($buku->judul_buku) }}">
 
                         <!-- COVER -->
@@ -92,12 +108,26 @@
 
                             <!-- RATING -->
                             <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star"></i>
-                                <i class="fa-solid fa-star-half-stroke"></i>
-                                <i class="fa-regular fa-star"></i>
+                                @for ($i = 0; $i < $fullStars; $i++)
+                                    <i class="fa-solid fa-star"></i>
+                                @endfor
+
+                                @if ($halfStar)
+                                    <i class="fa-solid fa-star-half-stroke"></i>
+                                @endif
+
+                                @for ($i = 0; $i < $emptyStars; $i++)
+                                    <i class="fa-regular fa-star"></i>
+                                @endfor
+
+                                <!-- Tampilkan rating numerik jika ada -->
+                                @if ($avgRating > 0)
+                                    <span class="text-gray-600 text-xs ml-1">({{ number_format($avgRating, 1) }})</span>
+                                @else
+                                    <span class="text-gray-400 text-xs ml-1">Belum ada rating</span>
+                                @endif
                             </div>
+
 
                             <!-- BUTTON -->
                             <div class="mt-auto pt-2">
@@ -110,8 +140,21 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
 
+                @empty
+                    <!-- 🔴 JIKA TIDAK ADA BUKU -->
+                    <div class="col-span-full text-center py-14">
+                        <p class="text-green text-lg font-semibold mb-2">
+                            Tidak ada buku dengan kategori ini
+                        </p>
+
+                        @if (request('kategori'))
+                            <p class="text-gray-500 text-sm">
+                                Kategori: <span class="font-medium">{{ request('kategori') }}</span>
+                            </p>
+                        @endif
+                    </div>
+                @endforelse
             </div>
-        </div>
-    @endsection
+
+        @endsection

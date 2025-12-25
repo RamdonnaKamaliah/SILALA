@@ -19,6 +19,7 @@ export default {
                 mochiy: ['"Mochiy Pop One"', "sans-serif"],
             },
             colors: {
+<<<<<<< HEAD
                 primary: "rgb(var(--primary) / <alpha-value>)",
                 green: "#626F47",
                 cream: "#F5ECD5",
@@ -31,6 +32,21 @@ export default {
                 netral: "#192734",
                 
             },
+=======
+                primary: '#A4B465',
+                green: '#626F47', 
+                green_dark: '#2F7A2F',
+                cream: '#F5ECD5', 
+                white: '#ffffff',
+                kuning: '#F0BB78',
+                cream_muda: '#F5ECD5',
+                orange_200: '#F0EAD2',
+                black: '#000000',
+                pearl: '#F8F8F8',
+                twetterdark: '#15202B',
+                netral: '#192734'
+            }
+>>>>>>> a8ca92be733905685b35971da96e246167f9f327
         },
     },
 

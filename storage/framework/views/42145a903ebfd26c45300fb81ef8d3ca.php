@@ -44,4 +44,7 @@
 <link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/data_kategori/create.css')); ?>">
 
 
-<link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/dataBuku/index.css')); ?>"><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/layout_admin/partial_admin/link.blade.php ENDPATH**/ ?>
+<link rel="stylesheet" href="<?php echo e(asset('assets_admin/css/dataBuku/index.css')); ?>">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+<link rel="stylesheet" href="<?php echo e(asset('/assets_admin/css/create-databuku.css')); ?>"><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/layout_admin/partial_admin/link.blade.php ENDPATH**/ ?>

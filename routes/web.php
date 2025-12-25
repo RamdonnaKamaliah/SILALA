@@ -12,8 +12,6 @@ use App\Http\Controllers\Admin\DataKategoriController;
 use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
-use App\Http\Controllers\Admin\DataDendaController;
-use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\user\DaftarBukuController;
 use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
@@ -68,27 +66,32 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
     Route::get('/riwayatbaca', [RiwayatBacaController::class, 'index'])->name('user.riwayatbaca');
 
     // PROFIL USER
-Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
-Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
-Route::put('/editprofil', [EditProfilController::class, 'update'])->name('user.updateprofil');
+    Route::get('/profil', [ProfilController::class, 'index'])->name('user.profil');
+    Route::get('/editprofil', [EditProfilController::class, 'index'])->name('user.editprofil');
+    Route::put('/editprofil', [EditProfilController::class, 'update'])->name('user.updateprofil');
 
     // BACA
     Route::get('/baca/{id}', [DetailBukuController::class, 'baca'])->name('user.baca');
 
-    // PENGEMBALIAN BUKU
+     // PENGEMBALIAN BUKU
     Route::put('/riwayat/kembalikan/{id}', [RiwayatBukuController::class, 'kembalikanBuku'])
         ->name('user.riwayat.kembalikan');
     Route::post('/kembalikan-buku-foto', [RiwayatBukuController::class, 'kembalikanBukuWithPhoto'])
-    ->name('user.kembalikan.buku.foto');
+        ->name('user.kembalikan.buku.foto');
     Route::get('/check-borrow-status/{bookId}', [RiwayatBukuController::class, 'checkBookBorrowStatus'])
         ->name('user.check.borrow.status');
     Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBorrow'])
         ->name('user.check.active.borrow');
+    Route::get('/peminjaman-teguran/{id}', [RiwayatBukuController::class, 'getPeminjamanTeguran'])
+        ->name('user.peminjaman.teguran');
 
     // PINJAM BUKU
     Route::post('/pinjam', [App\Http\Controllers\Admin\DataPeminjamController::class, 'store'])
         ->name('pinjam.store')
         ->middleware('auth');
+    
+        Route::get('/peminjaman-terlambat', [RiwayatBukuController::class, 'getPeminjamanTerlambat'])
+    ->name('user.peminjaman.terlambat');
     
     // FAVORIT
     Route::get('/favorit', [FavoritController::class, 'index'])->name('user.favorit');
@@ -138,6 +141,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
         ->name('data_peminjam.konfirmasi');  
     Route::put('/data_peminjam/{id}/masalah', [DataPeminjamController::class, 'laporkanMasalah'])
         ->name('data_peminjam.masalah');
+
+    //  Teguran dan Batalkan Teguran
+    Route::post('/data_peminjam/{id}/teguran', [DataPeminjamController::class, 'kirimTeguran'])
+    ->name('admin.data_peminjam.teguran');
+    Route::delete('/data_peminjam/{id}/batalkan-teguran', [DataPeminjamController::class, 'batalkanTeguran'])
+    ->name('admin.data_peminjam.batalkan-teguran');
         
     // Media Buku Routes
     Route::get('/media-buku', [MediaBukuController::class, 'index'])->name('media.index');

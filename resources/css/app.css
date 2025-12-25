@@ -23,3 +23,87 @@
         --primary: 168 85 247;
     }
 }
+<<<<<<< HEAD
+=======
+
+@layer components {
+
+  /* ===============================
+     USER SIDEBAR (SAFE VERSION)
+     =============================== */
+
+  /* Matikan semua curve default */
+  .user-sidebar .nav-item a::before
+  .user-sidebar .nav-item a::after {
+    display: none;
+  }
+
+  /* ===== CURVE ACTIVE ===== */
+  .user-sidebar .nav-item.active a::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: -50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 9999px;
+    background-color: transparent;
+    box-shadow: 35px 35px 0 10px theme('colors.white');
+    pointer-events: none;
+    z-index: 0;
+    display: block;
+  }
+
+  .user-sidebar .nav-item.active a::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    height: 50px;
+    border-radius: 9999px;
+    background-color: theme('colors.primary');
+    box-shadow: 35px -35px 0 10px theme('colors.white');
+    pointer-events: none;
+    z-index: 0;
+    display: block;
+  }
+
+  /* ===== ACTIVE ===== */
+  .user-sidebar .nav-item.active {
+    background-color: theme('colors.white');
+  }
+
+  .user-sidebar .nav-item.active .menu-item {
+    background-color: theme('colors.white');
+    border-color: transparent;
+  }
+
+  .user-sidebar .nav-item.active .iconify,
+  .user-sidebar .nav-item.active span {
+    color: theme('colors.green');
+  }
+
+  /* ===== HOVER (NON ACTIVE) ===== */
+  .user-sidebar .nav-item:not(.active) .menu-item {
+    transition: all 0.3s ease;
+  }
+
+  .user-sidebar .nav-item:not(.active) .menu-item:hover {
+    background-color: theme('colors.white');
+    transform: translateX(5px);
+  }
+
+  .user-sidebar .nav-item:not(.active) .menu-item:hover .iconify,
+  .user-sidebar .nav-item:not(.active) .menu-item:hover span {
+    color: theme('colors.green');
+  }
+
+  /* ===== SIDEBAR ANIMATION ===== */
+  .user-sidebar {
+    overflow: hidden;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+
+}
+>>>>>>> a8ca92be733905685b35971da96e246167f9f327

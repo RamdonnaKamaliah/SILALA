@@ -9,10 +9,9 @@ class LandingpageController extends Controller
 {
      public function index()
     {
-        // Ambil semua data buku dari database
+        // Semua Data Buku
         $data_buku = DataBuku::latest()->get();
 
-        // Kirim ke view landing page
         return view('landingpage', compact('data_buku'));
     }
 }

@@ -23,21 +23,27 @@
         </div>
       </div>
 
-      <!-- Input Pencarian -->
+      <!-- Input Pencarian Riwayat Baca -->
       <div class="relative w-full md:w-64">
-        <input type="text" placeholder="Cari Buku..."
-          class="w-full rounded-full bg-white border border-[#E0D6B8] pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C5B78B]" />
-        <span class="iconify absolute right-3 top-1/2 -translate-y-1/2 text-[#626F47]" data-icon="mdi:magnify" style="font-size:20px;"></span>
+        <input type="text" 
+               placeholder="Cari di riwayat baca..."
+               id="search-riwayat"
+               class="w-full rounded-full bg-white border border-[#E0D6B8] pl-4 pr-10 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#C5B78B]" />
+        <span class="iconify absolute right-3 top-1/2 -translate-y-1/2 text-[#626F47]" 
+              data-icon="mdi:magnify" 
+              style="font-size:20px;"></span>
       </div>
     </div>
 
     <!-- Grid Buku -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6" id="riwayat-container">
       <?php $__empty_1 = true; $__currentLoopData = $riwayat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
       <a href="<?php echo e(route('user.detailbuku', ['id' => $data->buku->id, 'from' => 'riwayatbaca'])); ?>" 
-         class="transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm block hover:no-underline group">
+         class="riwayat-card transition-transform duration-300 hover:scale-105 bg-white rounded-xl p-3 shadow-sm block hover:no-underline group"
+         data-judul="<?php echo e(strtolower($data->buku->judul_buku ?? '')); ?>"
+         data-penulis="<?php echo e(strtolower($data->buku->penulis ?? '')); ?>">
         <div class="aspect-[3/4] w-full overflow-hidden rounded-lg bg-gray-100">
-          <img src="<?php echo e(asset($data->buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
+          <img src="<?php echo e(asset('storage/' . $data->buku->foto_buku ?? 'assets/default-cover.jpg')); ?>" 
                alt="<?php echo e($data->buku->judul_buku); ?>" 
                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
         </div>
@@ -71,24 +77,30 @@
 
         </p>
 
-        <!-- 🔗 Tombol "Lanjutkan Baca" - gunakan event.stopPropagation() agar tidak trigger link parent -->
+        <!-- 🔗 Tombol "Lanjutkan Baca" -->
         <button onclick="event.stopPropagation(); window.open('<?php echo e(asset($data->buku->file_buku)); ?>', '_blank');"
           class="bg-green hover:bg-primary text-white font-semibold text-xs px-4 py-1 rounded-full mx-auto block mt-3 shadow transition-colors duration-200">
           Lanjutkan Baca
         </button>
       </a>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-        <div class="text-center py-12 col-span-full">
-          <div class="text-[#626F47] text-lg font-semibold mb-2">
-            <?php if(request()->has('status')): ?>
-              Tidak ada data untuk status yang dipilih
-            <?php else: ?>
-              Belum ada riwayat peminjaman
-            <?php endif; ?>
+        <!-- Tampilan default saat tidak ada riwayat -->
+        <div class="no-riwayat-default text-center py-12 col-span-full">
+          <div class="text-green text-lg font-semibold mb-2">
+            Belum ada riwayat baca
           </div>
-          <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
+          <p class="text-gray-500 text-sm">Silakan baca buku terlebih dahulu</p>
         </div>
       <?php endif; ?>
+      
+      <!-- Tampilan saat pencarian tidak menemukan hasil -->
+      <div id="no-search-results" class="hidden text-center py-12 col-span-full">
+        <div class="text-[#626F47] text-lg font-semibold mb-2">
+          Tidak ada buku yang sesuai
+        </div>
+        <p class="text-gray-500 text-sm">Coba gunakan kata kunci lain</p>
+      </div>
     </div>
-  <?php $__env->stopSection(); ?>
+  
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/riwayatbaca.blade.php ENDPATH**/ ?>

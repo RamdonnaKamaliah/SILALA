@@ -247,8 +247,8 @@
     </div>
 
 </div>
-<?php $__env->stopSection(); ?>
-
 <?php $__env->startPush('scripts'); ?>
 <?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

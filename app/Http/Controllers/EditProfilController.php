@@ -25,13 +25,12 @@ class EditProfilController extends Controller
 {
     $user = User::find(Auth::id());
     
-    // Validasi data - membership_type sekarang REQUIRED karena radio button wajib dipilih
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
         'phone' => 'nullable|string|max:20',
         'gender' => 'nullable|in:Laki-laki,Perempuan',
-        'membership_type' => 'required|in:Karyawan,Magang', // Diubah menjadi REQUIRED
+        'membership_type' => 'required|in:Karyawan,Magang',
         'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'current_password' => 'nullable|required_with:new_password',
         'new_password' => 'nullable|min:8|confirmed',
@@ -42,20 +41,20 @@ class EditProfilController extends Controller
     $user->email = $validated['email'];
     $user->phone = $validated['phone'] ?? $user->phone;
     
-    // Konversi gender sesuai database (L/P)
+    // Konversi gender
     $genderInput = $validated['gender'] ?? null;
     if ($genderInput) {
         if ($genderInput == 'Laki-laki') {
-            $user->gender = 'L'; // Database menggunakan 'L'
+            $user->gender = 'L';
         } elseif ($genderInput == 'Perempuan') {
-            $user->gender = 'P'; // Database menggunakan 'P'
+            $user->gender = 'P';
         }
     }
     
-    // Update membership_type (selalu ada karena required)
+    // Update membership type
     $user->membership_type = $validated['membership_type'];
 
-    // Update foto profil jika ada
+    // Update foto
     if ($request->hasFile('foto_profil')) {
         if ($user->foto_profil && Storage::exists('public/' . $user->foto_profil)) {
             Storage::delete('public/' . $user->foto_profil);

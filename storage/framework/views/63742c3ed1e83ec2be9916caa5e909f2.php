@@ -1,8 +1,21 @@
 <?php $__env->startSection('pageTitle', 'Data Peminjam'); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="p-4 md:p-6 lg:p-8 min-h-screen bg-gray-50">
     <!-- Header Section -->
+    
+    <?php if(session('success')): ?>
+        <div class="fixed top-4 right-4 z-[10001] bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
+            <i class="fas fa-check-circle"></i>
+            <span><?php echo e(session('success')); ?></span>
+        </div>
+    <?php endif; ?>
+
+    <?php if(session('error')): ?>
+        <div class="fixed top-4 right-4 z-[10001] bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-fade-in">
+            <i class="fas fa-exclamation-circle"></i>
+            <span><?php echo e(session('error')); ?></span>
+        </div>
+    <?php endif; ?>
     <div class="mb-8">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
             <div class="flex-1">
@@ -142,6 +155,15 @@
                     </thead>
                     <tbody class="divide-y divide-gray-200" id="tableBody">
                         <?php $__currentLoopData = $data_peminjam; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $peminjam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
+                            $isLate = now()->gt($peminjam->tanggal_kembali) && $peminjam->status == 'dipinjam';
+                            $isWaiting = $peminjam->status == 'menunggu_konfirmasi';
+                            $hasPhoto = !empty($peminjam->foto_bukti_pengembalian);
+                            $isMandiri = $peminjam->metode_pengembalian == 'mandiri';
+                            
+                            // Tambahkan kondisi untuk menampilkan tombol teguran
+                            $showTeguranButton = $isWaiting && $isMandiri && $hasPhoto;
+                        ?>
                             <?php
                                 $isLate = now()->gt($peminjam->tanggal_kembali) && $peminjam->status == 'dipinjam';
                                 $isWaiting = $peminjam->status == 'menunggu_konfirmasi';
@@ -199,7 +221,7 @@
                                         <?php if($peminjam->waktu_pengembalian_aktual): ?>
                                             <div class="flex items-center gap-2 text-sm text-gray-500">
                                                 <i class="fas fa-history text-[#A4B465] text-xs"></i>
-                                                Dikembalikan: <?php echo e(\Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y H:i')); ?>
+                                                Dikembalikan: <?php echo e(\Carbon\Carbon::parse($peminjam->waktu_pengembalian_aktual)->translatedFormat('d M Y')); ?>
 
                                             </div>
                                         <?php endif; ?>
@@ -251,48 +273,74 @@
                                 </td>
                                 
                                 <!-- Aksi Desktop -->
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
-                                        <?php if($peminjam->status == 'dipinjam'): ?>
-                                            <!-- Konfirmasi Kembali -->
-                                            <form action="<?php echo e(route('admin.data_peminjam.kembalikan', $peminjam->id)); ?>" method="POST" class="inline">
-                                                <?php echo csrf_field(); ?>
-                                                <?php echo method_field('PUT'); ?>
-                                                <button type="submit" 
-                                                    class="bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
-                                                    onclick="return confirm('Konfirmasi pengembalian buku?')">
-                                                    <i class="fas fa-undo text-xs"></i>
-                                                    Dikembalikan
-                                                </button>
-                                            </form>
-                                        <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
-                                            <!-- Konfirmasi Pengembalian dari User -->
-                                            <form action="<?php echo e(route('admin.data_peminjam.konfirmasi', $peminjam->id)); ?>" method="POST" class="inline">
-                                                <?php echo csrf_field(); ?>
-                                                <?php echo method_field('PUT'); ?>
-                                                <button type="submit" 
-                                                    class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
-                                                    onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
-                                                    <i class="fas fa-check text-xs"></i>
-                                                    Konfirmasi
-                                                </button>
-                                            </form>
-                                        <?php elseif($peminjam->status == 'dikembalikan'): ?>
-                                            <span class="inline-flex items-center px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-semibold">
-                                                <i class="fas fa-check-circle mr-1.5"></i>
-                                                Selesai
-                                            </span>
-                                        <?php endif; ?>
+<td class="px-6 py-4">
+    <div class="flex items-center gap-2">
+        <?php if($peminjam->status == 'dipinjam'): ?>
+            <!-- Konfirmasi Kembali -->
+            <form action="<?php echo e(route('admin.data_peminjam.kembalikan', $peminjam->id)); ?>" method="POST" class="inline">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
+                <button type="submit" 
+                    class="bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+                    onclick="return confirm('Konfirmasi pengembalian buku?')">
+                    <i class="fas fa-undo text-xs"></i>
+                    Dikembalikan
+                </button>
+            </form>
+            
+        <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
+            <?php if($showTeguranButton): ?>
+                <!-- Tombol Teguran -->
+                <button type="button" onclick="showTeguranModal(<?php echo e($peminjam->id); ?>, '<?php echo e(addslashes($peminjam->user->name)); ?>')"
+                    class="bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+                    title="Kirim Teguran">
+                    <i class="fas fa-exclamation-triangle text-xs"></i>
+                    Teguran
+                </button>
+            <?php endif; ?>
+            
+            <!-- Konfirmasi Pengembalian dari User -->
+            <form action="<?php echo e(route('admin.data_peminjam.konfirmasi', $peminjam->id)); ?>" method="POST" class="inline">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
+                <button type="submit" 
+                    class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+                    onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
+                    <i class="fas fa-check text-xs"></i>
+                    Konfirmasi
+                </button>
+            </form>
+            
+        <?php elseif($peminjam->status == 'dikembalikan'): ?>
+            <span class="inline-flex items-center px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-semibold">
+                <i class="fas fa-check-circle mr-1.5"></i>
+                Selesai
+            </span>
+            
+            <!-- Tombol Batalkan Teguran jika ada teguran -->
+            <?php if($peminjam->keterangan && str_contains($peminjam->keterangan, 'Teguran:')): ?>
+                <form action="<?php echo e(route('admin.data_peminjam.batalkan-teguran', $peminjam->id)); ?>" method="POST" class="inline">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
+                    <button type="submit" 
+                        class="bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+                        onclick="return confirm('Batalkan teguran ini?')">
+                        <i class="fas fa-times text-xs"></i>
+                        Batalkan Teguran
+                    </button>
+                </form>
+            <?php endif; ?>
+        <?php endif; ?>
 
-                                        <!-- Tombol Detail -->
-                                        <a href="<?php echo e(route('admin.data_peminjam.show', $peminjam->id)); ?>"
-                                            class="bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
-                                            title="Lihat Detail">
-                                            <i class="fas fa-eye text-xs"></i>
-                                            Detail
-                                        </a>
-                                    </div>
-                                </td>
+        <!-- Tombol Detail -->
+        <a href="<?php echo e(route('admin.data_peminjam.show', $peminjam->id)); ?>"
+            class="bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+            title="Lihat Detail">
+            <i class="fas fa-eye text-xs"></i>
+            Detail
+        </a>
+    </div>
+</td>
                             </tr>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
@@ -401,43 +449,69 @@
                         <?php endif; ?>
 
                         <!-- Actions Mobile -->
-                        <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-200">
-                            <?php if($peminjam->status == 'dipinjam'): ?>
-                                <form action="<?php echo e(route('admin.data_peminjam.kembalikan', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('PUT'); ?>
-                                    <button type="submit" 
-                                        class="w-full bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
-                                        onclick="return confirm('Konfirmasi pengembalian buku?')">
-                                        <i class="fas fa-undo text-xs"></i>
-                                        Kembalikan
-                                    </button>
-                                </form>
-                            <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
-                                <!-- Konfirmasi Pengembalian dari User -->
-                                <form action="<?php echo e(route('admin.data_peminjam.konfirmasi', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('PUT'); ?>
-                                    <button type="submit" 
-                                        class="w-full bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
-                                        onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
-                                        <i class="fas fa-check text-xs"></i>
-                                        Konfirmasi
-                                    </button>
-                                </form>
-                            <?php elseif($peminjam->status == 'dikembalikan'): ?>
-                                <span class="inline-flex items-center px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-semibold w-full justify-center">
-                                    <i class="fas fa-check-circle mr-1.5"></i>
-                                    Selesai
-                                </span>
-                            <?php endif; ?>
+<div class="flex flex-wrap gap-2 pt-3 border-t border-gray-200">
+    <?php if($peminjam->status == 'dipinjam'): ?>
+        <form action="<?php echo e(route('admin.data_peminjam.kembalikan', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
+            <button type="submit" 
+                class="w-full bg-[#A4B465] text-white px-3 py-2 rounded-lg hover:bg-[#8a9a58] text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+                onclick="return confirm('Konfirmasi pengembalian buku?')">
+                <i class="fas fa-undo text-xs"></i>
+                Kembalikan
+            </button>
+        </form>
+        
+    <?php elseif($peminjam->status == 'menunggu_konfirmasi'): ?>
+        <!-- Hanya tampilkan tombol teguran jika metode pengembalian mandiri -->
+        <?php if($peminjam->metode_pengembalian == 'mandiri' && $hasPhoto): ?>
+            <!-- Teguran Button Mobile -->
+            <button type="button" onclick="showTeguranModal(<?php echo e($peminjam->id); ?>, '<?php echo e(addslashes($peminjam->user->name)); ?>')"
+                class="flex-1 min-w-[100px] bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2">
+                <i class="fas fa-exclamation-triangle text-xs"></i>
+                Teguran
+            </button>
+        <?php endif; ?>
+        
+        <!-- Konfirmasi Pengembalian dari User -->
+        <form action="<?php echo e(route('admin.data_peminjam.konfirmasi', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
+            <button type="submit" 
+                class="w-full bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+                onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
+                <i class="fas fa-check text-xs"></i>
+                Konfirmasi
+            </button>
+        </form>
+        
+    <?php elseif($peminjam->status == 'dikembalikan'): ?>
+        <span class="inline-flex items-center px-3 py-2 bg-green-100 text-green-800 rounded-lg text-xs font-semibold w-full justify-center">
+            <i class="fas fa-check-circle mr-1.5"></i>
+            Selesai
+        </span>
+        
+        <!-- Batalkan Teguran Button Mobile -->
+        <?php if($peminjam->keterangan && str_contains($peminjam->keterangan, 'Teguran:')): ?>
+            <form action="<?php echo e(route('admin.data_peminjam.batalkan-teguran', $peminjam->id)); ?>" method="POST" class="flex-1 min-w-[120px]">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('DELETE'); ?>
+                <button type="submit" 
+                    class="w-full bg-gray-500 text-white px-3 py-2 rounded-lg hover:bg-gray-600 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+                    onclick="return confirm('Batalkan teguran ini?')">
+                    <i class="fas fa-times text-xs"></i>
+                    Batalkan Teguran
+                </button>
+            </form>
+        <?php endif; ?>
+    <?php endif; ?>
 
-                            <a href="<?php echo e(route('admin.data_peminjam.show', $peminjam->id)); ?>"
-                                class="flex-1 min-w-[80px] bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2">
-                                <i class="fas fa-eye text-xs"></i>
-                                Detail
-                            </a>
-                        </div>
+    <a href="<?php echo e(route('admin.data_peminjam.show', $peminjam->id)); ?>"
+        class="flex-1 min-w-[80px] bg-gray-600 text-white px-3 py-2 rounded-lg hover:bg-gray-700 text-xs font-semibold transition-all duration-200 flex items-center justify-center gap-2">
+        <i class="fas fa-eye text-xs"></i>
+        Detail
+    </a>
+</div>
                     </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
@@ -508,6 +582,79 @@
                 </button>
             </div>
         </div>
+    </div>
+</div>
+<!-- Modal untuk Kirim Teguran - VERSI FORM BIASA -->
+<div id="teguranModal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center bg-black/70 p-4">
+    <div class="bg-white rounded-xl shadow-xl overflow-hidden w-full max-w-md">
+        <!-- Header -->
+        <div class="flex justify-between items-center bg-yellow-500 text-white px-4 py-3">
+            <h3 class="text-base font-semibold truncate text-white">Kirim Teguran</h3>
+            <button type="button" onclick="tutupTeguranModal()" class="text-white hover:text-gray-200 text-lg">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Content - FORM BIASA -->
+        <form id="teguranForm" method="POST" action="" class="p-4">
+            <?php echo csrf_field(); ?>
+            
+            <!-- Info Peminjam -->
+            <div class="mb-4">
+                <p class="text-sm text-gray-600 mb-1">Untuk: <span id="teguranNamaPeminjam" class="font-semibold text-gray-900"></span></p>
+                <input type="hidden" name="peminjaman_id" id="peminjaman_id">
+            </div>
+            
+            <!-- Pesan Teguran -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <i class="fas fa-exclamation-triangle text-yellow-500 mr-1"></i>
+                    Pesan Teguran
+                </label>
+                
+                <!-- Quick Teguran Buttons -->
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <button type="button" onclick="setTeguranMessage('Buku tidak terfoto dengan jelas')"
+                        class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-2 rounded-lg hover:bg-yellow-100 transition-colors">
+                        Buku tidak terfoto
+                    </button>
+                    <button type="button" onclick="setTeguranMessage('Foto tidak jelas / blur')"
+                        class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-2 rounded-lg hover:bg-yellow-100 transition-colors">
+                        Foto tidak jelas
+                    </button>
+                    <button type="button" onclick="setTeguranMessage('Buku terlihat rusak')"
+                        class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-2 rounded-lg hover:bg-yellow-100 transition-colors">
+                        Buku rusak
+                    </button>
+                    <button type="button" onclick="setTeguranMessage('Foto tidak sesuai dengan buku')"
+                        class="text-xs bg-yellow-50 text-yellow-700 border border-yellow-200 px-3 py-2 rounded-lg hover:bg-yellow-100 transition-colors">
+                        Foto tidak sesuai
+                    </button>
+                </div>
+                
+                <!-- Textarea untuk pesan custom -->
+                <textarea name="pesan_teguran" id="pesan_teguran" 
+                    rows="3"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 text-sm"
+                    placeholder="Tulis pesan teguran atau pilih salah satu template di atas..."
+                    required></textarea>
+                <p class="text-xs text-gray-500 mt-1">Teguran akan muncul di riwayat peminjaman user</p>
+            </div>
+            
+            <!-- Buttons -->
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="tutupTeguranModal()"
+                    class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 text-sm font-medium transition-colors duration-200 flex items-center gap-1">
+                    <i class="fas fa-times text-xs"></i>
+                    Batal
+                </button>
+                <button type="submit"
+                    class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 text-sm font-medium transition-colors duration-200 flex items-center gap-1">
+                    <i class="fas fa-paper-plane text-xs"></i>
+                    Kirim Teguran
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 <?php $__env->stopSection(); ?>
@@ -627,6 +774,53 @@ document.getElementById('fotoModal').addEventListener('click', function(e) {
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         tutupFotoModal();
+    }
+});
+
+// Fungsi untuk menampilkan modal teguran - VERSI SIMPLE
+function showTeguranModal(peminjamanId, namaPeminjam) {
+    const modal = document.getElementById('teguranModal');
+    const form = document.getElementById('teguranForm');
+    const peminjamField = document.getElementById('teguranNamaPeminjam');
+    const peminjamIdField = document.getElementById('peminjaman_id');
+    
+    // Set data
+    peminjamField.textContent = namaPeminjam;
+    peminjamIdField.value = peminjamanId;
+    
+    // Set form action langsung
+    form.action = `/admin/data_peminjam/${peminjamanId}/teguran`;
+    
+    // Reset textarea
+    document.getElementById('pesan_teguran').value = '';
+    
+    modal.classList.remove('hidden');
+}
+
+// Fungsi untuk mengatur pesan teguran dari template
+function setTeguranMessage(message) {
+    document.getElementById('pesan_teguran').value = message;
+    document.getElementById('pesan_teguran').focus();
+}
+
+// Fungsi untuk menutup modal teguran
+function tutupTeguranModal() {
+    document.getElementById('teguranModal').classList.add('hidden');
+}
+
+// Tidak perlu event listener submit karena pakai form biasa
+
+// Close modal when clicking outside
+document.getElementById('teguranModal').addEventListener('click', function(e) {
+    if (e.target.id === 'teguranModal') {
+        tutupTeguranModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        tutupTeguranModal();
     }
 });
 </script>

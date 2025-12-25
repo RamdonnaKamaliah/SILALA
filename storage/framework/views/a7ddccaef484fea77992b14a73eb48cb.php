@@ -2,7 +2,6 @@
 
 <?php $__env->startSection('content'); ?>
   <div class="min-h-screen bg-[#F3EED9] py-10 px-6">
-    
     <?php if(auth()->guard()->check()): ?>
       <!-- Kartu Header -->
       <div class="bg-white rounded-2xl shadow-md px-8 py-6 flex justify-between items-center max-w-5xl mx-auto -mt-6">
@@ -98,4 +97,20 @@
 
   </div>
 <?php $__env->stopSection(); ?>
+<?php $__env->startPush('scripts'); ?>
+
+<?php if(session('success')): ?>
+<script>
+    showNotification(<?php echo json_encode(session('success'), 15, 512) ?>, 'success');
+</script>
+<?php endif; ?>
+
+<?php if(session('error')): ?>
+<script>
+    showNotification(<?php echo json_encode(session('error'), 15, 512) ?>, 'error');
+</script>
+<?php endif; ?>
+
+<?php $__env->stopPush(); ?>
+
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/profil.blade.php ENDPATH**/ ?>

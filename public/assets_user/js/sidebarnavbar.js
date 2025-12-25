@@ -25,6 +25,25 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => overlay.classList.add("hidden"), 300);
   });
 });
+
+document.getElementById('logoutButton').addEventListener('click', function(e) {
+  e.preventDefault(); // mencegah submit langsung
+  Swal.fire({
+    title: 'Konfirmasi Logout',
+    text: "Apakah Anda yakin ingin keluar?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#A4B465',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Ya, logout!',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // submit form
+      document.getElementById('logoutForm').submit();
+    }
+  })
+});
  // Notifikasi
 const notifBtn = document.getElementById('notifBtn');
 const notifBox = document.getElementById('notifBox');

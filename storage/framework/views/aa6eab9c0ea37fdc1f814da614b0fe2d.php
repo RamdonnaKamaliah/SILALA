@@ -2,7 +2,7 @@
 
 <?php $__env->startSection('content'); ?>
 <div class="min-h-screen bg-[#F3EED9] py-10 px-6">
-    <form method="POST" action="<?php echo e(route('user.updateprofil')); ?>" enctype="multipart/form-data">
+    <form id="formEditProfil" method="POST" action="<?php echo e(route('user.updateprofil')); ?>" enctype="multipart/form-data">
     <?php echo csrf_field(); ?>
     <?php echo method_field('PUT'); ?>
         
@@ -23,7 +23,7 @@
                             <div class="w-36 h-36 rounded-full bg-[#F3F7EE] border-2 border-[#C9DABF] overflow-hidden 
                                       shadow-[0_6px_12px_rgba(0,0,0,0.12)] flex items-center justify-center">
                                 <?php if(Auth::user()->foto_profil): ?>
-                                    <img id="preview-foto" src="<?php echo e(asset('storage/' . Auth::user()->foto_profil)); ?>" 
+                                    <img id="preview-foto" src="<?php echo e(Storage::url(Auth::user()->foto_profil)); ?>" 
                                          class="w-full h-full object-cover" alt="Foto profil" />
                                 <?php else: ?>
                                     <img id="preview-foto" src="<?php echo e(asset('assets/Profile.jpg')); ?>" 
@@ -112,25 +112,6 @@ unset($__errorArgs, $__bag); ?>
     </div>
 </div>
 
-<script>
-function togglePassword(inputId, eyeIconId) {
-    const passwordInput = document.getElementById(inputId);
-    const eyeIcon = document.getElementById(eyeIconId);
-    
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        eyeIcon.setAttribute('data-icon', 'mdi:eye-outline');
-    } else {
-        passwordInput.type = 'password';
-        eyeIcon.setAttribute('data-icon', 'mdi:eye-off-outline');
-    }
-    
-    // Refresh iconify icon
-    if (window.iconify) {
-        window.iconify.scan(eyeIcon);
-    }
-}
-</script>
                 </div>
 
                 <!-- KANAN: Data Profil -->
@@ -278,7 +259,7 @@ unset($__errorArgs, $__bag); ?>
                     class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-xl shadow-md transition">
                     Batal
                 </a>
-                <button type="submit"
+                <button type="button" onclick="confirmSubmit()"
                     class="bg-[#8CA47E] hover:bg-[#7c946e] text-white font-semibold py-2 px-6 rounded-xl shadow-md transition">
                     Simpan Perubahan
                 </button>
@@ -286,19 +267,6 @@ unset($__errorArgs, $__bag); ?>
         </div>
     </form>
 </div>
-<script>
-function previewImage(input) {
-    const preview = document.getElementById('preview-foto');
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            preview.src = e.target.result;
-        }
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-</script>
-
-
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/editprofil.blade.php ENDPATH**/ ?>

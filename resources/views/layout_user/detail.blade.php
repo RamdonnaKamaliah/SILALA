@@ -50,11 +50,10 @@
     {{-- PDF.js --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
-    {{-- Sidebar/Navbar --}}
+    {{-- Js --}}
     <script src="{{ asset('assets_user/js/sidebarnavbar.js') }}"></script>
-
-    {{-- Detail Buku JS --}}
     <script src="{{ asset('assets_user/js/detailbuku.js') }}"></script>
+    <script src="{{asset('assets_user/js/notif.js')}}"></script>
 
     {{-- Iconify --}}
     <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>

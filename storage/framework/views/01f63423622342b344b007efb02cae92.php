@@ -176,7 +176,7 @@
                             </thead>
 
                             <tbody class="divide-y divide-gray-100">
-                                <?php $__empty_1 = true; $__currentLoopData = $data_buku; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                <?php $__empty_1 = true; $__currentLoopData = $bukus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                     <tr class="hover:bg-[#F5F7ED] transition">
                                         <td class="px-4 py-3 text-center">
                                             <input type="checkbox" name="selected_ids[]" value="<?php echo e($buku->id); ?>"

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use App\Models\Admin;
 
 class AdminProfileController extends Controller
 {
@@ -27,25 +29,54 @@ class AdminProfileController extends Controller
 
         $request->validate([
             'name'  => 'required|string|max:255',
-            'telp'  => 'nullable|string|max:20',
-            'foto'  => 'nullable|image|max:2048',
+            'phone' => 'nullable|string|max:20',
+            'foto'  => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
 
         // Update basic data
         $admin->name = $request->name;
-        $admin->telp = $request->telp;
+        $admin->phone = $request->phone;
 
-        // Update foto
         if ($request->hasFile('foto')) {
+            \Log::info('📸 File foto detected!', [
+                'original_name' => $request->file('foto')->getClientOriginalName(),
+                'size' => $request->file('foto')->getSize(),
+                'mime' => $request->file('foto')->getMimeType(),
+            ]);
+
+            // Hapus foto lama jika ada
+            if ($admin->foto && file_exists(storage_path('app/public/uploads/admin/'.$admin->foto))) {
+                unlink(storage_path('app/public/uploads/admin/'.$admin->foto));
+                \Log::info('🗑️ Old photo deleted: ' . $admin->foto);
+            }
+
             $file = $request->file('foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/admin'), $filename);
+            $filename = time().'_'.$file->getClientOriginalName();
+            
+            // Pastikan folder ada
+            if (!file_exists(storage_path('app/public/uploads/admin'))) {
+                mkdir(storage_path('app/public/uploads/admin'), 0755, true);
+                \Log::info('📁 Folder created: uploads/admin');
+            }
+            
+            $file->storeAs('uploads/admin', $filename, 'public');
+            
             $admin->foto = $filename;
+            
+            \Log::info('✅ New photo saved: ' . $filename);
+        } else {
+            \Log::warning('⚠️ No file detected in request');
         }
 
         $admin->save();
 
-        return redirect()->route('admin.profile')
+        \Log::info('💾 Admin profile updated', [
+            'name' => $admin->name,
+            'phone' => $admin->phone,
+            'foto' => $admin->foto,
+        ]);
+
+        return redirect()->route('admin.profile_admin.index')
                          ->with('success', 'Profile berhasil diperbarui!');
     }
 
@@ -67,7 +98,7 @@ class AdminProfileController extends Controller
         $admin->password = Hash::make($request->password);
         $admin->save();
 
-        return redirect()->route('admin.profile')
+        return redirect()->route('admin.profile_admin.index')
                          ->with('success', 'Password berhasil diganti!');
     }
 }

@@ -301,7 +301,7 @@
                 @csrf
                 @method('PUT')
                 <button type="submit" 
-                    class="bg-green-600 text-white px-3 py-2 rounded-lg hover:bg-green-700 text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
+                    class="bg-green text-white px-3 py-2 rounded-lg hover:bg-green text-xs font-semibold transition-all duration-200 flex items-center gap-2 shadow-sm transform hover:scale-105"
                     onclick="return confirm('Konfirmasi pengembalian buku dari user?')">
                     <i class="fas fa-check text-xs"></i>
                     Konfirmasi

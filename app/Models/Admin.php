@@ -15,19 +15,13 @@ class Admin extends Authenticatable
         // Data dasar admin
         'name',
         'email',
-        'phone',        // ← ganti dari telp, sesuai DB
-        'foto',         // ← buat foto profile
-
-        // Authentication
+        'phone',       
+        'foto',        
         'password',
         'remember_token',
-
-        // Google Login (AMAN! TETAP ADA)
         'google_id',
         'google_token',
         'google_refresh_token',
-
-        // Field tambahan lain
         'membership_type',
         'gender',
         'email_verified_at',

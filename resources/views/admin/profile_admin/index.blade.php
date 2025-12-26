@@ -43,8 +43,11 @@
                         <div class="absolute inset-0 bg-gradient-to-br from-[#A4B465] to-[#6E7C45] rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                         
                         <div class="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#A4B465]/20">
-                            <img src="{{ $admin->foto ? asset('storage/'.'uploads/admin/'.$admin->foto) : asset('default-user.png') }}"
-                                 class="w-full h-full object-cover">
+                            <img src="{{ $admin->foto 
+                            ? asset('storage/uploads/admin/'.$admin->foto) 
+                            : asset('images/default-user.png') }}"
+                            class="w-full h-full object-cover">
+
                             
                             <!-- Overlay on Hover -->
                             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -92,7 +95,7 @@
                                     </div>
                                     <div class="text-left">
                                         <p class="text-xs text-[#8C9E55] font-medium">No Telepon</p>
-                                        <p class="font-semibold text-[#6E7C45]">{{ $admin->telp ?? '-' }}</p>
+                                        <p class="font-semibold text-[#6E7C45]">{{ $admin->phone ?? '-' }}</p>
                                     </div>
                                 </div>
                             </div>

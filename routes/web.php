@@ -27,66 +27,6 @@ use App\Http\Controllers\user\RatingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/logout', function () {
-    Auth::guard('admin')->logout();
-    Auth::guard('web')->logout();
-
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-
-    return redirect('/login');
-})->name('logout');
-
-// 🌟 ADMIN Profile
-Route::prefix('admin')
-    ->name('admin.')
-    ->middleware(['auth:admin', AdminMiddleware::class])
-    ->group(function () {
-
-        Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
-        Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
-        Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
-        Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
-    });
-
-// ==============================
-// 🌟 ADMIN CMS
-// ==============================
-Route::prefix('admin')
-    ->name('admin.')
-    ->middleware(['auth:admin', AdminMiddleware::class])
-    ->group(function () {
-
-        Route::get('/cms', [CmsController::class, 'editHero'])
-            ->name('cms_admin.index');
-
-        Route::post('/cms/update-hero', [CmsController::class, 'updateHero'])
-            ->name('cms_admin.updateHero');
-
-        Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
-            ->name('cms_admin.updateFooterLogo');
-
-        Route::post('/cms/update-sidebar-logo', [CmsController::class, 'updateSidebarLogo'])
-            ->name('cms_admin.updateSidebarLogo');   
-
-         Route::post('/cms/update-hero-bg', [CmsController::class, 'updateHeroBg'])
-            ->name('cms_admin.updateHeroBg');
-
-        Route::post('/cms/update-admin-sidebar-logo',  [CmsController::class, 'updateAdminSidebarLogo']
-            )->name('cms_admin.updateAdminSidebarLogo');
-
-            Route::post(
-    '/cms/update-footerdash',
-    [CmsController::class, 'updateFooterDash']
-)->name('cms_admin.updateFooterDash');
-
-
-    });
-
-
-// ==============================
-// 🌟 PUBLIC ROUTES
-// ==============================
 Route::get('/', function () {
     return view('landingpage');
 });
@@ -164,7 +104,12 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-       
+    
+      Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
+        Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+       Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
+    ->name('profile.update');
+        Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
     // Data Buku Routes
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
@@ -235,5 +180,15 @@ Route::get('/home', function () {
     
     return redirect()->route('login');
 })->name('home');
+
+Route::post('/logout', function () {
+    Auth::guard('admin')->logout();
+    Auth::guard('web')->logout();
+
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect('/login');
+})->name('logout');
 
 require __DIR__.'/auth.php';

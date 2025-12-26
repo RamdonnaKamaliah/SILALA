@@ -160,7 +160,7 @@
                                             <p class="text-gray-500 text-xs mt-1 font-medium">Edisi: {{ $buku->edisi }}
                                             </p>
                                         @endif
-                                        @if ($buku->isbn)
+                                        @if ($buku->isbn ?? false)
                                             <p class="text-gray-400 text-xs mt-1">ISBN: {{ $buku->isbn }}</p>
                                         @endif
                                     </div>

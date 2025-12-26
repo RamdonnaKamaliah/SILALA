@@ -161,7 +161,7 @@
 
                                             </p>
                                         <?php endif; ?>
-                                        <?php if($buku->isbn): ?>
+                                        <?php if($buku->isbn ?? false): ?>
                                             <p class="text-gray-400 text-xs mt-1">ISBN: <?php echo e($buku->isbn); ?></p>
                                         <?php endif; ?>
                                     </div>

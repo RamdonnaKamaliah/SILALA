@@ -119,7 +119,7 @@ class DataBukuController extends Controller
                     'filename' => $request->file('file_buku')->getClientOriginalName()],
                 
                 // Text fields
-                ['name' => 'media_id', 'contents' => $request->foto_id ?? ''],
+                ['name' => 'foto_id', 'contents' => $request->foto_id ?? ''],
                 ['name' => 'judul_buku', 'contents' => $request->judul_buku],
                 ['name' => 'penulis', 'contents' => $request->penulis],
                 ['name' => 'penerbit', 'contents' => $request->penerbit],

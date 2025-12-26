@@ -17,7 +17,7 @@ class DataBukuController extends Controller
      */
     public function index()
     {
-        $data = databuku::with('kategoris')->where('status', 'aktif')->get(); 
+        $data = databuku::with('kategoris')->latest()->where('status', 'aktif')->get(); 
         
         return response()->json([
             'status' => true,
@@ -122,7 +122,7 @@ class DataBukuController extends Controller
      */
     public function show(string $id)
     {
-        // ✅ FIX: Tambah ->with('kategoris')
+        
         $data = databuku::with('kategoris')->find($id);
         
         if($data){

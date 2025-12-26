@@ -5,19 +5,46 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\DataBuku;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class DataArsipController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-       // hanya tampilkan buku yang statusnya arsip
-    $buku_arsip = DataBuku::where('status', 'arsip')->get();
 
-    return view('admin.data_arsip.index', compact('buku_arsip'));
-    }
+    private $apiUrl = 'http://127.0.0.1:8000/api';
+    
+   public function index()
+{
+    try {
+        $response = Http::get($this->apiUrl . '/arsip');
+        
+        if ($response->successful()) {
+            $buku_arsip = collect($response->json()['data'])->map(function($item) {
+                $obj = (object) $item;
+                
+                // Convert kategoris jadi collection/array jika ada
+                if (isset($item['kategoris'])) {
+                    $obj->kategoris = collect($item['kategoris'])->map(fn($k) => (object)$k);
+                } else {
+                    $obj->kategoris = collect([]); // Empty collection
+                }
+                
+                return $obj;
+            });
+            
+            return view('admin.data_arsip.index', compact('buku_arsip'));
+        } // ← Tutup if
+        
+        return back()->with('error', 'Gagal mengambil data arsip');
+        
+    } catch (\Exception $e) { // ← Tambahkan catch
+        Log::error('Error fetching arsip: ' . $e->getMessage());
+        return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    } 
+} 
 
     /**
      * Show the form for creating a new resource.
@@ -40,7 +67,32 @@ class DataArsipController extends Controller
      */
     public function show(string $id)
     {
-        return view('admin.data_arsip.show', ['buku' => DataBuku::findOrFail($id)]);
+        try {
+            $response = Http::get($this->apiUrl . '/arsip/' . $id);
+
+            if ($response->successful()) {
+                $buku = $response->json()['data'];
+                $buku = (object) $buku;
+                
+                // Convert kategoris
+                if (isset($buku->kategoris) && is_array($buku->kategoris)) {
+                    $buku->kategoris = collect($buku->kategoris)->map(function($kategori) {
+                        return (object) $kategori;
+                    });
+                } else {
+                    $buku->kategoris = collect([]);
+                }
+
+                return view('admin.data_arsip.show', compact('buku'));
+            }
+
+            return redirect()->route('admin.data_arsip.index')
+                ->with('error', 'Buku tidak ditemukan');
+        } catch (\Exception $e) {
+            Log::error('Error showing book: ' . $e->getMessage());
+            return redirect()->route('admin.data_arsip.index')
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -64,14 +116,19 @@ class DataArsipController extends Controller
      */
     public function destroy(string $id)
     {
-        $buku = DataBuku::findOrFail($id);
-        // Hapus foto buku jika ada
-        if ($buku->foto_buku && file_exists(public_path($buku->foto_buku))) {
-            unlink(public_path($buku->foto_buku));
+          try {
+            $response = Http::delete($this->apiUrl . '/arsip/' . $id);
+
+            if ($response->successful()) {
+                return redirect()->route('admin.data_arsip.index')
+                    ->with('success', 'Data buku berhasil dihapus');
+            } else {
+                return back()->with('error', 'Gagal menghapus data');
+            }
+        } catch (\Exception $e) {
+            Log::error('Error deleting book: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-        $buku->delete();
-        return redirect()->route('admin.data_arsip.index')
-            ->with('success', 'Data buku berhasil dihapus!');
     }
 
     public function bulkDeleteArchive(Request $request)

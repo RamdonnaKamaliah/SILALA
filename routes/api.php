@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\DataArsipController;
 use App\Http\Controllers\Api\DataBukuController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\MediaBukuController;
@@ -19,11 +20,18 @@ Route::post('dataBuku/bulk-delete', [DataBukuController::class, 'bulkDelete']);
 Route::post('dataBuku/bulk-archive', [DataBukuController::class, 'bulkArchive']);
 Route::post('dataBuku/{id}/restore', [DataBukuController::class, 'restore']);
 Route::post('dataBuku/import', [DataBukuController::class, 'import']);
+
+
 Route::get('/media', [MediaBukuController::class, 'index']);
-Route::post('/media', [MediaBukuController::class, 'store']);
 Route::delete('/media/{id}', [MediaBukuController::class, 'destroy']);
-Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']);
+
+
 Route::get('/kategori', [KategoriController::class, 'index']);
-Route::put('/kategori', [KategoriController::class, 'store']);
-Route::put('/kategori/{id}', [KategoriController::class, 'show']);
+Route::post('/kategori', [KategoriController::class, 'store']);
+Route::get('/kategori/{id}', [KategoriController::class, 'show']);
 Route::put('/kategori/{id}', [KategoriController::class, 'update']);
+Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']);
+
+Route::get('arsip', [DataArsipController::class, 'index']);
+Route::get('arsip/{id}', [DataArsipController::class, 'show']);
+Route::delete('arsip/{id}', [DataArsipController::class, 'destroy']);

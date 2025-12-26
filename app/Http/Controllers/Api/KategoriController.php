@@ -15,7 +15,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategoris = datakategori::all();
+        $kategoris = datakategori::all()->latest();
         
         return response()->json([
             'status' => true,

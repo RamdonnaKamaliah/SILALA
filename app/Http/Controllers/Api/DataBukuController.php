@@ -8,7 +8,7 @@ use App\Models\databuku;
 use App\Models\GambarBuku;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Validator;   
 
 class DataBukuController extends Controller
 {

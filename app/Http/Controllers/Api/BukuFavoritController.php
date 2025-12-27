@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\user;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\Favorit;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 
-class FavoritController extends Controller
+class BukuFavoritController extends Controller
 {
     public function toggle(Request $request)
     {

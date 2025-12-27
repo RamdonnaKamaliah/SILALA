@@ -3,39 +3,42 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\DataBuku;
-use App\Models\DataKategori;
-use App\Models\Rating;
+use App\Models\databuku;
+use App\Models\datakategori;
 use Illuminate\Http\Request;
 
 class DaftarBukuController extends Controller
 {
     public function index(Request $request)
-{
-    $kategori = $request->kategori;
+    {
+        
+        $data_kategori = datakategori::all();
 
-    $data_bukus = DataBuku::where('status', 'aktif')
-        ->when($kategori && $kategori !== 'Semua', function ($query) use ($kategori) {
-            $query->whereHas('kategoris', function ($q) use ($kategori) {
-                $q->where('nama_kategori', $kategori);
+        $query = databuku::with(['kategoris', 'ratings']);
+
+        // filter kategori (kecuali "Semua")
+        if ($request->kategori && $request->kategori !== 'Semua') {
+            $query->whereHas('kategoris', function ($q) use ($request) {
+                $q->where('nama_kategori', $request->kategori);
             });
-        })
-        ->with('kategoris')
-        ->get();
+        }
 
-    $ratings = Rating::selectRaw('buku_id, AVG(rating) as avg_rating, COUNT(*) as total_ratings')
-        ->groupBy('buku_id')
-        ->get()
-        ->keyBy('buku_id');
+        $data_bukus = $query->get();
 
-    $data_kategori = DataKategori::all();
+        // hitung rating
+        $ratings = $data_bukus->mapWithKeys(function ($buku) {
+            return [
+                $buku->id => (object) [
+                    'avg_rating' => $buku->ratings->avg('rating') ?? 0,
+                    'total_ratings' => $buku->ratings->count(),
+                ]
+            ];
+        });
 
-    return view('user.daftarbuku', compact(
-        'data_bukus',
-        'data_kategori',
-        'ratings',
-        'kategori'
-    ))->with('title', 'DAFTAR BUKU');
-}
-
+        return view('user.daftarbuku', compact(
+            'data_bukus',
+            'ratings',
+            'data_kategori'
+        ));
+    }
 }

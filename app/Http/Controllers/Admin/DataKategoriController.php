@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+
 class DataKategoriController extends Controller
 {
     private $apiUrl = 'http://127.0.0.1:8000/api/kategori';

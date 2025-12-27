@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\BukuFavoritController;
+use App\Http\Controllers\Api\DaftarBukuController;
 use App\Http\Controllers\Api\DataArsipController;
 use App\Http\Controllers\Api\DataBukuController;
+use App\Http\Controllers\Api\DataPenggunaController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\MediaBukuController;
 use Illuminate\Http\Request;
@@ -35,3 +38,8 @@ Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']);
 Route::get('arsip', [DataArsipController::class, 'index']);
 Route::get('arsip/{id}', [DataArsipController::class, 'show']);
 Route::delete('arsip/{id}', [DataArsipController::class, 'destroy']);
+
+
+Route::get('dataPengguna', [DataPenggunaController::class, 'index']);
+Route::get('daftarBuku', [DaftarBukuController::class, 'index']);
+Route::get('favorit', [BukuFavoritController::class, 'index']);

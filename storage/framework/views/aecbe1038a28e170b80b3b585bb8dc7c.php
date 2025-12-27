@@ -1,7 +1,6 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Admin Dashboard - Data Pengguna')
+<?php $__env->startSection('pageTitle', 'Admin Dashboard - Data Pengguna'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="user-dashboard p-4 md:p-6 bg-gray-50 min-h-screen">
 
         <!-- Header Profesional -->
@@ -34,7 +33,7 @@
                             <i class="fas fa-user-friends text-[#A4B465] mr-2 text-sm"></i>
                             <h3 class="font-semibold text-gray-700 text-sm md:text-base">Total Pengguna</h3>
                         </div>
-                        <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1">{{ $userCount }}</p>
+                        <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1"><?php echo e($userCount); ?></p>
                         <p class="text-xs text-gray-500">
                             <i class="fas fa-database mr-1"></i>
                             Seluruh pengguna terdaftar
@@ -55,10 +54,10 @@
                             <i class="fas fa-briefcase text-[#A4B465] mr-2 text-sm"></i>
                             <h3 class="font-semibold text-gray-700 text-sm md:text-base">Karyawan</h3>
                         </div>
-                        <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1">{{ $karyawanCount }}</p>
+                        <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1"><?php echo e($karyawanCount); ?></p>
                         <p class="text-xs text-gray-500">
                             <i class="fas fa-chart-pie mr-1"></i>
-                            {{ $userCount > 0 ? number_format(($karyawanCount / $userCount) * 100, 1) : 0 }}% dari total
+                            <?php echo e($userCount > 0 ? number_format(($karyawanCount / $userCount) * 100, 1) : 0); ?>% dari total
                         </p>
                     </div>
                     <div class="bg-[#F5F7ED] p-3 rounded-full ml-4">
@@ -76,10 +75,10 @@
                             <i class="fas fa-user-graduate text-[#A4B465] mr-2 text-sm"></i>
                             <h3 class="font-semibold text-gray-700 text-sm md:text-base">Magang/PKL</h3>
                         </div>
-                        <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1">{{ $magangCount }}</p>
+                        <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1"><?php echo e($magangCount); ?></p>
                         <p class="text-xs text-gray-500">
                             <i class="fas fa-chart-pie mr-1"></i>
-                            {{ $userCount > 0 ? number_format(($magangCount / $userCount) * 100, 1) : 0 }}% dari total
+                            <?php echo e($userCount > 0 ? number_format(($magangCount / $userCount) * 100, 1) : 0); ?>% dari total
                         </p>
                     </div>
                     <div class="bg-[#F5F7ED] p-3 rounded-full ml-4">
@@ -141,13 +140,13 @@
                             <span class="text-sm font-medium text-gray-700">Karyawan</span>
                         </div>
                         <span class="text-sm font-semibold text-gray-700 bg-[#F5F7ED] px-3 py-1 rounded-full">
-                            {{ $karyawanCount }} pengguna
-                            ({{ $userCount > 0 ? number_format(($karyawanCount / $userCount) * 100, 1) : 0 }}%)
+                            <?php echo e($karyawanCount); ?> pengguna
+                            (<?php echo e($userCount > 0 ? number_format(($karyawanCount / $userCount) * 100, 1) : 0); ?>%)
                         </span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                         <div class="bg-gradient-to-r from-[#A4B465] to-[#8A9A55] h-3 rounded-full transition-all duration-1000 ease-out shadow-sm progress-bar-karyawan"
-                            style="width: 0%" data-width="{{ $userCount > 0 ? ($karyawanCount / $userCount) * 100 : 0 }}"></div>
+                            style="width: 0%" data-width="<?php echo e($userCount > 0 ? ($karyawanCount / $userCount) * 100 : 0); ?>"></div>
                     </div>
                 </div>
 
@@ -159,13 +158,13 @@
                             <span class="text-sm font-medium text-gray-700">Magang/PKL</span>
                         </div>
                         <span class="text-sm font-semibold text-gray-700 bg-[#F5F7ED] px-3 py-1 rounded-full">
-                            {{ $magangCount }} pengguna
-                            ({{ $userCount > 0 ? number_format(($magangCount / $userCount) * 100, 1) : 0 }}%)
+                            <?php echo e($magangCount); ?> pengguna
+                            (<?php echo e($userCount > 0 ? number_format(($magangCount / $userCount) * 100, 1) : 0); ?>%)
                         </span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                         <div class="bg-gradient-to-r from-[#C5D28B] to-[#A4B465] h-3 rounded-full transition-all duration-1000 ease-out shadow-sm progress-bar-magang"
-                            style="width: 0%" data-width="{{ $userCount > 0 ? ($magangCount / $userCount) * 100 : 0 }}"></div>
+                            style="width: 0%" data-width="<?php echo e($userCount > 0 ? ($magangCount / $userCount) * 100 : 0); ?>"></div>
                     </div>
                 </div>
             </div>
@@ -175,7 +174,7 @@
                 <div class="text-center">
                     <p class="text-[#A4B465] font-semibold text-sm">
                         <i class="fas fa-chart-pie mr-1"></i>
-                        Total Data: {{ $userCount }} Pengguna
+                        Total Data: <?php echo e($userCount); ?> Pengguna
                     </p>
                 </div>
             </div>
@@ -186,17 +185,17 @@
                 <div class="flex items-center justify-center space-x-8">
                     <div class="text-center">
                         <p class="text-xs text-gray-500 mb-1">Total Pengguna</p>
-                        <p class="text-2xl font-bold text-[#A4B465]">{{ $userCount }}</p>
+                        <p class="text-2xl font-bold text-[#A4B465]"><?php echo e($userCount); ?></p>
                     </div>
                     <div class="h-12 w-px bg-gray-300"></div>
                     <div class="text-center">
                         <p class="text-xs text-gray-500 mb-1">Karyawan</p>
-                        <p class="text-2xl font-bold text-[#8A9A55]">{{ $karyawanCount }}</p>
+                        <p class="text-2xl font-bold text-[#8A9A55]"><?php echo e($karyawanCount); ?></p>
                     </div>
                     <div class="h-12 w-px bg-gray-300"></div>
                     <div class="text-center">
                         <p class="text-xs text-gray-500 mb-1">Magang/PKL</p>
-                        <p class="text-2xl font-bold text-[#C5D28B]">{{ $magangCount }}</p>
+                        <p class="text-2xl font-bold text-[#C5D28B]"><?php echo e($magangCount); ?></p>
                     </div>
                 </div>
             </div>
@@ -204,6 +203,8 @@
 
     </div>
 
-    @push('scripts')
-    @endpush
-@endsection
+    <?php $__env->startPush('scripts'); ?>
+    <?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/data_pengguna/index.blade.php ENDPATH**/ ?>

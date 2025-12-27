@@ -1,8 +1,6 @@
-@extends('layout_user.user')
+<?php $__env->startSection('title', 'daftar buku User'); ?>
 
-@section('title', 'daftar buku User')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="halaman-daftar-buku">
         <!-- Filter & Search -->
         <div class="bg-cream px-4 md:px-6 py-3 sticky top-0 z-20">
@@ -14,7 +12,8 @@
                     <button
                         class="w-full md:w-48 px-4 py-2 bg-primary text-white rounded-xl shadow-md font-semibold flex justify-between items-center hover:bg-kuning hover:text-gray-700 transition-all duration-300">
                         <span id="kategoriText">
-                            {{ request('kategori') ?? 'Semua Kategori' }}
+                            <?php echo e(request('kategori') ?? 'Semua Kategori'); ?>
+
                         </span>
 
                         <svg class="w-4 h-4 transition-transform duration-200" id="kategoriIcon" fill="none"
@@ -27,18 +26,19 @@
                     <div id="kategoriMenu"
                         class="hidden absolute left-0 w-full md:w-48 mt-2 z-50 bg-primary rounded-xl shadow-xl p-2 border border-stone-200">
 
-                        <a href="{{ route('user.daftarbuku') }}"
+                        <a href="<?php echo e(route('user.daftarbuku')); ?>"
                             class="block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
                             Semua Kategori
                         </a>
 
 
-                        @foreach ($data_kategori as $kat)
-                            <a href="{{ route('user.daftarbuku', ['kategori' => $kat->nama_kategori]) }}"
+                        <?php $__currentLoopData = $data_kategori; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e(route('user.daftarbuku', ['kategori' => $kat->nama_kategori])); ?>"
                                 class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all rounded-lg">
-                                {{ $kat->nama_kategori }}
+                                <?php echo e($kat->nama_kategori); ?>
+
                             </a>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                     </div>
                 </div>
@@ -65,8 +65,8 @@
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
-                @forelse ($data_bukus as $buku)
-                    @php
+                <?php $__empty_1 = true; $__currentLoopData = $data_bukus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <?php
                         // Ambil rating untuk buku ini
                         $ratingData = $ratings[$buku->id] ?? null;
                         $avgRating = $ratingData ? $ratingData->avg_rating : 0;
@@ -76,22 +76,22 @@
                         $fullStars = floor($avgRating);
                         $halfStar = $avgRating - $fullStars >= 0.5 ? 1 : 0;
                         $emptyStars = 5 - $fullStars - $halfStar;
-                    @endphp
+                    ?>
 
                     <div class="group bg-amber-50 border border-amber-100 rounded-2xl shadow-md overflow-hidden transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-amber-50 cursor-pointer flex flex-col items-center pt-4"
-                        data-kategori-buku="{{ $buku->kategoris->first()->nama_kategori ?? '-' }}"
-                        data-judul="{{ strtolower($buku->judul_buku) }}">
+                        data-kategori-buku="<?php echo e($buku->kategoris->first()->nama_kategori ?? '-'); ?>"
+                        data-judul="<?php echo e(strtolower($buku->judul_buku)); ?>">
 
                         <!-- COVER -->
                         <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-                            @if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku))
-                                <img src="{{ asset('storage/' . $buku->foto_buku) }}"
+                            <?php if($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)): ?>
+                                <img src="<?php echo e(asset('storage/' . $buku->foto_buku)); ?>"
                                     class="w-full h-full object-cover rounded-lg">
-                            @else
-                                <img src="{{ asset('assets/default-cover.jpg') }}"
+                            <?php else: ?>
+                                <img src="<?php echo e(asset('assets/default-cover.jpg')); ?>"
                                     class="w-full h-full object-cover rounded-lg">
                                 <div class="absolute right-0 top-0 w-[6px] h-full bg-gray-300 shadow-inner"></div>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
                         <!-- KONTEN -->
@@ -99,40 +99,42 @@
 
                             <!-- JUDUL -->
                             <h3 class="font-bold text-gray-900 text-sm md:text-base line-clamp-2 h-10">
-                                {{ $buku->judul_buku }}
+                                <?php echo e($buku->judul_buku); ?>
+
                             </h3>
 
                             <!-- PENULIS -->
                             <p class="text-xs md:text-sm text-gray-600 h-5">
-                                {{ $buku->penulis }}
+                                <?php echo e($buku->penulis); ?>
+
                             </p>
 
                             <!-- RATING -->
                             <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-                                @for ($i = 0; $i < $fullStars; $i++)
+                                <?php for($i = 0; $i < $fullStars; $i++): ?>
                                     <i class="fa-solid fa-star"></i>
-                                @endfor
+                                <?php endfor; ?>
 
-                                @if ($halfStar)
+                                <?php if($halfStar): ?>
                                     <i class="fa-solid fa-star-half-stroke"></i>
-                                @endif
+                                <?php endif; ?>
 
-                                @for ($i = 0; $i < $emptyStars; $i++)
+                                <?php for($i = 0; $i < $emptyStars; $i++): ?>
                                     <i class="fa-regular fa-star"></i>
-                                @endfor
+                                <?php endfor; ?>
 
                                 <!-- Tampilkan rating numerik jika ada -->
-                                @if ($avgRating > 0)
-                                    <span class="text-gray-600 text-xs ml-1">({{ number_format($avgRating, 1) }})</span>
-                                @else
+                                <?php if($avgRating > 0): ?>
+                                    <span class="text-gray-600 text-xs ml-1">(<?php echo e(number_format($avgRating, 1)); ?>)</span>
+                                <?php else: ?>
                                     <span class="text-gray-400 text-xs ml-1">Belum ada rating</span>
-                                @endif
+                                <?php endif; ?>
                             </div>
 
 
                             <!-- BUTTON -->
                             <div class="mt-auto pt-2">
-                                <a href="{{ route('user.detailbuku', $buku->id) }}">
+                                <a href="<?php echo e(route('user.detailbuku', $buku->id)); ?>">
                                     <button
                                         class="bg-primary text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
                                hover:bg-green hover:scale-105">
@@ -143,20 +145,22 @@
                         </div>
                     </div>
 
-                @empty
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <!-- 🔴 JIKA TIDAK ADA BUKU -->
                     <div class="col-span-full text-center py-14">
                         <p class="text-green text-lg font-semibold mb-2">
                             Tidak ada buku dengan kategori ini
                         </p>
 
-                        @if (request('kategori'))
+                        <?php if(request('kategori')): ?>
                             <p class="text-gray-500 text-sm">
-                                Kategori: <span class="font-medium">{{ request('kategori') }}</span>
+                                Kategori: <span class="font-medium"><?php echo e(request('kategori')); ?></span>
                             </p>
-                        @endif
+                        <?php endif; ?>
                     </div>
-                @endforelse
+                <?php endif; ?>
             </div>
 
-        @endsection
+        <?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/user/daftarbuku.blade.php ENDPATH**/ ?>

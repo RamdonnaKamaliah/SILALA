@@ -1,4 +1,3 @@
-<x-sidebarUser></x-sidebarUser>
 
 <x-navbardetus 
     :buku="$buku"
@@ -7,3 +6,4 @@
     :userRating="$userRating"
 ></x-navbardetus>
 
+ 

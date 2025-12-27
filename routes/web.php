@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\CmsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -107,6 +108,11 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
        
     // Data Buku Routes
+     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
+        Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+       Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
+    ->name('profile.update');
+        Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
     Route::delete('/data_buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');

@@ -157,132 +157,159 @@ showNotification('Buku berhasil dihapus dari favorit', 'success');
 
   // MODAL PDF
   (function () {
-    const pdfViewer = document.getElementById("pdfViewer");
-    const pdfModal = document.getElementById("pdfModal");
-    const zoomInBtn = document.getElementById("zoomIn");
-    const zoomOutBtn = document.getElementById("zoomOut");
-    const zoomLabel = document.getElementById("zoomLabel");
-    const closePdfModal = document.getElementById("closePdfModal");
-    const pageCurrent = document.getElementById("pageCurrent");
-    const pageTotal = document.getElementById("pageTotal");
+  const pdfViewer = document.getElementById("pdfViewer");
+  const pdfModal = document.getElementById("pdfModal");
+  const zoomInBtn = document.getElementById("zoomIn");
+  const zoomOutBtn = document.getElementById("zoomOut");
+  const zoomLabel = document.getElementById("zoomLabel");
+  const closePdfModal = document.getElementById("closePdfModal");
+  const pageCurrent = document.getElementById("pageCurrent");
+  const pageTotal = document.getElementById("pageTotal");
 
-    if (!pdfViewer || !pdfModal) return;
+  if (!pdfViewer || !pdfModal) return;
 
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-    let pdfDoc = null;
-    let zoom = 1;
-    let pageCanvases = [];
+  let pdfDoc = null;
+  let zoom = 1;
+  let pageCanvases = [];
 
-    const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
+  const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
 
-    const updateLayout = () => {
-      if (!pageCanvases.length) return;
-      const isMobile = window.innerWidth <= 1024;
-      pdfViewer.style.display = "grid";
-      pdfViewer.style.gridTemplateColumns = "1fr";
-      pdfViewer.style.gap = "24px";
-      pdfViewer.style.padding = "24px";
+  const updateLayout = () => {
+    if (!pageCanvases.length) return;
+    const isMobile = window.innerWidth <= 1024;
+    pdfViewer.style.display = "grid";
+    pdfViewer.style.gridTemplateColumns = "1fr";
+    pdfViewer.style.gap = "24px";
+    pdfViewer.style.padding = "24px";
 
-      if (!isMobile && zoom <= 1.2) {
-        const w = pageCanvases[0].canvas.width + 40;
-        const c = Math.max(1, Math.floor(pdfViewer.parentElement.clientWidth / w));
-        pdfViewer.style.gridTemplateColumns = `repeat(${c}, auto)`;
+    if (!isMobile && zoom <= 1.2) {
+      const w = pageCanvases[0].canvas.width + 40;
+      const c = Math.max(1, Math.floor(pdfViewer.parentElement.clientWidth / w));
+      pdfViewer.style.gridTemplateColumns = `repeat(${c}, auto)`;
+    }
+  };
+
+  const updatePageTracking = () => {
+    if (!pageCurrent) return;
+    const scrollTop = pdfViewer.scrollTop;
+    let currentPage = 1;
+
+    for (const item of pageCanvases) {
+      const rect = item.canvas.getBoundingClientRect();
+      const viewerRect = pdfViewer.getBoundingClientRect();
+      const offsetTop = rect.top - viewerRect.top + pdfViewer.scrollTop;
+      if (scrollTop + pdfViewer.clientHeight / 2 >= offsetTop) {
+        currentPage = item.page;
       }
-    };
+    }
+    pageCurrent.innerText = currentPage;
+  };
 
-    const updatePageTracking = () => {
-      if (!pageCurrent) return;
-      const scrollTop = pdfViewer.scrollTop;
-      let currentPage = 1;
+  const renderPages = async () => {
+  pdfViewer.innerHTML = "";
 
-      for (const item of pageCanvases) {
-        const rect = item.canvas.getBoundingClientRect();
-        const viewerRect = pdfViewer.getBoundingClientRect();
-        const offsetTop = rect.top - viewerRect.top + pdfViewer.scrollTop;
-        if (scrollTop + pdfViewer.clientHeight / 2 >= offsetTop) {
-          currentPage = item.page;
-        }
+  const isMobile = window.innerWidth <= 1024;
+
+  for (const item of pageCanvases) {
+    const page = await pdfDoc.getPage(item.page);
+
+    let scale = zoom;
+
+    if (isMobile) {
+      const viewport1 = page.getViewport({ scale: 1 });
+      const fitScale = pdfViewer.clientWidth / viewport1.width;
+
+      if (zoom === 1) {
+        // mobile default 100%: muat container
+        scale = fitScale;
+        pdfViewer.style.overflowX = "hidden"; // disable scroll horizontal
+      } else {
+        // zoom > 100%: scale sesuai zoom, bisa scroll
+        scale = fitScale * zoom;
+        pdfViewer.style.overflowX = "auto"; // enable scroll horizontal
       }
-      pageCurrent.innerText = currentPage;
-    };
+    } else {
+      pdfViewer.style.overflowX = "auto"; // desktop tetap
+    }
 
-    const renderPages = async () => {
-      pdfViewer.innerHTML = "";
-      for (const item of pageCanvases) {
-        const page = await pdfDoc.getPage(item.page);
-        const viewport = page.getViewport({ scale: zoom });
-        const canvas = item.canvas;
-        const ctx = canvas.getContext("2d");
+    const viewport = page.getViewport({ scale });
+    const canvas = item.canvas;
+    const ctx = canvas.getContext("2d");
 
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
 
-        await page.render({ canvasContext: ctx, viewport }).promise;
+    await page.render({ canvasContext: ctx, viewport }).promise;
 
-        if (zoom <= 1) {
-          canvas.className = "w-full max-w-full mx-auto block";
-        } else {
-          canvas.className = "block mx-auto";
-          canvas.style.width = viewport.width + "px";
-        }
+    canvas.style.width = viewport.width + "px";
+    canvas.style.height = viewport.height + "px";
+    canvas.className = "block mx-auto";
 
-        pdfViewer.appendChild(canvas);
-      }
+    pdfViewer.appendChild(canvas);
+  }
 
-      zoomLabel && (zoomLabel.innerText = Math.round(zoom * 100) + "%");
-      pageTotal && (pageTotal.innerText = pdfDoc.numPages);
+  zoomLabel && (zoomLabel.innerText = Math.round(zoom * 100) + "%");
+  pageTotal && (pageTotal.innerText = pdfDoc.numPages);
 
-      updateLayout();
-      updatePageTracking();
-    };
+  updateLayout();
+  updatePageTracking();
+};
 
-    window.openPdfGlobal = async (url) => {
-      pdfModal.classList.remove("hidden");
-      pdfViewer.innerHTML = "Memuat PDF...";
 
-      const pdf = await pdfjsLib.getDocument(url).promise;
-      pdfDoc = pdf;
-      zoom = 1;
-      pageCanvases = [];
+  window.openPdfGlobal = async (url, title = "Preview Dokumen") => {
+  const pdfTitle = document.getElementById("pdfTitle");
+  if (pdfTitle) {
+    pdfTitle.lastChild.textContent = title;
+  }
 
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const canvas = document.createElement("canvas");
-        canvas.dataset.page = i;
-        canvas.style.borderRadius = "12px";
-        canvas.style.background = "#fff";
-        pageCanvases.push({ page: i, canvas });
-      }
+  pdfModal.classList.remove("hidden");
+  pdfViewer.innerHTML = "Memuat PDF...";
 
-      await renderPages();
-    };
+  const pdf = await pdfjsLib.getDocument(url).promise;
+  pdfDoc = pdf;
+  zoom = 1;
+  pageCanvases = [];
 
-    on(closePdfModal, "click", () => {
-      pdfModal.classList.add("hidden");
-      pdfViewer.innerHTML = "";
-      pdfDoc = null;
-    });
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const canvas = document.createElement("canvas");
+    canvas.dataset.page = i;
+    canvas.style.borderRadius = "12px";
+    canvas.style.background = "#fff";
+    pageCanvases.push({ page: i, canvas });
+  }
 
-    on(zoomInBtn, "click", () => {
-      zoom < 3 && (zoom += 0.2, renderPages());
-    });
+  await renderPages();
+};
 
-    on(zoomOutBtn, "click", () => {
-      zoom > 0.4 && (zoom -= 0.2, renderPages());
-    });
+  on(closePdfModal, "click", () => {
+    pdfModal.classList.add("hidden");
+    pdfViewer.innerHTML = "";
+    pdfDoc = null;
+  });
 
-    on(pdfViewer, "scroll", updatePageTracking);
-    on(window, "resize", updateLayout);
+  on(zoomInBtn, "click", () => {
+    zoom < 3 && (zoom += 0.2, renderPages());
+  });
 
-    document.querySelectorAll(".open-pdf").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const url = btn.getAttribute("data-url");
-        url && openPdfGlobal(url);
-      });
-    });
-  })();
+  on(zoomOutBtn, "click", () => {
+    zoom > 0.4 && (zoom -= 0.2, renderPages());
+  });
+
+  on(pdfViewer, "scroll", updatePageTracking);
+  on(window, "resize", updateLayout);
+
+  document.querySelectorAll(".open-pdf").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const url = btn.dataset.url;
+    const title = btn.dataset.title; // dari ADMIN
+    if (url) openPdfGlobal(url, title);
+  });
+});
+})();
 
 function handleEmptyFavoritesAfterDelete() {
   const remainingBooks = document.querySelectorAll('.book-card');

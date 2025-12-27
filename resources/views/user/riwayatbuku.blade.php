@@ -87,12 +87,14 @@
     @if($bukuSedangDipinjam)
         onclick="bukaModalPengembalian()"
     @endif
-    class="w-full md:w-64 rounded-full border px-4 py-3 text-sm flex items-center justify-center gap-2 transition-colors
-           @if($bukuSedangDipinjam)
-               bg-primary border-primary text-white hover:bg-[#8fa055] cursor-pointer
-           @else
-               bg-gray-400 text-white font-semibold cursor-not-allowed
-           @endif">
+    class="
+    w-full md:w-64 rounded-full border px-4 py-3 text-sm
+    flex items-center justify-center gap-2 transition-colors
+    {{ $bukuSedangDipinjam
+        ? 'bg-primary border-primary text-white hover:bg-primary/90 cursor-pointer'
+        : 'bg-gray-400 border-gray-400 text-white font-semibold cursor-not-allowed'
+    }}
+  ">
     <span class="iconify" data-icon="mdi:camera" style="font-size:20px;"></span>
     Pengembalian Mandiri
 </button>
@@ -100,195 +102,183 @@
 
     <!-- Table -->
     <div class="mt-6 bg-white rounded-3xl shadow-sm overflow-x-auto">
-      @if($riwayat->count() > 0)
-      <table class="min-w-full text-sm text-[#2E2E2E] border-collapse border border-[#F0EAD2]">
-        <thead class="bg-cream text-green font-semibold text-left">
-          <tr>
-            <th class="py-3 px-4 border-[#E6E6E6]">Buku</th>
-            <th class="py-3 px-4 border-[#E6E6E6]">Tanggal Pinjam</th>
-            <th class="py-3 px-4 border-[#E6E6E6]">Batas Pinjam</th>
-            <th class="py-3 px-4 border-[#E6E6E6]">Keterangan</th>
-            <th class="py-3 px-4">Status</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-[#F0EAD2]">
-          @foreach ($riwayat as $data)
-            @php
-              $buku = $data->buku;
-              $status = strtolower($data->status);
-              $tanggalPinjam = \Carbon\Carbon::parse($data->tanggal_pinjam)->translatedFormat('d F Y');
-              $tanggalKembali = \Carbon\Carbon::parse($data->tanggal_kembali)->translatedFormat('d F Y');
+    @if($riwayat->count() > 0)
+        <table class="min-w-full text-sm text-gray-800 border-collapse border border-yellow-50">
+            <thead class="bg-cream text-green font-semibold text-left">
+                <tr>
+                    <th class="py-3 px-4 border-gray-300">Buku</th>
+                    <th class="py-3 px-4 border-gray-300">Tanggal Pinjam</th>
+                    <th class="py-3 px-4 border-gray-300">Batas Pinjam</th>
+                    <th class="py-3 px-4 border-gray-300">Keterangan</th>
+                    <th class="py-3 px-4">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-yellow-50">
+                @foreach ($riwayat as $data)
+                    @php
+                        $buku = $data->buku;
+                        $status = strtolower($data->status);
+                        $tanggalPinjam = \Carbon\Carbon::parse($data->tanggal_pinjam)->translatedFormat('d F Y');
+                        $tanggalKembali = \Carbon\Carbon::parse($data->tanggal_kembali)->translatedFormat('d F Y');
+                        $hariTelat = $data->hari_telat;
+                        $isTerlambat = $data->is_terlambat;
+                    @endphp
+                    <tr class="hover:bg-yellow-50 transition">
+                        <!-- Kolom Buku -->
+                        <td class="py-4 px-4 relative min-w-[220px]">
+                            <a href="{{ route('user.detailbuku', ['id' => $buku->id, 'from' => 'riwayatbuku']) }}" 
+                               class="flex items-center gap-3 hover:no-underline group">
+                                <img src="{{ asset('storage/' . $buku->foto_buku ?? 'assets/default-cover.jpg') }}"
+                                     alt="Buku"
+                                     class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0 group-hover:shadow-xl transition-shadow duration-200">
+                                <div class="min-w-0">
+                                    <p class="font-semibold text-sm leading-snug group-hover:text-green transition-colors duration-200">
+                                        {{ $buku->judul_buku }}
+                                    </p>
+                                    <p class="text-green text-xs font-medium">{{ $buku->penulis }}</p>
+                                </div>
+                            </a>
+                            <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
+                        </td>
 
-              // Gunakan accessor dari model
-              $hariTelat = $data->hari_telat;
-              $isTerlambat = $data->is_terlambat;
-            @endphp
-            <tr class="hover:bg-[#FFF8E8] transition">
-              <td class="py-4 px-4 relative min-w-[220px]">
-                <!-- 🔗 UBAH: Tambahkan link ke detail buku -->
-                <a href="{{ route('user.detailbuku', ['id' => $buku->id, 'from' => 'riwayatbuku']) }}" 
-                   class="flex items-center gap-3 hover:no-underline group">
-                  <img src="{{ asset('storage/' . $buku->foto_buku ?? 'assets/default-cover.jpg') }}"
-                       alt="Buku"
-                       class="w-[60px] h-[80px] object-cover rounded-lg shadow-lg flex-shrink-0 group-hover:shadow-xl transition-shadow duration-200">
-                  <div class="min-w-0">
-                    <p class="font-semibold text-sm leading-snug group-hover:text-green transition-colors duration-200">
-                      {{ $buku->judul_buku }}
-                    </p>
-                    <p class="text-green text-xs font-medium">{{ $buku->penulis }}</p>
-                  </div>
-                </a>
-                <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
-              </td>
+                        <!-- Tanggal Pinjam -->
+                        <td class="py-4 px-4 whitespace-nowrap relative">
+                            {{ $tanggalPinjam }}
+                            <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
+                        </td>
 
-              <td class="py-4 px-4 whitespace-nowrap relative">
-                {{ $tanggalPinjam }}
-                <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
-              </td>
+                        <!-- Batas Pinjam -->
+                        <td class="py-4 px-4 whitespace-nowrap relative">
+                            {{ $tanggalKembali }}
+                            <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
+                        </td>
 
-              <td class="py-4 px-4 whitespace-nowrap relative">
-                {{ $tanggalKembali }}
-                <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
-              </td>
-              <td class="py-4 px-4 text-gray-800 font-medium whitespace-nowrap relative">
-                @if(
-    $status === 'menunggu_konfirmasi' &&
-    $data->metode_pengembalian == 'mandiri' &&
-    $data->keterangan &&
-    str_contains(strtolower($data->keterangan), 'teguran')
-)
+                        <!-- Keterangan -->
+                        <td class="py-4 px-4 text-gray-800 font-medium whitespace-nowrap relative">
+                            @if($status === 'menunggu_konfirmasi' &&
+                                $data->metode_pengembalian == 'mandiri' &&
+                                $data->keterangan &&
+                                str_contains(strtolower($data->keterangan), 'teguran'))
 
-                    <!-- Tampilkan Keterangan Teguran dari Admin (Hanya untuk pengembalian mandiri) -->
-                    <div class="flex flex-col gap-2">
-                        <span class="text-red-600 text-xs font-semibold break-words bg-red-50 px-3 py-2 rounded-lg border border-red-200">
-                            <div class="flex items-center gap-2 mb-1">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <span class="font-bold">PERLU FOTO ULANG</span>
-                            </div>
-                            <div class="text-[11px] text-gray-600">
-                                {{ $data->keterangan }}
-                            </div>
-                        </span>
-                        
-                        <!-- Status dengan teks "lakukan foto kembali" -->
-                        <div class="flex items-center gap-2 text-sm">
-                            @if ($status === 'menunggu_konfirmasi')
-                                <button onclick="bukaModalFotoUlang({{ $data->id }}, '{{ addslashes($data->buku->judul_buku) }}')"
-                                    class="bg-primary text-white px-3 py-1.5 rounded-lg hover:bg-green text-xs font-semibold transition-all duration-200 flex items-center gap-2">
-                                    <i class="fas fa-camera"></i>
-                                    lakukan foto kembali
-                                </button>
+                                <div class="flex flex-col gap-2">
+                                    <span class="text-red-600 text-xs font-semibold break-words bg-red-50 px-3 py-2 rounded-lg border border-red-200">
+                                        <div class="flex items-center gap-2 mb-1">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                            <span class="font-bold">PERLU FOTO ULANG</span>
+                                        </div>
+                                        <div class="text-[11px] text-gray-600">
+                                            {{ $data->keterangan }}
+                                        </div>
+                                    </span>
+
+                                    <div class="flex items-center gap-2 text-sm">
+                                        <button onclick="bukaModalFotoUlang({{ $data->id }}, '{{ addslashes($data->buku->judul_buku) }}')"
+                                                class="bg-primary text-white px-3 py-1.5 rounded-lg hover:bg-green text-xs font-semibold transition-all duration-200 flex items-center gap-2">
+                                            <i class="fas fa-camera"></i>
+                                            lakukan foto kembali
+                                        </button>
+                                    </div>
+                                </div>
+                            @else
+                                @if ($status === 'dipinjam')
+                                    @if ($isTerlambat)
+                                        <div class="text-red-600">Telat {{ $hariTelat }} Hari</div>
+                                        <div class="text-xs text-orange-500 mt-1">
+                                            <i class="fas fa-exclamation-circle mr-1"></i>
+                                            Harap segera kembalikan
+                                        </div>
+                                    @else
+                                        <span class="text-sm">Masih Dipinjam</span>
+                                    @endif
+                                @elseif ($status === 'menunggu_konfirmasi')
+                                    <span class="text-yellow-600 text-sm flex flex-col items-start">
+                                        <span><i class="fas fa-clock mr-1"></i>Menunggu Konfirmasi Admin</span>
+                                        @if($data->metode_pengembalian == 'mandiri')
+                                            <span class="mt-1 text-xs bg-primary text-white px-2 py-0.5 rounded-full inline-block">
+                                                Mandiri
+                                            </span>
+                                        @endif
+                                    </span>
+                                @else
+                                    @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
+                                        <span class="text-red-500">Terlambat</span>
+                                    @else
+                                        <span class="text-green-600">Tepat Waktu</span>
+                                    @endif
+                                @endif
                             @endif
-                        </div>
-                    </div>
-                @else
-                    <!-- Tampilkan informasi normal -->
-                    @if ($status === 'dipinjam')
-                        @if ($isTerlambat)
-                            <div class="text-red-600">
-                                Telat {{ $hariTelat }} Hari
-                            </div>
-                            <div class="text-xs text-orange-500 mt-1">
-                                <i class="fas fa-exclamation-circle mr-1"></i>
-                                Harap segera kembalikan
-                            </div>
-                        @else
-                            <span class="text-sm">Masih Dipinjam</span>
-                        @endif
-                    @elseif ($status === 'menunggu_konfirmasi')
-                        <span class="text-yellow-600 text-sm flex flex-col items-start">
-    <span>
-        <i class="fas fa-clock mr-1"></i>
-        Menunggu Konfirmasi Admin
-    </span>
+                            <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
+                        </td>
 
-    @if($data->metode_pengembalian == 'mandiri')
-        <span class="mt-1 text-xs bg-primary text-white px-2 py-0.5 rounded-full inline-block">
-            Mandiri
-        </span>
-    @endif
-</span>
-
-                    @else
-                        @if($data->keterangan && str_contains($data->keterangan, 'Terlambat'))
-                            <span class="text-red-500">Terlambat</span>
-                        @else
-                            <span class="text-green-600">Tepat Waktu</span>
-                        @endif
-                    @endif
-                @endif
-                <span class="absolute right-0 top-1/2 -translate-y-1/2 w-px h-20 bg-orange_200"></span>
-              </td>
-              <td class="py-4 px-4 whitespace-nowrap relative">
-                @if ($status === 'dipinjam')
-                  @if ($isTerlambat)
-                    <div class="flex items-start relative">
-                      <span class="iconify text-red-600 w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:alert-circle-outline"></span>
-                      <div>
-                        <span class="inline-flex items-center bg-[#FFEBCD] text-red-800 px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
-                          Terlambat
-                        </span>
-                        <span class="block mt-1 text-[11px] text-orange-500 italic">*Peringatan keterlambatan</span>
-                      </div>
-                    </div>
-                  @else
-                    <div class="flex items-center relative">
-                      <span class="iconify text-yellow-600 w-4 h-4 absolute -left-4 self-center" data-icon="mdi:clock-outline"></span>
-                      <span class="inline-flex items-center bg-white text-[#A78C1E] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
-                        Sedang Dipinjam
-                      </span>
-                    </div>
-                  @endif
-                @elseif ($status === 'menunggu_konfirmasi')
-                  <div class="flex items-center relative">
-                    <span class="iconify text-[#5F5311] w-4 h-4 absolute -left-4 self-center" data-icon="mdi:clock-alert-outline"></span>
-                    <span class="inline-flex items-center bg-[#FFEBC6] text-[#5F5311] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
-                      Menunggu Konfirmasi
-                    </span>
-                  </div>
-                @else
-                  <div class="flex items-center relative">
-                    <span class="iconify text-[#2F7A2F] w-4 h-4 absolute -left-4 self-center" data-icon="mdi:check"></span>
-                    <span class="inline-flex items-center bg-[#CCF6C2] text-[#2F7A2F] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">
-                      Sudah Dikembalikan
-                    </span>
-                  </div>
-                @endif
-              </td>
-            </tr>
-          @endforeach
-        </tbody>
-      </table>
-      @else
+                        <!-- Status -->
+                        <td class="py-4 px-4 whitespace-nowrap relative">
+                            @if ($status === 'dipinjam')
+                                @if ($isTerlambat)
+                                    <div class="flex items-start relative">
+                                        <span class="iconify text-red-600 w-4 h-4 absolute -left-4 mt-1" data-icon="mdi:alert-circle-outline"></span>
+                                        <div>
+                                            <span class="inline-flex items-center bg-yellow-50 text-red-800 px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">Terlambat</span>
+                                            <span class="block mt-1 text-[11px] text-orange-500 italic">*Peringatan keterlambatan</span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="flex items-center relative">
+                                        <span class="iconify text-yellow-600 w-4 h-4 absolute -left-4 self-center" data-icon="mdi:clock-outline"></span>
+                                        <span class="inline-flex items-center bg-white text-[#A78C1E] px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">Sedang Dipinjam</span>
+                                    </div>
+                                @endif
+                            @elseif ($status === 'menunggu_konfirmasi')
+                                <div class="flex items-center relative">
+                                    <span class="iconify text-yellow-900 w-4 h-4 absolute -left-4 self-center" data-icon="mdi:clock-alert-outline"></span>
+                                    <span class="inline-flex items-center bg-yellow-50 text-yellow-900 px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">Menunggu Konfirmasi</span>
+                                </div>
+                            @else
+                                <div class="flex items-center relative">
+                                    <span class="iconify text-green_dark w-4 h-4 absolute -left-4 self-center" data-icon="mdi:check"></span>
+                                    <span class="inline-flex items-center bg-green_soft text-green_dark px-3 py-1.5 rounded-full text-xs font-semibold min-w-[150px] justify-center shadow-sm">Sudah Dikembalikan</span>
+                                </div>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @else
         <div class="text-center py-12">
-          <div class="text-green text-lg font-semibold mb-2">
-            @if(request()->has('status'))
-              Tidak ada data untuk status yang dipilih
-            @else
-              Belum ada riwayat peminjaman
-            @endif
-          </div>
-          <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
+            <div class="text-green text-lg font-semibold mb-2">
+                @if(request()->has('status'))
+                    Tidak ada data untuk status yang dipilih
+                @else
+                    Belum ada riwayat peminjaman
+                @endif
+            </div>
+            <p class="text-gray-500 text-sm">Silakan pinjam buku terlebih dahulu</p>
         </div>
-      @endif
-    </div>
-
+    @endif
+</div>
     <!-- ====== MODAL PENGEMBALIAN MANDIRI (DILUAR NAV & MAIN) ====== -->
-    <div id="pengembalianModal" class="hidden fixed inset-0 z-[1050] flex items-center justify-center bg-black/40 p-4">
+    <div
+  id="pengembalianModal"
+  class="
+    fixed inset-0 z-[1050] flex items-center justify-center
+    bg-black/40 p-4
+    {{ $showPengembalianModal ?? false ? '' : 'hidden' }}
+  "
+>
       <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative">
         <!-- Header -->
-        <div class="bg-[#4C6444] text-white text-center py-3 font-semibold text-lg">
+        <div class="bg-green text-white text-center py-3 font-semibold text-lg">
           Pengembalian Mandiri
         </div>
 
         <!-- Isi Modal -->
-        <div class="p-6 space-y-4 text-sm text-[#2E2E2E] max-h-[80vh] overflow-y-auto">
+        <div class="p-6 space-y-4 text-sm text-gray-800 max-h-[80vh] overflow-y-auto">
 
           <!-- Dropdown Pilihan Buku -->
           <div>
             <label class="font-semibold mb-1 block">Judul Buku</label>
             <select id="selectBukuModal" 
-                class="w-full bg-[#F6D776] rounded-full px-4 py-2 text-sm text-center shadow-sm focus:outline-none">
+                class="w-full bg-yellow-200 rounded-full px-4 py-2 text-sm text-center shadow-sm focus:outline-none">
                 <option value="">-- Pilih Buku --</option>
                 @foreach($riwayat->where('status','dipinjam') as $item)
                     <option value="{{ $item->id }}">
@@ -303,12 +293,12 @@
             <label class="font-semibold mb-1 block">TAMPILAN LAYAR FOTO</label>
             <div class="grid grid-cols-2 gap-3">
               <button id="btnKameraDepan" onclick="pilihKamera('user')"
-                  class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+                  class="w-full bg-yellow-200 border border-yellow-50 text-gray-800 py-2 rounded-full flex items-center justify-center gap-2 hover:bg-yellow-200 transition-colors">
                   <span class="iconify" data-icon="mdi:camera-front"></span>
                   Kamera Depan
               </button>
               <button id="btnKameraBelakang" onclick="pilihKamera('environment')"
-                  class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+                  class="w-full bg-yellow-200 border border-yellow-50 text-gray-800 py-2 rounded-full flex items-center justify-center gap-2 hover:bg-yellow-200 transition-colors">
                   <span class="iconify" data-icon="mdi:camera-rear"></span>
                   Kamera Belakang
               </button>
@@ -342,11 +332,11 @@
 
             <!-- Peringatan -->
             <div class="text-[13px] space-y-1 mb-4">
-                <p class="text-[#DC2626] flex items-center gap-1">
+                <p class="text-red-600 flex items-center gap-1">
                   <i class="fa-solid fa-triangle-exclamation"></i>
                   Pastikan sampul buku terlihat jelas
                 </p>
-                <p class="text-[#DC2626] flex items-center gap-1">
+                <p class="text-red-600 flex items-center gap-1">
                   <i class="fa-solid fa-triangle-exclamation"></i>
                   Cahaya cukup untuk hasil foto yang baik
                 </p>
@@ -356,23 +346,32 @@
             <div class="flex gap-3">
                 <!-- Tombol Ambil Foto (Muncul saat kamera aktif) -->
                 <button id="btnAmbilFoto" onclick="ambilFoto()"
-                    class="flex-1 bg-[#BFEA7C] text-[#2E2E2E] font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1">
+                    class="flex-1 bg-primary text-gray-800 font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1">
                     <span class="iconify" data-icon="mdi:camera"></span>
                     Ambil Foto
                 </button>
                 
                 <!-- Tombol Kirim Foto (Muncul setelah ambil foto) -->
-                <button id="btnKirimFoto" onclick="kirimFoto()"
-                    class="flex-1 bg-[#4C6444] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1 hidden">
-                    <span class="iconify" data-icon="mdi:send"></span>
-                    Kirim Foto
-                </button>
-            </div>
-          </div>
+                 <button
+  id="btnKirimFoto"
+  onclick="kirimFoto()"
+  class="flex items-center justify-center gap-2 flex-1
+         bg-green text-white font-semibold text-sm
+         px-5 py-2 rounded-full shadow-md
+         hover:opacity-90 transition
+         {{ $showBtnKirim ?? false ? 'flex' : 'hidden' }}"
+>
+  <span class="iconify" data-icon="mdi:send"></span>
+  Kirim Foto
+</button>
+
+        </div>
+      </div>
+
 
           <!-- Tombol Batal (selalu tampil) -->
           <div class="flex justify-end gap-3 pt-4">
-            <button onclick="tutupModal()" class="bg-[#DC2626] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition">
+            <button onclick="tutupModal()" class="bg-red-600 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition">
               Batal
             </button>
           </div>
@@ -381,7 +380,15 @@
       </div>
     </div>
     <!-- ====== MODAL FOTO ULANG PENGEMBALIAN ====== -->
-<div id="fotoUlangModal" class="hidden fixed inset-0 z-[1050] flex items-center justify-center bg-black/40 p-4">
+<div
+  id="fotoUlangModal"
+  class="
+    fixed inset-0 z-[1050] flex items-center justify-center
+    bg-black/40 p-4
+    {{ $showFotoUlangModal ?? false ? '' : 'hidden' }}
+  "
+>
+
     <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative">
         <!-- Header -->
         <div class="bg-yellow-600 text-white text-center py-3 font-semibold text-lg" id="fotoUlangTitle">
@@ -389,7 +396,7 @@
         </div>
 
         <!-- Isi Modal -->
-        <div class="p-6 space-y-4 text-sm text-[#2E2E2E] max-h-[80vh] overflow-y-auto">
+        <div class="p-6 space-y-4 text-sm text-gray-800 max-h-[80vh] overflow-y-auto">
 
             <!-- Info Buku untuk Foto Ulang -->
             <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -406,12 +413,12 @@
                 <label class="font-semibold mb-1 block">TAMPILAN LAYAR FOTO</label>
                 <div class="grid grid-cols-2 gap-3">
                     <button id="btnKameraDepanUlang" onclick="pilihKameraUlang('user')"
-                        class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+                        class="w-full bg-yellow-200 border border-yellow-50 text-gray-800 py-2 rounded-full flex items-center justify-center gap-2 hover:bg-yellow-200 transition-colors">
                         <span class="iconify" data-icon="mdi:camera-front"></span>
                         Kamera Depan
                     </button>
                     <button id="btnKameraBelakangUlang" onclick="pilihKameraUlang('environment')"
-                        class="w-full bg-[#F6D776] border border-[#E0D6B8] text-[#2E2E2E] py-2 rounded-full flex items-center justify-center gap-2 hover:bg-[#e9ca65] transition-colors">
+                        class="w-full bg-yellow-200 border border-yellow-50 text-gray-800 py-2 rounded-full flex items-center justify-center gap-2 hover:bg-yellow-200 transition-colors">
                         <span class="iconify" data-icon="mdi:camera-rear"></span>
                         Kamera Belakang
                     </button>
@@ -445,11 +452,11 @@
 
                 <!-- Peringatan -->
                 <div class="text-[13px] space-y-1 mb-4">
-                    <p class="text-[#DC2626] flex items-center gap-1">
+                    <p class="text-red-600 flex items-center gap-1">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         Pastikan sampul buku terlihat jelas
                     </p>
-                    <p class="text-[#DC2626] flex items-center gap-1">
+                    <p class="text-red-600 flex items-center gap-1">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                         Cahaya cukup untuk hasil foto yang baik
                     </p>
@@ -459,14 +466,14 @@
                 <div class="flex gap-3">
                     <!-- Tombol Ambil Foto (Muncul saat kamera aktif) -->
                     <button id="btnAmbilFotoUlang" onclick="ambilFotoUlang()"
-                        class="flex-1 bg-[#BFEA7C] text-[#2E2E2E] font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1">
+                        class="flex-1 bg-primary text-gray-900 font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1">
                         <span class="iconify" data-icon="mdi:camera"></span>
                         Ambil Foto
                     </button>
                     
                     <!-- Tombol Kirim Foto (Muncul setelah ambil foto) -->
-                    <button id="btnKirimFotoUlang" onclick="kirimFotoUlang()"
-                        class="flex-1 bg-yellow-600 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition flex items-center justify-center gap-1 hidden">
+                     <button id="btnKirimFotoUlang" onclick="kirimFotoUlang()"
+                        class="flex-1 bg-yellow-600 text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition items-center justify-center gap-1 {{ $showBtnKirimFotoUlang ?? false ? 'flex' : 'hidden' }}">
                         <span class="iconify" data-icon="mdi:send"></span>
                         Kirim Foto Ulang
                     </button>
@@ -475,7 +482,7 @@
 
             <!-- Tombol Batal (selalu tampil) -->
             <div class="flex justify-end gap-3 pt-4">
-                <button onclick="tutupModalUlang()" class="bg-[#DC2626] text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition">
+                <button onclick="tutupModalUlang()" class="bg-red-600  text-white font-semibold text-sm px-5 py-2 rounded-full shadow-md hover:opacity-90 transition">
                     Batal
                 </button>
             </div>

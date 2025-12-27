@@ -1,9 +1,13 @@
 <!-- Tombol Hamburger -->
-<button id="hamburger" class="fixed top-4 left-4 z-50 flex flex-col justify-between w-8 h-6 focus:outline-none md:hidden">
-    <span class="block w-full h-[3px] bg-green rounded transition-all duration-300"></span>
-    <span class="block w-full h-[3px] bg-green rounded transition-all duration-300"></span>
-    <span class="block w-full h-[3px] bg-green rounded transition-all duration-300"></span>
+<button id="hamburger"
+    class="fixed top-4 left-4 z-50 flex flex-col justify-between w-8 h-6
+         focus:outline-none md:hidden transition-all duration-300">
+
+    <span class="block w-full h-[3px] bg-green rounded transition-all duration-300 transform"></span>
+    <span class="block w-full h-[3px] bg-green rounded transition-all duration-300 transform"></span>
+    <span class="block w-full h-[3px] bg-green rounded transition-all duration-300 transform"></span>
 </button>
+
 
 <!-- Overlay Sidebar -->
 <div id="sidebar-overlay"
@@ -21,6 +25,9 @@
                 class="w-12 h-12 rounded-full object-cover" />
             <p class="text-white font-bold text-lg leading-tight">
                 PERPUSTAKAAN BPMSPH
+                <span class="block text-xs font-normal opacity-90 mt-1">
+                    SILALA (Sistem Informasi Layanan Literasi & Arsip)<br>
+                </span>
             </p>
         </div>
     </div>
@@ -38,10 +45,10 @@
                     <!-- Foto Profil -->
                     @if (Auth::user()->foto_profil)
                         <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto Profil"
-                            class="w-20 h-20 rounded-full border-2 border-greenobject-cover shadow-md flex-shrink-0" />
+                            class="w-20 h-20 rounded-full border-2 border-green nobject-cover shadow-md flex-shrink-0" />
                     @else
                         <img src="{{ asset('assets/Profile.jpg') }}" alt="Foto Profil"
-                            class="w-20 h-20 rounded-full border-2 border-greenobject-cover shadow-md flex-shrink-0" />
+                            class="w-20 h-20 rounded-full border-2 border-green object-cover shadow-md flex-shrink-0" />
                     @endif
 
                     <div class="leading-tight flex-1 min-w-0">
@@ -61,13 +68,13 @@
                     class="menu-item flex items-center gap-3 border-[2px] border-cream bg-cream rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300
           group-hover:border-transparent group-hover:bg-white">
                     <span class="iconify text-green" data-icon="mdi:view-grid" data-width="32"></span>
-                    <span class="whitespace-nowrap text-base font-bold text-green text-green">Dashboard</span>
+                    <span class="whitespace-nowrap text-base font-bold text-green">Dashboard</span>
                 </div>
             </a>
         </li>
 
         <li
-            class="relative nav-item {{ request()->routeIs('user.daftarbuku') ? 'active' : '' }} rounded-l-[30px] hover:bg-white list-none">
+            class="relative nav-item {{ request()->routeIs('user.daftarbuku', 'user.detailbuku') ? 'active' : '' }} rounded-l-[30px] hover:bg-white list-none">
             <a href="{{ route('user.daftarbuku') }}"
                 class="group relative flex items-center w-full text-greentransition-colors duration-300">
                 <div
@@ -112,7 +119,7 @@
         <li class="relative nav-item rounded-l-[30px] hover:bg-white list-none">
             <form id="logoutForm" action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" id="logoutButton"
+                <button type="button" id="logoutButton"
                     class="group relative flex items-center w-full text-red-600 transition-colors duration-300">
                     <div
                         class="menu-item flex items-center gap-3 rounded-full px-4 py-3 ml-2 w-[230px] justify-start transition-all duration-300">

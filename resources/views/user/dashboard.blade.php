@@ -1,7 +1,21 @@
 @extends('layout_user.user')
 
 @section('title', 'Beranda User')
-
+@if(session('success'))
+  <div id="toast-success"
+       class="fixed top-5 right-5 z-50
+              bg-primary
+              text-white
+              border-l-4 border-white
+              px-4 py-3 rounded-xl shadow-md
+              flex items-center gap-2
+              transition-opacity duration-500">
+    <i class="fa-solid fa-circle-check text-white"></i>
+    <span class="text-sm font-medium">
+      {{ session('success') }}
+    </span>
+  </div>
+@endif
 @section('content')
 
     <!-- Kartu Sambutan -->
@@ -38,7 +52,7 @@
 
         <!-- Efek lembut -->
         <div
-            class="absolute inset-0 bg-gradient-to-r from-[#A4B465]/20 to-transparent 
+            class="absolute inset-0 bg-gradient-to-r from-green/20 to-transparent 
               backdrop-blur-[1px] rounded-2xl">
         </div>
     </section>
@@ -93,21 +107,21 @@
                             class="flex items-start bg-transparent p-3 hover:scale-[1.03] transition-transform duration-300">
                             <div class="relative w-32 h-44 flex-shrink-0">
                                 <div
-                                    class="absolute inset-0 bg-gradient-to-r from-[#00000020] to-transparent rounded-lg shadow-md">
+                                    class="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent rounded-lg shadow-md">
                                 </div>
                                 @if ($buku->foto_buku)
                                     <img src="{{ asset('storage/' . $buku->foto_buku) }}" alt="{{ $buku->judul_buku }}"
-                                        class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
+                                        class="w-full h-full object-cover rounded-lg shadow-lg border border-gray-200">
                                 @else
                                     <img src="{{ asset('assets/default-cover.jpg') }}" alt="{{ $buku->judul_buku }}"
-                                        class="w-full h-full object-cover rounded-lg shadow-lg border border-[#e6e6e6]">
+                                        class="w-full h-full object-cover rounded-lg shadow-lg border border-gray-200">
                                 @endif
-                                <div class="absolute right-0 top-0 w-1 h-full bg-[#d1cfcf] rounded-r-lg"></div>
+                                <div class="absolute right-0 top-0 w-1 h-full bg-gray-200 rounded-r-lg"></div>
                             </div>
 
                             <div class="ml-4 flex flex-col justify-between h-full">
                                 <div>
-                                    <h3 class="font-bold text-[#1E1E1E] text-base leading-snug">{{ $buku->judul_buku }}
+                                    <h3 class="font-bold text-gray-900 text-base leading-snug">{{ $buku->judul_buku }}
                                     </h3>
                                     <p class="text-sm text-gray-600 mb-2">By {{ $buku->penulis }}</p>
 

@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Tidak perlu register middleware di sini untuk Laravel 12
-        // Middleware akan di-register melalui bootstrap/providers.php
+        View::composer('*', function ($view) {
+            if (Auth::guard('admin')->check()) {
+                $view->with('admin', Auth::guard('admin')->user());
+            }
+        });
     }
 }

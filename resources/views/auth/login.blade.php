@@ -85,16 +85,6 @@
         Masuk untuk mengakses SiLala BPMSPH.
       </p>
 
-      <!-- Tampilkan pesan sukses jika ada (setelah registrasi dll) -->
-      @if(session('success'))
-        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-          <div class="flex items-center">
-            <i class="fas fa-check-circle text-green-500 mr-2"></i>
-            <span class="text-sm text-green-600 font-medium">{{ session('success') }}</span>
-          </div>
-        </div>
-      @endif
-
       <!-- Google Login -->
       <div class="mb-4">
        <a href="{{ route('google.redirect') }}"  

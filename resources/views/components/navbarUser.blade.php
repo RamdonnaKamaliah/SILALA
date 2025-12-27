@@ -1,120 +1,13 @@
 <!-- NAVBAR -->
 <nav id="navbar"
-<<<<<<< HEAD
-    class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-40 bg-primary
-  rounded-b-3xl shadow-sm flex justify-between items-center
-  px-4 md:px-6 py-4 md:py-6 transition-all duration-300">
-
-    <!-- Judul -->
-    <h1
-        class="absolute left-1/2 transform -translate-x-1/2 text-lg md:text-xl font-semibold text-[#626F47]
-    md:static md:transform-none md:translate-x-0">
-        {{ $title ?? 'BERANDA' }}
-    </h1>
-
-    <div class="flex items-center gap-4 ml-auto relative">
-        <!-- Notifikasi -->
-        <div class="relative">
-            <button id="notifBtn" class="text-[#626F47] bg-primary hover:bg-primary/90 text-lg focus:outline-none">
-                <i class="fa-solid fa-bell"></i>
-            </button>
-
-            <!-- Popup Notifikasi -->
-            <div id="notifBox"
-                class="absolute right-0 mt-3 w-72 sm:w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50
-              opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300">
-
-                <!-- Header -->
-                <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-bell text-[#A4B465]"></i>
-                        <h3 class="font-semibold text-gray-700 text-sm">Notifikasi</h3>
-                    </div>
-                    <button id="closeNotif" class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-
-                <!-- Daftar Notifikasi -->
-                <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
-                    <!-- Item Notifikasi -->
-                    <div
-                        class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
-                        <div
-                            class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top">
-                        </div>
-                        <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full flex-shrink-0"></div>
-                        <div class="flex-1">
-                            <p class="text-sm font-semibold text-[#626F47]">Admin</p>
-                            <p class="text-xs text-gray-600">Buku <b>Buku Saku</b> berhasil disimpan oleh Wildan.</p>
-                        </div>
-                        <span class="text-[10px] text-gray-400 whitespace-nowrap">1m</span>
-                    </div>
-
-                    <div
-                        class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
-                        <div
-                            class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top">
-                        </div>
-                        <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full flex-shrink-0"></div>
-                        <div class="flex-1">
-                            <p class="text-sm font-semibold text-[#626F47]">Sistem</p>
-                            <p class="text-xs text-gray-600">Perpustakaan diperbarui ke versi terbaru.</p>
-                        </div>
-                        <span class="text-[10px] text-gray-400 whitespace-nowrap">10m</span>
-                    </div>
-
-                    <div
-                        class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer transition group">
-                        <div
-                            class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top">
-                        </div>
-                        <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full flex-shrink-0"></div>
-                        <div class="flex-1">
-                            <p class="text-sm font-semibold text-[#626F47]">Admin</p>
-                            <p class="text-xs text-gray-600">Notifikasi tambahan untuk testing scroll.</p>
-                        </div>
-                        <span class="text-[10px] text-gray-400 whitespace-nowrap">15m</span>
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="text-center py-3 border-t border-gray-100">
-                    <a href="#" class="text-[#626F47] text-sm font-medium hover:text-[#A4B465]">
-                        Lihat semua aktivitas
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- darkmode -->
-        <button onclick="toggleDarkMode()" class="text-[#626F47] text-lg flex items-center gap-2">
-            <span class="iconify text-2xl dark:hidden" data-icon="mdi:weather-sunny"></span>
-            <span class="iconify text-2xl hidden dark:inline" data-icon="mdi:weather-night"></span>
-        </button>
-    </div>
-
-    <div class="flex gap-2">
-        <button class="rounded-full bg-blue-500 px-3 py-2 cursor-pointer" onclick="setTheme('blue')">Biru</button>
-
-        <button class="rounded-full bg-primary px-3 py-2 cursor-pointer" onclick="setTheme('green')">Hijau</button>
-
-        <button class="rounded-full bg-orange-500 px-3 py-2 cursor-pointer" onclick="setTheme('orange')">Orange</button>
-        <button class="rounded-full bg-purple-500 px-3 py-2 cursor-pointer" onclick="setTheme('purple')">Ungu</button>
-
-        <button class="rounded-full bg-yellow-500 px-3 py-2 cursor-pointer" onclick="setTheme('yellow')">Kuning</button>
-    </div>
-    </div>
-</nav>
-=======
-  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-30 bg-[#f7edd6]
+  class="fixed top-0 left-0 md:left-[320px] right-0 md:right-3 z-30 bg-cream
   rounded-b-3xl shadow-sm flex justify-between items-center
   px-4 md:px-6 py-4 md:py-6 transition-all duration-300">
 
   <!-- Judul -->
   <h1
     class="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0
-    text-lg md:text-xl font-semibold text-[#626F47]">
+    text-lg md:text-xl font-semibold text-green">
     {{ $title ?? 'BERANDA' }}
   </h1>
 
@@ -125,9 +18,13 @@
       <button id="notifButton" class="relative text-netral text-lg">
         <i class="fa-solid fa-bell"></i>
         <!-- Badge untuk jumlah notifikasi -->
-        <span id="notificationBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">
-          0
-        </span>
+        <span
+  id="notificationBadge"
+  class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center
+         {{ $showBadge ?? false ? '' : 'hidden' }}">
+  0
+</span>
+
       </button>
 
       <!-- Popup Notifikasi -->
@@ -139,7 +36,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between px-5 py-3 border-b border-gray-100">
           <div class="flex items-center gap-2">
-            <i class="fa-solid fa-bell text-[#A4B465]"></i>
+            <i class="fa-solid fa-bell text-primary"></i>
             <h3 class="font-semibold text-gray-700 text-sm">Notifikasi</h3>
           </div>
           <button id="closeNotif" class="text-gray-400 hover:text-gray-600">
@@ -151,10 +48,10 @@
         <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
           <!-- Notifikasi default (jika tidak ada telat) -->
           <div id="defaultNotif" class="notif-item relative flex items-start gap-3 px-5 py-3 hover:bg-gray-50 cursor-pointer group">
-            <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-[#A4B465] rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
-            <div class="w-2 h-2 mt-1 bg-[#A4B465] rounded-full"></div>
+            <div class="notif-line absolute left-0 top-0 bottom-0 w-[3px] bg-primary rounded-r-full scale-y-0 group-hover:scale-y-100 transition-transform origin-top"></div>
+            <div class="w-2 h-2 mt-1 bg-primary rounded-full"></div>
             <div class="flex-1">
-              <p class="text-sm font-semibold text-[#626F47]">Sistem</p>
+              <p class="text-sm font-semibold text-green">Sistem</p>
               <p class="text-xs text-gray-600">Tidak ada notifikasi baru.</p>
             </div>
             <span class="text-[10px] text-gray-400">Baru saja</span>
@@ -166,7 +63,7 @@
 
         <!-- Footer -->
         <div class="text-center py-3 border-t border-gray-100">
-          <a href="{{ route('user.riwayatbuku')}}" class="text-[#626F47] text-sm font-medium hover:text-[#A4B465]">
+          <a href="{{ route('user.riwayatbuku')}}" class="text-green text-sm font-medium hover:text-primary">
             Lihat semua aktivitas
           </a>
         </div>
@@ -174,10 +71,9 @@
     </div>
 
     <!-- Darkmode -->
-    <button onclick="toggleDarkMode()" class="text-[#626F47] text-lg">
+    <button onclick="toggleDarkMode()" class="text-green text-lg">
       <span class="iconify text-2xl dark:hidden" data-icon="mdi:weather-sunny"></span>
       <span class="iconify text-2xl hidden dark:inline" data-icon="mdi:weather-night"></span>
     </button>
   </div>
 </nav>
->>>>>>> a8ca92be733905685b35971da96e246167f9f327

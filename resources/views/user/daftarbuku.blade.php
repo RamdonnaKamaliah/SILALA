@@ -3,158 +3,159 @@
 @section('title', 'daftar buku User')
 
 @section('content')
-    <div class="halaman-daftar-buku">
-        <!-- Filter & Search -->
-        <div class=" px-4 md:px-6 py-3 sticky top-0 z-40">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="halaman-daftar-buku">
+    <!-- Filter & Search -->
+    <div class="bg-cream px-4 md:px-6 py-3 sticky top-0 z-20">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
 
-                <!-- Dropdown Kategori -->
-                <div class="relative w-full md:w-auto" id="kategoriDropdown">
+            <!-- Dropdown Kategori -->
+            <div class="relative w-full md:w-auto" id="kategoriDropdown">
 
-                    <button
-                        class="w-full md:w-48 px-4 py-2 bg-primary text-white rounded-xl shadow-md font-semibold flex justify-between items-center hover:bg-kuning hover:text-gray-700 transition-all duration-300">
-                        <span id="kategoriText">
-                            {{ request('kategori') ?? 'Semua Kategori' }}
-                        </span>
+                <button
+                    class="w-full md:w-48 px-4 py-2 bg-primary text-white rounded-xl shadow-md font-semibold flex justify-between items-center hover:bg-kuning hover:text-gray-700 transition-all duration-300">
+                    <span id="kategoriText">
+                        {{ request('kategori') ?? 'Semua Kategori' }}
+                    </span>
 
-                        <svg class="w-4 h-4 transition-transform duration-200" id="kategoriIcon" fill="none"
-                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
+                    <svg class="w-4 h-4 transition-transform duration-200" id="kategoriIcon" fill="none"
+                        stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
 
-                    <!-- Menu -->
-                    <div id="kategoriMenu"
-                        class="hidden absolute left-0 w-full md:w-48 mt-2 z-[9999] bg-primary rounded-xl shadow-xl p-2 border border-[#E2DAC3]">
+                <!-- Menu -->
+                <div id="kategoriMenu"
+                    class="hidden absolute left-0 w-full md:w-48 mt-2 z-50 bg-primary rounded-xl shadow-xl p-2 border border-stone-200">
 
-                        <a href="{{ route('user.daftarbuku') }}"
-                            class="block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
-                            Semua Kategori
-                        </a>
+                    <a href="{{ route('user.daftarbuku') }}"
+                        class="block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
+                        Semua Kategori
+                    </a>
 
 
-                        @foreach ($data_kategori as $kat)
-                            <a href="{{ route('user.daftarbuku', ['kategori' => $kat->nama_kategori]) }}"
-                                class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all rounded-lg">
-                                {{ $kat->nama_kategori }}
-                            </a>
-                        @endforeach
+                    @foreach ($data_kategori as $kat)
+                    <a href="{{ route('user.daftarbuku', ['kategori' => $kat->nama_kategori]) }}"
+                        class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all rounded-lg">
+                        {{ $kat->nama_kategori }}
+                    </a>
+                    @endforeach
 
-                    </div>
                 </div>
-
-                <!-- Search -->
-                <div class="relative w-full sm:w-auto flex justify-center md:justify-end">
-                    <input type="text" placeholder="Cari Buku..."
-                        class="px-5 py-2 w-full sm:w-56 md:w-72 rounded-full bg-white text-gray-900 placeholder-gray-900
-                   focus:outline-none focus:ring-2 focus:ring-[#8CA86C] pr-10 text-sm md:text-base transition-all duration-300">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-900"></i>
-                </div>
-
             </div>
+
+            <!-- Search -->
+            <div class="relative w-full sm:w-auto flex justify-center md:justify-end">
+                <input type="text" placeholder="Cari Buku..."
+                    class="px-5 py-2 w-full sm:w-56 md:w-72 rounded-full bg-white text-gray-900 placeholder-gray-900
+                   focus:outline-none focus:ring-2 focus:ring-primary pr-10 text-sm md:text-base transition-all duration-300">
+                <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-900"></i>
+            </div>
+
         </div>
+    </div>
 
-        <!-- Daftar Buku -->
-        <div class="flex-1 px-2 md:px-4 pt-4 pb-6">
+    <!-- Daftar Buku -->
+    <div class="flex-1 px-2 md:px-4 pt-4 pb-6">
 
-            <!-- Tampilkan pesan jika kosong -->
-            <div id="pesanKosong" class="col-span-full text-center text-gray-500 py-10 hidden">
-                <p class="text-green text-lg font-semibold mb-2">
-                    Tidak ada buku dengan judul ini
-                </p>
-            </div>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
+        <!-- Tampilkan pesan jika kosong -->
+        <div id="pesanKosong" class="col-span-full text-center text-gray-500 py-10 hidden">
+            <p class="text-green text-lg font-semibold mb-2">
+                Tidak ada buku dengan judul ini
+            </p>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8">
 
-                @forelse ($data_bukus as $buku)
-                    @php
-                        // Ambil rating untuk buku ini
-                        $ratingData = $ratings[$buku->id] ?? null;
-                        $avgRating = $ratingData ? $ratingData->avg_rating : 0;
-                        $totalRatings = $ratingData ? $ratingData->total_ratings : 0;
+            @forelse ($data_bukus as $buku)
+            @php
+            // Ambil rating untuk buku ini
+            $ratingData = $ratings[$buku->id] ?? null;
+            $avgRating = $ratingData ? $ratingData->avg_rating : 0;
+            $totalRatings = $ratingData ? $ratingData->total_ratings : 0;
 
-                        // Hitung bintang penuh, setengah, dan kosong
-                        $fullStars = floor($avgRating);
-                        $halfStar = $avgRating - $fullStars >= 0.5 ? 1 : 0;
-                        $emptyStars = 5 - $fullStars - $halfStar;
-                    @endphp
+            // Hitung bintang penuh, setengah, dan kosong
+            $fullStars = floor($avgRating);
+            $halfStar = $avgRating - $fullStars >= 0.5 ? 1 : 0;
+            $emptyStars = 5 - $fullStars - $halfStar;
+            @endphp
 
-                    <div class="group bg-[#f5ecd6] border border-[#e8dec0] rounded-2xl shadow-md overflow-hidden transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-[#faf3df] cursor-pointer flex flex-col items-center pt-4"
-                        data-kategori-buku="{{ $buku->nama_kategori }}" data-judul="{{ strtolower($buku->judul_buku) }}">
+            <div class="group bg-amber-50 border border-amber-100 rounded-2xl shadow-md overflow-hidden transition-all duration-700 ease-in-out hover:shadow-lg hover:scale-[1.03] hover:bg-amber-50 cursor-pointer flex flex-col items-center pt-4"
+                data-kategori-buku="{{ $buku->nama_kategori }}" data-judul="{{ strtolower($buku->judul_buku) }}">
 
-                        <!-- COVER -->
-                        <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
-                            @if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku))
-                                <img src="{{ asset('storage/' . $buku->foto_buku) }}"
-                                    class="w-full h-full object-cover rounded-lg">
-                            @else
-                                <img src="{{ asset('assets/default-cover.jpg') }}"
-                                    class="w-full h-full object-cover rounded-lg">
-                                <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
+                <!-- COVER -->
+                <div class="relative w-[85%] h-44 md:h-52 bg-white rounded-xl shadow-sm overflow-hidden">
+                    @if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku))
+                    <img src="{{ asset('storage/' . $buku->foto_buku) }}"
+                        class="w-full h-full object-cover rounded-lg">
+                    @else
+                    <img src="{{ asset('assets/default-cover.jpg') }}"
+                        class="w-full h-full object-cover rounded-lg">
+                    <div class="absolute right-0 top-0 w-[6px] h-full bg-gray-300 shadow-inner"></div>
+                    @endif
+                </div>
+
+                <!-- KONTEN -->
+                <div class="p-4 flex flex-col items-center text-center flex-1 w-full min-h-[150px]">
+
+                    <!-- JUDUL -->
+                    <h3 class="font-bold text-gray-900 text-sm md:text-base line-clamp-2 h-10">
+                        {{ $buku->judul_buku }}
+                    </h3>
+
+                    <!-- PENULIS -->
+                    <p class="text-xs md:text-sm text-gray-600 h-5">
+                        {{ $buku->penulis }}
+                    </p>
+
+                    <!-- RATING -->
+                    <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
+                        @for ($i = 0; $i < $fullStars; $i++)
+                            <i class="fa-solid fa-star"></i>
+                            @endfor
+
+                            @if ($halfStar)
+                            <i class="fa-solid fa-star-half-stroke"></i>
                             @endif
-                        </div>
 
-                        <!-- KONTEN -->
-                        <div class="p-4 flex flex-col items-center text-center flex-1 w-full min-h-[150px]">
-
-                            <!-- JUDUL -->
-                            <h3 class="font-bold text-[#1E1E1E] text-sm md:text-base line-clamp-2 h-10">
-                                {{ $buku->judul_buku }}
-                            </h3>
-
-                            <!-- PENULIS -->
-                            <p class="text-xs md:text-sm text-gray-600 h-5">
-                                {{ $buku->penulis }}
-                            </p>
-
-                            <!-- RATING -->
-                            <div class="flex justify-center text-yellow-400 text-xs md:text-sm space-x-1 mt-1">
-                                @for ($i = 0; $i < $fullStars; $i++)
-                                    <i class="fa-solid fa-star"></i>
-                                @endfor
-
-                                @if ($halfStar)
-                                    <i class="fa-solid fa-star-half-stroke"></i>
-                                @endif
-
-                                @for ($i = 0; $i < $emptyStars; $i++)
-                                    <i class="fa-regular fa-star"></i>
+                            @for ($i = 0; $i < $emptyStars; $i++)
+                                <i class="fa-regular fa-star"></i>
                                 @endfor
 
                                 <!-- Tampilkan rating numerik jika ada -->
                                 @if ($avgRating > 0)
-                                    <span class="text-gray-600 text-xs ml-1">({{ number_format($avgRating, 1) }})</span>
+                                <span class="text-gray-600 text-xs ml-1">({{ number_format($avgRating, 1) }})</span>
                                 @else
-                                    <span class="text-gray-400 text-xs ml-1">Belum ada rating</span>
+                                <span class="text-gray-400 text-xs ml-1">Belum ada rating</span>
                                 @endif
-                            </div>
-
-
-                            <!-- BUTTON -->
-                            <div class="mt-auto pt-2">
-                                <a href="{{ route('user.detailbuku', $buku->id) }}">
-                                    <button class="text-white text-xs md:text-sm px-5 py-1.5 rounded-full"
-                                        style="background-color: rgb(var(--primary));">
-                                        Lihat Detail
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
                     </div>
 
-                @empty
-                    <!-- 🔴 JIKA TIDAK ADA BUKU -->
-                    <div class="col-span-full text-center py-14">
-                        <p class="text-green text-lg font-semibold mb-2">
-                            Tidak ada buku dengan kategori ini
-                        </p>
 
-                        @if (request('kategori'))
-                            <p class="text-gray-500 text-sm">
-                                Kategori: <span class="font-medium">{{ request('kategori') }}</span>
-                            </p>
-                        @endif
+                    <!-- BUTTON -->
+                    <div class="mt-auto pt-2">
+                        <a href="{{ route('user.detailbuku', $buku->id) }}">
+                            <button
+                                class="bg-primary text-white text-xs md:text-sm px-5 py-1.5 rounded-full 
+                               hover:bg-green hover:scale-105">
+                                Lihat Detail
+                            </button>
+                        </a>
                     </div>
-                @endforelse
+                </div>
             </div>
+
+            @empty
+            <!-- 🔴 JIKA TIDAK ADA BUKU -->
+            <div class="col-span-full text-center py-14">
+                <p class="text-green text-lg font-semibold mb-2">
+                    Tidak ada buku dengan kategori ini
+                </p>
+
+                @if (request('kategori'))
+                <p class="text-gray-500 text-sm">
+                    Kategori: <span class="font-medium">{{ request('kategori') }}</span>
+                </p>
+                @endif
+            </div>
+            @endforelse
+        </div>
 
         @endsection

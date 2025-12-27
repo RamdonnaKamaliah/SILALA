@@ -37,7 +37,7 @@ class DataBukuController extends Controller
             'judul_buku' => 'required',
             'penulis' => 'required',
             'penerbit' => 'required',
-            'tahun_terbit' => 'required',
+            'tahun_terbit' => 'required|digits:4',
             'bahasa' => 'required',
             'kategori_id' => 'required|array|min:1',
             'kategori_id.*' => 'exists:data_kategoris,id', // ← Tambah validasi setiap item
@@ -85,8 +85,6 @@ class DataBukuController extends Controller
     }
 
 
-        // Simpan kategori_ids sebagai string
-        $kategori_ids = implode(',', $request->kategori_id);
 
         $buku = databuku::create([
             'judul_buku' => $request->judul_buku,

@@ -1,8 +1,6 @@
 <?php $__env->startSection('pageTitle', 'Data Buku'); ?>
 
 <?php $__env->startSection('content'); ?>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <div class="p-4 md:p-8 font-[Poppins] text-slate-800 bg-gray-50 min-h-screen">
 

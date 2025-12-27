@@ -115,9 +115,19 @@
         });
     }
 
-    // Initialize when page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add event listeners
-        document.getElementById('foto_buku').addEventListener('change', previewImage);
-        document.getElementById('file_buku').addEventListener('change', previewPDF);
-    });
+    // Init
+document.addEventListener('DOMContentLoaded', function () {
+    const fotoInput = document.getElementById('foto_buku');
+    const fileInput = document.getElementById('file_buku');
+
+    // ⛔ hentikan script kalau dua-duanya tidak ada
+    if (!fotoInput && !fileInput) return;
+
+    if (fotoInput) {
+        fotoInput.addEventListener('change', previewImage);
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener('change', previewPDF);
+    }
+});

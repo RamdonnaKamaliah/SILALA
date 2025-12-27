@@ -22,8 +22,8 @@ use App\Http\Controllers\EditProfilController;
 use App\Http\Controllers\user\RatingController;
 use App\Http\Controllers\Admin\MediaBukuController;
 use App\Http\Controllers\Admin\DashboardController;
-
-
+use App\Http\Controllers\DashboardController as ControllersDashboardController;
+use App\Http\Controllers\DashboardUserController;
 
 // Public Routes
 Route::get('/', function () {
@@ -49,9 +49,9 @@ Route::middleware('auth:web')->group(function () {
 });
 
 // User Routes
-Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
+Route::middleware([UserMiddleware::class])->group(function () {
     // USER
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardUserController::class, 'index'])->name('dashboard');
 
     //DAFTAR BUKU
     Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
@@ -103,24 +103,24 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
        
     // Data Buku Routes
     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
-    Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
+    Route::delete('/data_buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
     Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');
     Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
     ->name('data_buku.archive'); // 🗂️ Arsipkan buku
-    Route::post('/data-buku/bulk-archive', [DataBukuController::class, 'bulkArchive'])
+    Route::post('/data_buku/bulk-archive', [DataBukuController::class, 'bulkArchive'])
     ->name('data_buku.bulkArchive'); // 🗂️ Arsipkan banyak buku
     Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
     ->name('data_buku.restore');
 
     // Data Kategori Routes
     Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
-    Route::delete('/data-kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
+    Route::delete('/data_kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
 
     // Data Arsip Routes
     Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');
@@ -164,7 +164,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     
         //statistik peminjaman pengembalian
         Route::get('/statistik-peminjaman', [DashboardController::class, 'Statistik'])
-            ->name('dashboard');
+            ->name('statistik.peminjaman');
 });
 
 // Home Redirect Route

@@ -10,7 +10,7 @@ use App\Models\DataBuku;
 use App\Models\Rating;
 use Carbon\Carbon;
 
-class DashboardController extends Controller
+class DashboardUserController extends Controller
 {
     public function index()
     {

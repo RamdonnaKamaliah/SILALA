@@ -70,7 +70,9 @@
                             <?php if($item->path_file && Storage::disk('public')->exists($item->path_file)): ?>
                                 <img src="<?php echo e(asset('storage/' . $item->path_file)); ?>" class="w-full h-full object-cover"
                                     alt="<?php echo e($item->nama_file); ?>">
-                            
+                            <?php else: ?>
+                                <img src="<?php echo e(asset('assets/image_default/image_default_book.jpeg')); ?>"
+                                    class="w-full h-full object-cover opacity-60" alt="Default image">
                             <?php endif; ?>
 
                             

@@ -43,13 +43,8 @@
           group-hover:border-transparent group-hover:bg-white">
 
                     <!-- Foto Profil -->
-                    @if (Auth::user()->foto_profil)
-                        <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto Profil"
-                            class="w-20 h-20 rounded-full border-2 border-green nobject-cover shadow-md flex-shrink-0" />
-                    @else
-                        <img src="{{ asset('assets/Profile.jpg') }}" alt="Foto Profil"
-                            class="w-20 h-20 rounded-full border-2 border-green object-cover shadow-md flex-shrink-0" />
-                    @endif
+                    {{-- <img src="{{ $user->foto_profil ?: 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
+                        alt="Profile"> --}}
 
                     <div class="leading-tight flex-1 min-w-0">
                         <p class="font-bold text-green text-sm truncate">{{ Auth::user()->name }}</p>

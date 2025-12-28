@@ -3,338 +3,235 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Imports\DataBukuImport;
-use App\Models\DataBuku;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use App\Models\DataBuku;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\DataBukuImport; 
+use App\Models\DataKategori;
+use App\Models\GambarBuku;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class DataBukuController extends Controller
 {
-    private $apiUrl = 'http://127.0.0.1:8000/api';
-
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {
-        try {
-            $response = Http::get($this->apiUrl . '/dataBuku');
+{
+    $bukus = DataBuku::with('kategoris')->latest()->get();
 
-            if ($response->successful()) {
-                $data = $response->json()['data'] ?? [];
-                
-                $bukus = collect($data)->map(function($item) {
-                    $buku = (object) $item;
-                    
-                    // Convert kategoris jadi collection of objects
-                    if (isset($buku->kategoris) && is_array($buku->kategoris)) {
-                        $buku->kategoris = collect($buku->kategoris)->map(function($kategori) {
-                            return (object) $kategori;
-                        });
-                    } else {
-                        $buku->kategoris = collect([]);
-                    }
-                    
-                    return $buku;
-                });
-            } else {
-                $bukus = collect([]);
-            }
-        } catch (\Exception $e) {
-            Log::error('Error fetching books: ' . $e->getMessage());
-            $bukus = collect([]);
-        }
+    return view('admin.data_buku.index', compact('bukus'));
+}
 
-        return view('admin.data_buku.index', compact('bukus'));
-    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
 {
-    try {
-        // Ambil data kategori
-        $responseKategori = Http::get($this->apiUrl . '/kategori');
-        
-        // Ambil data media dari API
-        $responseMedia = Http::get($this->apiUrl . '/media');
-        
-        if ($responseKategori->successful()) {
-            $kategoris = collect($responseKategori->json()['data'] ?? [])->map(function($item) {
-                return (object) $item;
-            });
-        } else {
-            $kategoris = collect([]);
-        }
-
-        if ($responseMedia->successful()) {
-            $media = collect($responseMedia->json()['data'] ?? [])->map(function($item) {
-                return (object) $item;
-            });
-        } else {
-            $media = collect([]);
-        }
-    } catch (\Exception $e) {
-        Log::error('Error fetching data: ' . $e->getMessage());
-        $kategoris = collect([]);
-        $media = collect([]);
-    }
+    $kategoris = DataKategori::all();
+    $media = GambarBuku::all();
 
     return view('admin.data_buku.create', compact('kategoris', 'media'));
 }
+
+
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        try {
-            $request->validate([
-                'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-                'judul_buku' => 'required',
-                'penulis' => 'required',
-                'penerbit' => 'required',
-                'tahun_terbit' => 'required|digits:4',
-                'bahasa' => 'required',
-                'kategori_id' => 'required|array|min:1',
-                'jumlah_halaman' => 'required|integer|min:1',
-                'edisi' => 'required',
-                'deskripsi' => 'required',
-                'stok' => 'required|integer|min:0',
-                'file_buku' => 'required|mimes:pdf|max:10240',
-            ]);
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+        'foto_id'   => 'nullable|exists:gambar_bukus,id',
+        'judul_buku' => 'required',
+        'penulis' => 'required',
+        'penerbit' => 'required',
+        'tahun_terbit' => 'required',
+        'bahasa' => 'required',
+        'kategori_id' => 'required|array|min:1',
+        'jumlah_halaman' => 'required',
+        'edisi' => 'required',
+        'deskripsi' => 'required',
+        'stok' => 'required',
+        'file_buku' => 'required|mimes:pdf|max:10240',
+    ]);
 
-            // Kirim ke API dengan multipart/form-data
-            $response = Http::asMultipart()->post($this->apiUrl . '/dataBuku', [
-                // File uploads
-                ['name' => 'foto_buku', 'contents' => $request->hasFile('foto_buku') 
-                    ? fopen($request->file('foto_buku')->getRealPath(), 'r') 
-                    : '', 'filename' => $request->hasFile('foto_buku') 
-                    ? $request->file('foto_buku')->getClientOriginalName() 
-                    : ''],
-                
-                ['name' => 'file_buku', 'contents' => fopen($request->file('file_buku')->getRealPath(), 'r'), 
-                    'filename' => $request->file('file_buku')->getClientOriginalName()],
-                
-                // Text fields
-                ['name' => 'foto_id', 'contents' => $request->foto_id ?? ''],
-                ['name' => 'judul_buku', 'contents' => $request->judul_buku],
-                ['name' => 'penulis', 'contents' => $request->penulis],
-                ['name' => 'penerbit', 'contents' => $request->penerbit],
-                ['name' => 'tahun_terbit', 'contents' => $request->tahun_terbit],
-                ['name' => 'bahasa', 'contents' => $request->bahasa],
-                ['name' => 'jumlah_halaman', 'contents' => $request->jumlah_halaman],
-                ['name' => 'edisi', 'contents' => $request->edisi],
-                ['name' => 'deskripsi', 'contents' => $request->deskripsi],
-                ['name' => 'stok', 'contents' => $request->stok],
-                
-                
-                // Kategori (array)
-                ...collect($request->kategori_id)->map(function($id, $index) {
-                    return ['name' => "kategori_id[{$index}]", 'contents' => $id];
-                })->toArray(),
-            ]);
+    $foto_buku_path = null;
 
-            if ($response->successful()) {
-                return redirect()->route('admin.data_buku.index')
-                    ->with('success', 'Data buku berhasil ditambahkan');
-            } else {
-                $error = $response->json()['message'] ?? 'Gagal menambahkan data';
-                return back()->withInput()->with('error', $error);
-            }
-        } catch (\Exception $e) {
-            Log::error('Error storing book: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+    // 1️⃣ Upload manual
+    if ($request->hasFile('foto_buku')) {
+
+        $file = $request->file('foto_buku');
+
+        $path = $file->store('uploads/buku', 'public');  
+        $foto_buku_path = $path;
+
+        // Simpan ke tabel media
+        GambarBuku::create([
+            'nama_file' => $file->getClientOriginalName(),
+            'path_file' => $path,
+            'judul_buku' => $request->judul_buku,
+        ]);
+    }
+
+    // 2️⃣ Pilih dari galeri
+    if ($request->foto_id) {
+        $media = GambarBuku::find($request->foto_id);
+        if ($media) {
+            $foto_buku_path = $media->path_file;
         }
     }
+
+    // 3️⃣ Simpan data buku
+    $buku = DataBuku::create([
+        'judul_buku' => $request->judul_buku,
+        'penulis' => $request->penulis,
+        'penerbit' => $request->penerbit,
+        'tahun_terbit' => $request->tahun_terbit,
+        'bahasa' => $request->bahasa,
+        'jumlah_halaman' => $request->jumlah_halaman,
+        'edisi' => $request->edisi,
+        'deskripsi' => $request->deskripsi,
+        'stok' => $request->stok,
+
+        'file_buku' => $request->file_buku
+    ? $request->file_buku->store('uploads/file_buku', 'public')
+    : null,
+
+        'foto_buku' => $foto_buku_path,
+
+        'kategori_ids' => implode(',', $request->kategori_id),
+    ]);
+
+    // 4️⃣ Pivot kategori
+    $buku->kategoris()->attach($request->kategori_id);
+
+    return redirect()->route('admin.data_buku.index')
+        ->with('success', 'Data buku berhasil ditambahkan!');
+}
+
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        try {
-            $response = Http::get($this->apiUrl . '/dataBuku/' . $id);
-
-            if ($response->successful()) {
-                $data = $response->json()['data'];
-                $buku = (object) $data;
-                
-                // Convert kategoris
-                if (isset($buku->kategoris) && is_array($buku->kategoris)) {
-                    $buku->kategoris = collect($buku->kategoris)->map(function($kategori) {
-                        return (object) $kategori;
-                    });
-                } else {
-                    $buku->kategoris = collect([]);
-                }
-
-                return view('admin.data_buku.show', compact('buku'));
-            }
-
-            return redirect()->route('admin.data_buku.index')
-                ->with('error', 'Buku tidak ditemukan');
-        } catch (\Exception $e) {
-            Log::error('Error showing book: ' . $e->getMessage());
-            return redirect()->route('admin.data_buku.index')
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+        $buku = DataBuku::findOrFail($id);
+        return view('admin.data_buku.show', compact('buku'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        try {
-            // Ambil data buku
-            $responseBuku = Http::get($this->apiUrl . '/dataBuku/' . $id);
-            
-            // Ambil data kategori
-            $responseKategori = Http::get($this->apiUrl . '/kategori');
-
-            if ($responseBuku->successful() && $responseKategori->successful()) {
-                $buku = (object) $responseBuku->json()['data'];
-                
-                // Convert kategoris
-                if (isset($buku->kategoris) && is_array($buku->kategoris)) {
-                    $buku->kategoris = collect($buku->kategoris)->map(function($kategori) {
-                        return (object) $kategori;
-                    });
-                } else {
-                    $buku->kategoris = collect([]);
-                }
-                
-                $kategoris = collect($responseKategori->json()['data'] ?? [])->map(function($item) {
-                    return (object) $item;
-                });
-
-                return view('admin.data_buku.edit', compact('buku', 'kategoris'));
-            }
-
-            return redirect()->route('admin.data_buku.index')
-                ->with('error', 'Buku tidak ditemukan');
-        } catch (\Exception $e) {
-            Log::error('Error editing book: ' . $e->getMessage());
-            return redirect()->route('admin.data_buku.index')
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
-    }
-
+  public function edit(string $id)
+{
+    $buku = DataBuku::findOrFail($id);
+    $kategoris = DataKategori::all();
+    return view('admin.data_buku.edit', compact('buku', 'kategoris'));
+}
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        try {
-            $request->validate([
-                'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-                'judul_buku' => 'required',
-                'penulis' => 'required',
-                'penerbit' => 'required',
-                'tahun_terbit' => 'required|digits:4',
-                'bahasa' => 'required',
-                'kategori_id' => 'required|array|min:1',
-                'jumlah_halaman' => 'required|integer|min:1',
-                'edisi' => 'required',
-                'deskripsi' => 'required',
-                'stok' => 'required|integer|min:0',
-                'file_buku' => 'nullable|mimes:pdf|max:10240',
-            ]);
+  public function update(Request $request, $id)
+{
+    $buku = DataBuku::findOrFail($id);
 
-            $multipart = [
-                ['name' => 'judul_buku', 'contents' => $request->judul_buku],
-                ['name' => 'penulis', 'contents' => $request->penulis],
-                ['name' => 'penerbit', 'contents' => $request->penerbit],
-                ['name' => 'tahun_terbit', 'contents' => $request->tahun_terbit],
-                ['name' => 'bahasa', 'contents' => $request->bahasa],
-                ['name' => 'jumlah_halaman', 'contents' => $request->jumlah_halaman],
-                ['name' => 'edisi', 'contents' => $request->edisi],
-                ['name' => 'deskripsi', 'contents' => $request->deskripsi],
-                ['name' => 'stok', 'contents' => $request->stok],
-                ['name' => '_method', 'contents' => 'PUT'], // Method spoofing
-            ];
+    $buku->update($request->except('kategori_id'));
 
-            // Tambahkan
-            if ($request->hasFile('foto_buku')) {
-                $multipart[] = [
-                    'name' => 'foto_buku',
-                    'contents' => fopen($request->file('foto_buku')->getRealPath(), 'r'),
-                    'filename' => $request->file('foto_buku')->getClientOriginalName()
-                ];
-            }
-
-            if ($request->hasFile('file_buku')) {
-                $multipart[] = [
-                    'name' => 'file_buku',
-                    'contents' => fopen($request->file('file_buku')->getRealPath(), 'r'),
-                    'filename' => $request->file('file_buku')->getClientOriginalName()
-                ];
-            }
-
-            // Tambahkan kategori
-            foreach ($request->kategori_id as $index => $kategoriId) {
-                $multipart[] = ['name' => "kategori_id[{$index}]", 'contents' => $kategoriId];
-            }
-
-            // Kirim sebagai POST dengan method spoofing
-            $response = Http::asMultipart()->post($this->apiUrl . '/dataBuku/' . $id, $multipart);
-
-            if ($response->successful()) {
-                return redirect()->route('admin.data_buku.index')
-                    ->with('success', 'Data buku berhasil diupdate');
-            } else {
-                $error = $response->json()['message'] ?? 'Gagal mengupdate data';
-                return back()->withInput()->with('error', $error);
-            }
-        } catch (\Exception $e) {
-            Log::error('Error updating book: ' . $e->getMessage());
-            return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+    if ($request->hasFile('foto_buku')) {
+        $buku->foto_buku = $request->file('foto_buku')->store('foto-buku', 'public');
     }
+
+    if ($request->hasFile('file_buku')) {
+        $buku->file_buku = $request->file('file_buku')->store('file-buku', 'public');
+    }
+
+    $buku->save();
+    $buku->kategoris()->sync($request->kategori_id);
+
+    return redirect()->route('admin.data_buku.index')
+        ->with('success', 'Data buku berhasil diupdate');
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        try {
-            $response = Http::delete($this->apiUrl . '/dataBuku/' . $id);
-
-            if ($response->successful()) {
-                return redirect()->route('admin.data_buku.index')
-                    ->with('success', 'Data buku berhasil dihapus');
-            } else {
-                return back()->with('error', 'Gagal menghapus data');
-            }
-        } catch (\Exception $e) {
-            Log::error('Error deleting book: ' . $e->getMessage());
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+        $buku = DataBuku::findOrFail($id);
+       
+        $buku->delete();
+        return redirect()->route('admin.data_buku.index')
+            ->with('success', 'Data buku berhasil dihapus!');
     }
 
-        public function downloadTemplate()
+       public function bulkDelete(Request $request)
+{
+    $selectedIds = $request->selected_ids ?? [];
+
+    // Jika dikirim sebagai string "1,2,3"
+    if (!is_array($selectedIds)) {
+        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
+    }
+
+    // Hapus semua yang bukan angka (termasuk "on")
+    $selectedIds = array_filter($selectedIds, function ($id) {
+        return is_numeric($id);
+    });
+
+    // Ubah ke integer
+    $selectedIds = array_map('intval', $selectedIds);
+
+    if (empty($selectedIds)) {
+        return redirect()->back()->with('error', 'Tidak ada kategori yang dipilih.');
+    }
+
+    DataBuku::whereIn('id', $selectedIds)->delete();
+
+    return redirect()->route('admin.data_buku.index')
+        ->with('success', count($selectedIds) . ' buku berhasil dihapus.');
+}
+
+
+    public function downloadTemplate()
     {
         return response()->download(public_path('uploads/template/TEMPLATE_INPUT_DATA_BUKU_SILALA_NEW.xlsx'));
+
     }
 
-     public function import(Request $request)
+    public function import(Request $request)
     {
         $request->validate([
             'file' => 'required|mimes:xlsx,xls'
         ]);
 
-        Excel::import(new DataBukuImport, $request->file('file'));
+       Excel::import(new DataBukuImport, $request->file('file'));
 
-        return redirect()->route('admin.data_buku.index')->with('succes', 'Data buku berhasil di import');
+        return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diimpor!');
     }
+
+    private function isValidPdf($filePath)
+{
+    if (!Storage::disk('public')->exists($filePath)) {
+        return false;
+    }
+
+    $content = Storage::disk('public')->get($filePath);
+
+    // PDF selalu diawali dengan "%PDF-"
+    return str_starts_with($content, '%PDF-');
+}
+
     
     public function archive(Request $request, $id = null)
     {
     if ($id) {
-        $buku = databuku::findOrFail($id);
+        $buku = DataBuku::findOrFail($id);
         $buku->status = 'arsip';
         $buku->save();
 
@@ -345,16 +242,7 @@ class DataBukuController extends Controller
     return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
 }
 
-    public function restore ($id)
-    {
-        $buku = DataBuku::findOrFail($id);
-        $buku->status = 'aktif';
-        $buku->save();
-
-        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
-    }
-
-    public function bulkArchive(Request $request)
+public function bulkArchive(Request $request)
 {
     $selectedIds = $request->input('selected_ids', []);
 
@@ -378,29 +266,14 @@ class DataBukuController extends Controller
         ->with('success', count($selectedIds) . ' buku berhasil diarsipkan.');
 }
 
-     public function bulkDelete(Request $request)
-{
-    $selectedIds = $request->input('selected_ids', []);
 
-    if (!is_array($selectedIds)) {
-        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
+    //pulihkan buku dari arsip 
+    public function restore ($id)
+    {
+        $buku = DataBuku::findOrFail($id);
+        $buku->status = 'aktif';
+        $buku->save();
+
+        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
     }
-
-    $selectedIds = array_filter($selectedIds, function ($id) {
-        return is_numeric($id);
-    });
-
-    $selectedIds = array_map('intval', $selectedIds);
-
-    if (empty($selectedIds)) {
-        return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
-    }
-
-    databuku::whereIn('id', $selectedIds)->delete();
-
-   return redirect()->route('admin.data_buku.index')->with('succes', count($selectedIds). 'buku berhasil di hapus');
-
-
-}
-
 }

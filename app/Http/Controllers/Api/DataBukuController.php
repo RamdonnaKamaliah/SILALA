@@ -8,7 +8,7 @@ use App\Models\databuku;
 use App\Models\GambarBuku;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Validator;   
+use Illuminate\Support\Facades\Validator;
 
 class DataBukuController extends Controller
 {
@@ -37,7 +37,7 @@ class DataBukuController extends Controller
             'judul_buku' => 'required',
             'penulis' => 'required',
             'penerbit' => 'required',
-            'tahun_terbit' => 'required|digits:4',
+            'tahun_terbit' => 'required',
             'bahasa' => 'required',
             'kategori_id' => 'required|array|min:1',
             'kategori_id.*' => 'exists:data_kategoris,id', // ← Tambah validasi setiap item
@@ -85,6 +85,8 @@ class DataBukuController extends Controller
     }
 
 
+        // Simpan kategori_ids sebagai string
+        $kategori_ids = implode(',', $request->kategori_id);
 
         $buku = databuku::create([
             'judul_buku' => $request->judul_buku,

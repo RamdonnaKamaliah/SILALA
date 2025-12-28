@@ -174,6 +174,16 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
             ->name('statistik.peminjaman');
 });
 
+Route::middleware([App\Http\Middleware\UserMiddleware::class])->group(function () {
+    Route::get('/test-auth-2', function() {
+        return [
+            'logged_in_web' => Auth::guard('web')->check(),
+            'user_web' => Auth::guard('web')->user(),
+            'session_id' => session()->getId(),
+        ];
+    });
+});
+
 // Home Redirect Route
 Route::get('/home', function () {
     if (Auth::guard('admin')->check()) {

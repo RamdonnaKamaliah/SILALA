@@ -1,6 +1,8 @@
 <?php $__env->startSection('pageTitle', 'Data Buku'); ?>
 
 <?php $__env->startSection('content'); ?>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <div class="p-4 md:p-8 font-[Poppins] text-slate-800 bg-gray-50 min-h-screen">
 
@@ -127,10 +129,14 @@
                         <form id="bulkDeleteForm" action="<?php echo e(route('admin.data_buku.bulk-delete')); ?>" method="POST">
                             <?php echo csrf_field(); ?>
                             <?php echo method_field('DELETE'); ?>
-                            <input type="hidden" name="selected_ids" id="selectedIdsDelete">
+
+                            
+                            <div id="selectedIdsContainer"></div>
+
                             <button type="submit" id="bulkDeleteBtn" disabled
-                                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">Hapus Data
-                                Terpilih</button>
+                                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">
+                                Hapus Data Terpilih
+                            </button>
                         </form>
 
                         

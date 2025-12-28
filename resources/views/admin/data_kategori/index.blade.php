@@ -17,7 +17,7 @@
         </div>
         <div class="flex items-center space-x-2 text-sm text-white">
             <i class="fas fa-chart-line"></i>
-            <span>Total Kategori: <strong>{{ $kategoris->count() }}</strong></span>
+            <span>Total Kategori: <strong>{{ $data_kategori->count() }}</strong></span>
         </div>
     </div>
 
@@ -67,7 +67,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @forelse ($kategoris as $kategori)
+                        @forelse ($data_kategori as $kategori)
                             <tr class="hover:bg-gray-50/80 transition-colors duration-150 group">
                                 <td class="px-4 py-4 text-center">
                                     <input type="checkbox" name="selected_ids[]" value="{{ $kategori->id }}" 

@@ -15,7 +15,7 @@
         </div>
         <div class="flex items-center space-x-2 text-sm text-white">
             <i class="fas fa-chart-line"></i>
-            <span>Total Kategori: <strong><?php echo e($kategoris->count()); ?></strong></span>
+            <span>Total Kategori: <strong><?php echo e($data_kategori->count()); ?></strong></span>
         </div>
     </div>
 
@@ -65,7 +65,7 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <?php $__empty_1 = true; $__currentLoopData = $kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <?php $__empty_1 = true; $__currentLoopData = $data_kategori; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr class="hover:bg-gray-50/80 transition-colors duration-150 group">
                                 <td class="px-4 py-4 text-center">
                                     <input type="checkbox" name="selected_ids[]" value="<?php echo e($kategori->id); ?>" 

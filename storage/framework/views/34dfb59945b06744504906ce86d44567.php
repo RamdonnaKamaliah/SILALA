@@ -43,13 +43,7 @@
           group-hover:border-transparent group-hover:bg-white">
 
                     <!-- Foto Profil -->
-                    <?php if(Auth::user()->foto_profil): ?>
-                        <img src="<?php echo e(asset('storage/' . Auth::user()->foto_profil)); ?>" alt="Foto Profil"
-                            class="w-20 h-20 rounded-full border-2 border-green nobject-cover shadow-md flex-shrink-0" />
-                    <?php else: ?>
-                        <img src="<?php echo e(asset('assets/Profile.jpg')); ?>" alt="Foto Profil"
-                            class="w-20 h-20 rounded-full border-2 border-green object-cover shadow-md flex-shrink-0" />
-                    <?php endif; ?>
+                    
 
                     <div class="leading-tight flex-1 min-w-0">
                         <p class="font-bold text-green text-sm truncate"><?php echo e(Auth::user()->name); ?></p>

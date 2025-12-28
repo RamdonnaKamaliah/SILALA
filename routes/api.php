@@ -1,65 +1,53 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\BukuFavoritController;
-use App\Http\Controllers\Api\DaftarBukuController;
-use App\Http\Controllers\Api\DataArsipController;
-use App\Http\Controllers\Api\DataBukuController;
-use App\Http\Controllers\Api\DataPenggunaController;
-use App\Http\Controllers\Api\DetailBukuController;
-use App\Http\Controllers\Api\KategoriController;
-use App\Http\Controllers\Api\MediaBukuController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// USER API
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DaftarBukuController;
+use App\Http\Controllers\Api\DetailBukuController;
+use App\Http\Controllers\Api\KategoriController;
+use App\Http\Controllers\Api\RiwayatBukuController;
+use App\Http\Controllers\Api\BukuFavoritController;
 
+// ADMIN API
+use App\Http\Controllers\Api\AdminAuthController;
+use App\Http\Controllers\Api\DataBukuController;
+use App\Http\Controllers\Api\MediaBukuController;
+use App\Http\Controllers\Api\DataArsipController;
+use App\Http\Controllers\Api\DataPenggunaController;
 
-//data  buku
-Route::get('dataBuku', [DataBukuController::class, 'index']);
-Route::post('dataBuku', [DataBukuController::class, 'store']);
-Route::get('dataBuku/{id}', [DataBukuController::class, 'show']);
-Route::put('dataBuku/{id}', [DataBukuController::class, 'update']);
-Route::delete('dataBuku/{id}', [DataBukuController::class, 'destroy']);
-Route::post('dataBuku/bulk-delete', [DataBukuController::class, 'bulkDelete']);
-Route::post('dataBuku/bulk-archive', [DataBukuController::class, 'bulkArchive']);
-Route::post('dataBuku/{id}/restore', [DataBukuController::class, 'restore']);
-Route::post('dataBuku/import', [DataBukuController::class, 'import']);
+Route::prefix('user')->group(function () {
 
-//media
-Route::get('/media', [MediaBukuController::class, 'index']);
-Route::delete('/media/{id}', [MediaBukuController::class, 'destroy']);
+    // AUTH
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
 
-//kategori
-Route::get('/kategori', [KategoriController::class, 'index']);
-Route::post('/kategori', [KategoriController::class, 'store']);
-Route::get('/kategori/{id}', [KategoriController::class, 'show']);
-Route::put('/kategori/{id}', [KategoriController::class, 'update']);
-Route::delete('/kategori/{id}', [KategoriController::class, 'destroy']);
-
-//arsip
-Route::get('arsip', [DataArsipController::class, 'index']);
-Route::get('arsip/{id}', [DataArsipController::class, 'show']);
-Route::delete('arsip/{id}', [DataArsipController::class, 'destroy']);
-Route::get('dataPengguna', [DataPenggunaController::class, 'index']);
-
-
-
-// USER ROUTING
-
-//Register
-Route::post('register', [AuthController::class, 'register']);
-Route::get('/auth/google', [AuthController::class, 'redirectToGoogle']);
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
-
-//Login
-Route::post('login', [AuthController::class,'login']); 
-Route::post('/google/login', [AuthController::class,'googleLogin']); 
-
-Route::middleware(['auth:sanctum,web'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('daftarBuku', [DaftarBukuController::class, 'index']);
-    Route::get('detailBuku/{id}', [DetailBukuController::class, 'index']);
+    // BUKU & KATEGORI
+    Route::get('/daftar-buku', [DaftarBukuController::class, 'index']);
+    Route::get('/detail-buku/{id}', [DetailBukuController::class, 'index']);
+    Route::get('/kategori', [KategoriController::class, 'index']);
 });
+
+Route::prefix('user')
+    ->middleware('auth:sanctum')
+    ->group(function () {
+
+        Route::get('/me', [AuthController::class, 'me']);
+        Route::post('/logout', [AuthController::class, 'logout']);
+
+        // RIWAYAT & PEMINJAMAN
+        Route::get('/riwayat-buku', [RiwayatBukuController::class, 'index']);
+        Route::get('/check-active-borrow', [RiwayatBukuController::class, 'checkActiveBorrow']);
+        Route::get('/check-book-borrow/{bookId}', [RiwayatBukuController::class, 'checkBookBorrowStatus']);
+
+        Route::post('/pinjam-buku', [RiwayatBukuController::class, 'store']);
+        Route::post('/kembalikan-buku/{id}', [RiwayatBukuController::class, 'kembalikanBuku']);
+        Route::post('/kembalikan-buku-foto', [RiwayatBukuController::class, 'kembalikanBukuWithPhoto']);
+        Route::get('/peminjaman-terlambat', [RiwayatBukuController::class, 'getPeminjamanTerlambat']);
+
+        // FAVORIT
+        Route::get('/favorit', [BukuFavoritController::class, 'index']);
+        Route::post('/favorit/toggle', [BukuFavoritController::class, 'toggle']);
+        Route::delete('/favorit/remove', [BukuFavoritController::class, 'destroy']);
+    });

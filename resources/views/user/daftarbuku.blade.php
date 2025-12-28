@@ -33,7 +33,7 @@
                         </a>
 
 
-                        @foreach ($data_kategori as $kat)
+                        @foreach ($data_kategoris as $kat)
                             <a href="{{ route('user.daftarbuku', ['kategori' => $kat->nama_kategori]) }}"
                                 class="block w-full text-left px-4 py-2 text-white hover:bg-kuning hover:text-gray-900 transition-all rounded-lg">
                                 {{ $kat->nama_kategori }}

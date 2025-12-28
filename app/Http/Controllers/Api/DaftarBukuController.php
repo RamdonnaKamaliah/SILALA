@@ -17,6 +17,7 @@ class DaftarBukuController extends Controller
     public function index(Request $request)
    {
     
+    
     $kategori = $request->kategori;
 
     $data_bukus = DataBuku::where('status', 'aktif')

@@ -8,67 +8,52 @@ use App\Models\DataPeminjam;
 use App\Models\RiwayatBaca;
 use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Http;
+
 
 class DetailBukuController extends Controller
 {
-    public function index($id)
+     private $apiUrl = 'http://127.0.0.1:8000/api';
+     
+  public function index($id)
     {
-        $buku = DataBuku::findOrFail($id);
-        
-        // Cek apakah user sedang meminjam buku ini
-        $userBorrow = DataPeminjam::where('user_id', Auth::id())
-            ->where('buku_id', $buku->id)
-            ->where('status', 'dipinjam')
-            ->first();
+        try {
+            // Ambil SEMUA data dari API (termasuk data buku lengkap)
+            $response = Http::get($this->apiUrl . '/detail-buku/' . $id);
 
-        // Cek apakah user sudah membaca buku ini
-        $hasRead = RiwayatBaca::where('user_id', Auth::id())
-            ->where('buku_id', $buku->id)
-            ->exists();
+            if (!$response->successful()) {
+                return redirect()->back()->with('error', 'Buku tidak ditemukan');
+            }
 
-        // Cek stok buku
-        $stokHabis = $buku->stok <= 0;
+            $apiData = $response->json();
+            $data = $apiData['data'];
 
-        // Cek apakah sudah difavoritkan
-        $isFavorited = \App\Models\Favorit::where('user_id', Auth::id())
-            ->where('buku_id', $buku->id)
-            ->exists();
+            // Assign data dari API
+            $buku = (object) $data['buku']; // 👈 Dari API, bukan database
+            $userBorrow = $data['user_borrow'];
+            $hasRead = $data['has_read'];
+            $stokHabis = $data['stok_habis'];
+            $isFavorited = $data['is_favorited'];
+            $userRating = $data['user_rating'];
+            $averageRating = $data['average_rating'];
+            $totalRatings = $data['total_ratings'];
+            $canRate = $data['can_rate'];
 
-        // Initialize rating variables
-        $userRating = null;
-        $averageRating = 0;
-        $totalRatings = 0;
-        $canRate = false;
+            return view('user.detailbuku', compact(
+                'buku', 
+                'userBorrow', 
+                'stokHabis', 
+                'isFavorited',
+                'hasRead',
+                'userRating',
+                'averageRating',
+                'totalRatings',
+                'canRate'
+            ));
 
-        // Cek apakah tabel ratings ada
-        $ratingTableExists = Schema::hasTable('ratings');
-        
-        if ($ratingTableExists) {
-            // Cek apakah user sudah memberi rating
-            $userRating = Rating::where('user_id', Auth::id())
-                ->where('buku_id', $buku->id)
-                ->first();
-
-            // Hitung rating rata-rata
-            $averageRating = Rating::where('buku_id', $buku->id)->avg('rating') ?? 0;
-            $totalRatings = Rating::where('buku_id', $buku->id)->count();
-
-            // User bisa rating jika sudah membaca/meminjam
-            $canRate = ($hasRead || $userBorrow);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        return view('user.detailbuku', compact(
-            'buku', 
-            'userBorrow', 
-            'stokHabis', 
-            'isFavorited',
-            'hasRead',
-            'userRating',
-            'averageRating',
-            'totalRatings',
-            'canRate'
-        ));
     }
 
     public function baca($id)

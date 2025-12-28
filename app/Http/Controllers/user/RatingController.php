@@ -47,7 +47,7 @@ class RatingController extends Controller
             ]
         );
 
-        // 🔥 Hitung ulang average & total rating
+        
     $avgRating = Rating::where('buku_id', $request->buku_id)->avg('rating');
     $totalRatings = Rating::where('buku_id', $request->buku_id)->count();
 

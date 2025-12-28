@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     noRiwayatDefault.classList.remove('hidden');
                 }
             });
-            
+          
             // Reset saat halaman dimuat ulang
             searchInput.addEventListener('search', function() {
                 if (this.value === '') {

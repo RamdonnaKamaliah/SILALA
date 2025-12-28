@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\MediaBukuController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\DashboardController as ControllersDashboardController;
 use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\User\DaftarBukuController as UserDaftarBukuController;
 
 // Public Routes
 Route::get('/', function () {

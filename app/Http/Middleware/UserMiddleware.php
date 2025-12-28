@@ -11,6 +11,10 @@ class UserMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
+         if ($request->is('api/*')) {
+            return $next($request);
+        }
+        
         // ✅ Kalau admin nyoba masuk area user, tendang ke admin dashboard
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');

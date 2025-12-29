@@ -129,14 +129,10 @@
                         <form id="bulkDeleteForm" action="<?php echo e(route('admin.data_buku.bulk-delete')); ?>" method="POST">
                             <?php echo csrf_field(); ?>
                             <?php echo method_field('DELETE'); ?>
-
-                            
-                            <div id="selectedIdsContainer"></div>
-
+                            <input type="hidden" name="selected_ids" id="selectedIdsDelete">
                             <button type="submit" id="bulkDeleteBtn" disabled
-                                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">
-                                Hapus Data Terpilih
-                            </button>
+                                class="px-4 py-2 text-white rounded-lg opacity-50 bg-gray-400 cursor-not-allowed">Hapus Data
+                                Terpilih</button>
                         </form>
 
                         

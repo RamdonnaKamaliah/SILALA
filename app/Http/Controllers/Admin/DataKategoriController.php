@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\DataKategori;
+use App\Models\datakategori;
 
 class DataKategoriController extends Controller
 {
@@ -13,7 +13,7 @@ class DataKategoriController extends Controller
      */
     public function index()
     {
-        $data_kategori = DataKategori::all();
+        $data_kategori = datakategori::all();
         return view('admin.data_kategori.index', compact('data_kategori'));
     }
 
@@ -37,7 +37,7 @@ public function store(Request $request)
         'nama_kategori.required' => 'Nama kategori harus diisi.',
     ]);
 
-    DataKategori::create($validated);
+    datakategori::create($validated);
 
     return redirect()->route('admin.data_kategori.index')->with('success', 'Kategori berhasil ditambahkan.');
 }
@@ -47,7 +47,7 @@ public function store(Request $request)
      */
     public function show(string $id)
     {
-        $kategori = DataKategori::findOrFail($id);
+        $kategori = datakategori::findOrFail($id);
         return view('admin.data_kategori.show', compact('kategori'));
     }
 
@@ -56,7 +56,7 @@ public function store(Request $request)
      */
     public function edit(string $id)
     {
-        $kategori = DataKategori::findOrFail($id);
+        $kategori = datakategori::findOrFail($id);
         return view('admin.data_kategori.edit', compact('kategori'));
     }
 
@@ -71,7 +71,7 @@ public function store(Request $request)
     ]);
 
     // Cari data kategori
-    $kategori = DataKategori::findOrFail($id);
+    $kategori = datakategori::findOrFail($id);
 
     // Update data
     $kategori->update($validated);
@@ -88,7 +88,7 @@ public function store(Request $request)
      */
     public function destroy(string $id)
     {
-        $kategori = DataKategori::findOrFail($id);
+        $kategori = datakategori::findOrFail($id);
         $kategori->delete();
 
         return redirect()->route('admin.data_kategori.index')->with('success', 'Kategori berhasil dihapus.');
@@ -105,7 +105,7 @@ public function store(Request $request)
             return redirect()->back()->with('error', 'Tidak ada kategori yang dipilih.');
         }
 
-        DataKategori::whereIn('id', $selectedIds)->delete();
+        datakategori::whereIn('id', $selectedIds)->delete();
 
         return redirect()->route('admin.data_kategori.index')
             ->with('success', count($selectedIds) . ' kategori berhasil dihapus.');

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\DataBuku;
+use App\Models\databuku;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataBukuImport; 
 use App\Models\DataKategori;
@@ -20,7 +20,7 @@ class DataBukuController extends Controller
      */
     public function index()
 {
-    $bukus = DataBuku::with('kategoris')->latest()->get();
+    $bukus = databuku::with('kategoris')->latest()->get();
 
     return view('admin.data_buku.index', compact('bukus'));
 }
@@ -87,7 +87,7 @@ public function store(Request $request)
     }
 
     // 3️⃣ Simpan data buku
-    $buku = DataBuku::create([
+    $buku = databuku::create([
         'judul_buku' => $request->judul_buku,
         'penulis' => $request->penulis,
         'penerbit' => $request->penerbit,
@@ -120,7 +120,7 @@ public function store(Request $request)
      */
     public function show(string $id)
     {
-        $buku = DataBuku::findOrFail($id);
+        $buku = databuku::findOrFail($id);
         return view('admin.data_buku.show', compact('buku'));
     }
 
@@ -129,7 +129,7 @@ public function store(Request $request)
      */
   public function edit(string $id)
 {
-    $buku = DataBuku::findOrFail($id);
+    $buku = databuku::findOrFail($id);
     $kategoris = DataKategori::all();
     return view('admin.data_buku.edit', compact('buku', 'kategoris'));
 }
@@ -138,7 +138,7 @@ public function store(Request $request)
      */
   public function update(Request $request, $id)
 {
-    $buku = DataBuku::findOrFail($id);
+    $buku = databuku::findOrFail($id);
 
     $buku->update($request->except('kategori_id'));
 
@@ -163,8 +163,16 @@ public function store(Request $request)
      */
     public function destroy(string $id)
     {
-        $buku = DataBuku::findOrFail($id);
+        $buku = databuku::findOrFail($id);
        
+           // Hapus file gambar jika ada
+    if ($buku->file_buku && Storage::disk('public')->exists($buku->file_buku)) {
+        Storage::disk('public')->delete($buku->file_buku);
+    }
+     if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)) {
+        Storage::disk('public')->delete($buku->foto_buku);
+    }
+    
         $buku->delete();
         return redirect()->route('admin.data_buku.index')
             ->with('success', 'Data buku berhasil dihapus!');
@@ -179,19 +187,32 @@ public function store(Request $request)
         $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
     }
 
-    // Hapus semua yang bukan angka (termasuk "on")
-    $selectedIds = array_filter($selectedIds, function ($id) {
-        return is_numeric($id);
-    });
-
-    // Ubah ke integer
+    // Ambil hanya angka
+    $selectedIds = array_filter($selectedIds, fn ($id) => is_numeric($id));
     $selectedIds = array_map('intval', $selectedIds);
 
     if (empty($selectedIds)) {
-        return redirect()->back()->with('error', 'Tidak ada kategori yang dipilih.');
+        return redirect()->back()->with('error', 'Tidak ada buku yang dipilih.');
     }
 
-    DataBuku::whereIn('id', $selectedIds)->delete();
+    // 🔥 Ambil semua buku yang akan dihapus
+    $books = databuku::whereIn('id', $selectedIds)->get();
+
+    foreach ($books as $buku) {
+
+        // Hapus file buku (PDF / e-book)
+        if ($buku->file_buku && Storage::disk('public')->exists($buku->file_buku)) {
+            Storage::disk('public')->delete($buku->file_buku);
+        }
+
+        // Hapus foto / cover buku
+        if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)) {
+            Storage::disk('public')->delete($buku->foto_buku);
+        }
+    }
+
+    // Hapus data dari database
+    databuku::whereIn('id', $selectedIds)->delete();
 
     return redirect()->route('admin.data_buku.index')
         ->with('success', count($selectedIds) . ' buku berhasil dihapus.');
@@ -231,7 +252,7 @@ public function store(Request $request)
     public function archive(Request $request, $id = null)
     {
     if ($id) {
-        $buku = DataBuku::findOrFail($id);
+        $buku = databuku::findOrFail($id);
         $buku->status = 'arsip';
         $buku->save();
 
@@ -260,7 +281,7 @@ public function bulkArchive(Request $request)
         return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
     }
 
-    DataBuku::whereIn('id', $selectedIds)->update(['status' => 'arsip']);
+    databuku::whereIn('id', $selectedIds)->update(['status' => 'arsip']);
 
     return redirect()->route('admin.data_arsip.index')
         ->with('success', count($selectedIds) . ' buku berhasil diarsipkan.');
@@ -270,7 +291,7 @@ public function bulkArchive(Request $request)
     //pulihkan buku dari arsip 
     public function restore ($id)
     {
-        $buku = DataBuku::findOrFail($id);
+        $buku = databuku::findOrFail($id);
         $buku->status = 'aktif';
         $buku->save();
 

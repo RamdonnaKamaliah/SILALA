@@ -57,7 +57,7 @@
     
     <script src="<?php echo e(asset('assets_admin/js/dataBuku/edit.js')); ?>"></script>
     
-    <script src="<?php echo e(asset('assets_admin/js/dataBuku/index.js')); ?>"></script>
+    
 
     <!-- Arsip Buku -->
     <script src="<?php echo e(asset('assets_admin/js/arsipBuku/deleteArsip.js')); ?>"></script>

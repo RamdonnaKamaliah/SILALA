@@ -110,11 +110,10 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
        
     // Data Buku Routes
      Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
-        Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
-       Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
+    Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
     ->name('profile.update');
-        Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
-    Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
+    Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
     Route::delete('/data_buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
     Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');
@@ -125,9 +124,11 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
     Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
     ->name('data_buku.restore');
 
+     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
+
     // Data Kategori Routes
-    Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
     Route::delete('/data_kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
+    Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
 
     // Data Arsip Routes
     Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');

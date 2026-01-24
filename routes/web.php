@@ -107,13 +107,16 @@ Route::middleware([UserMiddleware::class])->group(function () {
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-       
+
     // Data Buku Routes
-     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
+    Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
+    Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
+     Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
     ->name('profile.update');
     Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+
+    
     Route::delete('/data_buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
     Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');

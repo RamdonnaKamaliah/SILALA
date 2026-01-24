@@ -19,7 +19,6 @@ class MediaBukuController extends Controller
 {
     $gambar = GambarBuku::findOrFail($id);
 
-    // hapus row di database
     $gambar->delete();
 
     return back()->with('success', 'Gambar & Data berhasil dihapus');

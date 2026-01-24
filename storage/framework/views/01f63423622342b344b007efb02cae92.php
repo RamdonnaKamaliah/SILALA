@@ -314,6 +314,8 @@
             </form>
         </div>
     </div>
+
+    
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/data_buku/index.blade.php ENDPATH**/ ?>

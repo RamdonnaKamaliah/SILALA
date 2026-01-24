@@ -13,18 +13,18 @@
                     <div class="flex items-center gap-3 md:ml-[350px]">
 
                         {{-- Tombol Baca --}}
-                        @if ($buku->file_buku && $buku->id)
-                            <button id="button" type="button" data-url="{{ route('user.baca', $buku->id) }}" 
-                                class="open-pdf bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
-                                Baca
+                            @if($buku->file_buku)
+                           <button
+                            type="button"
+                            onclick="openPdfModal('{{ route('user.baca', $buku->id) }}')"
+                            class="relative z-10 bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md">
+                            Baca
+                        </button>
+                          @else
+                            <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
+                              Baca
                             </button>
-                        @else
-                            <button
-                                class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed"
-                                disabled>
-                                Baca
-                            </button>
-                        @endif
+                          @endif
 
                         {{-- Tombol Pinjam --}}
                         @if ($userBorrow || $stokHabis)
@@ -136,43 +136,56 @@
             </div>
         </div>
 
-        <!-- ====== MODAL PDF ====== -->
-        <div id="pdfModal"
-            class=" fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 {{ $showPdfModal ?? false ? '' : 'hidden' }} ">
-            <div
-                class="bg-white w-full max-w-6xl h-[93vh] rounded-[32px] shadow-2xl overflow-hidden flex flex-col border border-gray-300 sm:p-0 p-2">
-                <div
-                    class="w-full bg-gradient-to-r from-gray-50 to-gray-200 px-6 py-4 border-b flex justify-between items-center shadow-sm">
-                    <h2 class="text-xl font-bold text-gray-700 flex items-center gap-3">
-                        <span class="iconify" data-icon="mdi:file-document-outline" data-width="26"></span>
-                        Preview Dokumen
-                    </h2>
-                    <button id="closePdfModal" class="p-2 text-[22px] text-gray-600 hover:text-red-600 transition">
-                        <span class="iconify" data-icon="mdi:close" data-width="22"></span>
-                    </button>
-                </div>
+        <!-- MODAL PDF -->
+<!-- MODAL PDF -->
+<div id="pdfModal"
+     class="fixed inset-0 z-50 hidden
+            bg-black/60
+            flex items-center justify-center
+            px-3">
 
-                <div class="w-full bg-white border-b px-6 py-3 flex items-center gap-6 shadow-sm">
-                    <div class="flex items-center gap-3">
-                        <button id="zoomOut"
-                            class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-200 hover:bg-gray-300 transition shadow-sm text-gray-700">
-                            <span class="iconify" data-icon="mdi:magnify-minus-outline" data-width="22"></span>
-                        </button>
-                        <button id="zoomIn"
-                            class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-200 hover:bg-gray-300 transition shadow-sm text-gray-700">
-                            <span class="iconify" data-icon="mdi:magnify-plus-outline" data-width="22"></span>
-                        </button>
-                        <span id="zoomLabel" class="font-semibold text-gray-700 text-sm ml-2">100%</span>
-                    </div>
-                    <span class="ml-auto text-sm text-gray-700 bg-gray-100 px-3 py-1.5 rounded-lg shadow-inner">
-                        Halaman: <span id="pageCurrent" class="font-bold">1</span> / <span id="pageTotal"
-                            class="font-bold">0</span>
-                    </span>
-                </div>
+    <!-- CARD MODAL -->
+    <div
+        class="
+        relative bg-white
+        w-full
+        max-w-md
+        h-[70vh]
 
-                <div id="pdfViewer" class="flex-1 overflow-y-auto bg-gray-50 scroll-smooth p-4"></div>
-            </div>
-        </div>
+        sm:max-w-lg
+        sm:h-[75vh]
+
+        md:max-w-4xl
+        md:h-[85vh]
+
+        rounded-xl
+        shadow-2xl
+        overflow-hidden
+        ">
+
+        <!-- CLOSE -->
+        <button
+            onclick="closePdfModal()"
+            class="
+            absolute top-3 right-3 z-50
+            bg-red-500 text-white
+            w-8 h-8 rounded-full
+            flex items-center justify-center
+            text-sm font-bold
+            shadow
+            ">
+            ✕
+        </button>
+
+        <!-- PDF -->
+        <iframe
+            id="pdfFrame"
+            class="w-full h-full border-0"
+            loading="lazy">
+        </iframe>
+
+    </div>
+</div>
 
         <!-- ====== DESKRIPSI BUKU ====== -->
         <div class="pt-6">

@@ -17,12 +17,12 @@ use App\Http\Controllers\Api\MediaBukuController;
 use App\Http\Controllers\Api\DataArsipController;
 use App\Http\Controllers\Api\DataPenggunaController;
 
+Route::post('/login', [AuthController::class, 'login']);
 Route::prefix('user')->group(function () {
-
+    
     // AUTH
-    Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
-
+    
     // BUKU & KATEGORI
     Route::get('/daftar-buku', [DaftarBukuController::class, 'index']);
     Route::get('/detail-buku/{id}', [DetailBukuController::class, 'index']);
@@ -30,9 +30,10 @@ Route::prefix('user')->group(function () {
 });
 
 Route::prefix('user')
-    ->middleware('auth:sanctum')
-    ->group(function () {
-
+->middleware('auth:sanctum')
+->group(function () {
+    
+    Route::get('/dataBuku', [DataBukuController::class, 'index']);
         Route::get('/me', [AuthController::class, 'me']);
         Route::post('/logout', [AuthController::class, 'logout']);
 

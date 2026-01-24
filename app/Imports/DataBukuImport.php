@@ -20,7 +20,7 @@ class DataBukuImport implements ToModel, WithStartRow
     public function model(array $row)
     {
         // 1. Import FOTO dari Google Drive
-        // ===============================
+   
         $fotoUrl = $row[10];
         $localFotoPath = null;
 

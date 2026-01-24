@@ -6,24 +6,19 @@
 
     <h1 class="text-2xl font-semibold mb-6">Pengaturan Gambar CMS</h1>
 
-    
+   
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-        
-        
-        
         <div class="p-4 bg-white rounded-lg shadow border">
             <h2 class="font-semibold mb-3 text-sm">Hero Section</h2>
 
             
             <?php if($heroImage): ?>
-                <img src="<?php echo e(asset('storage/cms/' . $heroImage)); ?>" 
+                <img src="<?php echo e(asset('storage/cms/' . $heroImage ? ('assets/image_default/image_default_book.jpeg'))); ?>" 
                      alt="Hero Image" 
                      class="w-full h-32 object-contain bg-gray-100 rounded mb-3">
             <?php else: ?>
-                <div class="w-full h-32 bg-gray-100 flex items-center justify-center rounded text-gray-500 text-sm">
-                    Belum ada gambar
-                </div>
+               <div>najakd</div>
             <?php endif; ?>
 
             
@@ -43,9 +38,7 @@
 
 
 
-        
-        
-        
+     
         <?php
             $footerLogo = \App\Models\Setting::getValue('footer_logo', 'logo_kementan.png');
             $logoExists = Storage::disk('public')->exists('cms/' . $footerLogo);
@@ -80,12 +73,6 @@
             </form>
         </div>
 
-        
-        
-        
-        
-        
-        
 
     </div>
 </div>

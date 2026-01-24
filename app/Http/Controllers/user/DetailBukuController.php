@@ -9,6 +9,7 @@ use App\Models\RiwayatBaca;
 use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
+  use Illuminate\Support\Facades\Storage;
 
 class DetailBukuController extends Controller
 {
@@ -71,27 +72,29 @@ class DetailBukuController extends Controller
         ));
     }
 
-    public function baca($id)
-    {
-        $buku = DataBuku::findOrFail($id);
 
-        // Cek login
-        if (!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu');
-        }
+public function baca($id)
+{
+    abort_if(!Auth::check(), 403);
 
-        // Cek apakah file buku tersedia
-        if (!$buku->file_buku) {
-            return back()->with('error', 'File buku tidak tersedia.');
-        }
+    $buku = DataBuku::findOrFail($id);
 
-        // Simpan riwayat baca (update atau buat baru)
-        RiwayatBaca::updateOrCreate(
-            ['user_id' => Auth::id(), 'buku_id' => $buku->id],
-            ['terakhir_dibaca' => now()]
-        );
+    abort_if(!$buku->file_buku, 404);
 
-        // Buka langsung file PDF
-        return redirect(asset($buku->file_buku));
+    if (!Storage::disk('public')->exists($buku->file_buku)) {
+        abort(404, 'File PDF tidak ditemukan');
     }
+
+    RiwayatBaca::updateOrCreate(
+        ['user_id' => Auth::id(), 'buku_id' => $buku->id],
+        ['terakhir_dibaca' => now()]
+    );
+
+    return response()->file(
+        Storage::disk('public')->path($buku->file_buku),
+        ['Content-Type' => 'application/pdf']
+    );
+
+
+}
 }

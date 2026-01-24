@@ -40,7 +40,7 @@ class DataBukuController extends Controller
             'tahun_terbit' => 'required',
             'bahasa' => 'required',
             'kategori_id' => 'required|array|min:1',
-            'kategori_id.*' => 'exists:data_kategoris,id', // ← Tambah validasi setiap item
+            'kategori_id.*' => 'exists:data_kategoris,id',
             'jumlah_halaman' => 'required',
             'edisi' => 'required',
             'deskripsi' => 'required',
@@ -60,7 +60,7 @@ class DataBukuController extends Controller
 
         $foto_buku_path = null;
 
-        // 1️⃣ Upload manual
+        //  Upload manual
     if ($request->hasFile('foto_buku')) {
 
         $file = $request->file('foto_buku');
@@ -76,7 +76,7 @@ class DataBukuController extends Controller
         ]);
     }
 
-    // 2️⃣ Pilih dari galeri
+    // Pilih dari galeri
     if ($request->foto_id) {
         $media = GambarBuku::find($request->foto_id);
         if ($media) {
@@ -107,7 +107,6 @@ class DataBukuController extends Controller
         // Attach ke tabel pivot
         $buku->kategoris()->attach($request->kategori_id);
 
-        // Load relasi sebelum return
         $buku->load('kategoris');
 
         return response()->json([
@@ -160,7 +159,7 @@ class DataBukuController extends Controller
             'file_buku' => 'nullable|mimes:pdf|max:10240',
         ]);
 
-        // ✅ FIX: Ganti databuku jadi DataBuku
+        
         $buku = databuku::findOrFail($id);
 
         // Handle foto_buku
@@ -248,7 +247,7 @@ class DataBukuController extends Controller
         ], 200);
     }
 
-    public function archive(Request $request, $id = null)
+    public function archive($id = null)
     {
     if ($id) {
         $buku = DataBuku::findOrFail($id);

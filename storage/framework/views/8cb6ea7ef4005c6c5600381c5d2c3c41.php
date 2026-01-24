@@ -1,7 +1,8 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Profile Admin')
 
-@section('content')
+
+<?php $__env->startSection('title', 'Profile Admin'); ?>
+
+<?php $__env->startSection('content'); ?>
 
 <div class="min-h-screen p-4 md:p-6">
 
@@ -20,7 +21,7 @@
                     </div>
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold text-white">
-                            Selamat Datang, {{ $admin->name }}!
+                            
                         </h1>
                         <p class="text-white/90 mt-1 text-sm md:text-base">Kelola biodata Anda dengan mudah</p>
                     </div>
@@ -43,9 +44,9 @@
                         <div class="absolute inset-0 bg-gradient-to-br from-[#A4B465] to-[#6E7C45] rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                         
                         <div class="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#A4B465]/20">
-                            <img src="{{ $admin->foto 
-                            ? asset('storage/uploads/admin/'.$admin->foto) 
-                            : asset('images/default-user.png') }}"
+                            <img src="<?php echo e($admin->foto 
+                            ? asset('storage/'.$admin->foto) 
+                            : asset('assets/image_default/image_default_book.jpeg')); ?>"
                             class="w-full h-full object-cover">
 
                             
@@ -63,15 +64,16 @@
                     <div class="flex-1 text-center md:text-left">
                         <div class="flex flex-col md:flex-row md:items-center gap-3 mb-4">
                             <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#6E7C45] to-[#A4B465] bg-clip-text text-transparent">
-                                {{ $admin->name }}
+                                <?php echo e($admin->name); ?>
+
                             </h2>
 
-                            @if($admin->role === 'administrator')
+                            <?php if($admin->role === 'administrator'): ?>
                             <span class="inline-flex items-center gap-1.5 bg-gradient-to-r from-[#A4B465] to-[#8FA056] text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-md">
                                 <i class="fas fa-shield-alt"></i>
                                 Administrator
                             </span>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
                         <!-- Info Cards -->
@@ -83,7 +85,7 @@
                                     </div>
                                     <div class="text-left">
                                         <p class="text-xs text-[#8C9E55] font-medium">Email Address</p>
-                                        <p class="font-semibold text-[#6E7C45]">{{ $admin->email }}</p>
+                                        <p class="font-semibold text-[#6E7C45]"><?php echo e($admin->email); ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +97,7 @@
                                     </div>
                                     <div class="text-left">
                                         <p class="text-xs text-[#8C9E55] font-medium">No Telepon</p>
-                                        <p class="font-semibold text-[#6E7C45]">{{ $admin->phone ?? '-' }}</p>
+                                        <p class="font-semibold text-[#6E7C45]"><?php echo e($admin->phone ?? '-'); ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -103,16 +105,11 @@
                     </div>
                 </div>
 
-                <!-- Divider dengan Style -->
-                <div class="my-8 flex items-center gap-4">
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[#DDE6C5] to-transparent"></div>
-                    <div class="text-[#8C9E55] text-xs font-medium">QUICK ACTIONS</div>
-                    <div class="flex-1 h-px bg-gradient-to-r from-transparent via-[#DDE6C5] to-transparent"></div>
-                </div>
+        
 
                 <!-- EDIT BUTTON dengan Enhanced Design -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-end">
-                    <a href="{{ route('admin.profile.edit') }}"
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-end pt-6">
+                    <a href="<?php echo e(route('admin.profile.edit')); ?>"
                        class="group relative inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#A4B465] to-[#8FA056] hover:from-[#8FA056] hover:to-[#6E7C45] text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                         <!-- Shimmer Effect -->
                         <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
@@ -129,24 +126,6 @@
     </div>
 </div>
 
-{{-- SWEETALERT --}}
-@if(session('success'))
-<script>
-Swal.fire({
-    icon: 'success',
-    title: 'Berhasil!',
-    text: '{{ session("success") }}',
-    showConfirmButton: false,
-    timer: 1600,
-    toast: true,
-    position: 'top-end',
-    background: '#A4B465',
-    color: '#fff',
-    iconColor: '#fff'
-})
-</script>
-@endif
 
-
-
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/profile/index.blade.php ENDPATH**/ ?>

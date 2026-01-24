@@ -5,99 +5,66 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
+
 
 class AdminProfileController extends Controller
 {
-    public function index()
-    {
+    public function index() {
         $admin = Auth::guard('admin')->user();
-        return view('admin.profile_admin.index', compact('admin'));
+        return view('admin.profile.index', compact('admin'));
     }
 
-    public function edit()
-    {
+    public function edit() {
         $admin = Auth::guard('admin')->user();
-        return view('admin.profile_admin.edit', compact('admin'));
+        return view('admin.profile.edit', compact('admin'));
     }
 
-    public function update(Request $request)
-    {
+    public function update(Request $request) {
         $admin = Auth::guard('admin')->user();
 
-        $request->validate([
-            'name'  => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'foto'  => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
+        $validated = $request->validate([
+            'name' => 'required|string|max:225',
+            'phone' => 'required|string|max:20',
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
-        // Update basic data
-        $admin->name = $request->name;
-        $admin->phone = $request->phone;
-
-        if ($request->hasFile('foto')) {
-            \Log::info('📸 File foto detected!', [
-                'original_name' => $request->file('foto')->getClientOriginalName(),
-                'size' => $request->file('foto')->getSize(),
-                'mime' => $request->file('foto')->getMimeType(),
-            ]);
-
-            // Hapus foto lama jika ada
-            if ($admin->foto && file_exists(storage_path('app/public/uploads/admin/'.$admin->foto))) {
-                unlink(storage_path('app/public/uploads/admin/'.$admin->foto));
-                \Log::info('🗑️ Old photo deleted: ' . $admin->foto);
+        if($request->hasFile('foto')){
+            if($admin->foto && Storage::disk('public')->exists($admin->foto)) {
+                Storage::disk('public')->delete($admin->foto);
             }
-
-            $file = $request->file('foto');
-            $filename = time().'_'.$file->getClientOriginalName();
-            
-            // Pastikan folder ada
-            if (!file_exists(storage_path('app/public/uploads/admin'))) {
-                mkdir(storage_path('app/public/uploads/admin'), 0755, true);
-                \Log::info('📁 Folder created: uploads/admin');
-            }
-            
-            $file->storeAs('uploads/admin', $filename, 'public');
-            
-            $admin->foto = $filename;
-            
-            \Log::info('✅ New photo saved: ' . $filename);
-        } else {
-            \Log::warning('⚠️ No file detected in request');
+            $validated['foto'] = $request->file('foto')->store('uploads/admin', 'public');
         }
 
-        $admin->save();
-
-        \Log::info('💾 Admin profile updated', [
-            'name' => $admin->name,
-            'phone' => $admin->phone,
-            'foto' => $admin->foto,
-        ]);
-
-        return redirect()->route('admin.profile_admin.index')
-                         ->with('success', 'Profile berhasil diperbarui!');
+        $admin->update($validated);
+        
+        return redirect()->route('admin.profile.index')->with('succes','data berhasil di edit');
     }
 
-    public function updatePassword(Request $request)
-    {
-        $admin = Auth::guard('admin')->user();
+   public function updatePassword(Request $request)
+{
+    $admin = Auth::guard('admin')->user();
 
-        $request->validate([
-            'current_password' => 'required',
-            'password'         => 'required|min:6|confirmed',
-        ]);
+    $request->validate([
+        'current_password' => 'required',
+        'password' => 'required|min:6|confirmed',
+    ]);
 
-        if (!Hash::check($request->current_password, $admin->password)) {
-            return back()->withErrors([
-                'current_password' => 'Password lama salah!'
-            ]);
-        }
-
-        $admin->password = Hash::make($request->password);
-        $admin->save();
-
-        return redirect()->route('admin.profile_admin.index')
-                         ->with('success', 'Password berhasil diganti!');
+    if (!Hash::check($request->current_password, $admin->password)) {
+        return back()->withErrors([
+            'current_password' => 'Password lama salah!'
+        ])->withInput();
     }
+
+    $admin->update([
+        'password' => Hash::make($request->password),
+    ]);
+
+    Auth::guard('admin')->logout();
+
+    return redirect('login')
+        ->with('success', 'Password berhasil diganti, silakan login ulang.');
+}
+
 }

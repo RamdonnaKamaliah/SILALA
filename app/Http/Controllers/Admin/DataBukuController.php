@@ -44,7 +44,7 @@ class DataBukuController extends Controller
      */
 public function store(Request $request)
 {
-    $validated = $request->validate([
+    $request->validate([
         'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         'foto_id'   => 'nullable|exists:gambar_bukus,id',
         'judul_buku' => 'required',
@@ -62,7 +62,7 @@ public function store(Request $request)
 
     $foto_buku_path = null;
 
-    // 1️⃣ Upload manual
+    //  Upload manual
     if ($request->hasFile('foto_buku')) {
 
         $file = $request->file('foto_buku');
@@ -78,7 +78,7 @@ public function store(Request $request)
         ]);
     }
 
-    // 2️⃣ Pilih dari galeri
+    // Pilih dari galeri
     if ($request->foto_id) {
         $media = GambarBuku::find($request->foto_id);
         if ($media) {
@@ -86,7 +86,7 @@ public function store(Request $request)
         }
     }
 
-    // 3️⃣ Simpan data buku
+    //  Simpan data buku
     $buku = databuku::create([
         'judul_buku' => $request->judul_buku,
         'penulis' => $request->penulis,
@@ -107,7 +107,6 @@ public function store(Request $request)
         'kategori_ids' => implode(',', $request->kategori_id),
     ]);
 
-    // 4️⃣ Pivot kategori
     $buku->kategoris()->attach($request->kategori_id);
 
     return redirect()->route('admin.data_buku.index')
@@ -182,12 +181,10 @@ public function store(Request $request)
 {
     $selectedIds = $request->selected_ids ?? [];
 
-    // Jika dikirim sebagai string "1,2,3"
     if (!is_array($selectedIds)) {
         $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
     }
 
-    // Ambil hanya angka
     $selectedIds = array_filter($selectedIds, fn ($id) => is_numeric($id));
     $selectedIds = array_map('intval', $selectedIds);
 
@@ -195,7 +192,6 @@ public function store(Request $request)
         return redirect()->back()->with('error', 'Tidak ada buku yang dipilih.');
     }
 
-    // 🔥 Ambil semua buku yang akan dihapus
     $books = databuku::whereIn('id', $selectedIds)->get();
 
     foreach ($books as $buku) {

@@ -25,12 +25,11 @@ use App\Http\Controllers\Admin\MediaBukuController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\DashboardController as ControllersDashboardController;
 use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\User\DaftarBukuController as UserDaftarBukuController;
 
 // Public Routes
-Route::get('/', function () {
-    return view('landingpage');
-});
+Route::get('/', [LandingpageController::class, 'index']);
 
 // Authentication Routes
 require __DIR__.'/auth.php';
@@ -164,14 +163,9 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
     ->name('media.destroy');
 
      
-        Route::get('/cms', [CmsController::class, 'editHero'])
-            ->name('cms_admin.index');
-
-        Route::post('/cms/update-hero', [CmsController::class, 'updateHero'])
-            ->name('cms_admin.updateHero');
-
-        Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
-            ->name('cms_admin.updateFooterLogo');
+    Route::get('/cms', [CmsController::class, 'index'])->name('cms.index');
+    Route::post('/cms/upload', [CmsController::class, 'upload'])->name('cms.upload');;
+    Route::delete('/cms/delete', [CmsController::class, 'deleteLogo'])->name('cms.delete');
     
         //statistik peminjaman pengembalian
         Route::get('/statistik-peminjaman', [DashboardController::class, 'Statistik'])

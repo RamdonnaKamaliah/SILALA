@@ -2,23 +2,19 @@
   <footer class="bg-[#626F47] text-[#F7EDD6] rounded-t-3xl py-4 px-6 md:px-10 mt-auto
   md:ml-[320px] md:mr-3 transition-all duration-300">
     <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-3 md:gap-0">
+      @php
+                    $footerUser = \App\Models\Setting::getValue('logo_footer_user');
+                @endphp
 
-      <!-- Kiri -->
-    @php
-    $footerdash = \App\Models\Setting::getValue(
-        'footerdash',
-        'logo_kementan.png'
-    );
-
-    $logoPath = Storage::disk('public')->exists('cms/' . $footerdash)
-        ? Storage::url('cms/' . $footerdash)
-        : asset('assets/logo_kementan.png');
-@endphp
+                @if ($footerUser && \Storage::disk('public')->exists('cms/' . $footerUser))
+                    <img src="{{ asset('storage/cms/' . $footerUser) }}" alt="footerUser"
+                        class="w-12 h-12 object-contain">
+                @else
+                    <img src="{{ asset('assets/logo_kementan.png') }}" alt="Hero Image"
+                        class="w-12 h-12 object-contain">
+                @endif
 
 <div class="flex items-center space-x-3">
-<img src="{{ $logoPath }}"
-     alt="Logo Footer Dashboard"
-     class="w-12 h-12 object-contain">
 
         <div class="leading-tight">
           <p class="text-[12px] sm:text-sm font-semibold">

@@ -9,21 +9,17 @@
 
         <div class="user-dashboard p-4 md:p-6 bg-gray-50 min-h-screen">
             <!-- Header Profesional -->
-            <div class="flex items-center mb-6">
-                <div class="bg-user-primary p-3 rounded-xl mr-4 shadow-sm">
-                    <!-- Icon Buku warna hijau primary (DIBESARKAN) -->
-                    <i class="fa-solid fa-book text-3xl" style="color: #A4B465;"></i>
+            <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-lg">
+                <div class="flex items-center space-x-4 mb-3">
+                    <div class="bg-white/20 p-3 rounded-full">
+                        <i class="fas fa-tags text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-white">Manajemen Data Buku</h1>
+                        <p class="text-white text-lg">Kelola dan pantau seluruh data buku di perpustakaan</p>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-1">
-                        Tambah Data Buku
-                    </h1>
-                    <p class="text-gray-600 text-sm md:text-base">
-                        <!-- Icon chart line juga aku gedein dikit -->
-                        <i class="fa-solid fa-chart-line text-lg mr-2" style="color: #A4B465;"></i>
-                        Pantau dan kelala data buku perpustakaan secara real-time
-                    </p>
-                </div>
+
             </div>
 
             <!-- ALERT SUCCESS -->
@@ -58,9 +54,10 @@
 
             <!-- TOMBOL AKSI -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                <h2 class="text-lg md:text-xl font-semibold text-[#A4B465] flex items-center gap-2">
-                    <i class="fa-solid fa-list"></i> Daftar Buku
-                </h2>
+                <div class="flex items-center space-x-2 text-sm text-white">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Total Data Buku: <strong>{{ $bukus->count() }}</strong></span>
+                </div>
                 <div x-data="{ open: false }" class="flex flex-wrap items-center gap-3 w-full md:w-auto">
                     <!-- Tombol Import -->
                     <button @click="open = true"
@@ -312,5 +309,5 @@
         </div>
     </div>
 
-    
+
 @endsection

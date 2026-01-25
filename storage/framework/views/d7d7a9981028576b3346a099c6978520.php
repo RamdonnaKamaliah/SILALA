@@ -19,19 +19,9 @@
     <!-- navbar -->
     <?php echo $__env->make('layout_landing.patrial_landing.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-    <!-- Hero Section -->
-   <?php
-    $heroBg = \App\Models\Setting::getValue('hero_bg', 'background.png');
-
-    $heroBgPath = \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $heroBg)
-        ? Storage::url('cms/' . $heroBg)
-        : asset('assets/background.png');
-        ?>
-
-        <section
-            class="pt-24 md:pt-32 pb-32 md:pb-40 relative 
+    <section class="pt-24 md:pt-32 pb-32 md:pb-40 relative 
                 bg-cover bg-[center_50%] hero-section"
-            style="background-image: url('<?php echo e($heroBgPath); ?>');">
+        style="background-image: url('<?php echo e('#'); ?>');">
 
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-4 md:px-6">
 
@@ -62,17 +52,20 @@
                 </p>
             </div>
 
-           <!-- Gambar di batas section -->
-        <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
-            <?php
-            $heroImage = \App\Models\Setting::getValue('hero_image', 'hero1.png');
-        ?>
+            <!-- Gambar di batas section -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
+                <?php
+                    $logoHero = \App\Models\Setting::getValue('logo_hero_section');
+                ?>
 
-        <img src="<?php echo e(asset('storage/cms/' . $heroImage)); ?>"
-            class="hero-image w-48 md:w-80 object-contain"
-            alt="Hero Image">
-
-</div>
+                <?php if($logoHero && \Storage::disk('public')->exists('cms/' . $logoHero)): ?>
+                    <img src="<?php echo e(asset('storage/cms/' . $logoHero)); ?>" alt="Hero Image"
+                        class="hero-image w-48 md:w-80 object-contain">
+                <?php else: ?>
+                    <img src="<?php echo e(asset('assets/hero1.png')); ?>" alt="Hero Image"
+                        class="hero-image w-48 md:w-80 object-contain">
+                <?php endif; ?>
+            </div>
 
 
         </div>
@@ -117,9 +110,56 @@
             </div>
 
             <!-- Grid Card -->
-            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                <?php $__empty_1 = true; $__currentLoopData = $buku; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <article
+                        class="recommend-card bg-white dark:bg-[#15202B] rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-5 w-full h-full
+          opacity-0 translate-y-10 transition-all duration-700 ease-out
+          hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
+
+                        <!-- Cover Buku -->
+                        <div
+                            class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0 transform transition-transform duration-500 hover:scale-105">
+                            <?php if($item->foto_buku): ?>
+                                <img src="<?php echo e(asset($item->foto_buku)); ?>" alt="<?php echo e($item->judul_buku); ?> - cover"
+                                    class="w-full h-full object-cover rounded-lg shadow-md">
+                            <?php else: ?>
+                                <img src="<?php echo e(asset('assets/default-cover.jpg')); ?>" alt="Default Cover"
+                                    class="w-full h-full object-cover rounded-lg shadow-md">
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Info Buku -->
+                        <div class="meta w-full text-center sm:text-left flex flex-col justify-between">
+                            <div>
+                                <h3
+                                    class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">
+                                    <?php echo e($item->judul_buku); ?></h3>
+                                <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">By
+                                    <?php echo e($item->penulis); ?></p>
+                            </div>
+
+                            <!-- Kategori -->
+                            <div
+                                class="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center sm:justify-start gap-2">
+                                <i class="fa fa-book"></i>
+                                <span class="break-words"><?php echo e($item->kategori); ?></span>
+                            </div>
+
+                            <!-- Rating -->
+                            <div class="mt-3 flex items-center justify-center sm:justify-start gap-3">
+                                <div class="rating text-yellow-400 text-base">★★★★☆</div>
+                            </div>
+                        </div>
+
+                    </article>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <p class="col-span-3 text-center text-gray-500 dark:text-gray-400">Belum ada data buku.</p>
+                <?php endif; ?>
+            </div>
         </div>
     </section>
+
 
     <!-- footer -->
     <?php echo $__env->make('layout_landing.patrial_landing.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>

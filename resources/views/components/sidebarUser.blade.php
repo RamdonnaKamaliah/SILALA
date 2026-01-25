@@ -21,8 +21,18 @@
     <!-- Header -->
     <div class="sidebar-header flex items-center justify-between px-4 mt-4 mb-6 text-white">
         <div class="flex items-center gap-2">
-            <img src="{{ asset('assets/logo_kementan.png') }}" alt="Logo"
-                class="w-12 h-12 rounded-full object-cover" />
+            @php
+                    $LogoUser = \App\Models\Setting::getValue('logo_sidebar_user');
+                @endphp
+
+                @if ($LogoUser && \Storage::disk('public')->exists('cms/' . $LogoUser))
+                    <img src="{{ asset('storage/cms/' . $LogoUser) }}" alt="LogoUser"
+                        class="w-12 h-12 rounded-full object-cover">
+                @else
+                    <img src="{{ asset('assets/logo_kementan.png') }}" alt="Hero Image"
+                        class="w-12 h-12 rounded-full object-cover">
+                @endif
+
             <p class="text-white font-bold text-lg leading-tight">
                 PERPUSTAKAAN BPMSPH
                 <span class="block text-xs font-normal opacity-90 mt-1">
@@ -43,8 +53,14 @@
           group-hover:border-transparent group-hover:bg-white">
 
                     <!-- Foto Profil -->
-                    {{-- <img src="{{ $user->foto_profil ?: 'https://ui-avatars.com/api/?name=' . urlencode($user->name) }}"
-                        alt="Profile"> --}}
+                    @if (Auth::user()->foto_profil)
+                        <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" alt="Foto Profil"
+                            class="w-20 h-20 rounded-full border-2 border-green nobject-cover shadow-md flex-shrink-0" />
+                    @else
+                        <img src="{{ asset('assets/Profile.jpg') }}" alt="Foto Profil"
+                            class="w-20 h-20 rounded-full border-2 border-green object-cover shadow-md flex-shrink-0" />
+                    @endif
+
 
                     <div class="leading-tight flex-1 min-w-0">
                         <p class="font-bold text-green text-sm truncate">{{ Auth::user()->name }}</p>

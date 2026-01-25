@@ -3,8 +3,7 @@
     <div class="lg:hidden fixed top-4 left-4 z-50">
         <button id="sidebar-toggle"
             class="p-2 rounded-lg bg-white shadow-md text-primary_dark hover:bg-primary_pale transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </button>
@@ -13,7 +12,7 @@
     <!-- Overlay -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-40 hidden lg:hidden z-30"></div>
 
-    <!-- Sidebar -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+    <!-- Sidebar -->
     <aside id="sidebar"
         class="fixed top-0 left-0 h-screen w-64 bg-gradient-to-b from-primary_dark to-primary_medium shadow-lg z-50 overflow-hidden sidebar-transition sidebar-desktop sidebar-mobile -translate-x-full lg:translate-x-0">
         <!-- Tombol Close (hanya muncul di mobile) -->
@@ -25,18 +24,16 @@
             </svg>
         </button>
 
-        <!-- Sidebar Header dengan Logo -->
         <div class="logo-container">
             @php
-                $adminSidebarLogo = \App\Models\Setting::getValue('admin_sidebar_logo', null);
-
-                $logoPath = $adminSidebarLogo &&
-                    \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $adminSidebarLogo)
-                    ? Storage::url('cms/' . $adminSidebarLogo)
-                    : asset('/assets_admin/image/BPMSPH-logo.png');
+                $logoAdmin = \App\Models\Setting::getValue('logo_admin_sidebar');
             @endphp
 
-            <img src="{{ $logoPath }}" alt="BPMS Logo" class="logo-img">
+            @if ($logoAdmin && \Storage::disk('public')->exists('cms/' . $logoAdmin))
+                <img src="{{ asset('storage/cms/' . $logoAdmin) }}" alt="BPMS Logo" class="logo-img">
+            @else
+                <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}" alt="BPMS Logo" class="logo-img">
+            @endif
         </div>
 
         <!-- Sidebar Content (Scrollable) -->
@@ -73,7 +70,7 @@
                 <!-- CMS -->
                 <li class="w-full">
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="{{ route('admin.cms_admin.index') }}">
+                        href="{{ route('admin.cms.index') }}">
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
                             <i class="fa-solid fa-gear text-lg"></i>

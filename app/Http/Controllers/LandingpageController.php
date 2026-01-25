@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\DataBuku;
+use App\Models\databuku;
 
 class LandingpageController extends Controller
 {
      public function index()
     {
-        // Semua Data Buku
-        $data_buku = DataBuku::latest()->get();
+        
+        $buku = databuku::latest()->get();
 
-        return view('landingpage', compact('data_buku'));
+        return view('landingpage', compact('buku'));
     }
 }

@@ -32,7 +32,7 @@
             <?php if($logoAdmin && \Storage::disk('public')->exists('cms/' . $logoAdmin)): ?>
                 <img src="<?php echo e(asset('storage/cms/' . $logoAdmin)); ?>" alt="BPMS Logo" class="logo-img">
             <?php else: ?>
-                <img src="<?php echo e(asset('assets/image_default/image_default_book.jpeg')); ?>" alt="BPMS Logo" class="logo-img">
+                <img src="<?php echo e(asset('assets_admin/image/BPMSPH-logo.png')); ?>" alt="BPMS Logo" class="logo-img">
             <?php endif; ?>
         </div>
 

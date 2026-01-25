@@ -2,52 +2,59 @@
 
 namespace Database\Seeders;
 
-use App\Models\Setting;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Setting;
 
 class LogoSettingSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
-        $logos = [
+        $settings = [
             [
                 'key' => 'logo_admin_sidebar',
                 'label' => 'Logo Sidebar Admin',
-                'group' => 'logos'
+                'group' => 'logos',
+                'value' => 'default/BPMSPH-logo.svg' 
             ],
             [
                 'key' => 'logo_user_sidebar',
                 'label' => 'Logo Sidebar User',
-                'group' => 'logos'
+                'group' => 'logos',
+                'value' => 'default/logo_kementan.svg'
             ],
             [
                 'key' => 'logo_hero_section',
                 'label' => 'Logo Hero Section',
-                'group' => 'logos'
+                'group' => 'logos',
+                'value' => 'default/hero1.png'
             ],
             [
                 'key' => 'logo_footer_landing',
                 'label' => 'Logo Footer Landing',
-                'group' => 'logos'
+                'group' => 'logos',
+                'value' => 'default/logo_kementan.svg'
             ],
             [
                 'key' => 'logo_footer_user',
                 'label' => 'Logo Footer User',
-                'group' => 'logos'
+                'group' => 'logos',
+                'value' => 'default/logo_kementan.svg'
             ],
+            [
+                'key' => 'background_landing',
+                'label' => 'Background Landing',
+                'group' => 'background',
+                'value' => 'default/background.png'
+            ]
         ];
 
-        foreach ($logos as $logo) {
+        foreach ($settings as $setting) {
             Setting::updateOrCreate(
-                ['key' => $logo['key']],
+                ['key' => $setting['key']],
                 [
-                    'label' => $logo['label'],
-                    'group' => $logo['group'],
-                    'value' => null
+                    'label' => $setting['label'],
+                    'group' => $setting['group'],
+                    'value' => $setting['value']
                 ]
             );
         }

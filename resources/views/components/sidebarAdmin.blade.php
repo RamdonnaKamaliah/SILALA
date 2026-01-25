@@ -32,7 +32,7 @@
             @if ($logoAdmin && \Storage::disk('public')->exists('cms/' . $logoAdmin))
                 <img src="{{ asset('storage/cms/' . $logoAdmin) }}" alt="BPMS Logo" class="logo-img">
             @else
-                <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}" alt="BPMS Logo" class="logo-img">
+                <img src="{{ asset('assets_admin/image/BPMSPH-logo.png') }}" alt="BPMS Logo" class="logo-img">
             @endif
         </div>
 

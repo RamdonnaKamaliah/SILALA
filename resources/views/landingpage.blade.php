@@ -19,9 +19,19 @@
     <!-- navbar -->
     @include('layout_landing.patrial_landing.header')
 
+    @php
+        $bgLanding = \App\Models\Setting::getValue('background_landing');
+        $bgImage =
+            $bgLanding && \Storage::disk('public')->exists('cms/' . $bgLanding)
+                ? asset('storage/cms/' . $bgLanding)
+                : asset('assets/background.png');
+    @endphp
+
     <section class="pt-24 md:pt-32 pb-32 md:pb-40 relative 
-                bg-cover bg-[center_50%] hero-section"
-        style="background-image: url('{{ '#' }}');">
+                bg-cover bg-center hero-section"
+        style="background-image: url('{{ $bgImage }}');">
+
+
 
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-4 md:px-6">
 

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class CmsController extends Controller
 {
     public function index() {
-        $logos = Setting::where('group', 'logos')->get();
+        $logos = Setting::whereIn('group', ['logos', 'background'])->get();
         $previewLogo = Setting::getValue('logo_admin_sidebar');
         
         return view('admin.cms.index', compact('logos', 'previewLogo'));

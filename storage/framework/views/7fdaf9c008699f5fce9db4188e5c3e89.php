@@ -19,7 +19,6 @@
                 <?php endif; ?>
 
 
-
                 <h3 class="text-lg md:text-xl font-bold leading-snug dark:text-white">
                     BALAI PENGUJIAN MUTU <br>
                     DAN SERTIFIKASI PRODUK HEWAN

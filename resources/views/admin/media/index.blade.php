@@ -1,134 +1,273 @@
 @extends('layout_admin.admin')
 
-@section('pageTitle', 'Admin Dashboard - Media Buku')
+@section('pageTitle', 'Data Media Buku')
 
 @section('content')
-    <div class="container mx-auto px-4 py-6">
-
-        {{-- Header Section --}}
-        <div class="bg-gradient-to-r from-[#A4B465] to-[#8fa050] rounded-xl shadow-lg p-6 mb-6">
-            <div class="flex justify-between items-center">
+    <div class="p-4 md:p-6 overflow-x-auto">
+        <!-- Header Section -->
+        <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-lg">
+            <div class="flex items-center space-x-4 mb-3">
+                <div class="bg-white/20 p-3 rounded-full">
+                    <i class="fas fa-images text-2xl"></i>
+                </div>
                 <div>
-                    <h1 class="text-3xl font-bold text-white mb-2">
-                        <i class="fas fa-images mr-3"></i>Galeri Media Buku
-                    </h1>
-                    <p class="text-white/80">Kelola foto dan gambar buku perpustakaan</p>
+                    <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-white">Galeri Media Buku</h1>
+                    <p class="text-white text-lg">Kelola foto dan gambar buku perpustakaan</p>
                 </div>
-                <div class="flex items-center gap-3">
-                    <div class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
-                        <span class="text-white/90 text-sm">Total Media:</span>
-                        <strong class="text-white text-lg ml-2">{{ $media->count() }}</strong>
-                    </div>
-                    <a href="{{ route('admin.data_buku.create') }}"
-                        class="bg-white text-[#A4B465] px-5 py-2.5 rounded-lg font-semibold hover:bg-gray-50 transition shadow-md">
-                        <i class="fas fa-plus mr-2"></i>Upload Media
-                    </a>
-                </div>
+            </div>
+            <div class="flex items-center space-x-2 text-sm text-white">
+                <i class="fas fa-chart-line"></i>
+                <span>Total Media: <strong>{{ $media->count() }}</strong></span>
             </div>
         </div>
 
-        {{-- Alert Messages --}}
-        @if (session('success'))
-            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6">
-                <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
+        <!-- Action Buttons -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+            <h2 class="text-2xl font-semibold text-gray-800 flex items-center">
+                <i class="fas fa-list-alt text-[#A4B465] mr-3"></i>
+                Daftar Media Buku
+            </h2>
+            <div class="flex items-center space-x-3">
+                <a href="{{ route('admin.data_buku.create') }}"
+                    class="bg-[#A4B465] hover:bg-[#8AA24F] text-white px-5 py-2.5 rounded-xl transition-all duration-200 flex items-center space-x-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Upload Media</span>
+                </a>
             </div>
-        @endif
+        </div>
 
-        @if (session('error'))
-            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6">
-                <i class="fas fa-exclamation-circle mr-2"></i>{{ session('error') }}
+        <!-- Table Container -->
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mt-6">
+            <div class="overflow-x-auto">
+                <table id="dataTableMedia" class="w-full text-sm">
+                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-b border-gray-200">
+                        <tr>
+                            <th class="w-20 px-4 py-4 text-center font-semibold">No</th>
+                            <th class="px-6 py-4 text-left font-semibold">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-image text-[#A4B465]"></i>
+                                    <span>Preview</span>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left font-semibold">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-file text-[#A4B465]"></i>
+                                    <span>Nama File</span>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-left font-semibold">
+                                <div class="flex items-center space-x-2">
+                                    <i class="fas fa-book text-[#A4B465]"></i>
+                                    <span>Buku Terkait</span>
+                                </div>
+                            </th>
+                            <th class="px-6 py-4 text-center font-semibold w-32">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach ($media as $item)
+                            <tr class="hover:bg-gray-50/80 transition-colors duration-150 group">
+                                <td class="px-4 py-4 text-center text-gray-600 font-medium">
+                                    {{ $loop->iteration }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="w-16 h-16 rounded-lg overflow-hidden shadow-sm border border-gray-200">
+                                        @if ($item->path_file && Storage::disk('public')->exists($item->path_file))
+                                            <img src="{{ asset('storage/' . $item->path_file) }}"
+                                                class="w-full h-full object-cover" alt="{{ $item->nama_file }}">
+                                        @else
+                                            <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
+                                                class="w-full h-full object-cover opacity-60" alt="Default image">
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div
+                                            class="w-10 h-10 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-file-image text-white text-sm"></i>
+                                        </div>
+                                        <span class="font-medium text-gray-800">{{ $item->nama_file }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    @if ($item->buku)
+                                        <span class="text-gray-700">{{ $item->buku->judul_buku }}</span>
+                                    @else
+                                        <span class="text-gray-400 italic text-sm">Belum digunakan</span>
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <a href="{{ asset('storage/' . $item->path_file) }}" target="_blank"
+                                            class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-3 rounded-xl transition-all duration-200 group relative"
+                                            title="Lihat Media">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <button type="button"
+                                            class="bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-xl transition-all duration-200 delete-btn group relative"
+                                            title="Hapus Media" data-id="{{ $item->id }}"
+                                            data-name="{{ $item->nama_file }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-        @endif
-
-        {{-- Content Section --}}
-        @if ($media->isEmpty())
-            {{-- Empty State --}}
-            <div class="bg-white rounded-xl shadow-sm border-2 border-dashed border-gray-300 p-16">
-                <div class="max-w-md mx-auto text-center">
-                    <div class="mb-6">
-                        <i class="fas fa-folder-open text-gray-300 text-8xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-700 mb-3">Belum Ada Media</h3>
-                    <p class="text-gray-500 mb-6">
-                        Galeri media masih kosong. Mulai dengan mengupload foto buku pertama Anda.
-                    </p>
-                    <a href="{{ route('admin.data_buku.create') }}"
-                        class="inline-block bg-[#A4B465] text-white px-8 py-3 rounded-lg hover:bg-[#8fa050] transition shadow-md">
-                        <i class="fas fa-upload mr-2"></i>Upload Media Pertama
-                    </a>
-                </div>
-            </div>
-        @else
-            {{-- Grid Media --}}
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
-                @foreach ($media as $item)
-                    <div
-                        class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-
-                        {{-- Image Preview --}}
-                        <div class="relative w-full h-48 bg-gray-100 group">
-                            @if ($item->path_file && Storage::disk('public')->exists($item->path_file))
-                                <img src="{{ asset('storage/' . $item->path_file) }}" class="w-full h-full object-cover"
-                                    alt="{{ $item->nama_file }}">
-                            @else
-                                <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
-                                    class="w-full h-full object-cover opacity-60" alt="Default image">
-                            @endif
-
-                            {{-- Overlay saat hover --}}
-                            <div
-                                class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                <a href="{{ asset('storage/' . $item->path_file) }}" target="_blank"
-                                    class="bg-white text-gray-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100">
-                                    <i class="fas fa-search-plus mr-2"></i>Lihat
-                                </a>
-                            </div>
-                        </div>
-
-                        {{-- Info Card --}}
-                        <div class="p-4">
-                            <h3 class="font-semibold text-gray-800 mb-2 truncate text-sm" title="{{ $item->nama_file }}">
-                                {{ $item->nama_file }}
-                            </h3>
-
-                            @if ($item->buku)
-                                <p class="text-xs text-gray-500 mb-3 line-clamp-2">
-                                    <i class="fas fa-book text-[#A4B465] mr-1"></i>
-                                    {{ $item->buku->judul_buku }}
-                                </p>
-                            @else
-                                <p class="text-xs text-gray-400 italic mb-3">
-                                    <i class="fas fa-info-circle mr-1"></i>Belum digunakan
-                                </p>
-                            @endif
-
-                            {{-- Actions --}}
-                            <div class="flex gap-2">
-                                <a href="{{ asset('storage/' . $item->path_file) }}" target="_blank"
-                                    class="flex-1 text-center bg-blue-500 text-white px-3 py-2 rounded-lg text-xs font-medium hover:bg-blue-600 transition">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-
-                                <form action="{{ route('admin.media.destroy', $item->id) }}" method="POST" class="flex-1"
-                                    onsubmit="return confirm('⚠️ Yakin ingin menghapus {{ $item->nama_file }}?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="w-full bg-red-500 text-white px-3 py-2 rounded-lg text-xs font-medium hover:bg-red-600 transition">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-
-            {{-- Pagination jika perlu --}}
-            {{-- <div class="mt-6">
-            {{ $media->links() }}
-        </div> --}}
-        @endif
-
+        </div>
     </div>
+
+    <!-- Delete Confirmation Form -->
+    <form id="deleteForm" method="POST" style="display: none;">
+        @csrf
+        @method('DELETE')
+    </form>
 @endsection
+
+@push('styles')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tooltip-text {
+            visibility: hidden;
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .group:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .dataTables_wrapper {
+            padding: 0 !important;
+        }
+
+        .dataTables_filter input {
+            border: 1px solid #d1d5db !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+        }
+
+        .dataTables_length select {
+            border: 1px solid #d1d5db !important;
+            border-radius: 8px !important;
+            padding: 6px 12px !important;
+        }
+
+        table.dataTable tbody tr:hover {
+            background-color: #f9fafb !important;
+        }
+
+        /* DataTables custom styling */
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border-radius: 8px !important;
+            margin: 0 2px;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #A4B465 !important;
+            color: white !important;
+            border: 1px solid #A4B465 !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #8AA24F !important;
+            color: white !important;
+            border: 1px solid #8AA24F !important;
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            var table = $('#dataTableMedia').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
+                },
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50],
+                dom: '<"flex flex-col md:flex-row justify-between items-center mb-4"<"mb-4 md:mb-0"l><"flex items-center"f>>rt<"flex flex-col md:flex-row justify-between items-center mt-4"<"mb-4 md:mb-0"i><"flex"p>>',
+                columnDefs: [{
+                        targets: 1, // Kolom preview
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        targets: 4, // Kolom aksi
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                initComplete: function() {
+                    $('.dataTables_filter input').attr('placeholder', 'Cari media...');
+                }
+            });
+
+            // Individual delete confirmation
+            $(document).on('click', '.delete-btn', function(e) {
+                e.preventDefault();
+                var mediaId = $(this).data('id');
+                var mediaName = $(this).data('name');
+                var deleteUrl = "{{ route('admin.media.destroy', ':id') }}".replace(':id', mediaId);
+
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    html: `Apakah Anda yakin ingin menghapus media ini?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var deleteForm = $('#deleteForm');
+                        deleteForm.attr('action', deleteUrl);
+                        deleteForm.submit();
+                    }
+                });
+            });
+
+            // Success message
+            @if (session('success'))
+                Swal.fire({
+                    title: 'Sukses!',
+                    text: 'Berhasil menghapus media.',
+                    icon: 'success',
+                    confirmButtonColor: '#A4B465',
+                    timer: 3000
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Gagal menghapus media.',
+                    icon: 'error',
+                    confirmButtonColor: '#ef4444'
+                });
+            @endif
+        });
+    </script>
+@endpush

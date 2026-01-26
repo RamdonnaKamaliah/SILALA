@@ -1,8 +1,6 @@
-@extends('layout_user.detail')
+<?php $__env->startSection('title', 'Detail Buku User'); ?>
 
-@section('title', 'Detail Buku User')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="max-w-4xl mx-auto px-4">
 
   <!-- ====== FIXED TOMBOL BACA/PINJAM/FAVORIT ====== -->
@@ -12,52 +10,52 @@
 
         <div class="flex items-center gap-3 md:ml-[350px]">
 
-          {{-- Tombol Baca --}}
-          @if($buku->file_buku && $buku->id)
+          
+          <?php if($buku->file_buku && $buku->id): ?>
           <a
-            href="{{ route('user.baca', $buku->id) }}"
+            href="<?php echo e(route('user.baca', $buku->id)); ?>"
             target="_blank"
             class="bg-primary hover:bg-green text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md inline-block text-center"
           >
             Baca
           </a>
-        @else
+        <?php else: ?>
           <button
             class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed"
             disabled
           >
             Baca
           </button>
-        @endif
+        <?php endif; ?>
 
-          {{-- Tombol Pinjam --}}
-          @if($userBorrow || $stokHabis)
+          
+          <?php if($userBorrow || $stokHabis): ?>
             <button class="bg-gray-400 text-white font-semibold text-sm px-8 py-1.5 rounded-full shadow-md cursor-not-allowed" disabled>
               Sedang Dipinjam
             </button>
-          @else
+          <?php else: ?>
             <button id="openPinjamModal"
                     class="bg-kuning text-[#2E2E2E] hover:bg-[#F6D776] font-semibold text-sm px-8 py-1.5 rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-lg">
               Pinjam
             </button>
-          @endif
+          <?php endif; ?>
         </div>
 
-        {{-- Tombol Favorit --}}
+        
         <div class="flex items-center">
           <button id="loveBtn"
                   class="group flex items-center justify-center text-[#E76F51] w-9 h-9 shadow-none bg-transparent transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-110 mr-2 md:mr-[60px]">
-            @if($isFavorited)
+            <?php if($isFavorited): ?>
               <i id="heartIcon" class="fa-solid fa-heart text-[#E63946] text-base transition-transform duration-300 group-hover:scale-125"></i>
-            @else
+            <?php else: ?>
               <i id="heartIcon" class="fa-regular fa-heart text-base transition-transform duration-300 group-hover:scale-125"></i>
-            @endif
+            <?php endif; ?>
           </button>
         </div>
 
       </div>
 
-      {{-- Garis bawah --}}
+      
       <div class="w-full">
         <div class="mx-auto md:ml-[350px] md:mr-[60px] border-t border-gray-300"></div>
       </div>
@@ -74,19 +72,19 @@
       <div class="p-6 space-y-4 text-sm text-[#2E2E2E] max-h-[80vh] overflow-y-auto">
         <div>
           <label class="font-semibold mb-1 block">Judul Buku</label>
-          <input type="text" value="{{ $buku->judul_buku }}" readonly
+          <input type="text" value="<?php echo e($buku->judul_buku); ?>" readonly
                  class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
         </div>
 
         <div>
           <label class="font-semibold mb-1 block">Penulis Buku</label>
-          <input type="text" value="{{ $buku->penulis }}" readonly
+          <input type="text" value="<?php echo e($buku->penulis); ?>" readonly
                  class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
         </div>
 
         <div>
           <label class="font-semibold mb-1 block">Stok Buku</label>
-          <input type="text" value="{{ $buku->stok ?? '-' }}" readonly
+          <input type="text" value="<?php echo e($buku->stok ?? '-'); ?>" readonly
                  class="w-full bg-[#F6D776] rounded-full px-3 py-1.5 text-sm text-center shadow-sm focus:outline-none">
         </div>
 
@@ -167,54 +165,55 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pt-8">
         <div>
           <h3 class="text-lg font-semibold mb-3">Deskripsi</h3>
-          <p class="text-sm leading-relaxed text-[#626F47]">{{ $buku->deskripsi }}</p>
+          <p class="text-sm leading-relaxed text-[#626F47]"><?php echo e($buku->deskripsi); ?></p>
         </div>
         <div class="grid grid-cols-2 gap-y-3 text-sm text-[#626F47]">
           <div>
             <p class="font-semibold text-[#2E2E2E]">Penerbit</p>
-            <p>{{ $buku->penulis }}</p>
+            <p><?php echo e($buku->penulis); ?></p>
           </div>
           <div>
             <p class="font-semibold text-[#2E2E2E]">Tahun Terbit</p>
-            <p>{{ $buku->tahun_terbit }}</p>
+            <p><?php echo e($buku->tahun_terbit); ?></p>
           </div>
           <div>
             <p class="font-semibold text-[#2E2E2E]">Bahasa</p>
-            <p>{{ $buku->bahasa }}</p>
+            <p><?php echo e($buku->bahasa); ?></p>
           </div>
           <div>
             <p class="font-semibold text-[#2E2E2E]">Kategori</p>
             <p>
-              @if($buku->kategoris->isNotEmpty())
-                {{ $buku->kategoris->pluck('nama_kategori')->join(', ') }}
-              @else
+              <?php if($buku->kategoris->isNotEmpty()): ?>
+                <?php echo e($buku->kategoris->pluck('nama_kategori')->join(', ')); ?>
+
+              <?php else: ?>
                 -
-              @endif
+              <?php endif; ?>
             </p>
           </div>
           <div>
             <p class="font-semibold text-[#2E2E2E]">Jumlah Halaman</p>
-            <p>{{ $buku->jumlah_halaman }}</p>
+            <p><?php echo e($buku->jumlah_halaman); ?></p>
           </div>
           <div>
             <p class="font-semibold text-[#2E2E2E]">Edisi</p>
-            <p>{{ $buku->edisi }}</p>
+            <p><?php echo e($buku->edisi); ?></p>
           </div>
         </div>
       </div>
 
-     {{-- RATING --}}
-@if(($hasRead || $userBorrow) && Schema::hasTable('ratings'))
+     
+<?php if(($hasRead || $userBorrow) && Schema::hasTable('ratings')): ?>
 <div class="w-full flex justify-center mt-8">
   <div class="bg-[#fff8ed] p-6 rounded-2xl shadow-lg border border-[#f0e6d5] w-[320px] md:w-[420px]">
 
     <!-- Judul -->
     <p class="text-xl font-bold text-[#3a3a3a] text-center mb-1">
-      @if($userRating)
+      <?php if($userRating): ?>
         Ubah Rating Buku Ini
-      @else
+      <?php else: ?>
         Beri Rating Buku Ini
-      @endif
+      <?php endif; ?>
     </p>
 
     <p class="text-sm text-[#6b6b6b] text-center mb-4">
@@ -223,33 +222,35 @@
 
     <!-- Bintang -->
     <div id="starContainer" class="flex items-center justify-center gap-3 mb-5"
-         data-buku-id="{{ $buku->id }}" 
-         data-rating-url="{{ route('user.rating.store') }}" 
-         data-csrf="{{ csrf_token() }}"
-         data-user-rating="{{ $userRating?->rating ?? 0 }}">
+         data-buku-id="<?php echo e($buku->id); ?>" 
+         data-rating-url="<?php echo e(route('user.rating.store')); ?>" 
+         data-csrf="<?php echo e(csrf_token()); ?>"
+         data-user-rating="<?php echo e($userRating?->rating ?? 0); ?>">
 
-      @for ($i = 1; $i <= 5; $i++)
-      <span class="rating-star text-4xl cursor-pointer" data-star="{{ $i }}">
+      <?php for($i = 1; $i <= 5; $i++): ?>
+      <span class="rating-star text-4xl cursor-pointer" data-star="<?php echo e($i); ?>">
   <span class="iconify text-yellow-500" data-icon="material-symbols:star-outline-rounded"></span>
 </span>
       </span>
-      @endfor
+      <?php endfor; ?>
     </div>
 
     <!-- Tombol -->
     <div class="flex justify-center mt-4">
       <button id="submitRating" 
-              data-default-text="{{ $userRating ? 'Update Rating' : 'Kirim Rating' }}" 
+              data-default-text="<?php echo e($userRating ? 'Update Rating' : 'Kirim Rating'); ?>" 
               class="bg-[#5c7040] hover:bg-[#4d5e34] active:scale-95 text-white text-sm font-medium px-7 py-2.5 rounded-xl transition-all shadow opacity-50 cursor-not-allowed" 
               disabled>
-        {{ $userRating ? 'Update Rating' : 'Kirim Rating' }}
+        <?php echo e($userRating ? 'Update Rating' : 'Kirim Rating'); ?>
+
       </button>
     </div>
 
   </div>
 </div>
-@endif
+<?php endif; ?>
     </div>
   </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout_user.detail', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/detailbuku.blade.php ENDPATH**/ ?>

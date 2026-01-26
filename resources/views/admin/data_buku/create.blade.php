@@ -77,12 +77,17 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                     <div>
-                        <div id="imagePreviewContainer" class="preview-box mt-4 hidden">
-                            <img id="imagePreview" class="preview-image" alt="Preview Cover">
-                            <p id="imageName" class="text-xs font-medium text-primary-dark break-all px-2 line-clamp-2">
-                            </p>
-                        </div>
-                    </div>
+    <div id="imagePreviewContainer" class="preview-box mt-4 hidden flex flex-col items-center gap-1">
+        <img id="imagePreview"
+             class="w-30 h-30 object-cover rounded-md border"
+             alt="Preview Cover">
+
+        <p id="imageName"
+           class="text-[11px] font-medium text-primary-dark text-center break-all max-w-[80px]">
+        </p>
+    </div>
+</div>
+
 
                     <!-- File Buku PDF -->
                     <div>
@@ -101,14 +106,20 @@
                             <span>Pilih File PDF</span>
                         </label>
 
-                        <div id="pdfPreviewContainer" class="preview-box mt-4 hidden">
-                            <canvas id="pdfPreview" class="preview-pdf-canvas"></canvas>
-                            <div class="mt-2">
-                                <p id="pdfName" class="text-xs font-medium text-primary-dark break-all px-2 line-clamp-1">
-                                </p>
-                                <p id="pdfSize" class="text-xs text-primary-medium mt-1"></p>
-                            </div>
-                        </div>
+                        <div id="pdfPreviewContainer" class="preview-box mt-4 hidden flex flex-col items-center gap-1">
+    <canvas id="pdfPreview"
+        class="w-30 h-34 border rounded-md"></canvas>
+
+    <div class="text-center">
+        <p id="pdfName"
+           class="text-[11px] font-medium text-primary-dark break-all max-w-[80px]">
+        </p>
+        <p id="pdfSize"
+           class="text-[10px] text-primary-medium mt-0.5">
+        </p>
+    </div>
+</div>
+
                     </div>
                 </div>
             </div>

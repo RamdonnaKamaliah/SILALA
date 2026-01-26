@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('pageTitle', 'Edit Profile Admin'); ?>
 
 <?php $__env->startSection('content'); ?>

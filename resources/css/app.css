@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
+    html {
         --primary: 164 180 101;
     }
 
@@ -21,6 +21,10 @@
 
     html.theme-purple {
         --primary: 168 85 247;
+    }
+
+    html.theme-yellow {
+        --primary: 234 179 8;
     }
 }
 
@@ -60,7 +64,7 @@
     width: 50px;
     height: 50px;
     border-radius: 9999px;
-    background-color: theme('colors.primary');
+    background-color: theme('colors.primary' );
     box-shadow: 35px -35px 0 10px theme('colors.white');
     pointer-events: none;
     z-index: 0;

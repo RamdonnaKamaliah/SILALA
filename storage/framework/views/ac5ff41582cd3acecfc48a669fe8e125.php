@@ -57,8 +57,7 @@
 
                 <!-- Deskripsi -->
                 <p class="text-base md:text-lg leading-relaxed text-black dark:text-white">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Sistem Informasi Layanan Literasi dan Arsip (SILALA). Memberikan kemudahan akses literasi dan pengelolaan arsip digital
                 </p>
             </div>
 
@@ -94,10 +93,7 @@
                     </span>
 
                     <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-medium italic">
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry. Lorem Ipsum has been the industry's standard dummy text
-                        ever since the 1500s, when an unknown printer took a galley of type
-                        and scrambled it to make a type specimen book."
+                        "Buku adalah jendela dunia. Dengan SILALA, jendela tersebut kini hadir dalam genggaman Anda melalui layanan baca online dan peminjaman buku yang praktis."
                     </p>
 
                     <span class="absolute -bottom-4 left-6 text-black dark:text-white text-3xl">

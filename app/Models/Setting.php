@@ -6,11 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    protected $fillable = ['key', 'value'];
+    protected $fillable = ['key', 'value', 'label', 'group'];
 
     public static function getValue($key, $default = null)
     {
-        return self::where('key', $key)->value('value') ?? $default;
+        $setting = self::where('key', $key)->first();
+        return $setting ? $setting->value : $default;
     }
 
     public static function setValue($key, $value)
@@ -19,5 +20,10 @@ class Setting extends Model
             ['key' => $key],
             ['value' => $value]
         );
+    }
+    
+    public static function getByGroup($group)
+    {
+        return self::where('group', $group)->get();
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\DataBuku;
+use App\Models\databuku;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\DataBukuImport; 
 use App\Models\DataKategori;
@@ -19,10 +19,12 @@ class DataBukuController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $data_buku = DataBuku::all();
-        return view('admin.data_buku.index', compact('data_buku'));
-    }
+{
+    $bukus = databuku::with('kategoris')->latest()->get();
+
+    return view('admin.data_buku.index', compact('bukus'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -42,7 +44,7 @@ class DataBukuController extends Controller
      */
 public function store(Request $request)
 {
-    $validated = $request->validate([
+    $request->validate([
         'foto_buku' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         'foto_id'   => 'nullable|exists:gambar_bukus,id',
         'judul_buku' => 'required',
@@ -60,7 +62,7 @@ public function store(Request $request)
 
     $foto_buku_path = null;
 
-    // 1️⃣ Upload manual
+    //  Upload manual
     if ($request->hasFile('foto_buku')) {
 
         $file = $request->file('foto_buku');
@@ -76,7 +78,7 @@ public function store(Request $request)
         ]);
     }
 
-    // 2️⃣ Pilih dari galeri
+    // Pilih dari galeri
     if ($request->foto_id) {
         $media = GambarBuku::find($request->foto_id);
         if ($media) {
@@ -84,8 +86,8 @@ public function store(Request $request)
         }
     }
 
-    // 3️⃣ Simpan data buku
-    $buku = DataBuku::create([
+    //  Simpan data buku
+    $buku = databuku::create([
         'judul_buku' => $request->judul_buku,
         'penulis' => $request->penulis,
         'penerbit' => $request->penerbit,
@@ -105,7 +107,6 @@ public function store(Request $request)
         'kategori_ids' => implode(',', $request->kategori_id),
     ]);
 
-    // 4️⃣ Pivot kategori
     $buku->kategoris()->attach($request->kategori_id);
 
     return redirect()->route('admin.data_buku.index')
@@ -118,7 +119,7 @@ public function store(Request $request)
      */
     public function show(string $id)
     {
-        $buku = DataBuku::findOrFail($id);
+        $buku = databuku::findOrFail($id);
         return view('admin.data_buku.show', compact('buku'));
     }
 
@@ -127,61 +128,32 @@ public function store(Request $request)
      */
   public function edit(string $id)
 {
-    $buku = DataBuku::findOrFail($id);
+    $buku = databuku::findOrFail($id);
     $kategoris = DataKategori::all();
     return view('admin.data_buku.edit', compact('buku', 'kategoris'));
 }
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+  public function update(Request $request, $id)
 {
-    $validated = $request->validate([
-        'foto_buku' => 'nullable|image|mimes:png,jpg|max:2048',
-        'judul_buku' => 'required|string|max:255',
-        'penulis' => 'required|string|max:255',
-        'penerbit' => 'required|string|max:255',
-        'tahun_terbit' => 'required|digits:4|integer|min:1000|max:' . (date('Y') + 1),
-        'bahasa' => 'required|string|max:100',
-        'kategori_id' => 'required|array',
-        'kategori_id.*' => 'exists:data_kategoris,id',
-        'jumlah_halaman' => 'required|integer|min:1',
-        'edisi' => 'required|string|max:100',
-        'deskripsi' => 'required|string',
-        'stok' => 'required|integer|min:0',
-        'file_buku' => 'required|mimes:pdf|max:255',
-    ]);
+    $buku = databuku::findOrFail($id);
 
-    $buku = DataBuku::findOrFail($id);
+    $buku->update($request->except('kategori_id'));
 
     if ($request->hasFile('foto_buku')) {
-    if ($buku->foto_buku && file_exists(storage_path('app/public/' . $buku->foto_buku))) {
-        unlink(storage_path('app/public/' . $buku->foto_buku));
+        $buku->foto_buku = $request->file('foto_buku')->store('foto-buku', 'public');
     }
 
-    $path = $request->file('foto_buku')->store('upload/foto_buku', 'public');
-    $validated['foto_buku'] = $path;
-}
-
-   if ($request->hasFile('file_buku')) {
-    if ($buku->file_buku && file_exists(storage_path('app/public/' . $buku->file_buku))) {
-        unlink(storage_path('app/public/' . $buku->file_buku));
+    if ($request->hasFile('file_buku')) {
+        $buku->file_buku = $request->file('file_buku')->store('file-buku', 'public');
     }
 
-    $path = $request->file('file_buku')->store('upload/file_buku', 'public');
-    $validated['file_buku'] = $path;
-}
-
-    // Simpan ulang kategori_ids dalam bentuk string
-    $validated['kategori_ids'] = implode(',', $request->kategori_id);
-
-    $dataBuku = collect($validated)->except('kategori_id')->toArray();
-    $buku->update($dataBuku);
-
-    // Update pivot
+    $buku->save();
     $buku->kategoris()->sync($request->kategori_id);
 
-    return redirect()->route('admin.data_buku.index')->with('success', 'Data buku berhasil diperbarui!');
+    return redirect()->route('admin.data_buku.index')
+        ->with('success', 'Data buku berhasil diupdate');
 }
 
 
@@ -190,8 +162,16 @@ public function store(Request $request)
      */
     public function destroy(string $id)
     {
-        $buku = DataBuku::findOrFail($id);
+        $buku = databuku::findOrFail($id);
        
+           // Hapus file gambar jika ada
+    if ($buku->file_buku && Storage::disk('public')->exists($buku->file_buku)) {
+        Storage::disk('public')->delete($buku->file_buku);
+    }
+     if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)) {
+        Storage::disk('public')->delete($buku->foto_buku);
+    }
+    
         $buku->delete();
         return redirect()->route('admin.data_buku.index')
             ->with('success', 'Data buku berhasil dihapus!');
@@ -201,24 +181,34 @@ public function store(Request $request)
 {
     $selectedIds = $request->selected_ids ?? [];
 
-    // Jika dikirim sebagai string "1,2,3"
     if (!is_array($selectedIds)) {
         $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
     }
 
-    // Hapus semua yang bukan angka (termasuk "on")
-    $selectedIds = array_filter($selectedIds, function ($id) {
-        return is_numeric($id);
-    });
-
-    // Ubah ke integer
+    $selectedIds = array_filter($selectedIds, fn ($id) => is_numeric($id));
     $selectedIds = array_map('intval', $selectedIds);
 
     if (empty($selectedIds)) {
-        return redirect()->back()->with('error', 'Tidak ada kategori yang dipilih.');
+        return redirect()->back()->with('error', 'Tidak ada buku yang dipilih.');
     }
 
-    DataBuku::whereIn('id', $selectedIds)->delete();
+    $books = databuku::whereIn('id', $selectedIds)->get();
+
+    foreach ($books as $buku) {
+
+        // Hapus file buku (PDF / e-book)
+        if ($buku->file_buku && Storage::disk('public')->exists($buku->file_buku)) {
+            Storage::disk('public')->delete($buku->file_buku);
+        }
+
+        // Hapus foto / cover buku
+        if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)) {
+            Storage::disk('public')->delete($buku->foto_buku);
+        }
+    }
+
+    // Hapus data dari database
+    databuku::whereIn('id', $selectedIds)->delete();
 
     return redirect()->route('admin.data_buku.index')
         ->with('success', count($selectedIds) . ' buku berhasil dihapus.');
@@ -257,50 +247,95 @@ public function store(Request $request)
     
     public function archive(Request $request, $id = null)
     {
-    if ($id) {
-        $buku = DataBuku::findOrFail($id);
-        $buku->status = 'arsip';
-        $buku->save();
+        if ($id) {
+            $buku = databuku::findOrFail($id);
+            $buku->status = 'arsip';
+            $buku->save();
 
-        return redirect()->route('admin.data_arsip.index')
-            ->with('success', 'Buku "' . $buku->judul_buku . '" berhasil diarsipkan!');
-    }
+            return redirect()->route('admin.data_arsip.index')
+                ->with('success', 'Buku "' . $buku->judul_buku . '" berhasil diarsipkan!');
+        }
 
-    return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
-}
-
-public function bulkArchive(Request $request)
-{
-    $selectedIds = $request->input('selected_ids', []);
-
-    if (!is_array($selectedIds)) {
-        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
-    }
-
-    $selectedIds = array_filter($selectedIds, function ($id) {
-        return is_numeric($id);
-    });
-
-    $selectedIds = array_map('intval', $selectedIds);
-
-    if (empty($selectedIds)) {
         return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
     }
 
-    DataBuku::whereIn('id', $selectedIds)->update(['status' => 'arsip']);
+public function bulkArchive(Request $request)
+    {
+        try {
+            // Validasi input
+            $request->validate([
+                'selected_ids' => 'required'
+            ]);
 
-    return redirect()->route('admin.data_arsip.index')
-        ->with('success', count($selectedIds) . ' buku berhasil diarsipkan.');
-}
+            $selectedIds = $request->input('selected_ids');
+
+            // Debug: uncomment untuk lihat raw input
+            // \Log::info('Raw selected_ids: ' . $selectedIds);
+
+            // Parse selected_ids
+            if (is_string($selectedIds)) {
+                // Hapus bracket JSON jika ada
+                $selectedIds = trim($selectedIds, '[]"');
+                // Split by comma
+                $selectedIds = explode(',', $selectedIds);
+            }
+
+            // Pastikan array dan bersihkan
+            if (!is_array($selectedIds)) {
+                $selectedIds = [$selectedIds];
+            }
+
+            // Clean dan convert ke integer
+            $selectedIds = array_map(function($id) {
+                // Hapus quotes dan whitespace
+                $id = trim($id, '"\' ');
+                return intval($id);
+            }, $selectedIds);
+
+            // Filter hanya yang valid (> 0)
+            $selectedIds = array_filter($selectedIds, function($id) {
+                return $id > 0;
+            });
+
+            // Reset array keys
+            $selectedIds = array_values($selectedIds);
+
+            // Debug: uncomment untuk lihat hasil parsing
+            // \Log::info('Parsed IDs: ' . json_encode($selectedIds));
+
+            if (empty($selectedIds)) {
+                return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+            }
+
+            // Update status
+            $updated = databuku::whereIn('id', $selectedIds)
+                ->where('status', 'aktif')
+                ->update(['status' => 'arsip']);
+
+            if ($updated > 0) {
+                return redirect()->route('admin.data_arsip.index')
+                    ->with('success', $updated . ' buku berhasil diarsipkan.');
+            } else {
+                return back()->with('error', 'Tidak ada buku yang berhasil diarsipkan. Pastikan buku berstatus aktif.');
+            }
+
+        } catch (\Exception $e) {    
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 
 
     //pulihkan buku dari arsip 
-    public function restore ($id)
+    public function restore($id)
     {
-        $buku = DataBuku::findOrFail($id);
-        $buku->status = 'aktif';
-        $buku->save();
+        try {
+            $buku = databuku::findOrFail($id);
+            $buku->status = 'aktif';
+            $buku->save();
 
-        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
+            return back()->with('success', 'Buku "' . $buku->judul_buku . '" berhasil dikembalikan dari arsip!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

@@ -1,20 +1,17 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\CmsController;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\UserMiddleware;
 use App\Http\Middleware\AdminMiddleware;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\GoogleLoginController;
 use App\Http\Controllers\Admin\DataBukuController;
 use App\Http\Controllers\Admin\DataKategoriController;
 use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
-use App\Http\Controllers\Admin\MediaBukuController;
-use App\Http\Controllers\Admin\CmsController;
-use App\Http\Controllers\Admin\AdminProfileController;
-
-// Controllers - Auth
 use App\Http\Controllers\user\DaftarBukuController;
 use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
@@ -24,12 +21,18 @@ use App\Http\Controllers\user\FavoritController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\EditProfilController;
 use App\Http\Controllers\user\RatingController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\MediaBukuController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\DashboardController as ControllersDashboardController;
+use App\Http\Controllers\DashboardUserController;
+use App\Http\Controllers\LandingpageController;
+use App\Http\Controllers\User\DaftarBukuController as UserDaftarBukuController;
 
-Route::get('/', function () {
-    return view('landingpage');
-});
+// Public Routes
+Route::get('/', [LandingpageController::class, 'index']);
+
+// Authentication Routes
+require __DIR__.'/auth.php';
 
 // Google OAuth Routes
 Route::get('/auth/google/redirect', [GoogleLoginController::class, 'redirectToGoogle'])
@@ -47,13 +50,12 @@ Route::middleware('auth:web')->group(function () {
 });
 
 // User Routes
-Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
+Route::middleware([UserMiddleware::class])->group(function () {
     // USER
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardUserController::class, 'index'])->name('dashboard');
 
     //DAFTAR BUKU
-    Route::get('/daftar-buku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
-
+    Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
 
     // DETAIL BUKU
     Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])->name('user.detailbuku');
@@ -102,29 +104,33 @@ Route::middleware(['auth:web', UserMiddleware::class])->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddleware::class])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    
-      Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile');
-        Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
-       Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
-    ->name('profile.update');
-        Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     // Data Buku Routes
-    Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
-    Route::delete('/data-buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulk-delete');
+    Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
+     Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
+    ->name('profile.update');
+    Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
+
+    
+    Route::delete('/data_buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulkDelete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
     Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');
+    Route::post('/data_buku/bulk-archive', [DataBukuController::class, 'bulkArchive'])
+    ->name('data_buku.bulkArchive'); // 🗂️ Arsipkan banyak buku
     Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
     ->name('data_buku.archive'); // 🗂️ Arsipkan buku
-    Route::post('/data-buku/bulk-archive', [DataBukuController::class, 'bulkArchive'])
-    ->name('data_buku.bulkArchive'); // 🗂️ Arsipkan banyak buku
     Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
     ->name('data_buku.restore');
 
+     Route::resource('/data_buku', DataBukuController::class)->names('data_buku');
+
     // Data Kategori Routes
+    Route::delete('/data_kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
     Route::resource('/data_kategori', DataKategoriController::class)->names('data_kategori');
-    Route::delete('/data-kategori/bulk-delete', [DataKategoriController::class, 'bulkDelete'])->name('data_kategori.bulk-delete');
 
     // Data Arsip Routes
     Route::resource('/data_arsip', DataArsipController::class)->names('data_arsip');
@@ -156,16 +162,24 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:admin', AdminMiddlewar
     Route::delete('/media-buku/{id}', [MediaBukuController::class, 'destroy'])
     ->name('media.destroy');
 
+     
+    Route::get('/cms', [CmsController::class, 'index'])->name('cms.index');
+    Route::post('/cms/upload', [CmsController::class, 'upload'])->name('cms.upload');;
+    Route::delete('/cms/delete', [CmsController::class, 'deleteLogo'])->name('cms.delete');
+    
+        //statistik peminjaman pengembalian
+        Route::get('/statistik-peminjaman', [DashboardController::class, 'Statistik'])
+            ->name('statistik.peminjaman');
+});
 
-        Route::get('/cms', [CmsController::class, 'editHero'])
-            ->name('cms_admin.index');
-
-        Route::post('/cms/update-hero', [CmsController::class, 'updateHero'])
-            ->name('cms_admin.updateHero');
-
-        Route::post('/cms/update-footer-logo', [CmsController::class, 'updateFooterLogo'])
-            ->name('cms_admin.updateFooterLogo');
-
+Route::middleware([App\Http\Middleware\UserMiddleware::class])->group(function () {
+    Route::get('/test-auth-2', function() {
+        return [
+            'logged_in_web' => Auth::guard('web')->check(),
+            'user_web' => Auth::guard('web')->user(),
+            'session_id' => session()->getId(),
+        ];
+    });
 });
 
 // Home Redirect Route
@@ -180,15 +194,3 @@ Route::get('/home', function () {
     
     return redirect()->route('login');
 })->name('home');
-
-Route::post('/logout', function () {
-    Auth::guard('admin')->logout();
-    Auth::guard('web')->logout();
-
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-
-    return redirect('/login');
-})->name('logout');
-
-require __DIR__.'/auth.php';

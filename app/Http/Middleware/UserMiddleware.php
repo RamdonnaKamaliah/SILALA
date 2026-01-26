@@ -9,22 +9,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserMiddleware
 {
-    /**
-     * Handle an incoming request.
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        // Jika user adalah admin, redirect ke admin dashboard
+         if ($request->is('api/*')) {
+            return $next($request);
+        }
+        
+        // ✅ Kalau admin nyoba masuk area user, tendang ke admin dashboard
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');
         }
 
-        // Jika user biasa sudah login, lanjutkan
+        // ✅ Kalau user biasa login, lanjutkan
         if (Auth::guard('web')->check()) {
             return $next($request);
         }
 
-        // Jika belum login sama sekali, redirect ke login
-        return redirect('/login');
+        // ✅ Kalau belum login, suruh login
+        return redirect()->route('login');
     }
 }

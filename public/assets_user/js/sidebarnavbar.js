@@ -1,29 +1,51 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const hamburger = document.getElementById("hamburger");
-  if (!hamburger) return; // Jika halaman tidak ada hamburger, skip
+ const hamburger = document.getElementById("hamburger");
+  if (!hamburger) return;
 
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebar-overlay");
+  const lines = hamburger.querySelectorAll("span");
+
+  const sidebarWidth = 256; // w-64
+  const offset = 16; // left-4 (1rem)
 
   hamburger.addEventListener("click", () => {
     const isHidden = sidebar.classList.contains("-translate-x-full");
 
     if (isHidden) {
+      /* ===== BUKA SIDEBAR ===== */
       sidebar.classList.remove("-translate-x-full");
+
       overlay.classList.remove("hidden");
       setTimeout(() => overlay.classList.add("opacity-100"), 10);
+
+      /* ☰ → X (RAPI & SIMETRIS) */
+      lines[0].style.transform = "translateY(9px) rotate(45deg)";
+      lines[1].style.opacity = "0";
+      lines[2].style.transform = "translateY(-9px) rotate(-45deg)";
+
+      /* PINDAH KE PINGGIR SIDEBAR */
+      hamburger.style.left = `${sidebarWidth + offset}px`;
     } else {
-      sidebar.classList.add("-translate-x-full");
-      overlay.classList.remove("opacity-100");
-      setTimeout(() => overlay.classList.add("hidden"), 300);
+      closeSidebar();
     }
   });
 
-  overlay.addEventListener("click", () => {
+  overlay.addEventListener("click", closeSidebar);
+
+  function closeSidebar() {
     sidebar.classList.add("-translate-x-full");
+
     overlay.classList.remove("opacity-100");
     setTimeout(() => overlay.classList.add("hidden"), 300);
-  });
+
+    /* X → ☰ */
+    lines[0].style.transform = "translateY(0) rotate(0)";
+    lines[1].style.opacity = "1";
+    lines[2].style.transform = "translateY(0) rotate(0)";
+
+    hamburger.style.left = "1rem";
+  }
 });
 
 document.getElementById('logoutButton').addEventListener('click', function(e) {
@@ -104,3 +126,4 @@ function toggleDarkMode() {
 if (localStorage.getItem('theme') === 'dark') {
   document.documentElement.classList.add('dark');
 }
+

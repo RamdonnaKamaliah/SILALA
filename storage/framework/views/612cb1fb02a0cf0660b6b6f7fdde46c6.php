@@ -1,206 +1,180 @@
 <?php $__env->startSection('pageTitle', 'Admin Dashboard - Data Pengguna'); ?>
 
 <?php $__env->startSection('content'); ?>
-<div class="user-dashboard p-4 md:p-6 bg-gray-50 min-h-screen">
-    
-    <!-- Header Profesional -->
-    <div class="text-left mb-8 md:mb-10">
-        <div class="flex items-center mb-3">
-            <div class="bg-[#A4B465] p-3 rounded-xl mr-4 shadow-lg">
-                <i class="fas fa-users text-white text-xl"></i>
+<!-- Tabel Data Pengguna -->
+<div class="p-4 md:p-6 overflow-x-auto">
+    <!-- Header Section -->
+    <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-lg">
+        <div class="flex items-center space-x-4 mb-3">
+            <div class="bg-white/20 p-3 rounded-full">
+                <i class="fa-solid fa-user-gear text-2xl"></i>
             </div>
             <div>
-                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-1">
-                    Manajemen Data Pengguna
-                </h1>
-                <p class="text-gray-600 text-sm md:text-base">
-                    <i class="fas fa-chart-line text-[#A4B465] mr-2"></i>
-                    Pantau dan kelola data pengguna perpustakaan secara real-time
-                </p>
+                <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-white">Manajemen Data Pengguna</h1>
+                <p class="text-white text-lg">Kelola dan pantau seluruh pengguna di perpustakaan</p>
             </div>
         </div>
-        <div class="w-24 h-1 bg-gradient-to-r from-[#A4B465] to-[#C5D28B] rounded-full mt-2"></div>
-    </div>
-
-    <!-- Statistik Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8">
-        <!-- Total Pengguna -->
-        <div class="bg-white rounded-xl p-4 md:p-6 shadow-md hover:shadow-xl border-l-4 border-[#A4B465] transition-all duration-300 hover:-translate-y-1">
-            <div class="flex items-center justify-between">
-                <div class="flex-1">
-                    <div class="flex items-center mb-2">
-                        <i class="fas fa-user-friends text-[#A4B465] mr-2 text-sm"></i>
-                        <h3 class="font-semibold text-gray-700 text-sm md:text-base">Total Pengguna</h3>
-                    </div>
-                    <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1"><?php echo e($totalUsers); ?></p>
-                    <p class="text-xs text-gray-500">
-                        <i class="fas fa-database mr-1"></i>
-                        Seluruh pengguna terdaftar
-                    </p>
-                </div>
-                <div class="bg-[#F5F7ED] p-3 rounded-full ml-4">
-                    <i class="fas fa-users text-[#A4B465] text-lg md:text-xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Karyawan -->
-        <div class="bg-white rounded-xl p-4 md:p-6 shadow-md hover:shadow-xl border-l-4 border-[#A4B465] transition-all duration-300 hover:-translate-y-1">
-            <div class="flex items-center justify-between">
-                <div class="flex-1">
-                    <div class="flex items-center mb-2">
-                        <i class="fas fa-briefcase text-[#A4B465] mr-2 text-sm"></i>
-                        <h3 class="font-semibold text-gray-700 text-sm md:text-base">Karyawan</h3>
-                    </div>
-                    <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1"><?php echo e($karyawanCount); ?></p>
-                    <p class="text-xs text-gray-500">
-                        <i class="fas fa-chart-pie mr-1"></i>
-                        <?php echo e($totalUsers > 0 ? number_format(($karyawanCount/$totalUsers)*100, 1) : 0); ?>% dari total
-                    </p>
-                </div>
-                <div class="bg-[#F5F7ED] p-3 rounded-full ml-4">
-                    <i class="fas fa-user-tie text-[#A4B465] text-lg md:text-xl"></i>
-                </div>
-            </div>
-        </div>
-
-        <!-- Magang/PKL -->
-        <div class="bg-white rounded-xl p-4 md:p-6 shadow-md hover:shadow-xl border-l-4 border-[#A4B465] transition-all duration-300 hover:-translate-y-1">
-            <div class="flex items-center justify-between">
-                <div class="flex-1">
-                    <div class="flex items-center mb-2">
-                        <i class="fas fa-user-graduate text-[#A4B465] mr-2 text-sm"></i>
-                        <h3 class="font-semibold text-gray-700 text-sm md:text-base">Magang/PKL</h3>
-                    </div>
-                    <p class="text-2xl md:text-3xl font-bold text-[#A4B465] mb-1"><?php echo e($magangCount); ?></p>
-                    <p class="text-xs text-gray-500">
-                        <i class="fas fa-chart-pie mr-1"></i>
-                        <?php echo e($totalUsers > 0 ? number_format(($magangCount/$totalUsers)*100, 1) : 0); ?>% dari total
-                    </p>
-                </div>
-                <div class="bg-[#F5F7ED] p-3 rounded-full ml-4">
-                    <i class="fas fa-graduation-cap text-[#A4B465] text-lg md:text-xl"></i>
-                </div>
-            </div>
+        <div class="flex items-center space-x-2 text-sm text-white">
+            <i class="fas fa-chart-line"></i>
+            <span>Total Pengguna: <strong><?php echo e($totalUsers); ?></strong></span>
         </div>
     </div>
 
-    <!-- Distribusi Pengguna -->
-    <div class="bg-white rounded-xl p-5 md:p-6 shadow-md mb-8 border border-gray-100">
-        <!-- Header Section -->
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 pb-4 border-b border-gray-200">
-            <div class="flex items-center mb-3 md:mb-0">
-                <div class="bg-[#A4B465] p-2 rounded-lg mr-3">
-                    <i class="fas fa-chart-bar text-white"></i>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-lg md:text-xl text-gray-800">Analisis Distribusi Pengguna</h3>
-                    <p class="text-xs text-gray-500 mt-1">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Persentase berdasarkan kategori pengguna
-                    </p>
-                </div>
-            </div>
-            
-            <!-- Legend untuk Mobile -->
-            <div class="flex md:hidden space-x-4 mt-2">
-                <div class="flex items-center">
-                    <div class="w-3 h-3 bg-[#A4B465] rounded-full mr-2"></div>
-                    <span class="text-xs text-gray-600">Karyawan</span>
-                </div>
-                <div class="flex items-center">
-                    <div class="w-3 h-3 bg-[#C5D28B] rounded-full mr-2"></div>
-                    <span class="text-xs text-gray-600">Magang</span>
-                </div>
-            </div>
-            
-            <!-- Legend untuk Desktop -->
-            <div class="hidden md:flex space-x-6">
-                <div class="flex items-center">
-                    <div class="w-3 h-3 bg-[#A4B465] rounded-full mr-2"></div>
-                    <span class="text-sm text-gray-600">Karyawan</span>
-                </div>
-                <div class="flex items-center">
-                    <div class="w-3 h-3 bg-[#C5D28B] rounded-full mr-2"></div>
-                    <span class="text-sm text-gray-600">Magang/PKL</span>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Progress Bars -->
-        <div class="space-y-5 md:space-y-6">
-            <!-- Progress Bar Karyawan -->
-            <div>
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
-                    <div class="flex items-center mb-1 sm:mb-0">
-                        <i class="fas fa-briefcase text-[#A4B465] mr-2 text-sm"></i>
-                        <span class="text-sm font-medium text-gray-700">Karyawan</span>
-                    </div>
-                    <span class="text-sm font-semibold text-gray-700 bg-[#F5F7ED] px-3 py-1 rounded-full">
-                        <?php echo e($karyawanCount); ?> pengguna (<?php echo e($totalUsers > 0 ? number_format(($karyawanCount/$totalUsers)*100, 1) : 0); ?>%)
-                    </span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                    <div class="bg-gradient-to-r from-[#A4B465] to-[#8A9A55] h-3 rounded-full transition-all duration-1000 ease-out shadow-sm progress-bar-karyawan" 
-                         style="width: 0%"
-                         data-width="<?php echo e($totalUsers > 0 ? ($karyawanCount/$totalUsers)*100 : 0); ?>"></div>
-                </div>
-            </div>
-            
-            <!-- Progress Bar Magang/PKL -->
-            <div>
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-2">
-                    <div class="flex items-center mb-1 sm:mb-0">
-                        <i class="fas fa-user-graduate text-[#C5D28B] mr-2 text-sm"></i>
-                        <span class="text-sm font-medium text-gray-700">Magang/PKL</span>
-                    </div>
-                    <span class="text-sm font-semibold text-gray-700 bg-[#F5F7ED] px-3 py-1 rounded-full">
-                        <?php echo e($magangCount); ?> pengguna (<?php echo e($totalUsers > 0 ? number_format(($magangCount/$totalUsers)*100, 1) : 0); ?>%)
-                    </span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                    <div class="bg-gradient-to-r from-[#C5D28B] to-[#A4B465] h-3 rounded-full transition-all duration-1000 ease-out shadow-sm progress-bar-magang" 
-                         style="width: 0%"
-                         data-width="<?php echo e($totalUsers > 0 ? ($magangCount/$totalUsers)*100 : 0); ?>"></div>
-                </div>
-            </div>
-        </div>
+    <!-- Table Container -->
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mt-6">
+        <div class="overflow-x-auto">
+            <table id="usersTable" class="w-full text-sm">
+                <thead class="bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left font-semibold">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-hashtag text-[#A4B465]"></i>
+                                <span>No</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left font-semibold">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-user text-[#A4B465]"></i>
+                                <span>Nama Pengguna</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left font-semibold">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-phone text-[#A4B465]"></i>
+                                <span>No. Telepon</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left font-semibold">
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-envelope text-[#A4B465]"></i>
+                                <span>Alamat Email</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-center font-semibold">
+                            <div class="flex items-center justify-center space-x-2">
+                                <i class="fas fa-id-card text-[#A4B465]"></i>
+                                <span>Jenis Keanggotaan</span>
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-center font-semibold">
+                            <div class="flex items-center justify-center space-x-2">
+                                <i class="fas fa-venus-mars text-[#A4B465]"></i>
+                                <span>Gender</span>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tr class="hover:bg-gray-50/80 transition-colors duration-150">
+                        <td class="px-6 py-4 text-center text-gray-600 font-medium">
+                            <?php echo e($index + 1); ?>
 
-        <!-- Summary untuk Mobile -->
-        <div class="mt-6 p-4 bg-gradient-to-r from-[#F5F7ED] to-white rounded-lg md:hidden border border-[#A4B465]/20">
-            <div class="text-center">
-                <p class="text-[#A4B465] font-semibold text-sm">
-                    <i class="fas fa-chart-pie mr-1"></i>
-                    Total Data: <?php echo e($totalUsers); ?> Pengguna
-                </p>
-            </div>
-        </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#A4B465] to-[#8A9A55] flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-semibold text-sm"><?php echo e(strtoupper(substr($user->name, 0, 1))); ?></span>
+                                </div>
+                                <span class="font-semibold text-gray-900"><?php echo e($user->name); ?></span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <?php if($user->phone): ?>
+                                <div class="text-sm text-gray-900">
+                                    <i class="fas fa-phone text-gray-400 mr-2"></i><?php echo e($user->phone); ?>
 
-        <!-- Summary untuk Desktop -->
-        <div class="hidden md:block mt-6 p-4 bg-gradient-to-r from-[#F5F7ED] to-white rounded-lg border border-[#A4B465]/20">
-            <div class="flex items-center justify-center space-x-8">
-                <div class="text-center">
-                    <p class="text-xs text-gray-500 mb-1">Total Pengguna</p>
-                    <p class="text-2xl font-bold text-[#A4B465]"><?php echo e($totalUsers); ?></p>
-                </div>
-                <div class="h-12 w-px bg-gray-300"></div>
-                <div class="text-center">
-                    <p class="text-xs text-gray-500 mb-1">Karyawan</p>
-                    <p class="text-2xl font-bold text-[#8A9A55]"><?php echo e($karyawanCount); ?></p>
-                </div>
-                <div class="h-12 w-px bg-gray-300"></div>
-                <div class="text-center">
-                    <p class="text-xs text-gray-500 mb-1">Magang/PKL</p>
-                    <p class="text-2xl font-bold text-[#C5D28B]"><?php echo e($magangCount); ?></p>
-                </div>
-            </div>
+                                </div>
+                            <?php else: ?>
+                                <span class="text-sm text-gray-400 italic">Not Found</span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="text-sm text-gray-900 flex items-center gap-2">
+                                <i class="fas fa-envelope text-gray-400"></i>
+                                <span class="truncate max-w-[250px]"><?php echo e($user->email); ?></span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <?php if($user->membership_type == 'karyawan'): ?>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#A4B465] text-white">
+                                    <i class="fas fa-briefcase"></i>
+                                    Karyawan
+                                </span>
+                            <?php elseif($user->membership_type == 'magang'): ?>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#C5D28B] text-white">
+                                    <i class="fas fa-user-graduate"></i>
+                                    Magang
+                                </span>
+                            <?php else: ?>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-400 text-white">
+                                    <?php echo e(ucfirst($user->membership_type)); ?>
+
+                                </span>
+                            <?php endif; ?>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <?php if($user->gender == 'L'): ?>
+                                <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-blue-100 text-blue-600">
+                                    <i class="fas fa-mars"></i>
+                                </span>
+                            <?php elseif($user->gender == 'P'): ?>
+                                <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-pink-100 text-pink-600">
+                                    <i class="fas fa-venus"></i>
+                                </span>
+                            <?php else: ?>
+                                <span class="text-sm text-gray-400 italic">Not Found</span>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </tbody>
+            </table>
         </div>
     </div>
-
 </div>
+<?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('scripts'); ?>
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#usersTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50],
+                ordering: true,
+                searching: true,
+                info: true,
+                dom: '<"flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 px-4 pt-4"lf>rt<"flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 px-4 pb-4"ip>',
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ data",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data",
+                    zeroRecords: "Data tidak ditemukan",
+                    paginate: {
+                        first: "Awal",
+                        last: "Akhir",
+                        next: "›",
+                        previous: "‹"
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: [5] } // Gender tidak bisa di-sort
+                ]
+            });
 
+            // Custom styling untuk DataTables elements
+            $('.dataTables_length select').addClass('px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#A4B465] focus:border-[#A4B465]');
+            $('.dataTables_filter input').addClass('px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#A4B465] focus:border-[#A4B465] ml-2');
+            $('.dataTables_length label, .dataTables_filter label').addClass('text-sm text-gray-700 font-medium');
+            $('.dataTables_info').addClass('text-sm text-gray-600');
+            $('.dataTables_paginate').addClass('flex gap-1');
+            $('.paginate_button').addClass('px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-[#A4B465] hover:text-white hover:border-[#A4B465] transition-colors');
+            $('.paginate_button.current').addClass('bg-[#A4B465] text-white border-[#A4B465]');
+            $('.paginate_button.disabled').addClass('opacity-50 cursor-not-allowed');
+        });
+    </script>
 <?php $__env->stopPush(); ?>
-<?php $__env->stopSection(); ?>
 <?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/admin/data_pengguna/index.blade.php ENDPATH**/ ?>

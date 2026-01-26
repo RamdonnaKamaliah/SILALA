@@ -16,22 +16,6 @@
 </head>
 
 <body class="min-h-screen flex flex-col font-[Ubuntu,sans-serif] bg-white">
-<?php if(session('success')): ?>
-  <div id="toast-success"
-       class="fixed top-5 right-5 z-50
-              bg-primary
-              text-white
-              border-l-4 border-white
-              px-4 py-3 rounded-xl shadow-md
-              flex items-center gap-2
-              transition-opacity duration-500">
-    <i class="fa-solid fa-circle-check text-white"></i>
-    <span class="text-sm font-medium">
-      <?php echo e(session('success')); ?>
-
-    </span>
-  </div>
-<?php endif; ?>
 
     
     <?php echo $__env->make('layout_user.partial_user.header', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>

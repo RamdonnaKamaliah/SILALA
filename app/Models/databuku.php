@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
-class DataBuku extends Model
+class databuku extends Model
 {
     use HasFactory;
 

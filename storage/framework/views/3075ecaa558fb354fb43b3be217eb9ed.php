@@ -70,11 +70,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Darkmode -->
-    <button onclick="toggleDarkMode()" class="text-green text-lg">
-      <span class="iconify text-2xl dark:hidden" data-icon="mdi:weather-sunny"></span>
-      <span class="iconify text-2xl hidden dark:inline" data-icon="mdi:weather-night"></span>
-    </button>
+   
   </div>
 </nav><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/components/navbarUser.blade.php ENDPATH**/ ?>

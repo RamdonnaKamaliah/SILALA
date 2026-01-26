@@ -10,15 +10,18 @@ class DataPenggunaController extends Controller
 {
     public function index()
     {
-        // Hanya 3 statistik yang dibutuhkan
+    
         $totalUsers = User::count();
         $karyawanCount = User::karyawan()->count();
         $magangCount = User::magang()->count();
+        
+        $users = User::all();
 
         return view('admin.data_pengguna.index', compact(
             'totalUsers',
             'karyawanCount',
-            'magangCount'
+            'magangCount',
+            'users' // Jangan lupa tambahin ini
         ));
     }
 }

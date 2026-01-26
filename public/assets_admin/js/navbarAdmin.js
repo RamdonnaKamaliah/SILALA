@@ -1,20 +1,3 @@
-
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        // Warna Primary - Hijau Muda dengan gradasi
-                        'primary-dark': '#8a9a55',
-                        'primary-medium': '#A4B465',
-                        'primary-light': '#b8c685',
-                        'primary-pale': '#f0f4e0',
-                        'primary-bg': '#f8faf0',
-                        'primary-text': '#5a6d3a'
-                    }
-                }
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             const notificationBtn = document.getElementById('notification-button');
             const notificationPopup = document.getElementById('notification-popup');

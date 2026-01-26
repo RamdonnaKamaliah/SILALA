@@ -23,7 +23,7 @@
         <?php if($favorites->count() === 0): ?> style="display:none" <?php endif; ?>
     >
         <?php $__currentLoopData = $favorites; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fav): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="book-card bg-white rounded-xl shadow-md border border-yellow-200 overflow-hidden p-3 flex gap-3 
+            <div class="book-card bg-white rounded-xl shadow-md border border-white overflow-hidden p-3 flex gap-3 
                 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                 data-url="<?php echo e(route('user.detailbuku', $fav->buku->id)); ?>"
                 data-book-id="<?php echo e($fav->buku->id); ?>"
@@ -48,7 +48,7 @@
                         </p>
                     </div>
 
-                    <div class="border-t border-yellow-100 my-2"></div>
+                    <div class="border-t border-gray-400 my-2"></div>
 
                     <div class="flex items-center justify-between">
                         <button type="button"

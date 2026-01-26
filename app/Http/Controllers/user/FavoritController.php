@@ -4,7 +4,6 @@ namespace App\Http\Controllers\user;
 
 use Illuminate\Http\Request;
 use App\Models\Favorit;
-use App\Models\DataBuku;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 

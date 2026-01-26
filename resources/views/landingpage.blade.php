@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('layout_landing.patrial_landing.link')
 
-    <title>SILALA</title>
+    <title>SILALA (Sistem Informasi Layanan Literasi & Arsip)</title>
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- style -->
@@ -19,19 +19,19 @@
     <!-- navbar -->
     @include('layout_landing.patrial_landing.header')
 
-    <!-- Hero Section -->
-   @php
-    $heroBg = \App\Models\Setting::getValue('hero_bg', 'background.png');
+    @php
+        $bgLanding = \App\Models\Setting::getValue('background_landing');
+        $bgImage =
+            $bgLanding && \Storage::disk('public')->exists('cms/' . $bgLanding)
+                ? asset('storage/cms/' . $bgLanding)
+                : asset('assets/background.png');
+    @endphp
 
-    $heroBgPath = \Illuminate\Support\Facades\Storage::disk('public')->exists('cms/' . $heroBg)
-        ? Storage::url('cms/' . $heroBg)
-        : asset('assets/background.png');
-        @endphp
+    <section class="pt-24 md:pt-32 pb-32 md:pb-40 relative 
+                bg-cover bg-center hero-section"
+        style="background-image: url('{{ $bgImage }}');">
 
-        <section
-            class="pt-24 md:pt-32 pb-32 md:pb-40 relative 
-                bg-cover bg-[center_50%] hero-section"
-            style="background-image: url('{{ $heroBgPath }}');">
+
 
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-4 md:px-6">
 
@@ -61,17 +61,20 @@
                 </p>
             </div>
 
-           <!-- Gambar di batas section -->
-        <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
-            @php
-            $heroImage = \App\Models\Setting::getValue('hero_image', 'hero1.png');
-        @endphp
+            <!-- Gambar di batas section -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 bottom-0 translate-y-1/2">
+                @php
+                    $logoHero = \App\Models\Setting::getValue('logo_hero_section');
+                @endphp
 
-        <img src="{{ asset('storage/cms/' . $heroImage) }}"
-            class="hero-image w-48 md:w-80 object-contain"
-            alt="Hero Image">
-
-</div>
+                @if ($logoHero && \Storage::disk('public')->exists('cms/' . $logoHero))
+                    <img src="{{ asset('storage/cms/' . $logoHero) }}" alt="Hero Image"
+                        class="hero-image w-48 md:w-80 object-contain">
+                @else
+                    <img src="{{ asset('assets/hero1.png') }}" alt="Hero Image"
+                        class="hero-image w-48 md:w-80 object-contain">
+                @endif
+            </div>
 
 
         </div>
@@ -113,18 +116,18 @@
             </div>
 
             <!-- Grid Card -->
-            {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                @forelse ($data_buku as $buku)
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                @forelse ($buku as $item)
                     <article
                         class="recommend-card bg-white dark:bg-[#15202B] rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-5 w-full h-full
-                  opacity-0 translate-y-10 transition-all duration-700 ease-out
-                  hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
+          opacity-0 translate-y-10 transition-all duration-700 ease-out
+          hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
 
                         <!-- Cover Buku -->
                         <div
                             class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0 transform transition-transform duration-500 hover:scale-105">
-                            @if ($buku->foto_buku)
-                                <img src="{{ asset($buku->foto_buku) }}" alt="{{ $buku->judul_buku }} - cover"
+                            @if ($item->foto_buku)
+                                <img src="{{ asset($item->foto_buku) }}" alt="{{ $item->judul_buku }} - cover"
                                     class="w-full h-full object-cover rounded-lg shadow-md">
                             @else
                                 <img src="{{ asset('assets/default-cover.jpg') }}" alt="Default Cover"
@@ -137,16 +140,16 @@
                             <div>
                                 <h3
                                     class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                                    {{ $buku->judul_buku }}</h3>
+                                    {{ $item->judul_buku }}</h3>
                                 <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">By
-                                    {{ $buku->penulis }}</p>
+                                    {{ $item->penulis }}</p>
                             </div>
 
                             <!-- Kategori -->
                             <div
                                 class="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center sm:justify-start gap-2">
                                 <i class="fa fa-book"></i>
-                                <span class="break-words">{{ $buku->kategori }}</span>
+                                <span class="break-words">{{ $item->kategori }}</span>
                             </div>
 
                             <!-- Rating -->
@@ -159,9 +162,10 @@
                 @empty
                     <p class="col-span-3 text-center text-gray-500 dark:text-gray-400">Belum ada data buku.</p>
                 @endforelse
-            </div> --}}
+            </div>
         </div>
     </section>
+
 
     <!-- footer -->
     @include('layout_landing.patrial_landing.footer')

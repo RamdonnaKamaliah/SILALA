@@ -17,9 +17,9 @@
             <a href="#rekomendasi" class="nav-link">Rekomendasi</a>
             <a href="#panduan" class="nav-link">Panduan</a>
 
-            <?php if(auth()->guard('admin')->check()): ?>
+            <?php if(auth('admin')->check()): ?>
                 <a href="<?php echo e(route('admin.dashboard')); ?>" class="nav-link">Dashboard Admin</a>
-            <?php elseif(auth()->guard('web')->check()): ?>
+            <?php elseif(auth('web')->check()): ?>
                 <a href="<?php echo e(url('/dashboard')); ?>" class="nav-link">Dashboard</a>
             <?php else: ?>
                 <a href="<?php echo e(route('login')); ?>" class="nav-link text-blue-500">Login</a>

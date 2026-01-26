@@ -14,7 +14,7 @@ class DataArsipController extends Controller
     public function index()
     {
        // hanya tampilkan buku yang statusnya arsip
-    $buku_arsip = DataBuku::where('status', 'arsip')->get();
+    $buku_arsip = DataBuku::where('status', 'arsip')->latest()->get();
 
     return view('admin.data_arsip.index', compact('buku_arsip'));
     }

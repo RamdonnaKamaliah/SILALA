@@ -75,9 +75,6 @@ public function getHariTelatAttribute(): int
     if ($hariIni->lte($tanggalKembali)) {
         return 0;
     }
-
-    // ⛔ JANGAN abs()
-    // ⛔ JANGAN endOfDay()
     return $tanggalKembali->diffInDays($hariIni);
 }
 
@@ -93,7 +90,7 @@ public function getIsTerlambatAttribute(): bool
 
 
 
-    // Accessor untuk foto bukti pengembalian (full URL)
+    // Bukuti Pengembalian Mnandiri
     public function getFotoBuktiPengembalianUrlAttribute()
     {
         if ($this->foto_bukti_pengembalian) {

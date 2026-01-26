@@ -9,10 +9,10 @@
                 <!-- Dropdown Kategori -->
                 <div class="relative w-full md:w-auto" id="kategoriDropdown">
 
-                    <button
+                     <button
                         class="w-full md:w-48 px-4 py-2 bg-primary text-white rounded-xl shadow-md font-semibold flex justify-between items-center hover:bg-kuning hover:text-gray-700 transition-all duration-300">
                         <span id="kategoriText">
-                            <?php echo e(request('kategori') ?? 'Semua Kategori'); ?>
+                            <?php echo e($kategori ?? 'Semua Kategori'); ?>
 
                         </span>
 
@@ -26,10 +26,11 @@
                     <div id="kategoriMenu"
                         class="hidden absolute left-0 w-full md:w-48 mt-2 z-[9999] bg-primary rounded-xl shadow-xl p-2 border border-[#E2DAC3]">
 
-                        <a href="<?php echo e(route('user.daftarbuku')); ?>"
-                            class="block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
-                            Semua Kategori
-                        </a>
+                        <a href="<?php echo e(route('user.daftarbuku', ['kategori' => null, 'search' => null])); ?>"
+   class="block w-full text-left px-4 py-2 text-white font-medium hover:text-gray-900 transition-all rounded-lg mb-2">
+    Semua Kategori
+</a>
+
 
 
                         <?php $__currentLoopData = $data_kategori; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -41,15 +42,28 @@
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                     </div>
+
                 </div>
 
-                <!-- Search -->
-                <div class="relative w-full sm:w-auto flex justify-center md:justify-end">
-                    <input type="text" placeholder="Cari Buku..."
-                        class="px-5 py-2 w-full sm:w-56 md:w-72 rounded-full bg-white text-gray-900 placeholder-gray-900
-                   focus:outline-none focus:ring-2 focus:ring-[#8CA86C] pr-10 text-sm md:text-base transition-all duration-300">
-                    <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-900"></i>
-                </div>
+                <form method="GET" action="<?php echo e(route('user.daftarbuku')); ?>"
+      class="relative w-full sm:w-auto flex justify-center md:justify-end">
+
+    <?php if(request('kategori')): ?>
+        <input type="hidden" name="kategori" value="<?php echo e(request('kategori')); ?>">
+    <?php endif; ?>
+
+    <input type="text" name="search"
+        value="<?php echo e(request('search')); ?>"
+        placeholder="Cari Buku..."
+        class="px-5 py-2 w-full sm:w-56 md:w-72 rounded-full bg-white text-gray-900
+        placeholder-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8CA86C]
+        pr-10 text-sm md:text-base transition-all duration-300">
+
+    <button type="submit">
+        <i class="fa-solid fa-magnifying-glass absolute right-3 top-2.5 text-gray-900"></i>
+    </button>
+</form>
+
 
             </div>
         </div>

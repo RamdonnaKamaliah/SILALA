@@ -14,17 +14,18 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Jika user biasa, redirect ke user dashboard
-        if (Auth::guard('web')->check()) {
-            return redirect()->route('dashboard');
-        }
-
         // Jika admin sudah login, lanjutkan
         if (Auth::guard('admin')->check()) {
             return $next($request);
         }
 
-        // Jika belum login sama sekali, redirect ke login
-        return redirect('/login');
+        // Jika user biasa login (guard web), redirect ke user dashboard
+        // (supaya user biasa gak bisa masuk area admin)
+        if (Auth::guard('web')->check()) {
+            return redirect()->route('dashboard');
+        }
+
+        // Jika belum login sama sekali, redirect ke login admin
+        return redirect()->route('login');
     }
 }

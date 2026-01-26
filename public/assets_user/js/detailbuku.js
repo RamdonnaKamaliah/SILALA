@@ -1,404 +1,377 @@
 // detailbuku.js
 document.addEventListener("DOMContentLoaded", () => {
+    // ====== PANAH TITLE ======
+    const backBtn = document.getElementById("backBtn");
 
-  // ====== PANAH TITLE ======
-  const backBtn = document.getElementById("backBtn");
-
-    if (!backBtn) return;
-
-    backBtn.addEventListener("click", () => {
-        if (document.referrer && document.referrer.includes(window.location.hostname)) {
-            window.history.back();
-        } else {
-            window.location.href = "{{ route('user.daftarbuku') }}";
-        }
-    });
-    
-  // ====== GLOBAL DATA ======
-  const body = document.body;
-  const bukuId = body.dataset.bukuId;
-  const favoritUrl = body.datasetFavoritUrl || body.dataset.favoritUrl || body.getAttribute('data-favorit-url');
-  const pinjamUrl = body.datasetPinjamUrl || body.dataset.pinjamUrl || body.getAttribute('data-pinjam-url');
-  const pinjamRedirect = body.datasetPinjamRedirect || body.dataset.pinjamRedirect || body.getAttribute('data-pinjam-redirect');
-  const metaCsrf = document.querySelector('meta[name="csrf-token"]');
-  const csrfToken = metaCsrf ? metaCsrf.getAttribute('content') : (body.dataset.csrf || body.getAttribute('data-csrf'));
-
-  // safety: helper untuk fetch JSON dengan handling 419/HTML responses
-  async function fetchJson(url, options = {}) {
-    const res = await fetch(url, options);
-    const text = await res.text();
-    try {
-      return { ok: res.ok, status: res.status, json: JSON.parse(text) };
-    } catch (err) {
-      // bukan JSON (mis. HTML error page)
-      return { ok: res.ok, status: res.status, text };
+    if (backBtn) {
+        backBtn.addEventListener("click", () => {
+            if (
+                document.referrer &&
+                document.referrer.includes(window.location.hostname)
+            ) {
+                window.history.back();
+            } else {
+                window.location.href = backBtn.dataset.backUrl;
+            }
+        });
     }
-  }
 
-  // ====== FAVORIT ======
-  (function initFavorit(){
-    const loveBtn = document.getElementById('loveBtn');
-    const heartIcon = document.getElementById('heartIcon');
-    if (!loveBtn || !heartIcon || !favoritUrl) return;
+    // ====== GLOBAL DATA ======
+    const body = document.body;
+    const bukuId = body.dataset.bukuId;
+    const favoritUrl =
+        body.datasetFavoritUrl ||
+        body.dataset.favoritUrl ||
+        body.getAttribute("data-favorit-url");
+    const pinjamUrl =
+        body.datasetPinjamUrl ||
+        body.dataset.pinjamUrl ||
+        body.getAttribute("data-pinjam-url");
+    const pinjamRedirect =
+        body.datasetPinjamRedirect ||
+        body.dataset.pinjamRedirect ||
+        body.getAttribute("data-pinjam-redirect");
+    const metaCsrf = document.querySelector('meta[name="csrf-token"]');
+    const csrfToken = metaCsrf
+        ? metaCsrf.getAttribute("content")
+        : body.dataset.csrf || body.getAttribute("data-csrf");
 
-    loveBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      try {
-        const { ok, status, json, text } = await fetchJson(favoritUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({ buku_id: bukuId })
+    // safety: helper untuk fetch JSON dengan handling 419/HTML responses
+    async function fetchJson(url, options = {}) {
+        const res = await fetch(url, options);
+        const text = await res.text();
+        try {
+            return { ok: res.ok, status: res.status, json: JSON.parse(text) };
+        } catch (err) {
+            // bukan JSON (mis. HTML error page)
+            return { ok: res.ok, status: res.status, text };
+        }
+    }
+
+    // ====== FAVORIT ======
+    (function initFavorit() {
+        const loveBtn = document.getElementById("loveBtn");
+        const heartIcon = document.getElementById("heartIcon");
+        if (!loveBtn || !heartIcon || !favoritUrl) return;
+
+        loveBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            try {
+                const { ok, status, json, text } = await fetchJson(favoritUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                        Accept: "application/json",
+                    },
+                    body: JSON.stringify({ buku_id: bukuId }),
+                });
+
+                if (!ok) {
+                    if (status === 419)
+                        return Swal.fire({
+                            icon: "warning",
+                            title: "Sesi Habis",
+                            text: "Silakan refresh halaman lalu coba lagi.",
+                        });
+                    console.error("Favorit error:", text || json);
+                    return Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: "Gagal mengubah favorit.",
+                    });
+                }
+
+                const data = json;
+                if (data.favorited) {
+                    heartIcon.classList.remove("fa-regular");
+                    heartIcon.classList.add("fa-solid", "text-[#E63946]");
+                } else {
+                    heartIcon.classList.remove("fa-solid", "text-[#E63946]");
+                    heartIcon.classList.add("fa-regular");
+                }
+            } catch (err) {
+                console.error("Error toggle favorit:", err);
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: "Terjadi kesalahan.",
+                });
+            }
+        });
+    })();
+
+    // ====== PINJAM ======
+    (function initPinjam() {
+        const openPinjamModal = document.getElementById("openPinjamModal");
+        const pinjamModal = document.getElementById("pinjamModal");
+        const closeModalBtn = document.getElementById("closeModalBtn");
+        const tglPinjamInput = document.getElementById("tglPinjamInput");
+        const tglKembaliInput = document.getElementById("tglKembaliInput");
+        const konfirmasiBtn = document.getElementById("konfirmasiPinjam");
+        if (!openPinjamModal || !pinjamModal || !konfirmasiBtn) return;
+
+        const now = new Date();
+        const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+        const maxDate = new Date(today);
+        maxDate.setDate(today.getDate() + 7);
+        const formatDate = (d) => d.toISOString().split("T")[0];
+
+        if (tglPinjamInput) tglPinjamInput.value = formatDate(today);
+        if (tglKembaliInput) {
+            tglKembaliInput.min = formatDate(today);
+            tglKembaliInput.max = formatDate(maxDate);
+            tglKembaliInput.value = "";
+        }
+
+        openPinjamModal.addEventListener("click", (e) => {
+            e.preventDefault();
+            pinjamModal.classList.remove("hidden");
+            if (tglKembaliInput) tglKembaliInput.focus();
+        });
+        if (closeModalBtn)
+            closeModalBtn.addEventListener("click", () =>
+                pinjamModal.classList.add("hidden")
+            );
+        pinjamModal.addEventListener("click", (e) => {
+            if (e.target === pinjamModal) pinjamModal.classList.add("hidden");
         });
 
-        if (!ok) {
-          if (status === 419) return Swal.fire({ icon: 'warning', title: 'Sesi Habis', text: 'Silakan refresh halaman lalu coba lagi.'});
-          console.error('Favorit error:', text || json);
-          return Swal.fire({ icon: 'error', title: 'Gagal', text: 'Gagal mengubah favorit.'});
-        }
+        konfirmasiBtn.addEventListener("click", async () => {
+            const tanggalKembali = tglKembaliInput?.value || "";
+            if (!tanggalKembali)
+                return Swal.fire({
+                    icon: "warning",
+                    title: "Peringatan",
+                    text: "Tanggal kembali belum diisi",
+                });
 
-        const data = json;
-        if (data.favorited) {
-          heartIcon.classList.remove('fa-regular');
-          heartIcon.classList.add('fa-solid', 'text-[#E63946]');
-        } else {
-          heartIcon.classList.remove('fa-solid', 'text-[#E63946]');
-          heartIcon.classList.add('fa-regular');
-        }
-      } catch (err) {
-        console.error('Error toggle favorit:', err);
-        Swal.fire({ icon: 'error', title: 'Gagal', text: 'Terjadi kesalahan.'});
-      }
-    });
-  })();
+            const diffDays = Math.ceil(
+                (new Date(tanggalKembali) - today) / (1000 * 60 * 60 * 24)
+            );
+            if (diffDays < 0 || diffDays > 7)
+                return Swal.fire({
+                    icon: "warning",
+                    title: "Peringatan",
+                    text: "Maksimal peminjaman 7 hari",
+                });
 
-  // ====== PINJAM ======
-  (function initPinjam(){
-    const openPinjamModal = document.getElementById("openPinjamModal");
-    const pinjamModal = document.getElementById("pinjamModal");
-    const closeModalBtn = document.getElementById("closeModalBtn");
-    const tglPinjamInput = document.getElementById("tglPinjamInput");
-    const tglKembaliInput = document.getElementById("tglKembaliInput");
-    const konfirmasiBtn = document.getElementById("konfirmasiPinjam");
-    if (!openPinjamModal || !pinjamModal || !konfirmasiBtn) return;
+            try {
+                konfirmasiBtn.disabled = true;
+                konfirmasiBtn.innerHTML =
+                    '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
 
-    const now = new Date();
-    const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
-    const maxDate = new Date(today);
-    maxDate.setDate(today.getDate() + 7);
-    const formatDate = d => d.toISOString().split("T")[0];
+                const { ok, status, json, text } = await fetchJson(pinjamUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                        Accept: "application/json",
+                    },
+                    body: JSON.stringify({
+                        buku_id: bukuId,
+                        tanggal_kembali: tanggalKembali,
+                    }),
+                });
 
-    if (tglPinjamInput) tglPinjamInput.value = formatDate(today);
-    if (tglKembaliInput) {
-      tglKembaliInput.min = formatDate(today);
-      tglKembaliInput.max = formatDate(maxDate);
-      tglKembaliInput.value = '';
-    }
+                if (!ok) {
+                    if (status === 419)
+                        return Swal.fire({
+                            icon: "warning",
+                            title: "Sesi Habis",
+                            text: "Silakan refresh halaman lalu coba lagi.",
+                        });
+                    console.error("Pinjam error:", text || json);
+                    return Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: "Anda telah mencapai batas maksimal peminjaman.",
+                    });
+                }
 
-    openPinjamModal.addEventListener('click', (e) => {
-      e.preventDefault();
-      pinjamModal.classList.remove('hidden');
-      if (tglKembaliInput) tglKembaliInput.focus();
-    });
-    if (closeModalBtn) closeModalBtn.addEventListener('click', () => pinjamModal.classList.add('hidden'));
-    pinjamModal.addEventListener('click', e => { if (e.target === pinjamModal) pinjamModal.classList.add('hidden'); });
+                const result = json;
+                if (result.success) {
+                    pinjamModal.classList.add("hidden");
+                    Swal.fire({
+                        icon: "success",
+                        title: "Berhasil!",
+                        text: result.message,
+                        timer: 2000,
+                        showConfirmButton: false,
+                    }).then(
+                        () => (window.location.href = pinjamRedirect || "/")
+                    );
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Gagal",
+                        text: result.message || "Terjadi kesalahan",
+                    });
+                }
+            } catch (err) {
+                console.error("Error pinjam:", err);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Terjadi kesalahan sistem",
+                });
+            } finally {
+                konfirmasiBtn.disabled = false;
+                konfirmasiBtn.innerHTML =
+                    '<i class="fa-solid fa-check text-[#2E2E2E]"></i> Konfirmasi';
+            }
+        });
+    })();
 
-    konfirmasiBtn.addEventListener('click', async () => {
-      const tanggalKembali = tglKembaliInput?.value || '';
-      if (!tanggalKembali) return Swal.fire({ icon:'warning', title:'Peringatan', text:'Tanggal kembali belum diisi'});
+       // ====== MODAL PDF ======
+  window.openPdfModal = function (url) {
+    const iframe = document.getElementById("pdfFrame");
+    const modal = document.getElementById("pdfModal");
 
-      const diffDays = Math.ceil((new Date(tanggalKembali) - today) / (1000*60*60*24));
-      if (diffDays < 0 || diffDays > 7) return Swal.fire({ icon:'warning', title:'Peringatan', text:'Maksimal peminjaman 7 hari'});
+    iframe.src = url + "#toolbar=0&navpanes=0&scrollbar=1&zoom=page-width";
+    modal.classList.remove("hidden");
 
-      try {
-        konfirmasiBtn.disabled = true;
-        konfirmasiBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+    document.body.classList.add("overflow-hidden");
+};
 
-        const { ok, status, json, text } = await fetchJson(pinjamUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': csrfToken,
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({ buku_id: bukuId, tanggal_kembali: tanggalKembali })
+window.closePdfModal = function () {
+    document.getElementById("pdfFrame").src = "";
+    document.getElementById("pdfModal").classList.add("hidden");
+
+    document.body.classList.remove("overflow-hidden");
+};
+
+    // ====== RATING ======
+    const starContainer = document.getElementById("starContainer");
+    const submitRatingBtn = document.getElementById("submitRating");
+    const navbar = document.querySelector(".navbar-rating");
+
+    if (!starContainer || !submitRatingBtn) return;
+
+    const initialRating = parseInt(starContainer.dataset.userRating) || 0;
+    const stars = starContainer.querySelectorAll(".rating-star");
+    let selectedRating = initialRating;
+
+    function updateStars(rating, permanent = false) {
+        stars.forEach((star, index) => {
+            const icon = star.querySelector(".iconify");
+            if (index < rating) {
+                icon.dataset.icon = "mdi:star"; // ⭐ penuh
+            } else {
+                icon.dataset.icon = "mdi:star-outline"; // ☆ kosong
+            }
         });
 
-        if (!ok) {
-          if (status === 419) return Swal.fire({ icon:'warning', title:'Sesi Habis', text:'Silakan refresh halaman lalu coba lagi.'});
-          console.error('Pinjam error:', text || json);
-          return Swal.fire({ icon:'error', title:'Gagal', text:'Anda telah mencapai batas maksimal peminjaman.' });
-        }
-
-        const result = json;
-        if (result.success) {
-          pinjamModal.classList.add('hidden');
-          Swal.fire({ icon:'success', title:'Berhasil!', text: result.message, timer:2000, showConfirmButton:false })
-            .then(() => window.location.href = pinjamRedirect || '/');
-        } else {
-          Swal.fire({ icon:'error', title:'Gagal', text: result.message || 'Terjadi kesalahan' });
-        }
-      } catch (err) {
-        console.error('Error pinjam:', err);
-        Swal.fire({ icon:'error', title:'Error', text:'Terjadi kesalahan sistem' });
-      } finally {
-        konfirmasiBtn.disabled = false;
-        konfirmasiBtn.innerHTML = '<i class="fa-solid fa-check text-[#2E2E2E]"></i> Konfirmasi';
-      }
-    });
-  })();
-
-  // ====== RATING ======
-   const starContainer = document.getElementById("starContainer");
-const submitRatingBtn = document.getElementById("submitRating");
-const navbar = document.querySelector(".navbar-rating");
-
-if (!starContainer || !submitRatingBtn) return;
-
-const initialRating = parseInt(starContainer.dataset.userRating) || 0;
-const stars = starContainer.querySelectorAll(".rating-star");
-let selectedRating = initialRating;
-
-function updateStars(rating, permanent = false) {
-    stars.forEach((star, index) => {
-        const icon = star.querySelector(".iconify");
-        if (index < rating) {
-            icon.dataset.icon = "mdi:star"; // ⭐ penuh
-        } else {
-            icon.dataset.icon = "mdi:star-outline"; // ☆ kosong
-        }
-    });
-
-    if (permanent) selectedRating = rating;
-}
-
-function updateNavbar(avgRating, totalRatings) {
-    if (!navbar) return;
-
-    let html = "";
-    for (let i = 1; i <= 5; i++) {
-        if (i <= Math.floor(avgRating)) {
-            html += `<span class="iconify text-yellow-500" data-icon="mdi:star"></span>`;
-        } else {
-            html += `<span class="iconify text-yellow-500" data-icon="mdi:star-outline"></span>`;
-        }
+        if (permanent) selectedRating = rating;
     }
 
-    if (totalRatings > 0) {
-        html += `<span class="text-xs text-gray-600 ml-2">(${avgRating.toFixed(1)})</span>`;
+    function updateNavbar(avgRating, totalRatings) {
+        if (!navbar) return;
+
+        let html = "";
+        for (let i = 1; i <= 5; i++) {
+            if (i <= Math.floor(avgRating)) {
+                html += `<span class="iconify text-yellow-500" data-icon="mdi:star"></span>`;
+            } else {
+                html += `<span class="iconify text-yellow-500" data-icon="mdi:star-outline"></span>`;
+            }
+        }
+
+        if (totalRatings > 0) {
+            html += `<span class="text-xs text-gray-600 ml-2">(${avgRating.toFixed(
+                1
+            )})</span>`;
+        }
+
+        navbar.innerHTML = html;
     }
 
-    navbar.innerHTML = html;
-}
+    // Set awal bintang
+    updateStars(initialRating, true);
 
-// Set awal bintang
-updateStars(initialRating, true);
-
-if (initialRating > 0) {
-    submitRatingBtn.disabled = false;
-    submitRatingBtn.classList.remove("opacity-50", "cursor-not-allowed");
-}
-
-stars.forEach(star => {
-    star.addEventListener("mouseover", () => {
-        updateStars(parseInt(star.dataset.star));
-    });
-
-    star.addEventListener("click", () => {
-        const rating = parseInt(star.dataset.star);
-        updateStars(rating, true);
-
+    if (initialRating > 0) {
         submitRatingBtn.disabled = false;
         submitRatingBtn.classList.remove("opacity-50", "cursor-not-allowed");
-    });
-});
+    }
 
-starContainer.addEventListener("mouseleave", () => {
-    updateStars(selectedRating, true);
-});
-
-submitRatingBtn.addEventListener("click", async () => {
-    if (selectedRating === 0)
-        return Swal.fire({ icon: "warning", title: "Pilih rating dulu!" });
-
-    submitRatingBtn.disabled = true;
-    submitRatingBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
-
-    try {
-        const res = await fetch(starContainer.dataset.ratingUrl, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": starContainer.dataset.csrf,
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                buku_id: starContainer.dataset.bukuId,
-                rating: selectedRating
-            })
+    stars.forEach((star) => {
+        star.addEventListener("mouseover", () => {
+            updateStars(parseInt(star.dataset.star));
         });
 
-        const data = await res.json();
+        star.addEventListener("click", () => {
+            const rating = parseInt(star.dataset.star);
+            updateStars(rating, true);
 
-        if (data.success) {
-            Swal.fire({
-                icon: "success",
-                title: "Berhasil!",
-                text: data.message,
-                timer: 1500,
-                showConfirmButton: false
+            submitRatingBtn.disabled = false;
+            submitRatingBtn.classList.remove(
+                "opacity-50",
+                "cursor-not-allowed"
+            );
+        });
+    });
+
+    starContainer.addEventListener("mouseleave", () => {
+        updateStars(selectedRating, true);
+    });
+
+    submitRatingBtn.addEventListener("click", async () => {
+        if (selectedRating === 0)
+            return Swal.fire({ icon: "warning", title: "Pilih rating dulu!" });
+
+        submitRatingBtn.disabled = true;
+        submitRatingBtn.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
+
+        try {
+            const res = await fetch(starContainer.dataset.ratingUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": starContainer.dataset.csrf,
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    buku_id: starContainer.dataset.bukuId,
+                    rating: selectedRating,
+                }),
             });
 
-            if (navbar) {
-                const avgRating = selectedRating;
-                const totalRatings = parseInt(navbar.dataset.totalRatings) || 1;
-                updateNavbar(avgRating, totalRatings);
+            const data = await res.json();
+
+            if (data.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Berhasil!",
+                    text: data.message,
+                    timer: 1500,
+                    showConfirmButton: false,
+                });
+
+                if (navbar) {
+                    const avgRating = selectedRating;
+                    const totalRatings =
+                        parseInt(navbar.dataset.totalRatings) || 1;
+                    updateNavbar(avgRating, totalRatings);
+                }
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Gagal",
+                    text: data.message,
+                });
             }
-        } else {
-            Swal.fire({ icon: "error", title: "Gagal", text: data.message });
+        } catch (err) {
+            console.error(err);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Kesalahan sistem",
+            });
+        } finally {
+            submitRatingBtn.disabled = false;
+            submitRatingBtn.innerHTML = submitRatingBtn.dataset.defaultText;
         }
-    } catch (err) {
-        console.error(err);
-        Swal.fire({ icon: "error", title: "Error", text: "Kesalahan sistem" });
-    } finally {
-        submitRatingBtn.disabled = false;
-        submitRatingBtn.innerHTML = submitRatingBtn.dataset.defaultText;
-    }
-});
+    });
 
-  // ====== PDF VIEWER (GLOBAL & SAFE) ======
-(function () {
-  const pdfViewer = document.getElementById("pdfViewer");
-  const pdfModal = document.getElementById("pdfModal");
-  const zoomInBtn = document.getElementById("zoomIn");
-  const zoomOutBtn = document.getElementById("zoomOut");
-  const zoomLabel = document.getElementById("zoomLabel");
-  const closePdfModal = document.getElementById("closePdfModal");
-  const pageCurrent = document.getElementById("pageCurrent");
-  const pageTotal = document.getElementById("pageTotal");
-
-  if (!pdfViewer || !pdfModal) return;
-
-  pdfjsLib.GlobalWorkerOptions.workerSrc =
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-  let pdfDoc = null;
-  let zoom = 1;
-  let pageCanvases = [];
-  let observer = null;
-
-  // ================= SAFE EVENT =================
-  const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
-
-  // ================= LAYOUT =================
-  const updateLayout = () => {
-    if (!pageCanvases.length) return;
-
-    const isMobile = window.innerWidth <= 1024;
-    pdfViewer.style.display = "grid";
-    pdfViewer.style.gridTemplateColumns = "1fr";
-    pdfViewer.style.gap = "24px";
-    pdfViewer.style.padding = "24px";
-
-    if (!isMobile && zoom <= 1.2) {
-      const w = pageCanvases[0].canvas.width + 40;
-      const c = Math.max(
-        1,
-        Math.floor(pdfViewer.parentElement.clientWidth / w)
-      );
-      pdfViewer.style.gridTemplateColumns = `repeat(${c}, auto)`;
-    }
-  };
-
-  // ================= PAGE TRACK =================
-  const activatePageTracking = () => {
-    if (!pageCurrent) return;
-    if (observer) observer.disconnect();
-
-    observer = new IntersectionObserver(
-      entries => {
-        let max = 0, page = 1;
-        entries.forEach(e => {
-          if (e.intersectionRatio > max) {
-            max = e.intersectionRatio;
-            page = e.target.dataset.page;
-          }
-        });
-        pageCurrent.innerText = page;
-      },
-      { root: pdfViewer, threshold: [0.6] }
-    );
-
-    pageCanvases.forEach(p => observer.observe(p.canvas));
-  };
-
-  // ================= RENDER =================
-  const renderPages = async () => {
-    pdfViewer.innerHTML = "";
-
-    for (const item of pageCanvases) {
-      const page = await pdfDoc.getPage(item.page);
-      const viewport = page.getViewport({ scale: zoom });
-      const canvas = item.canvas;
-      const ctx = canvas.getContext("2d");
-
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-
-      await page.render({ canvasContext: ctx, viewport }).promise;
-
-      canvas.style.width = zoom <= 1 ? "100%" : "auto";
-      canvas.style.maxWidth = zoom <= 1 ? "100%" : "none";
-
-      pdfViewer.appendChild(canvas);
-    }
-
-    zoomLabel && (zoomLabel.innerText = Math.round(zoom * 100) + "%");
-    pageTotal && (pageTotal.innerText = pageCanvases.length);
-
-    updateLayout();
-    activatePageTracking();
-  };
-
-  // ================= OPEN PDF =================
-  window.openPdfGlobal = async (url) => {
-    pdfModal.classList.remove("hidden");
-    pdfViewer.innerHTML = "Memuat PDF...";
-
-    const pdf = await pdfjsLib.getDocument(url).promise;
-    pdfDoc = pdf;
-    zoom = 1;
-    pageCanvases = [];
-
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const canvas = document.createElement("canvas");
-      canvas.dataset.page = i;
-      canvas.style.borderRadius = "12px";
-      canvas.style.background = "#fff";
-      pageCanvases.push({ page: i, canvas });
-    }
-
-    await renderPages();
-  };
-
-  // ================= EVENTS =================
-  on(closePdfModal, "click", () => {
-    pdfModal.classList.add("hidden");
-    pdfViewer.innerHTML = "";
-    pdfDoc = null;
-  });
-
-  on(zoomInBtn, "click", () => {
-    zoom < 3 && (zoom += 0.2, renderPages());
-  });
-
-  on(zoomOutBtn, "click", () => {
-    zoom > 0.4 && (zoom -= 0.2, renderPages());
-  });
-
-  on(window, "resize", updateLayout);
-})();
 }); // DOMContentLoaded

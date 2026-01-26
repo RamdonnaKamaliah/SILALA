@@ -48,18 +48,16 @@
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                {{-- <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                     <i class="fas fa-calendar-plus text-[#A4B465]"></i>
                     <div>
                         <p class="text-sm text-gray-600">Dibuat Pada</p>
                         <p class="text-gray-800 font-medium">{{ $kategori->created_at->format('d F Y') }}</p>
-                        <p class="text-gray-500 text-xs" id="createdTime">
-                            {{ $kategori->created_at->format('H:i:s') }}
-                        </p>
+                        <p class="text-gray-800 font-medium">{{ \Carbon\Carbon::parse($kategori->created_at)->format('d F Y') }}</p>
                     </div>
-                </div>
+                </div> --}}
 
-                <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                {{-- <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                     <i class="fas fa-edit text-[#A4B465]"></i>
                     <div>
                         <p class="text-sm text-gray-600">Terakhir Diupdate</p>
@@ -67,7 +65,7 @@
                         <p class="text-gray-500 text-xs" id="updatedTime">
                             {{ $kategori->updated_at->format('H:i:s') }}
                         </p>
-                    </div>
+                    </div> --}}
                 </div>
 
                 <!-- Waktu Sekarang -->

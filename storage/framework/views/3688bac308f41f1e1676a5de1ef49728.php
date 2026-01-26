@@ -2,10 +2,20 @@
   <footer class="bg-[#626F47] text-[#F7EDD6] rounded-t-3xl py-4 px-6 md:px-10 mt-auto
   md:ml-[320px] md:mr-3 transition-all duration-300">
     <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-3 md:gap-0">
+      <?php
+                    $footerUser = \App\Models\Setting::getValue('logo_footer_user');
+                ?>
 
-      <!-- Kiri -->
-      <div class="flex items-center space-x-3">
-        <img src="<?php echo e(asset('assets/logo_kementan.png')); ?>" alt="Logo BPMSPH" class="w-12 h-12 object-contain">
+                <?php if($footerUser && \Storage::disk('public')->exists('cms/' . $footerUser)): ?>
+                    <img src="<?php echo e(asset('storage/cms/' . $footerUser)); ?>" alt="footerUser"
+                        class="w-12 h-12 object-contain">
+                <?php else: ?>
+                    <img src="<?php echo e(asset('assets/logo_kementan.png')); ?>" alt="Hero Image"
+                        class="w-12 h-12 object-contain">
+                <?php endif; ?>
+
+<div class="flex items-center space-x-3">
+
         <div class="leading-tight">
           <p class="text-[12px] sm:text-sm font-semibold">
             BALAI PENGUJIAN MUTU DAN SERTIFIKASI PRODUK HEWAN
@@ -25,5 +35,6 @@
       </div>
 
     </div>
+  </div>
   </footer>
 <?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/layout_user/partial_user/footer.blade.php ENDPATH**/ ?>

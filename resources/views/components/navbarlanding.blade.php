@@ -17,13 +17,13 @@
             <a href="#rekomendasi" class="nav-link">Rekomendasi</a>
             <a href="#panduan" class="nav-link">Panduan</a>
 
-            @auth('admin')
+            @if (auth('admin')->check())
                 <a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard Admin</a>
-            @elseauth('web')
+            @elseif(auth('web')->check())
                 <a href="{{ url('/dashboard') }}" class="nav-link">Dashboard</a>
             @else
                 <a href="{{ route('login') }}" class="nav-link text-blue-500">Login</a>
-            @endauth
+            @endif
         </nav>
 
         <!-- Theme toggle -->

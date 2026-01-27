@@ -2,7 +2,7 @@
   <footer class="bg-[#626F47] text-[#F7EDD6] rounded-t-3xl py-4 px-6 md:px-10 mt-auto
   md:ml-[320px] md:mr-3 transition-all duration-300">
     <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-3 md:gap-0">
-      <?php
+                <?php
                     $footerUser = \App\Models\Setting::getValue('logo_footer_user');
                 ?>
 
@@ -10,7 +10,7 @@
                     <img src="<?php echo e(asset('storage/cms/' . $footerUser)); ?>" alt="footerUser"
                         class="w-12 h-12 object-contain">
                 <?php else: ?>
-                    <img src="<?php echo e(asset('assets/logo_kementan.png')); ?>" alt="Hero Image"
+                    <img src="<?php echo e(asset('default/logo_kementan.svg')); ?>" alt="Hero Image"
                         class="w-12 h-12 object-contain">
                 <?php endif; ?>
 

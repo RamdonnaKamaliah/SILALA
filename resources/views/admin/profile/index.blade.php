@@ -47,7 +47,7 @@
                             <img 
                                 src="{{ $admin->foto && Storage::disk('public')->exists($admin->foto)
                                     ? asset('storage/'.$admin->foto)
-                                    : asset('default/photo_profile.svg') }}"
+                                    : asset('default/profile_admin.svg') }}"
                                 class="w-full h-full object-cover"
                             >
 

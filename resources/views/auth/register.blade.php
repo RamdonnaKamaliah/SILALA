@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Register - SiLala BPMSPH</title>
+  <title>Register | Silala</title>
+  <link rel="icon" type="image/svg+xml" href="{{ asset('default/icon_silala.svg') }}">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>

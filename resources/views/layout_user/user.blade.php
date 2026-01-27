@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Silala | Sistem Informasi Layanan Literasi & Arsip</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('default/icon_silala.svg') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- Include link (CSS, font, dsb) --}}

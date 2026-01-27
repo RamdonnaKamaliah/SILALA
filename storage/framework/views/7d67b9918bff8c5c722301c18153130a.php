@@ -34,7 +34,8 @@
         <!-- Teks sambutan -->
         <div class="z-10 max-w-[70%] sm:max-w-[65%] md:max-w-none">
             <h2 class="text-base sm:text-lg md:text-3xl font-medium text-white font-mochiy leading-tight">
-                Hallo Rifdah,
+                Hallo <?php echo e(Auth::user()->name); ?>
+
             </h2>
             <p class="text-xs sm:text-sm md:text-base mt-1 text-[#F7EDD6]/90 leading-snug">
                 Selamat datang di perpustakaan BPMSPH.<br>

@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title>Silala | Sistem Informasi Layanan Literasi & Arsip</title>
+    <link rel="icon" type="image/svg+xml" href="<?php echo e(asset('default/icon_silala.svg')); ?>">
+
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
     

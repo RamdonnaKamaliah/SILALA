@@ -18,11 +18,21 @@
 <div id="sidebar"
     class="user-sidebar fixed w-[300px] h-full bg-primary border-l-[10px] border-primary transition-transform duration-500 transform -translate-x-full md:translate-x-0 z-40 md:z-40">
 
-    <!-- Header -->
+     <!-- Header -->
     <div class="sidebar-header flex items-center justify-between px-4 mt-4 mb-6 text-white">
         <div class="flex items-center gap-2">
-            <img src="<?php echo e(asset('assets/logo_kementan.png')); ?>" alt="Logo"
-                class="w-12 h-12 rounded-full object-cover" />
+                <?php
+                    $LogoUser = \App\Models\Setting::getValue('logo_user_sidebar');
+                ?>
+
+                <?php if($LogoUser && \Storage::disk('public')->exists('cms/' . $LogoUser)): ?>
+                    <img src="<?php echo e(asset('storage/cms/' . $LogoUser)); ?>" alt="LogoUser"
+                        class="w-12 h-12 rounded-full object-cover">
+                <?php else: ?>
+                    <img src="<?php echo e(asset('assets/logo_kementan.png')); ?>" alt="Hero Image"
+                        class="w-12 h-12 rounded-full object-cover">
+                <?php endif; ?>
+
             <p class="text-white font-bold text-lg leading-tight">
                 PERPUSTAKAAN BPMSPH
                 <span class="block text-xs font-normal opacity-90 mt-1">
@@ -31,6 +41,7 @@
             </p>
         </div>
     </div>
+
 
     <!-- Profil -->
     <ul id="sidebar-menu" class="space-y-3">
@@ -47,7 +58,7 @@
                         <img src="<?php echo e(asset('storage/' . Auth::user()->foto_profil)); ?>" alt="Foto Profil"
                             class="w-20 h-20 rounded-full border-2 border-green nobject-cover shadow-md flex-shrink-0" />
                     <?php else: ?>
-                        <img src="<?php echo e(asset('assets/Profile.jpg')); ?>" alt="Foto Profil"
+                        <img src="<?php echo e(asset('default/profile_user.svg')); ?>" alt="Foto Profil"
                             class="w-20 h-20 rounded-full border-2 border-green object-cover shadow-md flex-shrink-0" />
                     <?php endif; ?>
 

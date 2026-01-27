@@ -7,6 +7,8 @@
     <?php echo $__env->make('layout_landing.patrial_landing.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
     <title>SILALA (Sistem Informasi Layanan Literasi & Arsip)</title>
+    <link rel="icon" type="image/svg+xml" href="<?php echo e(asset('default/icon_silala.svg')); ?>">
+
     <!-- Vite -->
     <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <!-- style -->
@@ -120,18 +122,19 @@
                 <?php $__empty_1 = true; $__currentLoopData = $buku; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <article
                         class="recommend-card bg-white dark:bg-[#15202B] rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-5 w-full h-full
-          opacity-0 translate-y-10 transition-all duration-700 ease-out
-          hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
+                        opacity-0 translate-y-10 transition-all duration-700 ease-out
+                        hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
 
                         <!-- Cover Buku -->
                         <div
                             class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0 transform transition-transform duration-500 hover:scale-105">
-                            <?php if($item->foto_buku): ?>
-                                <img src="<?php echo e(asset($item->foto_buku)); ?>" alt="<?php echo e($item->judul_buku); ?> - cover"
-                                    class="w-full h-full object-cover rounded-lg shadow-md">
+                            <?php if($item->foto_buku && Storage::disk('public')->exists($item->foto_buku)): ?>
+                                <img src="<?php echo e(asset('storage/' . $item->foto_buku)); ?>"
+                                    class="w-full h-full object-cover rounded-lg">
                             <?php else: ?>
-                                <img src="<?php echo e(asset('assets/default-cover.jpg')); ?>" alt="Default Cover"
-                                    class="w-full h-full object-cover rounded-lg shadow-md">
+                                <img src="<?php echo e(asset('assets/default-cover.jpg')); ?>"
+                                    class="w-full h-full object-cover rounded-lg">
+                                <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
                             <?php endif; ?>
                         </div>
 
@@ -143,19 +146,28 @@
                                     <?php echo e($item->judul_buku); ?></h3>
                                 <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">By
                                     <?php echo e($item->penulis); ?></p>
+                                                                        <!-- Deskripsi -->
+                                    <p
+                                        class="mt-2 text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
+                                        <?php echo e($item->deskripsi ?? 'Deskripsi belum tersedia.'); ?>
+
+                                    </p>
                             </div>
 
                             <!-- Kategori -->
                             <div
                                 class="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center sm:justify-start gap-2">
                                 <i class="fa fa-book"></i>
-                                <span class="break-words"><?php echo e($item->kategori); ?></span>
+                                <span class="break-words">
+                                     <?php if($item->kategoris->isNotEmpty()): ?>
+                                    <?php echo e($item->kategoris->pluck('nama_kategori')->join(', ')); ?>
+
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                                </span>
                             </div>
 
-                            <!-- Rating -->
-                            <div class="mt-3 flex items-center justify-center sm:justify-start gap-3">
-                                <div class="rating text-yellow-400 text-base">★★★★☆</div>
-                            </div>
                         </div>
 
                     </article>

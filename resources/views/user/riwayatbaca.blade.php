@@ -82,8 +82,7 @@
          px-4 py-1 rounded-full
          mx-auto block mt-auto
          shadow transition-colors duration-200"
-                    data-url="{{ route('user.baca', $data->buku->id) }}" data-title="{{ $data->buku->judul_buku }}"
-                    onclick="event.preventDefault(); event.stopPropagation()">
+                    onclick="OpenPDFModal('{{ route('user.baca', $data->buku->id) }}')">
                     Lanjutkan Baca
                 </button>
 
@@ -106,43 +105,30 @@
             <p class="text-gray-500 text-sm">Coba gunakan kata kunci lain</p>
         </div>
     </div>
-    <!-- ====== MODAL PDF ====== -->
-    <div id="pdfModal"
+    <!-- MODAL PDF -->
+<div id="pdfModal"
+     class="fixed inset-0 z-50 hidden bg-black/70 flex items-center justify-center">
+
+    <div
         class="
-    fixed inset-0 bg-black/50 backdrop-blur-md z-[99999] flex items-center justify-center p-4 {{ $showPdfModal ?? false ? '' : 'hidden' }} ">
+        relative bg-white flex flex-col w-full h-full md:w-3/4 md:h-[90vh] rounded-none md:rounded-xl overflow-hidden">
+
+        <!-- HEADER -->
         <div
-            class="bg-white w-full max-w-6xl h-[93vh] rounded-[32px] shadow-2xl overflow-hidden flex flex-col border border-gray-300 sm:p-0 p-2">
-            <div
-                class="w-full bg-gradient-to-r from-gray-50 to-gray-200 px-6 py-4 border-b flex justify-between items-center shadow-sm">
-                <h2 id="pdfTitle" class="text-xl font-bold text-gray-700 flex items-center gap-3">
-                    <span class="iconify" data-icon="mdi:file-document-outline" data-width="26"></span>
-                    Preview Dokumen
-                </h2>
-                <button id="closePdfModal" class="p-2 text-[22px] text-gray-600 hover:text-red-600 transition">
-                    <span class="iconify" data-icon="mdi:close" data-width="22"></span>
-                </button>
-            </div>
+            class="h-12 shrink-0 bg-gray-900 text-white flex items-center justify-between px-4">
 
-            <div class="w-full bg-white border-b px-6 py-3 flex items-center gap-6 shadow-sm">
-                <div class="flex items-center gap-3">
-                    <button id="zoomOut"
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-200 hover:bg-gray-300 transition shadow-sm text-gray-700">
-                        <span class="iconify" data-icon="mdi:magnify-minus-outline" data-width="22"></span>
-                    </button>
-                    <button id="zoomIn"
-                        class="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-200 hover:bg-gray-300 transition shadow-sm text-gray-700">
-                        <span class="iconify" data-icon="mdi:magnify-plus-outline" data-width="22"></span>
-                    </button>
-                    <span id="zoomLabel" class="font-semibold text-gray-700 text-sm ml-2">100%</span>
-                </div>
-                <span class="ml-auto text-sm text-gray-700 bg-gray-100 px-3 py-1.5 rounded-lg shadow-inner">
-                    Halaman: <span id="pageCurrent" class="font-bold">1</span> / <span id="pageTotal"
-                        class="font-bold">0</span>
-                </span>
-            </div>
-
-            <div id="pdfViewer" class="flex-1 overflow-y-auto bg-gray-50 scroll-smooth p-4"></div>
+            <button
+                onclick="closePdfModal()"
+                class=" bg-red-500 hover:bg-red-600 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                ✕
+            </button>
         </div>
-    </div>
 
+        <!-- PDF -->
+        <iframe
+            id="pdfFrame" class="flex-1 w-full border-0" loading="lazy">
+        </iframe>
+
+    </div>
+</div>
 @endsection

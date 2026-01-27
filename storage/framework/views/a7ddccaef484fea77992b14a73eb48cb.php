@@ -21,7 +21,7 @@
           <?php if(Auth::user()->foto_profil): ?>
             <img src="<?php echo e(asset('storage/' . Auth::user()->foto_profil)); ?>" class="w-full h-full object-cover" />
           <?php else: ?>
-            <img src="<?php echo e(asset('assets/Profile.jpg')); ?>" class="w-full h-full object-cover" />
+            <img src="<?php echo e(asset('default/profile_user.svg')); ?>" class="w-full h-full object-cover" />
           <?php endif; ?>
         </div>
       </div>

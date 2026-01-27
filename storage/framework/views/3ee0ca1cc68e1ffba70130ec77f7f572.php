@@ -159,7 +159,6 @@
                     </div>
 
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <!-- 🔴 JIKA TIDAK ADA BUKU -->
                     <div class="col-span-full text-center py-14">
                         <p class="text-green text-lg font-semibold mb-2">
                             Tidak ada buku dengan kategori ini

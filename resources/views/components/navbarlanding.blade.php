@@ -15,7 +15,6 @@
             <a href="/" class="nav-link text-green-600">Beranda</a>
             <a href="#tentang" class="nav-link">Tentang</a>
             <a href="#rekomendasi" class="nav-link">Rekomendasi</a>
-            <a href="#panduan" class="nav-link">Panduan</a>
 
             @if (auth('admin')->check())
                 <a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard Admin</a>

@@ -19,9 +19,8 @@ class AdminSeeder extends Seeder
             'email' => 'admin@admin.com',
             'password' => Hash::make('admin123'),
             'phone' => '082345678901',
-            'membership_type' => 'karyawan',
-            'gender' => 'P',
             'email_verified_at' => now(),
         ]);
+        
     }
 }

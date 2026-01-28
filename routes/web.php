@@ -141,6 +141,8 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
 
     // Data Pengguna Routes
     Route::resource('/data_pengguna', DataPenggunaController::class)->names('data_pengguna');
+    Route::delete('/data_pengguna/{id}', [DataPenggunaController::class, 'destroy'])
+    ->name('data_pengguna.destroy');
 
     // Data Peminjam Routes
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');

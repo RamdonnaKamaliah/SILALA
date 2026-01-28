@@ -112,7 +112,7 @@
                 <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white">
                     Rekomendasi Buku Best Seller
                 </h2>
-                <p class="mt-2 text-gray-600 dark:text-gray-300 text-base">
+                <p class="mt-2 text-white dark:text-gray-300 text-base">
                     Pilihan buku terbaik untuk menambah wawasan dan inspirasi
                 </p>
             </div>

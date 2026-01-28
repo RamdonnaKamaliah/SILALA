@@ -63,6 +63,12 @@
                                 <span>Gender</span>
                             </div>
                         </th>
+                        <th class="px-6 py-4 text-center font-semibold">
+                            <div class="flex items-center justify-center space-x-2">
+                                <i class="fas fa-venus-mars text-[#A4B465]"></i>
+                                <span>Aksi</span>
+                            </div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -124,6 +130,16 @@
                                 <span class="text-sm text-gray-400 italic">Not Found</span>
                             @endif
                         </td>
+                        <td class="px-6 py-4 text-center">
+                            <button
+                                type="button"
+                                class="bg-red-600 text-white p-2.5 rounded-lg hover:bg-red-700 transition-all duration-200 delete-btn shadow-sm transform hover:scale-105"
+                                title="Hapus Pengguna"
+                                data-id="{{ $user->id }}"
+                                data-name="{{ $user->name }}">
+                                <i class="fas fa-trash text-sm"></i>
+                            </button>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -172,6 +188,44 @@
             $('.paginate_button').addClass('px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-[#A4B465] hover:text-white hover:border-[#A4B465] transition-colors');
             $('.paginate_button.current').addClass('bg-[#A4B465] text-white border-[#A4B465]');
             $('.paginate_button.disabled').addClass('opacity-50 cursor-not-allowed');
+        });
+
+
+        $(document).on('click', '.delete-btn', function () {
+            let userId = $(this).data('id');
+            let userName = $(this).data('name');
+
+            Swal.fire({
+                title: 'Hapus Pengguna?',
+                html: `Apakah kamu yakin ingin menghapus <strong>${userName}</strong>?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, hapus',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/admin/data_pengguna/${userId}`,
+                        type: 'DELETE',
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function (res) {
+                            Swal.fire('Berhasil!', res.message, 'success')
+                                .then(() => location.reload());
+                        },
+                        error: function (xhr) {
+                            Swal.fire(
+                                'Gagal!',
+                                xhr.responseJSON?.message ?? 'Terjadi kesalahan.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
         });
     </script>
 @endpush

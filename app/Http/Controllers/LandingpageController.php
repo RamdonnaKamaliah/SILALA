@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\databuku;
+use App\Models\DataBuku;
 
 class LandingpageController extends Controller
 {
-     public function index()
+    public function index()
     {
-        
-        $buku = databuku::latest()->get();
+        $buku = DataBuku::withAvg('ratings', 'rating')
+            ->having('ratings_avg_rating', '>=', 4)
+            ->orderByDesc('ratings_avg_rating')
+            ->get();
 
         return view('landingpage', compact('buku'));
     }

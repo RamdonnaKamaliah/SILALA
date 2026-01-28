@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php echo $__env->make('layout_landing.patrial_landing.link', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-    <title>SILALA (Sistem Informasi Layanan Literasi & Arsip)</title>
+    <title>Silala | Sistem Informasi Layanan Literasi & Arsip</title>
     <link rel="icon" type="image/svg+xml" href="<?php echo e(asset('default/icon_silala.svg')); ?>">
 
     <!-- Vite -->
@@ -112,7 +112,7 @@
                 <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white">
                     Rekomendasi Buku Best Seller
                 </h2>
-                <p class="mt-2 text-gray-600 dark:text-gray-300 text-base">
+                <p class="mt-2 text-white dark:text-gray-300 text-base">
                     Pilihan buku terbaik untuk menambah wawasan dan inspirasi
                 </p>
             </div>

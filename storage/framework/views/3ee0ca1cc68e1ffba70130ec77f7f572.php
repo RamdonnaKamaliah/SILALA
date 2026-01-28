@@ -139,8 +139,6 @@
                                 <!-- Tampilkan rating numerik jika ada -->
                                 <?php if($avgRating > 0): ?>
                                     <span class="text-gray-600 text-xs ml-1">(<?php echo e(number_format($avgRating, 1)); ?>)</span>
-                                <?php else: ?>
-                                    <span class="text-gray-400 text-xs ml-1">Belum ada rating</span>
                                 <?php endif; ?>
                             </div>
 

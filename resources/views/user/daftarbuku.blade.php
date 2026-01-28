@@ -137,8 +137,6 @@
                                 <!-- Tampilkan rating numerik jika ada -->
                                 @if ($avgRating > 0)
                                     <span class="text-gray-600 text-xs ml-1">({{ number_format($avgRating, 1) }})</span>
-                                @else
-                                    <span class="text-gray-400 text-xs ml-1">Belum ada rating</span>
                                 @endif
                             </div>
 

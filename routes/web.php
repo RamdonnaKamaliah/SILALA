@@ -58,7 +58,10 @@ Route::middleware([UserMiddleware::class])->group(function () {
     Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
 
     // DETAIL BUKU
-    Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])->name('user.detailbuku');
+    Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])
+    ->middleware('auth')
+    ->name('user.detailbuku');
+
 
     // RIWAYAT BUKU & RIWAYAT BACA
     Route::get('/riwayatbuku', [RiwayatBukuController::class, 'index'])->name('user.riwayatbuku');

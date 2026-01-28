@@ -168,6 +168,14 @@
                                 </span>
                             </div>
 
+                            <a href="<?php echo e(route('user.detailbuku', $item->id)); ?>"
+   class="mt-3 inline-flex items-center justify-center bg-primary hover:bg-green text-white text-sm font-semibold px-5 py-1.5 rounded-full transition">
+    <i class="fa-solid fa-eye mr-1"></i>
+    Lihat Buku
+</a>
+
+
+
                         </div>
 
                     </article>

@@ -19,6 +19,10 @@
     <!-- navbar -->
     @include('layout_landing.patrial_landing.header')
 
+    <!-- Hero Section -->
+    <!-- navbar -->
+    @include('layout_landing.patrial_landing.header')
+
     @php
         $bgLanding = \App\Models\Setting::getValue('background_landing');
         $bgImage =
@@ -30,9 +34,6 @@
     <section class="pt-24 md:pt-32 pb-32 md:pb-40 relative 
                 bg-cover bg-center hero-section"
         style="background-image: url('{{ $bgImage }}');">
-
-
-
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-4 md:px-6">
 
             <!-- Judul + Icon -->
@@ -57,8 +58,8 @@
 
                 <!-- Deskripsi -->
                 <p class="text-base md:text-lg leading-relaxed text-black dark:text-white">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Sistem informasi layanan literasi & Arsip(SILALA). Memberikan
+                    kemudahan akses literasi dan pengelolaan Arsip digital
                 </p>
             </div>
 
@@ -97,10 +98,9 @@
                     </span>
 
                     <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-medium italic">
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting
-                        industry. Lorem Ipsum has been the industry's standard dummy text
-                        ever since the 1500s, when an unknown printer took a galley of type
-                        and scrambled it to make a type specimen book."
+                        "Buku adalah jendela dunia. Dengan SILALA, jendela tersebut kini hadir dalam
+                        genggaman anda melalui layanan baca online dan peminjaman buku yang
+                        praktis."
                     </p>
 
                     <span class="absolute -bottom-4 left-6 text-black dark:text-white text-3xl">
@@ -120,18 +120,18 @@
             </div>
 
             <!-- Grid Card -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                @forelse ($buku as $item)
+            {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                @forelse ($data_buku as $buku)
                     <article
                         class="recommend-card bg-white dark:bg-[#15202B] rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-5 w-full h-full
-          opacity-0 translate-y-10 transition-all duration-700 ease-out
-          hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
+                  opacity-0 translate-y-10 transition-all duration-700 ease-out
+                  hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
 
                         <!-- Cover Buku -->
                         <div
                             class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0 transform transition-transform duration-500 hover:scale-105">
-                            @if ($item->foto_buku)
-                                <img src="{{ asset($item->foto_buku) }}" alt="{{ $item->judul_buku }} - cover"
+                            @if ($buku->foto_buku)
+                                <img src="{{ asset($buku->foto_buku) }}" alt="{{ $buku->judul_buku }} - cover"
                                     class="w-full h-full object-cover rounded-lg shadow-md">
                             @else
                                 <img src="{{ asset('assets/default-cover.jpg') }}" alt="Default Cover"
@@ -144,16 +144,16 @@
                             <div>
                                 <h3
                                     class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                                    {{ $item->judul_buku }}</h3>
+                                    {{ $buku->judul_buku }}</h3>
                                 <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">By
-                                    {{ $item->penulis }}</p>
+                                    {{ $buku->penulis }}</p>
                             </div>
 
                             <!-- Kategori -->
                             <div
                                 class="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center sm:justify-start gap-2">
                                 <i class="fa fa-book"></i>
-                                <span class="break-words">{{ $item->kategori }}</span>
+                                <span class="break-words">{{ $buku->kategori }}</span>
                             </div>
 
                             <!-- Rating -->
@@ -166,10 +166,9 @@
                 @empty
                     <p class="col-span-3 text-center text-gray-500 dark:text-gray-400">Belum ada data buku.</p>
                 @endforelse
-            </div>
+            </div> --}}
         </div>
     </section>
-
 
     <!-- footer -->
     @include('layout_landing.patrial_landing.footer')

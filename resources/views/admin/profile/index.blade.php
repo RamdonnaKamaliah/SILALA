@@ -44,10 +44,13 @@
                         <div class="absolute inset-0 bg-gradient-to-br from-[#A4B465] to-[#6E7C45] rounded-2xl blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
                         
                         <div class="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-xl border-4 border-white ring-4 ring-[#A4B465]/20">
-                            <img src="{{ $admin->foto 
-                            ? asset('storage/'.$admin->foto) 
-                            : asset('assets/image_default/image_default_book.jpeg') }}"
-                            class="w-full h-full object-cover">
+                            <img 
+                                src="{{ $admin->foto && Storage::disk('public')->exists($admin->foto)
+                                    ? asset('storage/'.$admin->foto)
+                                    : asset('default/profile_admin.svg') }}"
+                                class="w-full h-full object-cover"
+                            >
+
 
                             
                             <!-- Overlay on Hover -->

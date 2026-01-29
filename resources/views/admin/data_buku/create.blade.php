@@ -49,33 +49,33 @@
                         </div>
 
                         <!-- File Buku PDF -->
-                        <div>
-                            <label class="form-label">
-                                <i class="fas fa-file-pdf text-primary"></i>
-                                <span>File Buku (PDF)</span>
-                            </label>
+                    <div>
+                        <label class="form-label">
+                            <i class="fas fa-file-pdf text-primary"></i>
+                            <span>File Buku (PDF)</span>
+                        </label>
 
-                            <input type="file" id="file_buku" name="file_buku" accept=".pdf"
-                                onchange="previewPDF(event)" class="hidden">
-                            @error('file_buku')
-                                <p class="text-red-500 text-sm">{{ $message }}</p>
-                            @enderror
+                        <input type="file" id="file_buku" name="file_buku" accept=".pdf" onchange="previewPDF(event)"
+                            class="hidden"> @error('file_buku')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
 
-                            <label for="file_buku" class="file-upload-btn">
-                                <i class="fas fa-file-upload"></i>
-                                <span>Pilih File PDF</span>
-                            </label>
+                        <label for="file_buku" class="file-upload-btn">
+                            <i class="fas fa-file-upload"></i>
+                            <span>Pilih File PDF</span>
+                        </label>
 
-                            <div id="pdfPreviewContainer" class="preview-box mt-4 hidden">
-                                <canvas id="pdfPreview" class="preview-pdf-canvas"></canvas>
-                                <div class="mt-2">
-                                    <p id="pdfName"
-                                        class="text-xs font-medium text-primary-dark break-all px-2 line-clamp-1">
-                                    </p>
-                                    <p id="pdfSize" class="text-xs text-primary-medium mt-1"></p>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="pdfPreviewContainer" class="preview-box mt-4 hidden flex flex-col items-center gap-1">
+    <canvas id="pdfPreview" class="border rounded-md" style="width: 120px; height: 160px;"></canvas>
+    <div class="text-center">
+        <p id="pdfName" class="text-[11px] font-medium text-primary-dark break-all max-w-[80px]"></p>
+        <p id="pdfSize" class="text-[10px] text-primary-medium mt-0.5"></p>
+    </div>
+</div>
+
+
+                    </div>
+
                     </div>
                 </div>
 

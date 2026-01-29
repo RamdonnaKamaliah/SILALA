@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\TrashedAccount;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 
 class DataPenggunaController extends Controller
 {
@@ -24,4 +24,29 @@ class DataPenggunaController extends Controller
             'users' // Jangan lupa tambahin ini
         ));
     }
+
+
+public function destroy($id)
+{
+    try {
+        $user = User::findOrFail($id);
+
+        TrashedAccount::create([
+            'name' => $user->name,
+            'email'=> $user->email,
+        ]);
+
+        $user->delete();
+
+        return response()->json([
+            'message' => 'Akun berhasil dihapus'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Gagal menghapus akun'
+        ], 500);
+    }
+}
+
+
 }

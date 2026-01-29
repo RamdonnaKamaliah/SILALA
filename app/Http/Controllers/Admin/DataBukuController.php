@@ -247,50 +247,95 @@ public function store(Request $request)
     
     public function archive(Request $request, $id = null)
     {
-    if ($id) {
-        $buku = databuku::findOrFail($id);
-        $buku->status = 'arsip';
-        $buku->save();
+        if ($id) {
+            $buku = databuku::findOrFail($id);
+            $buku->status = 'arsip';
+            $buku->save();
 
-        return redirect()->route('admin.data_arsip.index')
-            ->with('success', 'Buku "' . $buku->judul_buku . '" berhasil diarsipkan!');
-    }
+            return redirect()->route('admin.data_arsip.index')
+                ->with('success', 'Buku "' . $buku->judul_buku . '" berhasil diarsipkan!');
+        }
 
-    return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
-}
-
-public function bulkArchive(Request $request)
-{
-    $selectedIds = $request->input('selected_ids', []);
-
-    if (!is_array($selectedIds)) {
-        $selectedIds = array_filter(array_map('trim', explode(',', $selectedIds)));
-    }
-
-    $selectedIds = array_filter($selectedIds, function ($id) {
-        return is_numeric($id);
-    });
-
-    $selectedIds = array_map('intval', $selectedIds);
-
-    if (empty($selectedIds)) {
         return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
     }
 
-    databuku::whereIn('id', $selectedIds)->update(['status' => 'arsip']);
+public function bulkArchive(Request $request)
+    {
+        try {
+            // Validasi input
+            $request->validate([
+                'selected_ids' => 'required'
+            ]);
 
-    return redirect()->route('admin.data_arsip.index')
-        ->with('success', count($selectedIds) . ' buku berhasil diarsipkan.');
-}
+            $selectedIds = $request->input('selected_ids');
+
+            // Debug: uncomment untuk lihat raw input
+            // \Log::info('Raw selected_ids: ' . $selectedIds);
+
+            // Parse selected_ids
+            if (is_string($selectedIds)) {
+                // Hapus bracket JSON jika ada
+                $selectedIds = trim($selectedIds, '[]"');
+                // Split by comma
+                $selectedIds = explode(',', $selectedIds);
+            }
+
+            // Pastikan array dan bersihkan
+            if (!is_array($selectedIds)) {
+                $selectedIds = [$selectedIds];
+            }
+
+            // Clean dan convert ke integer
+            $selectedIds = array_map(function($id) {
+                // Hapus quotes dan whitespace
+                $id = trim($id, '"\' ');
+                return intval($id);
+            }, $selectedIds);
+
+            // Filter hanya yang valid (> 0)
+            $selectedIds = array_filter($selectedIds, function($id) {
+                return $id > 0;
+            });
+
+            // Reset array keys
+            $selectedIds = array_values($selectedIds);
+
+            // Debug: uncomment untuk lihat hasil parsing
+            // \Log::info('Parsed IDs: ' . json_encode($selectedIds));
+
+            if (empty($selectedIds)) {
+                return back()->with('error', 'Tidak ada buku yang dipilih untuk diarsipkan.');
+            }
+
+            // Update status
+            $updated = databuku::whereIn('id', $selectedIds)
+                ->where('status', 'aktif')
+                ->update(['status' => 'arsip']);
+
+            if ($updated > 0) {
+                return redirect()->route('admin.data_arsip.index')
+                    ->with('success', $updated . ' buku berhasil diarsipkan.');
+            } else {
+                return back()->with('error', 'Tidak ada buku yang berhasil diarsipkan. Pastikan buku berstatus aktif.');
+            }
+
+        } catch (\Exception $e) {    
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 
 
     //pulihkan buku dari arsip 
-    public function restore ($id)
+    public function restore($id)
     {
-        $buku = databuku::findOrFail($id);
-        $buku->status = 'aktif';
-        $buku->save();
+        try {
+            $buku = databuku::findOrFail($id);
+            $buku->status = 'aktif';
+            $buku->save();
 
-        return redirect()->route('admin.data_buku.index')->with('success', 'Buku berhasil dipulihkan!');
+            return back()->with('success', 'Buku "' . $buku->judul_buku . '" berhasil dikembalikan dari arsip!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

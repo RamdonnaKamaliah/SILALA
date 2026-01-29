@@ -1,3 +1,4 @@
+
 <body class="bg-white">
     <!-- Hamburger Button untuk Mobile -->
     <div class="lg:hidden fixed top-4 left-4 z-50">
@@ -27,6 +28,7 @@
         <div class="logo-container">
             <?php
                 $logoAdmin = \App\Models\Setting::getValue('logo_admin_sidebar');
+                $currentRoute = Route::currentRouteName();
             ?>
 
             <?php if($logoAdmin && \Storage::disk('public')->exists('cms/' . $logoAdmin)): ?>
@@ -39,121 +41,191 @@
         <!-- Sidebar Content (Scrollable) -->
         <div class="sidebar-content">
             <ul class="mt-4 space-y-2 px-4 pb-4">
+
                 <!-- Dashboard -->
-                <li class="w-full">
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
+                        <?php echo e($currentRoute == 'admin.dashboard' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
                         href="<?php echo e(route('admin.dashboard')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                            <?php echo e($currentRoute == 'admin.dashboard' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-house-chimney-window text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                            <?php echo e($currentRoute == 'admin.dashboard' ? 'text-white font-semibold' : ''); ?>">
                             Dashboard
                         </span>
                     </a>
                 </li>
 
-                <!-- Akun Pengguna -->
-                <li class="w-full">
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="<?php echo e(route('admin.data_pengguna.index')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-user-gear text-lg"></i>
+                <!-- Data Peminjam -->
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
+                        <?php echo e(in_array($currentRoute, [
+                            'admin.data_peminjam.index',
+                            'admin.data_peminjam.show'
+                        ]) ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('admin.data_peminjam.index')); ?>">
+
+                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_peminjam.index',
+                                'admin.data_peminjam.show'
+                            ]) ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <i class="fa-solid fa-id-card text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
-                            Akun Pengguna
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_peminjam.index',
+                                'admin.data_peminjam.show'
+                            ]) ? 'text-white font-semibold' : ''); ?>">
+                            Data Peminjam
                         </span>
                     </a>
                 </li>
 
-                <!-- CMS -->
-                <li class="w-full">
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="<?php echo e(route('admin.cms.index')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-gear text-lg"></i>
-                        </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
-                            CMS
-                        </span>
-                    </a>
-                </li>
 
                 <!-- Data Buku -->
-                <li class="w-full">
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
+                        <?php echo e(in_array($currentRoute, [
+                            'admin.data_buku.index',
+                            'admin.data_buku.create',
+                            'admin.data_buku.edit',
+                            'admin.data_buku.show'
+                        ]) ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
                         href="<?php echo e(route('admin.data_buku.index')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-book-bookmark text-lg"></i>
+
+                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_buku.index',
+                                'admin.data_buku.create',
+                                'admin.data_buku.edit',
+                                'admin.data_buku.show'
+                            ]) ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <i class="fa-solid fa-book text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_buku.index',
+                                'admin.data_buku.create',
+                                'admin.data_buku.edit',
+                                'admin.data_buku.show'
+                            ]) ? 'text-white font-semibold' : ''); ?>">
                             Data Buku
                         </span>
                     </a>
                 </li>
 
+
                 <!-- Media Buku -->
-                <li class="w-full">
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
+                        <?php echo e($currentRoute == 'admin.media.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
                         href="<?php echo e(route('admin.media.index')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                            <?php echo e($currentRoute == 'admin.media.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-photo-film text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                            <?php echo e($currentRoute == 'admin.media.index' ? 'text-white font-semibold' : ''); ?>">
                             Media Buku
                         </span>
                     </a>
                 </li>
 
                 <!-- Data Kategori -->
-                <li class="w-full">
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
+                        <?php echo e(in_array($currentRoute, [
+                            'admin.data_kategori.index',
+                            'admin.data_kategori.create',
+                            'admin.data_kategori.show',
+                            'admin.data_kategori.edit'
+                        ]) ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
                         href="<?php echo e(route('admin.data_kategori.index')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-layer-group text-lg"></i>
+
+                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_kategori.index',
+                                'admin.data_kategori.create',
+                                'admin.data_kategori.show',
+                                'admin.data_kategori.edit'
+                            ]) ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <i class="fa-solid fa-tags text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_kategori.index',
+                                'admin.data_kategori.create',
+                                'admin.data_kategori.show',
+                                'admin.data_kategori.edit'
+                            ]) ? 'text-white font-semibold' : ''); ?>">
                             Data Kategori
                         </span>
                     </a>
                 </li>
 
+                <!-- Akun Pengguna -->
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
+                        <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('admin.data_pengguna.index')); ?>">
+                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <i class="fa-solid fa-user-gear text-lg"></i>
+                        </div>
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'text-white font-semibold' : ''); ?>">
+                            Akun Pengguna
+                        </span>
+                    </a>
+                </li>
+
                 <!-- Data Arsip -->
-                <li class="w-full">
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
+                        <?php echo e(in_array($currentRoute, [
+                            'admin.data_arsip.index',
+                            'admin.data_arsip.show'
+                        ]) ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
                         href="<?php echo e(route('admin.data_arsip.index')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
+
+                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_arsip.index',
+                                'admin.data_arsip.show'
+                            ]) ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-box-archive text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
+
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_arsip.index',
+                                'admin.data_arsip.show'
+                            ]) ? 'text-white font-semibold' : ''); ?>">
                             Data Arsip
                         </span>
                     </a>
                 </li>
 
-                <!-- Data Peminjam -->
-                <li class="w-full">
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative"
-                        href="<?php echo e(route('admin.data_peminjam.index')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 text-[#8a9a55]">
-                            <i class="fa-solid fa-id-card text-lg"></i>
+                <!-- CMS -->
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
+                        <?php echo e($currentRoute == 'admin.cms.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('admin.cms.index')); ?>">
+                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                            <?php echo e($currentRoute == 'admin.cms.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <i class="fa-solid fa-gear text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text">
-                            Data Peminjam
+                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                            <?php echo e($currentRoute == 'admin.cms.index' ? 'text-white font-semibold' : ''); ?>">
+                            CMS
                         </span>
                     </a>
-                </li>
-
-                <!-- Divider -->
-                <li class="w-full mt-6 pt-3">
-                    <h6 class="pl-2 text-xs font-bold leading-tight uppercase divider-text">Account pages</h6>
                 </li>
 
                 <!-- Logout Menu -->

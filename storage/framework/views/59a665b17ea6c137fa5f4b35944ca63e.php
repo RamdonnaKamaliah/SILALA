@@ -23,9 +23,6 @@ border-b border-primary_light/20">
                     </div>
                 </div>
 
-               
-   
-
     <!-- PROFILE LINK -->
     <a href="<?php echo e(route('admin.profile.index')); ?>" 
        class="flex items-center gap-3 rounded-xl hover:bg-primary_light/30 px-3 py-2 transition-all duration-200 group">
@@ -33,9 +30,13 @@ border-b border-primary_light/20">
         <!-- FOTO PROFIL -->
         <div class="relative">
             <div class="h-9 w-9 rounded-full overflow-hidden border-2 border-white/30 shadow-lg group-hover:border-white/50 transition-all">
-                <img src="<?php echo e($admin->foto ? asset('storage/'.$admin->foto) : asset('default-user.png')); ?>"
-                    class="w-full h-full object-cover"
-                    alt="Foto Admin">
+                <img 
+                src="<?php echo e($admin->foto && Storage::disk('public')->exists($admin->foto)
+                    ? asset('storage/'.$admin->foto)
+                    : asset('default/profile_admin.svg')); ?>"
+                class="w-full h-full object-cover"
+                alt="Foto Admin">
+
             </div>
             <!-- Status Online -->
             <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white bg-green_dark"></div>

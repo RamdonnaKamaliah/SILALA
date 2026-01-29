@@ -18,11 +18,11 @@
 <div id="sidebar"
     class="user-sidebar fixed w-[300px] h-full bg-primary border-l-[10px] border-primary transition-transform duration-500 transform -translate-x-full md:translate-x-0 z-40 md:z-40">
 
-    <!-- Header -->
+     <!-- Header -->
     <div class="sidebar-header flex items-center justify-between px-4 mt-4 mb-6 text-white">
         <div class="flex items-center gap-2">
-            <?php
-                    $LogoUser = \App\Models\Setting::getValue('logo_sidebar_user');
+                <?php
+                    $LogoUser = \App\Models\Setting::getValue('logo_user_sidebar');
                 ?>
 
                 <?php if($LogoUser && \Storage::disk('public')->exists('cms/' . $LogoUser)): ?>
@@ -42,6 +42,7 @@
         </div>
     </div>
 
+
     <!-- Profil -->
     <ul id="sidebar-menu" class="space-y-3">
         <li
@@ -57,10 +58,9 @@
                         <img src="<?php echo e(asset('storage/' . Auth::user()->foto_profil)); ?>" alt="Foto Profil"
                             class="w-20 h-20 rounded-full border-2 border-green nobject-cover shadow-md flex-shrink-0" />
                     <?php else: ?>
-                        <img src="<?php echo e(asset('assets/Profile.jpg')); ?>" alt="Foto Profil"
+                        <img src="<?php echo e(asset('default/profile_user.svg')); ?>" alt="Foto Profil"
                             class="w-20 h-20 rounded-full border-2 border-green object-cover shadow-md flex-shrink-0" />
                     <?php endif; ?>
-
 
                     <div class="leading-tight flex-1 min-w-0">
                         <p class="font-bold text-green text-sm truncate"><?php echo e(Auth::user()->name); ?></p>
@@ -141,5 +141,4 @@
             </form>
         </li>
     </ul>
-</div>
-<?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/components/sidebarUser.blade.php ENDPATH**/ ?>
+</div><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/components/sidebarUser.blade.php ENDPATH**/ ?>

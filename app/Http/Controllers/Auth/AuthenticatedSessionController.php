@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
         if (Auth::guard('web')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'))
-             ->with('success', 'Berhasil login! Selamat datang');
+             ->with('success');
         }
 
         // Jika semua gagal

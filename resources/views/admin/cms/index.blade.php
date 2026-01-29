@@ -8,7 +8,7 @@
         <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-lg">
             <div class="flex items-center space-x-4 mb-3">
                 <div class="bg-white/20 p-3 rounded-full">
-                    <i class="fas fa-tags text-2xl"></i>
+                    <i class="fa-solid fa-gear text-lg"></i>
                 </div>
                 <div>
                     <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-white">Pengaturan Konten</h1>
@@ -50,20 +50,6 @@
                                         <img src="{{ asset('storage/cms/' . $setting->value) }}" alt="{{ $setting->label }}"
                                             class="w-full h-48 object-contain bg-gray-50 rounded-lg border-2 border-gray-200">
 
-                                        {{-- Delete Button Overlay --}}
-                                        <div class="absolute top-2 right-2">
-                                            <button type="button"
-                                                class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-medium shadow-lg transition-all"
-                                                data-key="{{ $setting->key }}">
-                                                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                    </path>
-                                                </svg>
-                                                Hapus
-                                            </button>
-                                        </div>
                                     </div>
                                     <p class="text-xs text-gray-500 mt-2 text-center">Klik "Pilih File" untuk mengganti</p>
                                 </div>
@@ -256,80 +242,6 @@
                         });
                 });
             });
-
-            // Handle delete button
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const key = this.dataset.key;
-
-                    Swal.fire({
-                        title: 'Hapus Gambar?',
-                        text: 'Gambar akan dihapus permanen dari server',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#EF4444',
-                        cancelButtonColor: '#6B7280',
-                        confirmButtonText: 'Ya, Hapus!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            deleteImage(key);
-                        }
-                    });
-                });
-            });
-
-            /**
-             * Delete Image
-             */
-            function deleteImage(key) {
-                document.getElementById('loading-overlay').classList.remove('hidden');
-
-                fetch('{{ route('admin.cms.delete') }}', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({
-                            key: key
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('loading-overlay').classList.add('hidden');
-
-                        if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Terhapus!',
-                                text: data.message,
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Gagal',
-                                text: data.message,
-                                confirmButtonColor: '#16A34A'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        document.getElementById('loading-overlay').classList.add('hidden');
-                        console.error('Error:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi Kesalahan',
-                            text: 'Gagal menghapus gambar',
-                            confirmButtonColor: '#16A34A'
-                        });
-                    });
-            }
         });
     </script>
 @endpush

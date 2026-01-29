@@ -66,7 +66,7 @@
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         @foreach ($media as $item)
-                            <tr class="hover:bg-gray-50/80 transition-colors duration-150 group">
+                            <tr class="hover:bg-gray-50/80 transition-colors duration-150">
                                 <td class="px-4 py-4 text-center text-gray-600 font-medium">
                                     {{ $loop->iteration }}
                                 </td>
@@ -83,8 +83,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center space-x-3">
-                                        <div
-                                            class="w-10 h-10 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] rounded-lg flex items-center justify-center">
+                                        <div class="w-10 h-10 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] rounded-lg flex items-center justify-center">
                                             <i class="fas fa-file-image text-white text-sm"></i>
                                         </div>
                                         <span class="font-medium text-gray-800">{{ $item->nama_file }}</span>
@@ -100,13 +99,14 @@
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center space-x-2">
                                         <a href="{{ asset('storage/' . $item->path_file) }}" target="_blank"
-                                            class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-3 rounded-xl transition-all duration-200 group relative"
+                                            class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-3 rounded-xl transition-all duration-200"
                                             title="Lihat Media">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <button type="button"
-                                            class="bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-xl transition-all duration-200 delete-btn group relative"
-                                            title="Hapus Media" data-id="{{ $item->id }}"
+                                            class="bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-xl transition-all duration-200 delete-btn"
+                                            title="Hapus Media" 
+                                            data-id="{{ $item->id }}"
                                             data-name="{{ $item->nama_file }}">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -127,101 +127,46 @@
     </form>
 @endsection
 
-@push('styles')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .tooltip-text {
-            visibility: hidden;
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .group:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .dataTables_wrapper {
-            padding: 0 !important;
-        }
-
-        .dataTables_filter input {
-            border: 1px solid #d1d5db !important;
-            border-radius: 8px !important;
-            padding: 8px 12px !important;
-        }
-
-        .dataTables_length select {
-            border: 1px solid #d1d5db !important;
-            border-radius: 8px !important;
-            padding: 6px 12px !important;
-        }
-
-        table.dataTable tbody tr:hover {
-            background-color: #f9fafb !important;
-        }
-
-        /* DataTables custom styling */
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            border-radius: 8px !important;
-            margin: 0 2px;
-            border: 1px solid #e5e7eb !important;
-        }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background: #A4B465 !important;
-            color: white !important;
-            border: 1px solid #A4B465 !important;
-        }
-
-        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            background: #8AA24F !important;
-            color: white !important;
-            border: 1px solid #8AA24F !important;
-        }
-    </style>
-@endpush
-
 @push('scripts')
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
     <script>
         $(document).ready(function() {
             // Initialize DataTable
-            var table = $('#dataTableMedia').DataTable({
-                language: {
-                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json"
-                },
+            $('#dataTableMedia').DataTable({
+                responsive: true,
                 pageLength: 10,
                 lengthMenu: [5, 10, 25, 50],
-                dom: '<"flex flex-col md:flex-row justify-between items-center mb-4"<"mb-4 md:mb-0"l><"flex items-center"f>>rt<"flex flex-col md:flex-row justify-between items-center mt-4"<"mb-4 md:mb-0"i><"flex"p>>',
-                columnDefs: [{
-                        targets: 1, // Kolom preview
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        targets: 4, // Kolom aksi
-                        orderable: false,
-                        searchable: false
+                ordering: true,
+                searching: true,
+                info: true,
+                dom: '<"flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 px-4 pt-4"lf>rt<"flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 px-4 pb-4"ip>',
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ data",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data",
+                    zeroRecords: "Data tidak ditemukan",
+                    paginate: {
+                        first: "Awal",
+                        last: "Akhir",
+                        next: "›",
+                        previous: "‹"
                     }
-                ],
-                initComplete: function() {
-                    $('.dataTables_filter input').attr('placeholder', 'Cari media...');
-                }
+                },
+                columnDefs: [
+                    { orderable: false, targets: [1, 4] } // Preview & Aksi tidak bisa di-sort
+                ]
             });
+
+            // Custom styling untuk DataTables elements
+            $('.dataTables_length select').addClass('px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#A4B465] focus:border-[#A4B465]');
+            $('.dataTables_filter input').addClass('px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#A4B465] focus:border-[#A4B465] ml-2');
+            $('.dataTables_length label, .dataTables_filter label').addClass('text-sm text-gray-700 font-medium');
+            $('.dataTables_info').addClass('text-sm text-gray-600');
+            $('.dataTables_paginate').addClass('flex gap-1');
+            $('.paginate_button').addClass('px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-[#A4B465] hover:text-white hover:border-[#A4B465] transition-colors');
+            $('.paginate_button.current').addClass('bg-[#A4B465] text-white border-[#A4B465]');
+            $('.paginate_button.disabled').addClass('opacity-50 cursor-not-allowed');
 
             // Individual delete confirmation
             $(document).on('click', '.delete-btn', function(e) {
@@ -232,7 +177,7 @@
 
                 Swal.fire({
                     title: 'Konfirmasi Hapus',
-                    html: `Apakah Anda yakin ingin menghapus media ini?`,
+                    html: `Apakah Anda yakin ingin menghapus media <strong>${mediaName}</strong>?`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#ef4444',
@@ -253,7 +198,7 @@
             @if (session('success'))
                 Swal.fire({
                     title: 'Sukses!',
-                    text: 'Berhasil menghapus media.',
+                    text: '{{ session('success') }}',
                     icon: 'success',
                     confirmButtonColor: '#A4B465',
                     timer: 3000
@@ -263,7 +208,7 @@
             @if (session('error'))
                 Swal.fire({
                     title: 'Error!',
-                    text: 'Gagal menghapus media.',
+                    text: '{{ session('error') }}',
                     icon: 'error',
                     confirmButtonColor: '#ef4444'
                 });

@@ -66,7 +66,7 @@
 
         <!-- ====== MODAL PINJAM ====== -->
         <div id="pinjamModal"
-            class="fixed inset-0 z-[1050] items-center justify-center bg-black/40 p-4
+            class="fixed inset-0 z-[1050] flex items-center justify-center bg-black/40 p-4
          {{ $showpinjamModal ?? false ? 'flex' : 'hidden' }}">
             <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden relative">
                 <div class="bg-green text-white text-center py-3 font-semibold text-lg">
@@ -136,52 +136,28 @@
             </div>
         </div>
 
-        <!-- MODAL PDF -->
 <!-- MODAL PDF -->
 <div id="pdfModal"
-     class="fixed inset-0 z-50 hidden
-            bg-black/60
-            flex items-center justify-center
-            px-3">
+     class="fixed inset-0 z-50 hidden bg-black/70 flex items-center justify-center">
 
-    <!-- CARD MODAL -->
     <div
         class="
-        relative bg-white
-        w-full
-        max-w-md
-        h-[70vh]
+        relative bg-white flex flex-col w-full h-full md:w-3/4 md:h-[90vh] rounded-none md:rounded-xl overflow-hidden">
 
-        sm:max-w-lg
-        sm:h-[75vh]
+        <!-- HEADER -->
+        <div
+            class="h-12 shrink-0 bg-gray-900 text-white flex items-center justify-between px-4">
 
-        md:max-w-4xl
-        md:h-[85vh]
-
-        rounded-xl
-        shadow-2xl
-        overflow-hidden
-        ">
-
-        <!-- CLOSE -->
-        <button
-            onclick="closePdfModal()"
-            class="
-            absolute top-3 right-3 z-50
-            bg-red-500 text-white
-            w-8 h-8 rounded-full
-            flex items-center justify-center
-            text-sm font-bold
-            shadow
-            ">
-            ✕
-        </button>
+            <button
+                onclick="closePdfModal()"
+                class=" bg-red-500 hover:bg-red-600 w-8 h-8 rounded-full flex items-center justify-center font-bold">
+                ✕
+            </button>
+        </div>
 
         <!-- PDF -->
         <iframe
-            id="pdfFrame"
-            class="w-full h-full border-0"
-            loading="lazy">
+            id="pdfFrame" class="flex-1 w-full border-0" loading="lazy">
         </iframe>
 
     </div>

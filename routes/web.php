@@ -58,7 +58,10 @@ Route::middleware([UserMiddleware::class])->group(function () {
     Route::get('/daftarbuku', [DaftarBukuController::class, 'index'])->name('user.daftarbuku');
 
     // DETAIL BUKU
-    Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])->name('user.detailbuku');
+    Route::get('/detailbuku/{id}', [DetailBukuController::class, 'index'])
+    ->middleware('auth')
+    ->name('user.detailbuku');
+
 
     // RIWAYAT BUKU & RIWAYAT BACA
     Route::get('/riwayatbuku', [RiwayatBukuController::class, 'index'])->name('user.riwayatbuku');
@@ -119,10 +122,10 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
     Route::delete('/data_buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulkDelete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
     Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');
-    Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
-    ->name('data_buku.archive'); // 🗂️ Arsipkan buku
     Route::post('/data_buku/bulk-archive', [DataBukuController::class, 'bulkArchive'])
     ->name('data_buku.bulkArchive'); // 🗂️ Arsipkan banyak buku
+    Route::put('/data_buku/{id}/archive', [DataBukuController::class, 'archive'])
+    ->name('data_buku.archive'); // 🗂️ Arsipkan buku
     Route::put('/data_buku/{id}/restore', [DataBukuController::class, 'restore'])
     ->name('data_buku.restore');
 
@@ -141,6 +144,8 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
 
     // Data Pengguna Routes
     Route::resource('/data_pengguna', DataPenggunaController::class)->names('data_pengguna');
+    Route::delete('/data_pengguna/{id}', [DataPenggunaController::class, 'destroy'])
+    ->name('data_pengguna.destroy');
 
     // Data Peminjam Routes
     Route::resource('/data_peminjam', DataPeminjamController::class)->names('data_peminjam');

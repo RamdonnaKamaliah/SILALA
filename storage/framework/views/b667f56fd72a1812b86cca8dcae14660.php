@@ -11,16 +11,11 @@
                     <img src="<?php echo e(asset('/assets_admin/image/sisapa.png')); ?>" alt="logo"
                         class="w-16 h-16 md:w-20 md:h-20 rounded-xl object-cover shadow-sm" />
                     <div>
-                        <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-[#2d5016]">Selamat Datang, Admin 👋</h1>
-                        <p class="text-sm text-gray-600 mt-1">Sistem Manajemen Perpustakaan — Silala</p>
+                        <h1 class="text-xl md:text-2xl lg:text-3xl font-bold text-[#2d5016]">Selamat Datang, Admin</h1>
+                        <p class="text-sm text-gray-600 mt-1">Sistem Informasi Layanan Literasi dan Arsip — Silala</p>
                     </div>
                 </div>
 
-                <!-- Tanggal dan Waktu -->
-                <div class="text-center mt-4 md:mt-0">
-                    <div id="current-time" class="text-lg md:text-xl lg:text-2xl font-bold text-[#2d5016]">00:00:00</div>
-                    <div id="current-date" class="text-xs text-gray-600 mt-1">Hari, DD Bulan YYYY</div>
-                </div>
             </div>
         </div>
 
@@ -41,15 +36,6 @@
                 <div class="flex items-end justify-between">
                     <div>
                         <div class="text-2xl font-bold text-gray-800"><?php echo e($totalBuku); ?></div>
-                        <div class="flex items-center mt-2">
-                            <span class="text-xs text-green-600 flex items-center">
-                                <i class="fas fa-arrow-up mr-1 text-xs"></i>+12
-                            </span>
-                            <span class="text-xs text-gray-500 ml-2">dari bulan lalu</span>
-                        </div>
-                    </div>
-                    <div class="w-16 h-10">
-                        <canvas id="sparkTotalBuku"></canvas>
                     </div>
                 </div>
             </div>
@@ -68,15 +54,6 @@
                 <div class="flex items-end justify-between">
                     <div>
                         <div class="text-2xl font-bold text-gray-800"><?php echo e($peminjamAktif); ?></div>
-                        <div class="flex items-center mt-2">
-                            <span class="text-xs text-green-600 flex items-center">
-                                <i class="fas fa-arrow-up mr-1 text-xs"></i>+8
-                            </span>
-                            <span class="text-xs text-gray-500 ml-2">dari minggu lalu</span>
-                        </div>
-                    </div>
-                    <div class="w-16 h-10">
-                        <canvas id="sparkPeminjam"></canvas>
                     </div>
                 </div>
             </div>
@@ -94,17 +71,8 @@
                 </div>
                 <div class="flex items-end justify-between">
                     <div>
-                        <div class="text-2xl font-bold text-gray-800"><?php echo e($bukuDipinjam); ?></div>
-                        <div class="flex items-center mt-2">
-                            <span class="text-xs text-green-600 flex items-center">
-                                <i class="fas fa-arrow-up mr-1 text-xs"></i>+24
-                            </span>
-                            <span class="text-xs text-gray-500 ml-2">dari kemarin</span>
-                        </div>
-                    </div>
-                    <div class="w-16 h-10">
-                        <canvas id="sparkDipinjam"></canvas>
-                    </div>
+                        <div class="text-2xl font-bold text-gray-800"><?php echo e($bukuDipinjam); ?></div>                       
+                    </div>                   
                 </div>
             </div>
 
@@ -121,22 +89,13 @@
                 </div>
                 <div class="flex items-end justify-between">
                     <div>
-                        <div class="text-2xl font-bold text-gray-800"><?php echo e($bukuArsip); ?></div>
-                        <div class="flex items-center mt-2">
-                            <span class="text-xs text-green-600 flex items-center">
-                                <i class="fas fa-download mr-1 text-xs"></i>125
-                            </span>
-                            <span class="text-xs text-gray-500 ml-2">unduhan hari ini</span>
-                        </div>
-                    </div>
-                    <div class="w-16 h-10">
-                        <canvas id="sparkEbook"></canvas>
-                    </div>
+                        <div class="text-2xl font-bold text-gray-800"><?php echo e($bukuArsip); ?></div>                      
+                    </div>              
                 </div>
             </div>
         </div>
 
-        <!-- Chart Section -->
+        <!-- Statistik Mingguan -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <!-- Main Chart -->
             <div class="bg-white rounded-xl p-4 shadow-sm">
@@ -151,58 +110,68 @@
                 </div>
             </div>
 
-            <!-- Quick Stats -->
+            <!-- Ringkasan Cepat -->
             <div class="bg-white rounded-xl p-4 shadow-sm">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Ringkasan Cepat</h3>
 
                 <div class="space-y-3">
+
+                    <!-- Peminjaman Hari Ini -->
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div class="flex items-center">
                             <div class="w-8 h-8 rounded-lg bg-[#4a7c3a] flex items-center justify-center mr-3">
                                 <i class="fas fa-clock text-white text-xs"></i>
                             </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Peminjaman Hari Ini</p>
-                            </div>
+                            <p class="text-sm font-medium text-gray-700">Peminjaman Hari Ini</p>
                         </div>
-                        <span class="text-lg font-bold text-[#2d5016]">42</span>
+                        <span class="text-lg font-bold text-[#2d5016]">
+                            <?php echo e($pinjamHariIni); ?>
+
+                        </span>
                     </div>
 
+                    <!-- Pengembalian Besok -->
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div class="flex items-center">
                             <div class="w-8 h-8 rounded-lg bg-[#6b9c5a] flex items-center justify-center mr-3">
                                 <i class="fas fa-calendar-check text-white text-xs"></i>
                             </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Pengembalian Besok</p>
-                            </div>
+                            <p class="text-sm font-medium text-gray-700">Pengembalian Besok</p>
                         </div>
-                        <span class="text-lg font-bold text-[#2d5016]">28</span>
+                        <span class="text-lg font-bold text-[#2d5016]">
+                            <?php echo e($kembaliBesok); ?>
+
+                        </span>
                     </div>
 
+                    <!-- Keterlambatan -->
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div class="flex items-center">
                             <div class="w-8 h-8 rounded-lg bg-[#8fb982] flex items-center justify-center mr-3">
                                 <i class="fas fa-exclamation-triangle text-white text-xs"></i>
                             </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Keterlambatan</p>
-                            </div>
+                            <p class="text-sm font-medium text-gray-700">Keterlambatan</p>
                         </div>
-                        <span class="text-lg font-bold text-[#dc2626]">5</span>
+                        <span class="text-lg font-bold text-red-600">
+                            <?php echo e($keterlambatan); ?>
+
+                        </span>
                     </div>
 
+                    <!-- Buku Populer -->
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                         <div class="flex items-center">
                             <div class="w-8 h-8 rounded-lg bg-[#a5c998] flex items-center justify-center mr-3">
                                 <i class="fas fa-star text-white text-xs"></i>
                             </div>
-                            <div>
-                                <p class="text-sm font-medium text-gray-700">Buku Populer</p>
-                            </div>
+                            <p class="text-sm font-medium text-gray-700">Buku Populer</p>
                         </div>
-                        <span class="text-lg font-bold text-[#2d5016]">12</span>
+                        <span class="text-lg font-bold text-[#2d5016]">
+                            <?php echo e($bukuPopuler); ?>
+
+                        </span>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -211,47 +180,71 @@
         <div class="bg-white rounded-xl p-4 shadow-sm">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">Aktivitas Terbaru</h3>
-                <a href="#" class="text-sm text-[#4a7c3a] hover:text-[#2d5016] font-medium">Lihat Semua</a>
             </div>
 
             <div class="space-y-3">
-                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
-                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-                        <i class="fas fa-user-plus text-blue-600"></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-gray-800">Anggota baru terdaftar</p>
-                        <p class="text-xs text-gray-500">Andi Pratama • 10 menit yang lalu</p>
-                    </div>
-                    <span class="text-xs text-gray-500">Baru</span>
-                </div>
+                <?php $__empty_1 = true; $__currentLoopData = $activities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $activity): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                    <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+                        <div class="w-10 h-10 rounded-full <?php echo e($activity['bg']); ?> flex items-center justify-center mr-3">
+                            <i class="fas <?php echo e($activity['icon']); ?> <?php echo e($activity['iconColor']); ?>"></i>
+                        </div>
 
-                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
-                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center mr-3">
-                        <i class="fas fa-book text-green-600"></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-gray-800">Peminjaman buku berhasil</p>
-                        <p class="text-xs text-gray-500">"Laskar Pelangi" dipinjam • 1 jam yang lalu</p>
-                    </div>
-                    <span class="text-xs text-gray-500">Selesai</span>
-                </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-gray-800">
+                                <?php echo e($activity['title']); ?>
 
-                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors duration-200">
-                    <div class="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center mr-3">
-                        <i class="fas fa-exclamation text-yellow-600"></i>
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                <?php echo e($activity['desc']); ?> • <?php echo e($activity['time']->diffForHumans()); ?>
+
+                            </p>
+                        </div>
+
+                        <?php if($activity['type'] === 'pengingat'): ?>
+                            <span class="text-xs text-yellow-600 font-medium">Penting</span>
+                        <?php else: ?>
+                            <span class="text-xs text-gray-500">Baru</span>
+                        <?php endif; ?>
                     </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-gray-800">Pengingat pengembalian</p>
-                        <p class="text-xs text-gray-500">3 buku akan jatuh tempo besok • 2 jam yang lalu</p>
-                    </div>
-                    <span class="text-xs text-yellow-600">Penting</span>
-                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                    <p class="text-sm text-gray-500 text-center">
+                        Belum ada aktivitas terbaru
+                    </p>
+                <?php endif; ?>
             </div>
         </div>
-
     </div>
     <?php $__env->startPush('scripts'); ?>
+    <script>
+    const ctx = document.getElementById('mainChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: <?php echo json_encode($chartLabels, 15, 512) ?>,
+            datasets: [{
+                label: 'Jumlah Peminjaman',
+                data: <?php echo json_encode($chartData, 15, 512) ?>,
+                tension: 0.4,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true
+                }
+            }
+        }
+    });
+    </script>
     <?php $__env->stopPush(); ?>
 <?php $__env->stopSection(); ?>
 

@@ -73,5 +73,4 @@
             <?php endif; ?>
         </div>
     </nav>
-</aside>
-<?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/components/navbarlanding.blade.php ENDPATH**/ ?>
+</aside><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/components/navbarlanding.blade.php ENDPATH**/ ?>

@@ -320,7 +320,7 @@ class DataPeminjamController extends Controller
             $peminjaman->keterangan = 'Teguran: ' . $request->pesan_teguran;
             $peminjaman->save();
 
-            return redirect()->back()->with('success', 'Teguran berhasil dikirim ke peminjam. User diminta untuk mengupload foto ulang.');
+            return redirect()->back()->with('success', 'Teguran berhasil dikirim ke peminjam. Peminjam diminta untuk mengupload foto ulang.');
 
         } catch (\Exception $e) {
             Log::error('Error kirim teguran: ' . $e->getMessage(), [

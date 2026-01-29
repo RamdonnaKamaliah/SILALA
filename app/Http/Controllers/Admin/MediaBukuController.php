@@ -23,5 +23,4 @@ class MediaBukuController extends Controller
 
     return back()->with('success', 'Gambar & Data berhasil dihapus');
 }
-
 }

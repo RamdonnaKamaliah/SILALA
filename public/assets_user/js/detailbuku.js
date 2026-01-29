@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         if (closeModalBtn)
             closeModalBtn.addEventListener("click", () =>
-                pinjamModal.classList.add("hidden"),
+                pinjamModal.classList.add("hidden")
             );
         pinjamModal.addEventListener("click", (e) => {
             if (e.target === pinjamModal) pinjamModal.classList.add("hidden");
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
             const diffDays = Math.ceil(
-                (new Date(tanggalKembali) - today) / (1000 * 60 * 60 * 24),
+                (new Date(tanggalKembali) - today) / (1000 * 60 * 60 * 24)
             );
             if (diffDays < 0 || diffDays > 7)
                 return Swal.fire({
@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         timer: 2000,
                         showConfirmButton: false,
                     }).then(
-                        () => (window.location.href = pinjamRedirect || "/"),
+                        () => (window.location.href = pinjamRedirect || "/")
                     );
                 } else {
                     Swal.fire({
@@ -223,24 +223,23 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     })();
 
-    // ====== MODAL PDF ======
-    window.openPdfModal = function (url) {
-        const iframe = document.getElementById("pdfFrame");
-        const modal = document.getElementById("pdfModal");
+       // ====== MODAL PDF ======
+  window.openPdfModal = function (url) {
+    const iframe = document.getElementById("pdfFrame");
+    const modal = document.getElementById("pdfModal");
 
-        iframe.src = url + "#toolbar=0&navpanes=0&scrollbar=1&zoom=page-width";
-        modal.classList.remove("hidden");
+    iframe.src = url + "#toolbar=0&navpanes=0&scrollbar=1&zoom=page-width";
+    modal.classList.remove("hidden");
 
-        // lock scroll background (mobile)
-        document.body.classList.add("overflow-hidden");
-    };
+    document.body.classList.add("overflow-hidden");
+};
 
-    window.closePdfModal = function () {
-        document.getElementById("pdfFrame").src = "";
-        document.getElementById("pdfModal").classList.add("hidden");
+window.closePdfModal = function () {
+    document.getElementById("pdfFrame").src = "";
+    document.getElementById("pdfModal").classList.add("hidden");
 
-        document.body.classList.remove("overflow-hidden");
-    };
+    document.body.classList.remove("overflow-hidden");
+};
 
     // ====== RATING ======
     const starContainer = document.getElementById("starContainer");
@@ -280,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (totalRatings > 0) {
             html += `<span class="text-xs text-gray-600 ml-2">(${avgRating.toFixed(
-                1,
+                1
             )})</span>`;
         }
 
@@ -307,7 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
             submitRatingBtn.disabled = false;
             submitRatingBtn.classList.remove(
                 "opacity-50",
-                "cursor-not-allowed",
+                "cursor-not-allowed"
             );
         });
     });
@@ -374,4 +373,5 @@ document.addEventListener("DOMContentLoaded", () => {
             submitRatingBtn.innerHTML = submitRatingBtn.dataset.defaultText;
         }
     });
+
 }); // DOMContentLoaded

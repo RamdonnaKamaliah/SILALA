@@ -33,99 +33,78 @@
                <i class="fas fa-plus-circle"></i>
                <span>Tambah Kategori</span>
             </a>
-            <button id="bulkDeleteBtn" 
-                class="bg-gray-400 text-white px-5 py-2.5 rounded-xl transition-all duration-200 flex items-center space-x-2 cursor-not-allowed opacity-50"
-                disabled>
-                <i class="fas fa-trash-alt"></i>
-                <span>Hapus Terpilih</span>
-            </button>
         </div>
     </div>
 
-    <!-- Bulk Delete Form -->
-    <form id="bulkDeleteForm" action="{{ route('admin.data_kategori.bulk-delete') }}" method="POST">
-        @csrf
-        @method('DELETE')
-
-        <!-- Table Container -->
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mt-6">
-            <div class="overflow-x-auto">
-                <table id="dataTableKategori" class="w-full text-sm">
-                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100 text-gray-700 border-b border-gray-200">
-                        <tr>
-                            <th class="w-14 px-4 py-4 text-center">
-                                <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-gray-300 text-[#A4B465] focus:ring-[#A4B465]">
-                            </th>
-                            <th class="w-20 px-4 py-4 text-center font-semibold">No</th>
-                            <th class="px-6 py-4 text-left font-semibold">
-                                <div class="flex items-center space-x-2">
-                                    <i class="fas fa-tag text-[#A4B465]"></i>
-                                    <span>Nama Kategori</span>
-                                </div>
-                            </th>
-                            <th class="px-6 py-4 text-center font-semibold w-32">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @forelse ($data_kategori as $kategori)
-                            <tr class="hover:bg-gray-50/80 transition-colors duration-150 group">
-                                <td class="px-4 py-4 text-center">
-                                    <input type="checkbox" name="selected_ids[]" value="{{ $kategori->id }}" 
-                                           class="row-checkbox w-4 h-4 rounded border-gray-300 text-[#A4B465] focus:ring-[#A4B465]">
-                                </td>
-                                <td class="px-4 py-4 text-center text-gray-600 font-medium">
+    <!-- Table Container -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden mt-6">
+        <div class="overflow-x-auto">
+            <table id="dataTableKategori" class="w-full text-sm">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                            <div class="flex items-center justify-center gap-2">
+                                <i class="fas fa-hashtag text-[#A4B465]"></i>
+                                No
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-tag text-[#A4B465]"></i>
+                                Nama Kategori
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider border-b border-gray-200">
+                            <div class="flex items-center justify-center gap-2">
+                                <i class="fas fa-cog text-[#A4B465]"></i>
+                                Aksi
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @foreach ($data_kategori as $kategori)
+                        <tr class="hover:bg-gray-50 transition-colors duration-150">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900 text-center">
                                     {{ $loop->iteration }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-folder text-white text-sm"></i>
-                                        </div>
-                                        <span class="font-medium text-gray-800">{{ $kategori->nama_kategori }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] rounded-lg flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-folder text-white text-sm"></i>
                                     </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center justify-center space-x-2">
-                                        <a href="{{ route('admin.data_kategori.show', $kategori->id) }}"
-                                           class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-3 rounded-xl transition-all duration-200 group relative"
-                                           title="Detail Kategori">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="{{ route('admin.data_kategori.edit', $kategori->id) }}"
-                                           class="bg-green-50 hover:bg-green-100 text-green-600 p-3 rounded-xl transition-all duration-200 group relative"
-                                           title="Edit Kategori">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form action="{{ route('admin.data_kategori.destroy', $kategori->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button"
-                                                class="bg-red-50 hover:bg-red-100 text-red-600 p-3 rounded-xl transition-all duration-200 delete-btn group relative"
-                                                title="Hapus Kategori"
-                                                data-id="{{ $kategori->id }}"
-                                                data-name="{{ $kategori->nama_kategori }}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="px-6 py-12 text-center">
-                                    <div class="flex flex-col items-center justify-center text-gray-400">
-                                        <i class="fas fa-inbox text-4xl mb-3"></i>
-                                        <p class="text-lg">Tidak ada data kategori</p>
-                                        <p class="text-sm mt-1">Mulai dengan menambahkan kategori baru</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                                    <span class="font-semibold text-gray-900">{{ $kategori->nama_kategori }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center justify-center gap-2">
+                                    <a href="{{ route('admin.data_kategori.show', $kategori->id) }}"
+                                       class="bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm transform hover:scale-105"
+                                       title="Detail Kategori">
+                                        <i class="fas fa-eye text-sm"></i>
+                                    </a>
+                                    <a href="{{ route('admin.data_kategori.edit', $kategori->id) }}"
+                                       class="bg-green text-white p-2.5 rounded-lg hover:bg-green-700 transition-all duration-200 shadow-sm transform hover:scale-105"
+                                       title="Edit Kategori">
+                                        <i class="fas fa-edit text-sm"></i>
+                                    </a>
+                                    <button type="button"
+                                        class="bg-red-600 text-white p-2.5 rounded-lg hover:bg-red-700 transition-all duration-200 delete-btn shadow-sm transform hover:scale-105"
+                                        title="Hapus Kategori"
+                                        data-id="{{ $kategori->id }}"
+                                        data-name="{{ $kategori->nama_kategori }}">
+                                        <i class="fas fa-trash text-sm"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-    </form>
+    </div>
 </div>
 
 <!-- Delete Confirmation Form -->
@@ -135,190 +114,91 @@
 </form>
 @endsection
 
-@push('styles')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-.tooltip-text {
-    visibility: hidden;
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.group:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-}
-
-#bulkDeleteBtn:enabled {
-    background-color: #ef4444;
-    cursor: pointer;
-    opacity: 1;
-}
-
-#bulkDeleteBtn:enabled:hover {
-    background-color: #dc2626;
-    transform: translateY(-1px);
-}
-
-.dataTables_wrapper {
-    padding: 0 !important;
-}
-
-.dataTables_filter input {
-    border: 1px solid #d1d5db !important;
-    border-radius: 8px !important;
-    padding: 8px 12px !important;
-}
-
-.dataTables_length select {
-    border: 1px solid #d1d5db !important;
-    border-radius: 8px !important;
-    padding: 6px 12px !important;
-}
-
-table.dataTable tbody tr:hover {
-    background-color: #f9fafb !important;
-}
-</style>
-@endpush
-
 @push('scripts')
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-$(document).ready(function() {
-    // Initialize DataTable
-    var table = $('#dataTableKategori').DataTable({
-        language: { 
-            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json" 
-        },
-        pageLength: 10,
-        lengthMenu: [5, 10, 25, 50],
-        dom: '<"flex flex-col md:flex-row justify-between items-center mb-4"<"mb-4 md:mb-0"l><"flex items-center"f>>rt<"flex flex-col md:flex-row justify-between items-center mt-4"<"mb-4 md:mb-0"i><"flex"p>>',
-        columnDefs: [
-            { orderable: false, targets: [0, 3] },
-            { searchable: false, targets: [0, 3] }
-        ],
-        initComplete: function() {
-            $('.dataTables_filter input').attr('placeholder', 'Cari kategori...');
-        }
-    });
-
-    // Select All functionality
-    $('#selectAll').on('click', function() {
-        var isChecked = this.checked;
-        $('.row-checkbox').prop('checked', isChecked);
-        updateBulkDeleteButton();
-    });
-
-    // Individual checkbox change
-    $(document).on('change', '.row-checkbox', function() {
-        if (!this.checked) {
-            $('#selectAll').prop('checked', false);
-        } else {
-            var allChecked = $('.row-checkbox:checked').length === $('.row-checkbox').length;
-            $('#selectAll').prop('checked', allChecked);
-        }
-        updateBulkDeleteButton();
-    });
-
-    // Update bulk delete button state
-    function updateBulkDeleteButton() {
-        var checkedCount = $('.row-checkbox:checked').length;
-        var bulkDeleteBtn = $('#bulkDeleteBtn');
-        
-        if (checkedCount > 0) {
-            bulkDeleteBtn.prop('disabled', false);
-            bulkDeleteBtn.html('<i class="fas fa-trash-alt mr-2"></i>Hapus (' + checkedCount + ') Data Terpilih');
-        } else {
-            bulkDeleteBtn.prop('disabled', true);
-            bulkDeleteBtn.html('<i class="fas fa-trash-alt mr-2"></i>Hapus Data Terpilih');
-        }
-    }
-
-    // Bulk delete confirmation
-    $('#bulkDeleteBtn').on('click', function(e) {
-        e.preventDefault();
-        var selectedIds = $('.row-checkbox:checked').map(function() { 
-            return this.value; 
-        }).get();
-        
-        if (selectedIds.length > 0) {
-            Swal.fire({
-                title: 'Konfirmasi Hapus Massal',
-                html: `Apakah Anda yakin ingin menghapus <strong>${selectedIds.length}</strong> kategori yang dipilih?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#bulkDeleteForm').submit();
-                }
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#dataTableKategori').DataTable({
+                responsive: true,
+                pageLength: 10,
+                lengthMenu: [5, 10, 25, 50],
+                ordering: true,
+                searching: true,
+                info: true,
+                dom: '<"flex flex-col sm:flex-row justify-between items-center gap-4 mb-4 px-4 pt-4"lf>rt<"flex flex-col sm:flex-row justify-between items-center gap-4 mt-4 px-4 pb-4"ip>',
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ data",
+                    info: "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data",
+                    zeroRecords: "Data tidak ditemukan",
+                    paginate: {
+                        first: "Awal",
+                        last: "Akhir",
+                        next: "›",
+                        previous: "‹"
+                    }
+                },
+                columnDefs: [
+                    { orderable: false, targets: [2] } // Aksi tidak bisa di-sort
+                ]
             });
-        }
-    });
 
-    // Individual delete confirmation - FIXED VERSION
-    $(document).on('click', '.delete-btn', function(e) {
-        e.preventDefault();
-        var kategoriId = $(this).data('id');
-        var kategoriName = $(this).data('name');
-        var deleteUrl = "{{ route('admin.data_kategori.destroy', ':id') }}".replace(':id', kategoriId);
-        
-        Swal.fire({
-            title: 'Konfirmasi Hapus',
-            html: `Apakah Anda yakin ingin menghapus kategori <strong>"${kategoriName}"</strong>?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#6b7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Create dynamic form submission
-                var deleteForm = $('#deleteForm');
-                deleteForm.attr('action', deleteUrl);
-                deleteForm.submit();
-            }
-        });
-    });
+            // Custom styling untuk DataTables elements
+            $('.dataTables_length select').addClass('px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#A4B465] focus:border-[#A4B465]');
+            $('.dataTables_filter input').addClass('px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-[#A4B465] focus:border-[#A4B465] ml-2');
+            $('.dataTables_length label, .dataTables_filter label').addClass('text-sm text-gray-700 font-medium');
+            $('.dataTables_info').addClass('text-sm text-gray-600');
+            $('.dataTables_paginate').addClass('flex gap-1');
+            $('.paginate_button').addClass('px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-[#A4B465] hover:text-white hover:border-[#A4B465] transition-colors');
+            $('.paginate_button.current').addClass('bg-[#A4B465] text-white border-[#A4B465]');
+            $('.paginate_button.disabled').addClass('opacity-50 cursor-not-allowed');
 
-    // Success message for various actions
-    @if(session('success'))
-        Swal.fire({
-            title: 'Sukses!',
-            text: '{{ session('success') }}',
-            icon: 'success',
-            confirmButtonColor: '#A4B465',
-            timer: 3000
-        });
-    @endif
+            // Delete confirmation
+            $(document).on('click', '.delete-btn', function(e) {
+                e.preventDefault();
+                var kategoriId = $(this).data('id');
+                var kategoriName = $(this).data('name');
+                var deleteUrl = "{{ route('admin.data_kategori.destroy', ':id') }}".replace(':id', kategoriId);
 
-    @if(session('error'))
-        Swal.fire({
-            title: 'Error!',
-            text: '{{ session('error') }}',
-            icon: 'error',
-            confirmButtonColor: '#ef4444'
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    html: `Apakah Anda yakin ingin menghapus kategori <strong>${kategoriName}</strong>?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444',
+                    cancelButtonColor: '#6b7280',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var deleteForm = $('#deleteForm');
+                        deleteForm.attr('action', deleteUrl);
+                        deleteForm.submit();
+                    }
+                });
+            });
+
+            // Success message
+            @if (session('success'))
+                Swal.fire({
+                    title: 'Sukses!',
+                    text: '{{ session('success') }}',
+                    icon: 'success',
+                    confirmButtonColor: '#A4B465',
+                    timer: 3000
+                });
+            @endif
+
+            @if (session('error'))
+                Swal.fire({
+                    title: 'Error!',
+                    text: '{{ session('error') }}',
+                    icon: 'error',
+                    confirmButtonColor: '#ef4444'
+                });
+            @endif
         });
-    @endif
-});
-</script>
+    </script>
 @endpush

@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @include('layout_landing.patrial_landing.link')
 
-    <title>SILALA (Sistem Informasi Layanan Literasi & Arsip)</title>
+    <title>Silala | Sistem Informasi Layanan Literasi & Arsip</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('default/icon_silala.svg') }}">
+
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- style -->
@@ -16,10 +18,6 @@
 
 <body class="bg-gray-50 dark:bg-[#15202B] font-sans text-slate-700 dark:text-[#39FF14]">
 
-    <!-- navbar -->
-    @include('layout_landing.patrial_landing.header')
-
-    <!-- Hero Section -->
     <!-- navbar -->
     @include('layout_landing.patrial_landing.header')
 
@@ -34,6 +32,9 @@
     <section class="pt-24 md:pt-32 pb-32 md:pb-40 relative 
                 bg-cover bg-center hero-section"
         style="background-image: url('{{ $bgImage }}');">
+
+
+
         <div class="max-w-5xl mx-auto flex flex-col items-center text-center px-4 md:px-6">
 
             <!-- Judul + Icon -->
@@ -58,8 +59,7 @@
 
                 <!-- Deskripsi -->
                 <p class="text-base md:text-lg leading-relaxed text-black dark:text-white">
-                    Sistem informasi layanan literasi & Arsip(SILALA). Memberikan
-                    kemudahan akses literasi dan pengelolaan Arsip digital
+                    Sistem Informasi Layanan Literasi dan Arsip (SILALA). Memberikan kemudahan akses literasi dan pengelolaan arsip digital
                 </p>
             </div>
 
@@ -98,9 +98,7 @@
                     </span>
 
                     <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed font-medium italic">
-                        "Buku adalah jendela dunia. Dengan SILALA, jendela tersebut kini hadir dalam
-                        genggaman anda melalui layanan baca online dan peminjaman buku yang
-                        praktis."
+                        "Buku adalah jendela dunia. Dengan SILALA, jendela tersebut kini hadir dalam genggaman Anda melalui layanan baca online dan peminjaman buku yang praktis."
                     </p>
 
                     <span class="absolute -bottom-4 left-6 text-black dark:text-white text-3xl">
@@ -114,28 +112,29 @@
                 <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white">
                     Rekomendasi Buku Best Seller
                 </h2>
-                <p class="mt-2 text-gray-600 dark:text-gray-300 text-base">
+                <p class="mt-2 text-white dark:text-gray-300 text-base">
                     Pilihan buku terbaik untuk menambah wawasan dan inspirasi
                 </p>
             </div>
 
             <!-- Grid Card -->
-            {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                @forelse ($data_buku as $buku)
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                @forelse ($buku as $item)
                     <article
                         class="recommend-card bg-white dark:bg-[#15202B] rounded-2xl p-4 md:p-6 flex flex-col sm:flex-row items-center sm:items-start gap-4 md:gap-5 w-full h-full
-                  opacity-0 translate-y-10 transition-all duration-700 ease-out
-                  hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
+                        opacity-0 translate-y-10 transition-all duration-700 ease-out
+                        hover:-translate-y-2 hover:shadow-2xl hover:ring-4 hover:ring-[#39FF14] hover:bg-gradient-to-br hover:from-white/70 hover:to-[#39FF14]/10 dark:hover:from-[#111]/70 dark:hover:to-[#39FF14]/20">
 
                         <!-- Cover Buku -->
                         <div
                             class="cover w-24 h-36 md:w-32 md:h-44 flex-shrink-0 transform transition-transform duration-500 hover:scale-105">
-                            @if ($buku->foto_buku)
-                                <img src="{{ asset($buku->foto_buku) }}" alt="{{ $buku->judul_buku }} - cover"
-                                    class="w-full h-full object-cover rounded-lg shadow-md">
+                            @if ($item->foto_buku && Storage::disk('public')->exists($item->foto_buku))
+                                <img src="{{ asset('storage/' . $item->foto_buku) }}"
+                                    class="w-full h-full object-cover rounded-lg">
                             @else
-                                <img src="{{ asset('assets/default-cover.jpg') }}" alt="Default Cover"
-                                    class="w-full h-full object-cover rounded-lg shadow-md">
+                                <img src="{{ asset('assets/default-cover.jpg') }}"
+                                    class="w-full h-full object-cover rounded-lg">
+                                <div class="absolute right-0 top-0 w-[6px] h-full bg-[#d6d6d6] shadow-inner"></div>
                             @endif
                         </div>
 
@@ -144,31 +143,47 @@
                             <div>
                                 <h3
                                     class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">
-                                    {{ $buku->judul_buku }}</h3>
+                                    {{ $item->judul_buku }}</h3>
                                 <p class="text-sm md:text-base text-gray-700 dark:text-gray-300 mt-1">By
-                                    {{ $buku->penulis }}</p>
+                                    {{ $item->penulis }}</p>
+                                                                        <!-- Deskripsi -->
+                                    <p
+                                        class="mt-2 text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-3">
+                                        {{ $item->deskripsi ?? 'Deskripsi belum tersedia.' }}
+                                    </p>
                             </div>
 
                             <!-- Kategori -->
                             <div
                                 class="mt-2 text-sm text-gray-600 dark:text-gray-400 flex items-center justify-center sm:justify-start gap-2">
                                 <i class="fa fa-book"></i>
-                                <span class="break-words">{{ $buku->kategori }}</span>
+                                <span class="break-words">
+                                     @if ($item->kategoris->isNotEmpty())
+                                    {{ $item->kategoris->pluck('nama_kategori')->join(', ') }}
+                                @else
+                                    -
+                                @endif
+                                </span>
                             </div>
 
-                            <!-- Rating -->
-                            <div class="mt-3 flex items-center justify-center sm:justify-start gap-3">
-                                <div class="rating text-yellow-400 text-base">★★★★☆</div>
-                            </div>
+                            <a href="{{ route('user.detailbuku', $item->id) }}"
+   class="mt-3 inline-flex items-center justify-center bg-primary hover:bg-green text-white text-sm font-semibold px-5 py-1.5 rounded-full transition">
+    <i class="fa-solid fa-eye mr-1"></i>
+    Lihat Buku
+</a>
+
+
+
                         </div>
 
                     </article>
                 @empty
                     <p class="col-span-3 text-center text-gray-500 dark:text-gray-400">Belum ada data buku.</p>
                 @endforelse
-            </div> --}}
+            </div>
         </div>
     </section>
+
 
     <!-- footer -->
     @include('layout_landing.patrial_landing.footer')

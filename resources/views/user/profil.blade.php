@@ -22,7 +22,7 @@
           @if(Auth::user()->foto_profil)
             <img src="{{ asset('storage/' . Auth::user()->foto_profil) }}" class="w-full h-full object-cover" />
           @else
-            <img src="{{ asset('assets/Profile.jpg') }}" class="w-full h-full object-cover" />
+            <img src="{{ asset('default/profile_user.svg') }}" class="w-full h-full object-cover" />
           @endif
         </div>
       </div>

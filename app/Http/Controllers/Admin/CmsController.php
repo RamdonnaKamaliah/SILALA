@@ -50,30 +50,4 @@ class CmsController extends Controller
         }
     }
 
-    public function delete(Request $request) {
-        $request->validate([
-            'key' => 'required|string|exists:settings,key'
-        ]);
-
-        try {
-            $setting = Setting::where('key', $request->key)->first();
-            
-            if ($setting->value && Storage::disk('public')->exists('cms/' . $setting->value)) {
-                Storage::disk('public')->delete('cms/' . $setting->value);
-            }
-
-            $setting->update(['value' => null]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil menghapus ' . $setting->label
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Gagal menghapus: ' . $e->getMessage()
-            ], 500);
-        }
-    }
 }

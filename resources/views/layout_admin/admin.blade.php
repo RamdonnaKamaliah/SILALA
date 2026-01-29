@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard</title>
+    <title>Admin Silala | Sistem Informasi Layanan Literasi & Arsip</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('default/icon_silala.svg') }}">
+
     @include('layout_admin.partial_admin.link')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
@@ -74,7 +76,7 @@
     {{-- profile admin --}}
     <script src="{{ asset('assets_admin/js/profile_Admin/index.js') }}"></script>
     <script src="{{ asset('assets_admin/js/profile_Admin/edit.js') }}"></script>
-    
+
     @stack('scripts')
 </body>
 </html>

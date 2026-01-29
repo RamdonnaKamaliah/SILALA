@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\TrashedAccount;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -24,8 +25,16 @@ class GoogleLoginController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
 
+            $googleUser = Socialite::driver('google')->user();
+            
+            if(TrashedAccount::where('email', $googleUser->getEmail())->exists()) {
+                return redirect('/login')->with(
+                    'error', 'Email ini tidak bisa digunakan lagi untuk login atau registrasi'
+                );
+            }
+        
+            
             // Cek apakah ada admin
             $admin = Admin::where('email', $googleUser->getEmail())->first();
             if ($admin) {

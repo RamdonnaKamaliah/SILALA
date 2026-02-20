@@ -1,0 +1,50 @@
+
+        /* Style untuk truncate text dengan ellipsis */
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Responsif untuk tabel */
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+            }
+        }
+
+        /* Style untuk ikon aksi */
+        .action-btn {
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Style untuk empty state */
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        /* Style untuk modal Alpine.js */
+        [x-cloak] {
+            display: none !important;
+        }
+
+        /* Style untuk checkbox */
+        input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        /* Style untuk tombol aksi */
+        .btn-action {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }

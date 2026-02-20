@@ -1,0 +1,206 @@
+/* ===============================
+   FE2 NAVBAR SCOPE (ANTI TABRAK)
+================================ */
+
+.fe2-navbar {
+  position: relative;
+}
+
+/* ===== BADGES ===== */
+.fe2-navbar .notification-badge,
+.fe2-navbar .message-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  color: white;
+  border-radius: 9999px;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: 2px solid #8a9a55;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fe2-navbar .notification-badge {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+}
+
+.fe2-navbar .message-badge {
+  background: linear-gradient(135deg, #4dabf7 0%, #339af0 100%);
+}
+
+/* ===== SHADOW & GLASS ===== */
+.fe2-navbar .popup-shadow {
+  box-shadow: 0 20px 40px rgba(138, 154, 85, 0.15);
+}
+
+.fe2-navbar .glass-effect {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
+.fe2-navbar .custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.fe2-navbar .custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.fe2-navbar .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #8a9a55, #A4B465);
+  border-radius: 3px;
+}
+
+.fe2-navbar .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #A4B465, #b8c685);
+}
+
+/* ===== HOVER EFFECT ===== */
+.fe2-navbar .hover-lift {
+  transition: all 0.3s ease;
+}
+
+.fe2-navbar .hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(138, 154, 85, 0.15);
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fe2-subtle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.fe2-navbar .pulse-subtle {
+  animation: fe2-subtle-pulse 2s infinite;
+}
+
+/* ===== DROPDOWN ===== */
+.fe2-navbar .dropdown-container {
+  position: relative;
+}
+
+.fe2-navbar .dropdown-menu {
+  position: fixed;
+  z-index: 50; /* turunin dari 9999 biar sopan */
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px) scale(0.95);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.fe2-navbar .dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 639px) {
+  .fe2-navbar .dropdown-menu {
+    left: 0.5rem !important;
+    right: 0.5rem !important;
+    width: calc(100vw - 1rem) !important;
+    max-width: none !important;
+    top: 5.5rem !important;
+  }
+
+  .fe2-navbar .navbar-padding {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .fe2-navbar .navbar-icon-spacing {
+    gap: 0.25rem;
+  }
+
+  .fe2-navbar .navbar-height {
+    height: 70px;
+  }
+
+  .fe2-navbar .dropdown-content {
+    max-height: 60vh;
+  }
+
+  .fe2-navbar .notification-item,
+  .fe2-navbar .message-item,
+  .fe2-navbar .profile-item {
+    padding: 0.875rem 1rem;
+  }
+
+  .fe2-navbar .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .fe2-navbar .icon-button {
+    padding: 10px;
+  }
+
+  .fe2-navbar .mobile-only { display: block; }
+  .fe2-navbar .desktop-only { display: none; }
+}
+
+/* ===== TABLET ===== */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .fe2-navbar .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: 350px;
+    max-width: 90vw;
+  }
+
+  .fe2-navbar .navbar-height {
+    height: 80px;
+  }
+
+  .fe2-navbar .navbar-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .fe2-navbar .mobile-only { display: none; }
+  .fe2-navbar .desktop-only { display: block; }
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 1024px) {
+  .fe2-navbar .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: 380px;
+    max-width: 90vw;
+  }
+
+  .fe2-navbar .navbar-height {
+    height: 85px;
+  }
+
+  .fe2-navbar .navbar-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* ===== TRANSITION ===== */
+.fe2-navbar .smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}

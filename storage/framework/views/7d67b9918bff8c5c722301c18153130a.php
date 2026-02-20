@@ -1,0 +1,182 @@
+<?php $__env->startSection('title', 'Beranda User'); ?>
+<?php if(session('success')): ?>
+  <div id="toast-success"
+       class="fixed top-5 right-5 z-50
+              bg-primary
+              text-white
+              border-l-4 border-white
+              px-4 py-3 rounded-xl shadow-md
+              flex items-center gap-2
+              transition-opacity duration-500">
+    <i class="fa-solid fa-circle-check text-white"></i>
+    <span class="text-sm font-medium">
+      <?php echo e(session('success')); ?>
+
+    </span>
+  </div>
+<?php endif; ?>
+<?php $__env->startSection('content'); ?>
+
+    <!-- Kartu Sambutan -->
+    <section
+        class="relative bg-gradient-to-r from-green to-primary text-white 
+  px-3 py-3 sm:px-4 sm:py-3 md:px-8 md:py-3 rounded-2xl shadow-md 
+  flex items-center justify-between overflow-hidden flex-shrink-0">
+
+        <!-- Bintang kiri atas -->
+        <img src="<?php echo e(asset('assets/logo_bintang.png')); ?>" alt="star"
+            class="absolute top-1.5 left-3 w-4 sm:w-5 md:w-7 opacity-90 z-20">
+
+        <!-- Bintang kanan atas -->
+        <img src="<?php echo e(asset('assets/logo_bintang.png')); ?>" alt="star"
+            class="absolute top-1.5 right-3 w-4 sm:w-5 md:w-7 opacity-90 z-20">
+
+        <!-- Teks sambutan -->
+        <div class="z-10 max-w-[70%] sm:max-w-[65%] md:max-w-none">
+            <h2 class="text-base sm:text-lg md:text-3xl font-medium text-white font-mochiy leading-tight">
+                Hallo <?php echo e(Auth::user()->name); ?>
+
+            </h2>
+            <p class="text-xs sm:text-sm md:text-base mt-1 text-[#F7EDD6]/90 leading-snug">
+                Selamat datang di perpustakaan BPMSPH.<br>
+                Mari jelajahi dunia lewat membaca
+                <img src="<?php echo e(asset('assets/emoji_bumi.png')); ?>" alt="Globe"
+                    class="inline w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 align-text-bottom">
+            </p>
+        </div>
+
+        <!-- Gambar buku -->
+        <div class="z-10 w-20 sm:w-24 md:w-36 lg:w-40 relative flex-shrink-0 ml-2 sm:ml-4">
+            <img src="<?php echo e(asset('assets/logo_buku.png')); ?>" alt="Welcome" class="w-full drop-shadow-lg">
+        </div>
+
+        <!-- Efek lembut -->
+        <div
+            class="absolute inset-0 bg-gradient-to-r from-green/20 to-transparent 
+              backdrop-blur-[1px] rounded-2xl">
+        </div>
+    </section>
+
+    <!-- CARD STATISTIK -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-6 px-2">
+
+        <!-- Sedang Dipinjam -->
+        <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
+            <span class="iconify absolute left-2 -top-2 text-[70px] text-cream" data-icon="mdi:book-plus"></span>
+            <div class="ml-[78px] mt-[4px] leading-tight">
+                <p class="text-sm text-white font-medium">Sedang dipinjam</p>
+                <h3 class="text-lg font-mochiy text-white"><?php echo e($dipinjam); ?> Buku</h3>
+            </div>
+        </div>
+
+        <!-- Telat -->
+        <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
+            <span class="iconify absolute left-2 -top-2 text-[70px] text-cream" data-icon="mdi:book-alert"></span>
+            <div class="ml-[78px] mt-[4px] leading-tight">
+                <p class="text-sm text-white font-medium">Telat Pengembalian</p>
+                <h3 class="text-lg font-mochiy text-white"><?php echo e($telat); ?> Buku</h3>
+            </div>
+        </div>
+
+        <!-- Favorit -->
+        <div class="bg-green px-6 pt-2 pb-4 rounded-2xl shadow-md relative overflow-hidden">
+            <span class="iconify absolute left-2 -top-2 text-[70px] text-cream" data-icon="mdi:book-heart"></span>
+            <div class="ml-[78px] mt-[4px] leading-tight">
+                <p class="text-sm text-white font-medium">Favorit</p>
+                <h3 class="text-lg font-mochiy text-white"><?php echo e($favorit); ?> Buku</h3>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- BAGIAN KONTEN YANG SCROLL -->
+    <div class="mt-6 overflow-y-auto scrollbar-hide flex-1 pr-2 
+    pb-10 md:rounded-b-3xl">
+        <!-- Rekomendasi -->
+        <section class="pb-8">
+            <h2 class="text-lg md:text-xl font-medium text-black mb-4 ml-2">Rekomendasi</h2>
+
+            <?php if($bukuRatingTertinggi->isEmpty()): ?>
+                <div class="flex flex-col items-center justify-center py-10 text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" viewBox="0 0 24 24"><path fill="currentColor" d="m7.625 6.4l2.8-3.625q.3-.4.713-.587T12 2t.863.188t.712.587l2.8 3.625l4.25 1.425q.65.2 1.025.738t.375 1.187q0 .3-.088.6t-.287.575l-2.75 3.9l.1 4.1q.025.875-.575 1.475t-1.4.6q-.05 0-.55-.075L12 19.675l-4.475 1.25q-.125.05-.275.063T6.975 21q-.8 0-1.4-.6T5 18.925l.1-4.125l-2.725-3.875q-.2-.275-.288-.575T2 9.75q0-.625.363-1.162t1.012-.763z"/></svg>
+
+                    <p class="text-sm font-medium">
+                        Belum ada buku dengan rating tertinggi
+                    </p>
+                </div>
+            <?php else: ?>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <?php $__currentLoopData = $bukuRatingTertinggi; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <!-- Card Buku -->
+                        <div
+                            class="flex items-start bg-transparent p-3 hover:scale-[1.03] transition-transform duration-300">
+                            <div class="relative w-32 h-44 flex-shrink-0">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-r from-black/10 to-transparent rounded-lg shadow-md">
+                                </div>
+                                <?php if($buku->foto_buku): ?>
+                                    <img src="<?php echo e(asset('storage/' . $buku->foto_buku)); ?>" alt="<?php echo e($buku->judul_buku); ?>"
+                                        class="w-full h-full object-cover rounded-lg shadow-lg border border-gray-200">
+                                <?php else: ?>
+                                    <img src="<?php echo e(asset('assets/default-cover.jpg')); ?>" alt="<?php echo e($buku->judul_buku); ?>"
+                                        class="w-full h-full object-cover rounded-lg shadow-lg border border-gray-200">
+                                <?php endif; ?>
+                                <div class="absolute right-0 top-0 w-1 h-full bg-gray-200 rounded-r-lg"></div>
+                            </div>
+
+                            <div class="ml-4 flex flex-col justify-between h-full">
+                                <div>
+                                    <h3 class="font-bold text-gray-900 text-base leading-snug"><?php echo e($buku->judul_buku); ?>
+
+                                    </h3>
+                                    <p class="text-sm text-gray-600 mb-2">By <?php echo e($buku->penulis); ?></p>
+
+                                    <!-- Rating Bintang -->
+                                    <?php
+                                        // Hitung rating rata-rata
+                                        $avgRating = $buku->ratings()->avg('rating') ?? 0;
+                                        $fullStars = floor($avgRating);
+                                        $hasHalfStar = $avgRating - $fullStars >= 0.5;
+                                        $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                                    ?>
+
+                                    <div class="flex text-yellow-400 text-sm space-x-1 mb-2">
+                                        <?php for($i = 0; $i < $fullStars; $i++): ?>
+                                            <i class="fa-solid fa-star"></i>
+                                        <?php endfor; ?>
+
+                                        <?php if($hasHalfStar): ?>
+                                            <i class="fa-solid fa-star-half-stroke"></i>
+                                        <?php endif; ?>
+
+                                        <?php for($i = 0; $i < $emptyStars; $i++): ?>
+                                            <i class="fa-regular fa-star"></i>
+                                        <?php endfor; ?>
+
+                                        <span class="text-gray-500 text-xs ml-1">
+                                            (<?php echo e(number_format($avgRating, 1)); ?>)
+                                        </span>
+                                    </div>
+
+                                    <p class="text-xs text-gray-500 mb-1">
+                                        <?php echo e($buku->penerbit); ?> • <?php echo e($buku->tahun_terbit); ?>
+
+                                    </p>
+                                </div>
+
+                                <a href="<?php echo e(route('user.detailbuku', $buku->id)); ?>"
+                                    class="bg-[#626F47] text-white text-xs px-5 py-1.5 rounded-full hover:bg-[#4e5d38] transition w-fit text-center">
+                                    Detail
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            <?php endif; ?>
+        </section>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_user.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\silala_bpmsph\resources\views/user/dashboard.blade.php ENDPATH**/ ?>

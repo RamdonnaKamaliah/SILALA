@@ -178,8 +178,8 @@
                 <select id="membership_type" name="membership_type" required
                   class="block w-full box-border px-3 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
                   <option value="">Pilih Jenis Keanggotaan</option>
-                  <option value="karyawan" {{ old('membership_type') == 'karyawan' ? 'selected' : '' }}>Karyawan</option>
-                  <option value="magang" {{ old('membership_type') == 'magang' ? 'selected' : '' }}>Magang</option>
+                  <option value="pengunjung" {{ old('membership_type') == 'pengunjung' ? 'selected' : '' }}>Pengunjung</option>
+                  <option value="anggota" {{ old('membership_type') == 'anggota' ? 'selected' : '' }}>Anggota</option>
                 </select>
                 <x-input-error :messages="$errors->get('membership_type')" class="mt-1 text-sm text-red-600" />
               </div>

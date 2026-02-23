@@ -1,4 +1,3 @@
-
 <body class="bg-white">
     <!-- Hamburger Button untuk Mobile -->
     <div class="lg:hidden fixed top-4 left-4 z-50">
@@ -47,11 +46,13 @@
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
                         {{ $currentRoute == 'admin.dashboard' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
                         href="{{ route('admin.dashboard') }}">
-                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
                             {{ $currentRoute == 'admin.dashboard' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
                             <i class="fa-solid fa-house-chimney-window text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
                             {{ $currentRoute == 'admin.dashboard' ? 'text-white font-semibold' : '' }}">
                             Dashboard
                         </span>
@@ -61,25 +62,24 @@
                 <!-- Data Peminjam -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
-                        {{ in_array($currentRoute, [
-                            'admin.data_peminjam.index',
-                            'admin.data_peminjam.show'
-                        ]) ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
+                        {{ in_array($currentRoute, ['admin.data_peminjam.index', 'admin.data_peminjam.show'])
+                            ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
+                            : '' }}"
                         href="{{ route('admin.data_peminjam.index') }}">
 
-                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
-                            {{ in_array($currentRoute, [
-                                'admin.data_peminjam.index',
-                                'admin.data_peminjam.show'
-                            ]) ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
+                            {{ in_array($currentRoute, ['admin.data_peminjam.index', 'admin.data_peminjam.show'])
+                                ? 'bg-white text-[#8a9a55]'
+                                : 'text-[#8a9a55]' }}">
                             <i class="fa-solid fa-id-card text-lg"></i>
                         </div>
 
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
-                            {{ in_array($currentRoute, [
-                                'admin.data_peminjam.index',
-                                'admin.data_peminjam.show'
-                            ]) ? 'text-white font-semibold' : '' }}">
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
+                            {{ in_array($currentRoute, ['admin.data_peminjam.index', 'admin.data_peminjam.show'])
+                                ? 'text-white font-semibold'
+                                : '' }}">
                             Data Peminjam
                         </span>
                     </a>
@@ -93,27 +93,35 @@
                             'admin.data_buku.index',
                             'admin.data_buku.create',
                             'admin.data_buku.edit',
-                            'admin.data_buku.show'
-                        ]) ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
+                            'admin.data_buku.show',
+                        ])
+                            ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
+                            : '' }}"
                         href="{{ route('admin.data_buku.index') }}">
 
-                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
                             {{ in_array($currentRoute, [
                                 'admin.data_buku.index',
                                 'admin.data_buku.create',
                                 'admin.data_buku.edit',
-                                'admin.data_buku.show'
-                            ]) ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
+                                'admin.data_buku.show',
+                            ])
+                                ? 'bg-white text-[#8a9a55]'
+                                : 'text-[#8a9a55]' }}">
                             <i class="fa-solid fa-book text-lg"></i>
                         </div>
 
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
                             {{ in_array($currentRoute, [
                                 'admin.data_buku.index',
                                 'admin.data_buku.create',
                                 'admin.data_buku.edit',
-                                'admin.data_buku.show'
-                            ]) ? 'text-white font-semibold' : '' }}">
+                                'admin.data_buku.show',
+                            ])
+                                ? 'text-white font-semibold'
+                                : '' }}">
                             Data Buku
                         </span>
                     </a>
@@ -125,11 +133,13 @@
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
                         {{ $currentRoute == 'admin.media.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
                         href="{{ route('admin.media.index') }}">
-                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
                             {{ $currentRoute == 'admin.media.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
                             <i class="fa-solid fa-photo-film text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
                             {{ $currentRoute == 'admin.media.index' ? 'text-white font-semibold' : '' }}">
                             Media Buku
                         </span>
@@ -143,27 +153,35 @@
                             'admin.data_kategori.index',
                             'admin.data_kategori.create',
                             'admin.data_kategori.show',
-                            'admin.data_kategori.edit'
-                        ]) ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
+                            'admin.data_kategori.edit',
+                        ])
+                            ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
+                            : '' }}"
                         href="{{ route('admin.data_kategori.index') }}">
 
-                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
                             {{ in_array($currentRoute, [
                                 'admin.data_kategori.index',
                                 'admin.data_kategori.create',
                                 'admin.data_kategori.show',
-                                'admin.data_kategori.edit'
-                            ]) ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
+                                'admin.data_kategori.edit',
+                            ])
+                                ? 'bg-white text-[#8a9a55]'
+                                : 'text-[#8a9a55]' }}">
                             <i class="fa-solid fa-tags text-lg"></i>
                         </div>
 
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
                             {{ in_array($currentRoute, [
                                 'admin.data_kategori.index',
                                 'admin.data_kategori.create',
                                 'admin.data_kategori.show',
-                                'admin.data_kategori.edit'
-                            ]) ? 'text-white font-semibold' : '' }}">
+                                'admin.data_kategori.edit',
+                            ])
+                                ? 'text-white font-semibold'
+                                : '' }}">
                             Data Kategori
                         </span>
                     </a>
@@ -174,39 +192,42 @@
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
                         {{ $currentRoute == 'admin.data_pengguna.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
                         href="{{ route('admin.data_pengguna.index') }}">
-                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
                             {{ $currentRoute == 'admin.data_pengguna.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
-                            <i class="fa-solid fa-user-gear text-lg"></i>
+                            <i class="fa-solid fa-user text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
                             {{ $currentRoute == 'admin.data_pengguna.index' ? 'text-white font-semibold' : '' }}">
                             Akun Pengguna
                         </span>
                     </a>
                 </li>
 
+             
+
                 <!-- Data Arsip -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
-                        {{ in_array($currentRoute, [
-                            'admin.data_arsip.index',
-                            'admin.data_arsip.show'
-                        ]) ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
+                        {{ in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
+                            ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
+                            : '' }}"
                         href="{{ route('admin.data_arsip.index') }}">
 
-                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
-                            {{ in_array($currentRoute, [
-                                'admin.data_arsip.index',
-                                'admin.data_arsip.show'
-                            ]) ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
+                            {{ in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
+                                ? 'bg-white text-[#8a9a55]'
+                                : 'text-[#8a9a55]' }}">
                             <i class="fa-solid fa-box-archive text-lg"></i>
                         </div>
 
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
-                            {{ in_array($currentRoute, [
-                                'admin.data_arsip.index',
-                                'admin.data_arsip.show'
-                            ]) ? 'text-white font-semibold' : '' }}">
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
+                            {{ in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
+                                ? 'text-white font-semibold'
+                                : '' }}">
                             Data Arsip
                         </span>
                     </a>
@@ -217,16 +238,19 @@
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
                         {{ $currentRoute == 'admin.cms.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
                         href="{{ route('admin.cms.index') }}">
-                        <div class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
                             {{ $currentRoute == 'admin.cms.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
                             <i class="fa-solid fa-gear text-lg"></i>
                         </div>
-                        <span class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
                             {{ $currentRoute == 'admin.cms.index' ? 'text-white font-semibold' : '' }}">
                             CMS
                         </span>
                     </a>
                 </li>
+
 
                 <!-- Logout Menu -->
                 <li class="w-full mt-2">

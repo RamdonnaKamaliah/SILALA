@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\DataKategoriController;
 use App\Http\Controllers\Admin\DataArsipController;
 use App\Http\Controllers\Admin\DataPenggunaController;
 use App\Http\Controllers\Admin\DataPeminjamController;
+use App\Http\Controllers\Admin\AdminAkunController;
 use App\Http\Controllers\user\DaftarBukuController;
 use App\Http\Controllers\Auth\SetupPasswordController;
 use App\Http\Controllers\user\DetailBukuController;
@@ -26,6 +27,10 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\DashboardController as ControllersDashboardController;
 use App\Http\Controllers\DashboardUserController;
 use App\Http\Controllers\LandingpageController;
+use App\Http\Controllers\superAdmin\DashboardSuperAdminController;
+use App\Http\Controllers\superAdmin\SuperAdminAkunAdminController;
+use App\Http\Controllers\superAdmin\SuperAdminDataBukuController;
+use App\Http\Controllers\superAdmin\SuperAdminPeminjamController;
 use App\Http\Controllers\User\DaftarBukuController as UserDaftarBukuController;
 
 // Public Routes
@@ -107,8 +112,10 @@ Route::middleware([UserMiddleware::class])->group(function () {
 });
 
 // Admin Routes
-Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['admin.auth', 'admin.only'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::resource('/akun', AdminAkunController::class)->names('akun_admin');
 
     // Data Buku Routes
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
@@ -176,6 +183,19 @@ Route::prefix('admin')->name('admin.')->middleware([AdminMiddleware::class])->gr
         Route::get('/statistik-peminjaman', [DashboardController::class, 'Statistik'])
             ->name('statistik.peminjaman');
 });
+
+
+// Super Admin
+Route::prefix('superadmin')->name('superadmin.')->middleware(['admin.auth', 'super.admin'])->group(function () {
+    Route::get('/dashboard', [DashboardSuperAdminController::class, 'index'])->name('dashboard');
+    
+    Route::resource('/data_peminjam', SuperAdminPeminjamController::class)->names('data_peminjam');
+    Route::resource('/akun_admin', SuperAdminAkunAdminController::class)->names('akun_admin');
+    Route::resource('/data_buku', SuperAdminDataBukuController::class)->names('data_buku');
+    
+});
+
+
 
 Route::middleware([App\Http\Middleware\UserMiddleware::class])->group(function () {
     Route::get('/test-auth-2', function() {

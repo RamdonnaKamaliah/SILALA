@@ -55,7 +55,9 @@
             <li><a href="#rekomendasi"
                     class="flex items-center px-4 py-3 hover:bg-green-700 rounded-lg font-medium transition-all duration-200"><i
                         class="fas fa-book mr-3"></i>Rekomendasi</a></li>
-            
+            <li><a href="#panduan"
+                    class="flex items-center px-4 py-3 hover:bg-green-700 rounded-lg font-medium transition-all duration-200"><i
+                        class="fas fa-question-circle mr-3"></i>Panduan</a></li>
         </ul>
 
         <div class="border-t border-gray-700 mt-6 pt-4 space-y-2">

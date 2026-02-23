@@ -77,6 +77,45 @@
     <script src="<?php echo e(asset('assets_admin/js/profile_Admin/index.js')); ?>"></script>
     <script src="<?php echo e(asset('assets_admin/js/profile_Admin/edit.js')); ?>"></script>
 
+<?php if(session('swal')): ?>
+<script>
+Swal.fire({
+    icon: "<?php echo e(session('swal.icon')); ?>",
+    title: "<?php echo e(session('swal.title')); ?>",
+    text: "<?php echo e(session('swal.text')); ?>",
+    timer: 2000,            // ⏱ 2 detik
+    showConfirmButton: false,
+    timerProgressBar: true
+});
+</script>
+<?php endif; ?>
+
+<script>
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.delete-btn')) {
+        const btn  = e.target.closest('.delete-btn');
+        const form = btn.closest('form');
+        const name = btn.dataset.name;
+
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: `Akun ${name} akan dihapus permanen`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // ⬅️ baru submit ke controller
+            }
+        });
+    }
+});
+</script>
+
+    <script src="<?php echo e(asset('assets_admin/js/akun_admin/index.js')); ?>"></script>
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/layout_admin/admin.blade.php ENDPATH**/ ?>

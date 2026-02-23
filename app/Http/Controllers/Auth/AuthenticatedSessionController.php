@@ -18,28 +18,36 @@ class AuthenticatedSessionController extends Controller
      * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
-    {
-        $credentials = $request->only('email', 'password');
-        $remember = $request->boolean('remember');
+{
+    $credentials = $request->only('email', 'password');
+    $remember = $request->boolean('remember');
 
-        // Coba login sebagai admin terlebih dahulu
-        if (Auth::guard('admin')->attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-            return redirect()->intended(route('admin.dashboard'));
+    // Coba login sebagai admin terlebih dahulu
+    if (Auth::guard('admin')->attempt($credentials, $remember)) {
+        $request->session()->regenerate();
+       
+
+        $admin = Auth::guard('admin')->user();
+
+        if ($admin->isSuperAdmin()) {
+            return redirect()->route('superadmin.dashboard');
         }
 
-        // Jika bukan admin, coba sebagai user
-        if (Auth::guard('web')->attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'))
-             ->with('success');
-        }
-
-        // Jika semua gagal
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+        return redirect()->route('admin.dashboard');
     }
+
+    // Jika bukan admin, coba sebagai user
+    if (Auth::guard('web')->attempt($credentials, $remember)) {
+        $request->session()->regenerate();
+        return redirect()->intended(route('dashboard'))
+            ->with('success');
+    }
+
+    // Jika semua gagal
+    return back()->withErrors([
+        'email' => 'Email atau password salah.',
+    ])->onlyInput('email');
+}
 
     /**
      * Destroy an authenticated session.

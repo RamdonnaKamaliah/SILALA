@@ -40,19 +40,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Scope untuk user karyawan
+     * Scope untuk user pengunjung
      */
-    public function scopeKaryawan($query)
+    public function scopePengunjung($query)
     {
-        return $query->where('membership_type', 'karyawan');
+        return $query->where('membership_type', 'pengunjung');
     }
 
     /**
-     * Scope untuk user magang/pkl
+     * Scope untuk user anggota
      */
-    public function scopeMagang($query)
+    public function scopeAnggota($query)
     {
-        return $query->where('membership_type', 'magang');
+        return $query->where('membership_type', 'anggota');
     }
 
     /**
@@ -61,8 +61,8 @@ class User extends Authenticatable
     public function getMembershipTypeLabelAttribute()
     {
         $labels = [
-            'karyawan' => 'Karyawan',
-            'magang' => 'Magang/PKL',
+            'pengunjung' => 'Pengunjung',
+            'anggota' => 'Anggota',
         ];
 
         return $labels[$this->membership_type] ?? 'Tidak Diketahui';

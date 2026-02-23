@@ -1,15 +1,15 @@
     // Animasi progress bars
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
-            const progressBarKaryawan = document.querySelector('.progress-bar-karyawan');
-            const progressBarMagang = document.querySelector('.progress-bar-magang');
+            const progressBarPengunjung = document.querySelector('.progress-bar-pengunjung');
+            const progressBarAnggota = document.querySelector('.progress-bar-anggota');
             
-            if (progressBarKaryawan) {
-                progressBarKaryawan.style.width = progressBarKaryawan.dataset.width + '%';
+            if (progressBarPengunjung) {
+                progressBarPengunjung.style.width = progressBarPengunjung.dataset.width + '%';
             }
             
-            if (progressBarMagang) {
-                progressBarMagang.style.width = progressBarMagang.dataset.width + '%';
+            if (progressBarAnggota) {
+                progressBarAnggota.style.width = progressBarAnggota.dataset.width + '%';
             }
         }, 300);
     });

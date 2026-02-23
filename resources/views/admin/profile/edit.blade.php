@@ -51,7 +51,9 @@
                                 <div class="flex justify-center mb-4">
                                     <div class="relative">
                                         <img id="previewImageForm"
-                                            src="{{ $admin->foto ? asset('storage/' . $admin->foto) : asset('assets/image_default/image_default_book.jpeg') }}"
+                                             src="{{ $admin->foto && Storage::disk('public')->exists($admin->foto)
+                                                ? asset('storage/'.$admin->foto)
+                                                : asset('default/profile_admin.svg') }}"
                                             class="w-24 h-24 rounded-full object-cover border-4 border-[#A4B465] shadow-lg">
                                         <div class="absolute bottom-0 right-0 w-7 h-7 bg-[#A4B465] rounded-full flex items-center justify-center shadow-lg">
                                             <i class="fas fa-camera text-white text-xs"></i>

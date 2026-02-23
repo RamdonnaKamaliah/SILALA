@@ -17,10 +17,10 @@ class AdminSeeder extends Seeder
         Admin::create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
+            'email' => 'admin@silala.com',
             'password' => Hash::make('admin123'),
             'phone' => '082345678901',
             'email_verified_at' => now(),
         ]);
-        
     }
 }

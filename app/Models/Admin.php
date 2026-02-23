@@ -19,6 +19,7 @@ class Admin extends Authenticatable
         'phone',       
         'foto',        
         'password',
+        'plain_password',
         'remember_token',
         'email_verified_at',
     ];
@@ -35,4 +36,14 @@ class Admin extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    
+   public function isAdmin(): bool
+{
+    return $this->role === 'admin';
+}
+
+public function isSuperAdmin(): bool
+{
+    return $this->role === 'super_admin';
+}
 }

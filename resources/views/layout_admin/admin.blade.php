@@ -77,6 +77,45 @@
     <script src="{{ asset('assets_admin/js/profile_Admin/index.js') }}"></script>
     <script src="{{ asset('assets_admin/js/profile_Admin/edit.js') }}"></script>
 
+@if(session('swal'))
+<script>
+Swal.fire({
+    icon: "{{ session('swal.icon') }}",
+    title: "{{ session('swal.title') }}",
+    text: "{{ session('swal.text') }}",
+    timer: 2000,            // ⏱ 2 detik
+    showConfirmButton: false,
+    timerProgressBar: true
+});
+</script>
+@endif
+
+<script>
+document.addEventListener('click', function (e) {
+    if (e.target.closest('.delete-btn')) {
+        const btn  = e.target.closest('.delete-btn');
+        const form = btn.closest('form');
+        const name = btn.dataset.name;
+
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: `Akun ${name} akan dihapus permanen`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, hapus',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit(); // ⬅️ baru submit ke controller
+            }
+        });
+    }
+});
+</script>
+
+    <script src="{{ asset('assets_admin/js/akun_admin/index.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

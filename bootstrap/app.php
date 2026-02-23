@@ -12,8 +12,14 @@
             health: '/up',
         )
         ->withMiddleware(function (Middleware $middleware) {
+             $middleware->alias([
+        'admin.auth'  => \App\Http\Middleware\AdminMiddleware::class,
+        'admin.only'  => \App\Http\Middleware\AdminOnly::class,
+        'super.admin' => \App\Http\Middleware\SuperAdminOnly::class,
+    ]);
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            
         ]);
     })
         ->withExceptions(function (Exceptions $exceptions): void {

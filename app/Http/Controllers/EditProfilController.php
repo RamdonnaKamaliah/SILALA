@@ -30,7 +30,7 @@ class EditProfilController extends Controller
         'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
         'phone' => 'nullable|string|max:20',
         'gender' => 'nullable|in:Laki-laki,Perempuan',
-        'membership_type' => 'required|in:Karyawan,Magang',
+        'membership_type' => 'required|in:pengunjung,anggota',
         'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         'current_password' => 'nullable|required_with:new_password',
         'new_password' => 'nullable|min:8|confirmed',

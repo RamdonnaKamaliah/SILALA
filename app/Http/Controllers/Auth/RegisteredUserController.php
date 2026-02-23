@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:15'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'membership_type' => ['required', 'in:karyawan,magang'],
+            'membership_type' => ['required', 'in:pengunjung,anggota'],
             'gender' => ['required', 'in:L,P'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);

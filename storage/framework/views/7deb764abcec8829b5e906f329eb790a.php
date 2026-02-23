@@ -235,8 +235,8 @@
                 <select id="membership_type" name="membership_type" required
                   class="block w-full box-border px-3 py-2 border border-green-200 rounded-lg focus:ring-2 focus:ring-green-500 focus:outline-none text-sm">
                   <option value="">Pilih Jenis Keanggotaan</option>
-                  <option value="karyawan" <?php echo e(old('membership_type') == 'karyawan' ? 'selected' : ''); ?>>Karyawan</option>
-                  <option value="magang" <?php echo e(old('membership_type') == 'magang' ? 'selected' : ''); ?>>Magang</option>
+                  <option value="pengunjung" <?php echo e(old('membership_type') == 'pengunjung' ? 'selected' : ''); ?>>Pengunjung</option>
+                  <option value="anggota" <?php echo e(old('membership_type') == 'anggota' ? 'selected' : ''); ?>>Anggota</option>
                 </select>
                 <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>

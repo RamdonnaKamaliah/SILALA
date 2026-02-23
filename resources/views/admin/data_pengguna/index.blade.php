@@ -101,15 +101,15 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center">
-                            @if($user->membership_type == 'karyawan')
+                            @if($user->membership_type == 'pengunjung')
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#A4B465] text-white">
-                                    <i class="fas fa-briefcase"></i>
-                                    Karyawan
+                                    <i class="fas fa-user"></i>
+                                    Pengunjung
                                 </span>
-                            @elseif($user->membership_type == 'magang')
+                            @elseif($user->membership_type == 'anggota')
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#C5D28B] text-white">
                                     <i class="fas fa-user-graduate"></i>
-                                    Magang
+                                    Anggota
                                 </span>
                             @else
                                 <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-400 text-white">

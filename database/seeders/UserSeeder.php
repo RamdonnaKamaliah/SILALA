@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
             'name' => 'user 1',
             'phone' => '0823547482',
             'email' => 'user@gmail.com',
-            'membership_type' => 'karyawan',
+            'membership_type' => 'pengunjung',
             'gender' => 'P',
             'password' => 'user123' 
         ]);

@@ -14,15 +14,15 @@ class DataPenggunaController extends Controller
     public function index()
     {
         $userCount = User::count();
-        $karyawanCount = User::karyawan()->count();
-        $magangCount = User::magang()->count();
+        $pengunjungCount = User::pengunjung()->count();
+        $anggotaCount = User::anggota()->count();
 
        return response()->json([
         'status' => true,
         'message' => 'data pengguna di temukan',
         'user_count' => $userCount,
-        'karyawan_count' => $karyawanCount,
-        'magang_count' => $magangCount
+        'pengunjung_count' => $pengunjungCount,
+        'anggota_count' => $anggotaCount
        ]);
        
     }

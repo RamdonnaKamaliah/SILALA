@@ -210,29 +210,28 @@ unset($__errorArgs, $__bag); ?>
         <div class="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
             <?php
                 $current = old('membership_type', Auth::user()->membership_type);
-                // Normalize value - trim whitespace and ensure proper case
                 $normalizedCurrent = $current ? trim(ucfirst(strtolower($current))) : '';
             ?>
             
-            <!-- Opsi Karyawan -->
+            <!-- Opsi Pengunjung -->
             <div class="flex items-center">
-                <input type="radio" id="karyawan" name="membership_type" value="Karyawan" 
-                    <?php echo e(($normalizedCurrent == 'Karyawan') ? 'checked' : ''); ?> 
+                <input type="radio" id="pengunjung" name="membership_type" value="pengunjung" 
+                    <?php echo e(($normalizedCurrent == 'pengunjung') ? 'checked' : ''); ?> 
                     class="accent-primary mr-2" />
-                <label for="karyawan" class="text-sm text-gray-800 cursor-pointer flex items-center">
-                    <span class="iconify mr-1" data-icon="mdi:briefcase-account" data-width="16"></span>
-                    Karyawan
+                <label for="pengunjung" class="text-sm text-gray-800 cursor-pointer flex items-center">
+                    <span class="iconify mr-1" data-icon="mdi:account-outline" data-width="16"></span>
+                    Pengunjung
                 </label>
             </div>
             
-            <!-- Opsi Magang -->
+            <!-- Opsi Anggota -->
             <div class="flex items-center">
-                <input type="radio" id="magang" name="membership_type" value="Magang" 
-                    <?php echo e(($normalizedCurrent == 'Magang') ? 'checked' : ''); ?> 
+                <input type="radio" id="anggota" name="membership_type" value="anggota" 
+                    <?php echo e(($normalizedCurrent == 'anggota') ? 'checked' : ''); ?> 
                     class="accent-primary mr-2" />
-                <label for="magang" class="text-sm text-gray-800 cursor-pointer flex items-center">
+                <label for="anggota" class="text-sm text-gray-800 cursor-pointer flex items-center">
                     <span class="iconify mr-1" data-icon="mdi:school-outline" data-width="16"></span>
-                    Magang
+                    Anggota
                 </label>
             </div>
         </div>

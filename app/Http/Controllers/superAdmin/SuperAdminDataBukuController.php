@@ -12,6 +12,12 @@ class SuperAdminDataBukuController extends Controller
 {
     $bukus = databuku::with('kategoris')->latest()->get();
 
-    return view('admin.data_buku.index', compact('bukus'));
+    return view('super_admin.data_buku.index', compact('bukus'));
 }
+
+ public function show(string $id)
+    {
+        $buku = databuku::findOrFail($id);
+        return view('super_admin.data_buku.show', compact('buku'));
+    }
 }

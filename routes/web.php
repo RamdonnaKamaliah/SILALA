@@ -30,6 +30,7 @@ use App\Http\Controllers\LandingpageController;
 use App\Http\Controllers\superAdmin\DashboardSuperAdminController;
 use App\Http\Controllers\superAdmin\SuperAdminAkunAdminController;
 use App\Http\Controllers\superAdmin\SuperAdminDataBukuController;
+use App\Http\Controllers\superAdmin\SuperAdminMediaBukuController;
 use App\Http\Controllers\superAdmin\SuperAdminPeminjamController;
 use App\Http\Controllers\User\DaftarBukuController as UserDaftarBukuController;
 
@@ -192,6 +193,7 @@ Route::prefix('superadmin')->name('superadmin.')->middleware(['admin.auth', 'sup
     Route::resource('/data_peminjam', SuperAdminPeminjamController::class)->names('data_peminjam');
     Route::resource('/akun_admin', SuperAdminAkunAdminController::class)->names('akun_admin');
     Route::resource('/data_buku', SuperAdminDataBukuController::class)->names('data_buku');
+    Route::resource('/media_buku', SuperAdminMediaBukuController::class)->names('media_buku');
     
 });
 

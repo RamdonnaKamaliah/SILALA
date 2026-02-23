@@ -1,8 +1,8 @@
-@extends('layout_superAdmin.super_admin')
 
-@section('pageTitle', 'Data Media Buku')
 
-@section('content')
+<?php $__env->startSection('pageTitle', 'Data Media Buku'); ?>
+
+<?php $__env->startSection('content'); ?>
     <div class="p-4 md:p-6 overflow-x-auto">
         <!-- Header Section -->
         <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-lg">
@@ -17,7 +17,7 @@
             </div>
             <div class="flex items-center space-x-2 text-sm text-white">
                 <i class="fas fa-chart-line"></i>
-                <span>Total Media: <strong>{{ $media->count() }}</strong></span>
+                <span>Total Media: <strong><?php echo e($media->count()); ?></strong></span>
             </div>
         </div>
 
@@ -59,20 +59,21 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @foreach ($media as $item)
+                        <?php $__currentLoopData = $media; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr class="hover:bg-gray-50/80 transition-colors duration-150">
                                 <td class="px-4 py-4 text-center text-gray-600 font-medium">
-                                    {{ $loop->iteration }}
+                                    <?php echo e($loop->iteration); ?>
+
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="w-16 h-16 rounded-lg overflow-hidden shadow-sm border border-gray-200">
-                                        @if ($item->path_file && Storage::disk('public')->exists($item->path_file))
-                                            <img src="{{ asset('storage/' . $item->path_file) }}"
-                                                class="w-full h-full object-cover" alt="{{ $item->nama_file }}">
-                                        @else
-                                            <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
+                                        <?php if($item->path_file && Storage::disk('public')->exists($item->path_file)): ?>
+                                            <img src="<?php echo e(asset('storage/' . $item->path_file)); ?>"
+                                                class="w-full h-full object-cover" alt="<?php echo e($item->nama_file); ?>">
+                                        <?php else: ?>
+                                            <img src="<?php echo e(asset('assets/image_default/image_default_book.jpeg')); ?>"
                                                 class="w-full h-full object-cover opacity-60" alt="Default image">
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
@@ -80,19 +81,19 @@
                                         <div class="w-10 h-10 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] rounded-lg flex items-center justify-center">
                                             <i class="fas fa-file-image text-white text-sm"></i>
                                         </div>
-                                        <span class="font-medium text-gray-800">{{ $item->nama_file }}</span>
+                                        <span class="font-medium text-gray-800"><?php echo e($item->nama_file); ?></span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    @if ($item->buku)
-                                        <span class="text-gray-700">{{ $item->buku->judul_buku }}</span>
-                                    @else
+                                    <?php if($item->buku): ?>
+                                        <span class="text-gray-700"><?php echo e($item->buku->judul_buku); ?></span>
+                                    <?php else: ?>
                                         <span class="text-gray-400 italic text-sm">Belum digunakan</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center justify-center space-x-2">
-                                        <a href="{{ asset('storage/' . $item->path_file) }}" target="_blank"
+                                        <a href="<?php echo e(asset('storage/' . $item->path_file)); ?>" target="_blank"
                                             class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-3 rounded-xl transition-all duration-200"
                                             title="Lihat Media">
                                             <i class="fas fa-eye"></i>
@@ -101,7 +102,7 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
@@ -109,9 +110,9 @@
     </div>
 
    
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
    
     <script>
         $(document).ready(function() {
@@ -157,7 +158,7 @@
                 e.preventDefault();
                 var mediaId = $(this).data('id');
                 var mediaName = $(this).data('name');
-                var deleteUrl = "{{ route('admin.media.destroy', ':id') }}".replace(':id', mediaId);
+                var deleteUrl = "<?php echo e(route('admin.media.destroy', ':id')); ?>".replace(':id', mediaId);
 
                 Swal.fire({
                     title: 'Konfirmasi Hapus',
@@ -179,24 +180,25 @@
             });
 
             // Success message
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 Swal.fire({
                     title: 'Sukses!',
-                    text: '{{ session('success') }}',
+                    text: '<?php echo e(session('success')); ?>',
                     icon: 'success',
                     confirmButtonColor: '#A4B465',
                     timer: 3000
                 });
-            @endif
+            <?php endif; ?>
 
-            @if (session('error'))
+            <?php if(session('error')): ?>
                 Swal.fire({
                     title: 'Error!',
-                    text: '{{ session('error') }}',
+                    text: '<?php echo e(session('error')); ?>',
                     icon: 'error',
                     confirmButtonColor: '#ef4444'
                 });
-            @endif
+            <?php endif; ?>
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layout_superAdmin.super_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/super_admin/media_buku/index.blade.php ENDPATH**/ ?>

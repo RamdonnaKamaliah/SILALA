@@ -77,6 +77,25 @@
                     </a>
                 </li>
 
+                <!-- Akun Pengguna -->
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
+                        <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('admin.data_pengguna.index')); ?>">
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <i class="fa-solid fa-user text-lg"></i>
+                        </div>
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'text-white font-semibold' : ''); ?>">
+                            Akun Pengguna
+                        </span>
+                    </a>
+                </li>
+
+
                 <!-- Data Peminjam -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
@@ -136,7 +155,7 @@
                                 'superadmin.data_buku.index',
                                 'admin.data_buku.create',
                                 'admin.data_buku.edit',
-                                '',
+                                'superadmin.data_buku.show',
                             ])
                                 ? 'text-white font-semibold'
                                 : ''); ?>">
@@ -149,16 +168,16 @@
                 <!-- Media Buku -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
-                        <?php echo e($currentRoute == 'admin.media.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
-                        href="<?php echo e(route('admin.media.index')); ?>">
+                        <?php echo e($currentRoute == 'superadmin.media_buku.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('superadmin.media_buku.index')); ?>">
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
-                            <?php echo e($currentRoute == 'admin.media.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <?php echo e($currentRoute == 'superadmin.media_buku.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-photo-film text-lg"></i>
                         </div>
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
-                            <?php echo e($currentRoute == 'admin.media.index' ? 'text-white font-semibold' : ''); ?>">
+                            <?php echo e($currentRoute == 'superadmin.media_buku.index' ? 'text-white font-semibold' : ''); ?>">
                             Media Buku
                         </span>
                     </a>
@@ -205,23 +224,6 @@
                     </a>
                 </li>
 
-                <!-- Akun Pengguna -->
-                <li>
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
-                        <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
-                        href="<?php echo e(route('admin.data_pengguna.index')); ?>">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
-                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
-                            <i class="fa-solid fa-user text-lg"></i>
-                        </div>
-                        <span
-                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
-                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'text-white font-semibold' : ''); ?>">
-                            Akun Pengguna
-                        </span>
-                    </a>
-                </li>
 
 
 

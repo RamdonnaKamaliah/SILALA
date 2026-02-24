@@ -174,25 +174,7 @@
                                 </div>
                             </div>
 
-                            <!-- Tombol Aksi -->
-                            <div class="mt-8 pt-6 border-t border-green-200 flex flex-col sm:flex-row gap-3">
-                                <a href="{{ route('admin.data_buku.edit', $buku->id) }}"
-                                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-[#7a9140] to-[#657f2e] text-white rounded-xl shadow-lg hover:from-[#657f2e] hover:to-[#506d1c] transition-all duration-300 transform hover:-translate-y-1 font-medium">
-                                    <i class="fas fa-edit mr-2"></i>
-                                    <span>Edit Buku</span>
-                                </a>
-                                <form action="{{ route('admin.data_buku.destroy', $buku->id) }}" method="POST"
-                                    class="inline w-full sm:w-auto">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit"
-                                        class="w-full inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:-translate-y-1 font-medium"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
-                                        <i class="fas fa-trash-alt mr-2"></i>
-                                        <span>Hapus Buku</span>
-                                    </button>
-                                </form>
-                            </div>
+                          
                         </div>
                     </div>
                 </div>

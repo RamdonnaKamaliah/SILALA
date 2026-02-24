@@ -81,15 +81,15 @@
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
                         <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
-                        href="<?php echo e(route('admin.data_pengguna.index')); ?>">
+                        href="<?php echo e(route('superadmin.data_user.index')); ?>">
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
-                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <?php echo e($currentRoute == 'superadmin.data_user.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-user text-lg"></i>
                         </div>
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
-                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'text-white font-semibold' : ''); ?>">
+                            <?php echo e($currentRoute == 'superadmin.data_user.index' ? 'text-white font-semibold' : ''); ?>">
                             Akun Pengguna
                         </span>
                     </a>
@@ -187,21 +187,21 @@
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
                         <?php echo e(in_array($currentRoute, [
-                            'admin.data_kategori.index',
+                            'superadmin.kategori.index',
                             'admin.data_kategori.create',
-                            'admin.data_kategori.show',
+                            'superadmin.kategori.show',
                             'admin.data_kategori.edit',
                         ])
                             ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
                             : ''); ?>"
-                        href="<?php echo e(route('admin.data_kategori.index')); ?>">
+                        href="<?php echo e(route('superadmin.kategori.index')); ?>">
 
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
                             <?php echo e(in_array($currentRoute, [
-                                'admin.data_kategori.index',
+                                'superadmin.kategori.index',
                                 'admin.data_kategori.create',
-                                'admin.data_kategori.show',
+                                'superadmin.kategori.show',
                                 'admin.data_kategori.edit',
                             ])
                                 ? 'bg-white text-[#8a9a55]'
@@ -212,9 +212,9 @@
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
                             <?php echo e(in_array($currentRoute, [
-                                'admin.data_kategori.index',
+                                'superadmin.kategori.index',
                                 'admin.data_kategori.create',
-                                'admin.data_kategori.show',
+                                'superadmin.kategori.show',
                                 'admin.data_kategori.edit',
                             ])
                                 ? 'text-white font-semibold'
@@ -226,19 +226,17 @@
 
 
 
-
-
                 <!-- Data Arsip -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
-                        <?php echo e(in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
+                        <?php echo e(in_array($currentRoute, ['superadmin.data_arsip.index', 'superadmin.data_arsip.show'])
                             ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
                             : ''); ?>"
-                        href="<?php echo e(route('admin.data_arsip.index')); ?>">
+                        href="<?php echo e(route('superadmin.data_arsip.index')); ?>">
 
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
-                            <?php echo e(in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
+                            <?php echo e(in_array($currentRoute, ['superadmin.data_arsip.index', 'superadmin.data_arsip.show'])
                                 ? 'bg-white text-[#8a9a55]'
                                 : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-box-archive text-lg"></i>
@@ -246,7 +244,7 @@
 
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
-                            <?php echo e(in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
+                            <?php echo e(in_array($currentRoute, ['superadmin.data_arsip.index', 'superadmin.data_arsip.show'])
                                 ? 'text-white font-semibold'
                                 : ''); ?>">
                             Data Arsip

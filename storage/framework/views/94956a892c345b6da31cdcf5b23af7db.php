@@ -1,7 +1,7 @@
-@extends('layout_superAdmin.super_admin')
-@section('pageTitle', 'Admin Dashboard - Data Pengguna')
 
-@section('content')
+<?php $__env->startSection('pageTitle', 'Admin Dashboard - Data Pengguna'); ?>
+
+<?php $__env->startSection('content'); ?>
     <!-- Tabel Data Pengguna -->
     <div class="p-4 md:p-6 overflow-x-auto">
         <!-- Header Section -->
@@ -17,7 +17,7 @@
             </div>
             <div class="flex items-center space-x-2 text-sm text-white">
                 <i class="fas fa-chart-line"></i>
-                <span>Total Pengguna: <strong>{{ $totalUsers }}</strong></span>
+                <span>Total Pengguna: <strong><?php echo e($totalUsers); ?></strong></span>
             </div>
         </div>
 
@@ -72,89 +72,92 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @foreach ($users as $index => $user)
+                        <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr class="hover:bg-gray-50/80 transition-colors duration-150">
                                 <td class="px-6 py-4 text-center text-gray-600 font-medium">
-                                    {{ $index + 1 }}
+                                    <?php echo e($index + 1); ?>
+
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         <div
                                             class="w-10 h-10 rounded-full bg-gradient-to-br from-[#A4B465] to-[#8A9A55] flex items-center justify-center flex-shrink-0">
                                             <span
-                                                class="text-white font-semibold text-sm">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
+                                                class="text-white font-semibold text-sm"><?php echo e(strtoupper(substr($user->name, 0, 1))); ?></span>
                                         </div>
-                                        <span class="font-semibold text-gray-900">{{ $user->name }}</span>
+                                        <span class="font-semibold text-gray-900"><?php echo e($user->name); ?></span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    @if ($user->phone)
+                                    <?php if($user->phone): ?>
                                         <div class="text-sm text-gray-900">
-                                            <i class="fas fa-phone text-gray-400 mr-2"></i>{{ $user->phone }}
+                                            <i class="fas fa-phone text-gray-400 mr-2"></i><?php echo e($user->phone); ?>
+
                                         </div>
-                                    @else
+                                    <?php else: ?>
                                         <span class="text-sm text-gray-400 italic">Not Found</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900 flex items-center gap-2">
                                         <i class="fas fa-envelope text-gray-400"></i>
-                                        <span class="truncate max-w-[250px]">{{ $user->email }}</span>
+                                        <span class="truncate max-w-[250px]"><?php echo e($user->email); ?></span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    @if ($user->membership_type == 'pengunjung')
+                                    <?php if($user->membership_type == 'pengunjung'): ?>
                                         <span
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#A4B465] text-white">
                                             <i class="fas fa-user"></i>
                                             Pengunjung
                                         </span>
-                                    @elseif($user->membership_type == 'anggota')
+                                    <?php elseif($user->membership_type == 'anggota'): ?>
                                         <span
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#C5D28B] text-white">
                                             <i class="fas fa-user-graduate"></i>
                                             Anggota
                                         </span>
-                                    @else
+                                    <?php else: ?>
                                         <span
                                             class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-400 text-white">
-                                            {{ ucfirst($user->membership_type) }}
+                                            <?php echo e(ucfirst($user->membership_type)); ?>
+
                                         </span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    @if ($user->gender == 'L')
+                                    <?php if($user->gender == 'L'): ?>
                                         <span
                                             class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-blue-100 text-blue-600">
                                             <i class="fas fa-mars"></i>
                                         </span>
-                                    @elseif($user->gender == 'P')
+                                    <?php elseif($user->gender == 'P'): ?>
                                         <span
                                             class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-pink-100 text-pink-600">
                                             <i class="fas fa-venus"></i>
                                         </span>
-                                    @else
+                                    <?php else: ?>
                                         <span class="text-sm text-gray-400 italic">Not Found</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <button type="button"
                                         class="bg-red-600 text-white p-2.5 rounded-lg hover:bg-red-700 transition-all duration-200 delete-btn shadow-sm transform hover:scale-105"
-                                        title="Hapus Pengguna" data-id="{{ $user->id }}"
-                                        data-name="{{ $user->name }}">
+                                        title="Hapus Pengguna" data-id="<?php echo e($user->id); ?>"
+                                        data-name="<?php echo e($user->name); ?>">
                                         <i class="fas fa-trash text-sm"></i>
                                     </button>
                                 </td>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         $(document).ready(function() {
             // Initialize DataTable
@@ -223,7 +226,7 @@
                         url: `/admin/data_pengguna/${userId}`,
                         type: 'DELETE',
                         data: {
-                            _token: '{{ csrf_token() }}'
+                            _token: '<?php echo e(csrf_token()); ?>'
                         },
                         success: function(res) {
                             Swal.fire('Berhasil!', res.message, 'success')
@@ -241,4 +244,6 @@
             });
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout_superAdmin.super_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/super_admin/akun_pengguna/index.blade.php ENDPATH**/ ?>

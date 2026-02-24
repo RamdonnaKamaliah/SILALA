@@ -1,8 +1,8 @@
-@extends('layout_superAdmin.super_admin')
 
-@section('pageTitle', 'Data Kategori')
 
-@section('content')
+<?php $__env->startSection('pageTitle', 'Data Kategori'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="p-4 md:p-6 overflow-x-auto">
     <!-- Header Section -->
     <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-lg">
@@ -17,7 +17,7 @@
         </div>
         <div class="flex items-center space-x-2 text-sm text-white">
             <i class="fas fa-chart-line"></i>
-            <span>Total Kategori: <strong>{{ $data_kategori->count() }}</strong></span>
+            <span>Total Kategori: <strong><?php echo e($data_kategori->count()); ?></strong></span>
         </div>
     </div>
 
@@ -57,11 +57,12 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @foreach ($data_kategori as $kategori)
+                    <?php $__currentLoopData = $data_kategori; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr class="hover:bg-gray-50 transition-colors duration-150">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900 text-center">
-                                    {{ $loop->iteration }}
+                                    <?php echo e($loop->iteration); ?>
+
                                 </div>
                             </td>
                             <td class="px-6 py-4">
@@ -69,12 +70,12 @@
                                     <div class="w-10 h-10 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] rounded-lg flex items-center justify-center flex-shrink-0">
                                         <i class="fas fa-folder text-white text-sm"></i>
                                     </div>
-                                    <span class="font-semibold text-gray-900">{{ $kategori->nama_kategori }}</span>
+                                    <span class="font-semibold text-gray-900"><?php echo e($kategori->nama_kategori); ?></span>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center justify-center gap-2">
-                                    <a href="{{ route('superadmin.kategori.show', $kategori->id) }}"
+                                    <a href="<?php echo e(route('superadmin.kategori.show', $kategori->id)); ?>"
                                        class="bg-blue-600 text-white p-2.5 rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-sm transform hover:scale-105"
                                        title="Detail Kategori">
                                         <i class="fas fa-eye text-sm">Lihat</i>
@@ -83,7 +84,7 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </tbody>
             </table>
         </div>
@@ -92,12 +93,12 @@
 
 <!-- Delete Confirmation Form -->
 <form id="deleteForm" method="POST" style="display: none;">
-    @csrf
-    @method('DELETE')
+    <?php echo csrf_field(); ?>
+    <?php echo method_field('DELETE'); ?>
 </form>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         $(document).ready(function() {
             // Initialize DataTable
@@ -142,7 +143,7 @@
                 e.preventDefault();
                 var kategoriId = $(this).data('id');
                 var kategoriName = $(this).data('name');
-                var deleteUrl = "{{ route('admin.data_kategori.destroy', ':id') }}".replace(':id', kategoriId);
+                var deleteUrl = "<?php echo e(route('admin.data_kategori.destroy', ':id')); ?>".replace(':id', kategoriId);
 
                 Swal.fire({
                     title: 'Konfirmasi Hapus',
@@ -164,24 +165,25 @@
             });
 
             // Success message
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 Swal.fire({
                     title: 'Sukses!',
-                    text: '{{ session('success') }}',
+                    text: '<?php echo e(session('success')); ?>',
                     icon: 'success',
                     confirmButtonColor: '#A4B465',
                     timer: 3000
                 });
-            @endif
+            <?php endif; ?>
 
-            @if (session('error'))
+            <?php if(session('error')): ?>
                 Swal.fire({
                     title: 'Error!',
-                    text: '{{ session('error') }}',
+                    text: '<?php echo e(session('error')); ?>',
                     icon: 'error',
                     confirmButtonColor: '#ef4444'
                 });
-            @endif
+            <?php endif; ?>
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layout_superAdmin.super_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/super_admin/kategori/index.blade.php ENDPATH**/ ?>

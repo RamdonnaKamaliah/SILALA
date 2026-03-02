@@ -1,7 +1,7 @@
-@extends('layout_superAdmin.super_admin')
-@section('pageTitle', 'Admin Dashboard - Data Arsip')
 
-@section('content')
+<?php $__env->startSection('pageTitle', 'Admin Dashboard - Data Arsip'); ?>
+
+<?php $__env->startSection('content'); ?>
     <div class="p-4 md:p-6 font-poppins">
         <!-- Header Section -->
         <div class="text-left mb-8 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-lg">
@@ -16,29 +16,29 @@
             </div>
             <div class="flex items-center space-x-2 text-sm text-white">
                 <i class="fas fa-chart-line"></i>
-                <span>Total Arsip: <strong>{{ $buku_arsip->count() }}</strong></span>
+                <span>Total Arsip: <strong><?php echo e($buku_arsip->count()); ?></strong></span>
             </div>
         </div>
 
 
 
         <!-- Hidden Forms for Bulk Actions -->
-        <form id="bulkDeleteArchiveForm" action="{{ route('admin.data_arsip.bulkDeleteArchive') }}" method="POST"
+        <form id="bulkDeleteArchiveForm" action="<?php echo e(route('admin.data_arsip.bulkDeleteArchive')); ?>" method="POST"
             style="display: none;">
-            @csrf
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="selected_ids" id="selectedIds">
         </form>
 
-        <form id="bulkRestoreForm" action="{{ route('admin.data_arsip.bulkRestore') }}" method="POST"
+        <form id="bulkRestoreForm" action="<?php echo e(route('admin.data_arsip.bulkRestore')); ?>" method="POST"
             style="display: none;">
-            @csrf
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="selected_ids" id="selectedIdsRestore">
         </form>
 
         <!-- Hidden Form for Individual Delete -->
         <form id="deleteForm" method="POST" style="display: none;">
-            @csrf
-            @method('DELETE')
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('DELETE'); ?>
         </form>
 
         <!-- Table Container -->
@@ -104,85 +104,90 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        @foreach ($buku_arsip as $index => $buku)
+                        <?php $__currentLoopData = $buku_arsip; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr class="hover:bg-gray-50/80 transition-colors duration-150">
                                 <td class="px-3 py-4 text-center">
-                                    <input type="checkbox" name="selected_ids[]" value="{{ $buku->id }}"
+                                    <input type="checkbox" name="selected_ids[]" value="<?php echo e($buku->id); ?>"
                                         class="row-checkbox w-4 h-4 rounded border-gray-300 text-[#A4B465] focus:ring-[#A4B465] focus:ring-2">
                                 </td>
                                 <td class="px-4 py-4 text-center">
                                     <span
                                         class="inline-flex items-center justify-center w-7 h-7 bg-gradient-to-br from-[#A4B465] to-[#8AA24F] text-white rounded-full text-xs font-bold shadow-sm">
-                                        {{ $index + 1 }}
+                                        <?php echo e($index + 1); ?>
+
                                     </span>
                                 </td>
                                 <td class="px-4 py-4">
                                     <div
                                         class="w-14 h-20 overflow-hidden rounded-lg border border-gray-200 mx-auto shadow-sm">
-                                        @if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku))
-                                            <img src="{{ asset('storage/' . $buku->foto_buku) }}"
-                                                class="w-full h-full object-cover" alt="{{ $buku->judul_buku }}">
-                                        @else
-                                            <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
+                                        <?php if($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)): ?>
+                                            <img src="<?php echo e(asset('storage/' . $buku->foto_buku)); ?>"
+                                                class="w-full h-full object-cover" alt="<?php echo e($buku->judul_buku); ?>">
+                                        <?php else: ?>
+                                            <img src="<?php echo e(asset('assets/image_default/image_default_book.jpeg')); ?>"
                                                 class="w-full h-full object-cover" alt="Default">
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 <td class="px-4 py-4">
                                     <div class="max-w-xs">
-                                        <p class="font-bold text-gray-900 text-sm line-clamp-2">{{ $buku->judul_buku }}</p>
-                                        @if ($buku->edisi)
-                                            <p class="text-gray-500 text-xs mt-1 font-medium">Edisi: {{ $buku->edisi }}</p>
-                                        @endif
-                                        @if ($buku->isbn ?? false)
-                                            <p class="text-gray-400 text-xs mt-1">ISBN: {{ $buku->isbn }}</p>
-                                        @endif
+                                        <p class="font-bold text-gray-900 text-sm line-clamp-2"><?php echo e($buku->judul_buku); ?></p>
+                                        <?php if($buku->edisi): ?>
+                                            <p class="text-gray-500 text-xs mt-1 font-medium">Edisi: <?php echo e($buku->edisi); ?></p>
+                                        <?php endif; ?>
+                                        <?php if($buku->isbn ?? false): ?>
+                                            <p class="text-gray-400 text-xs mt-1">ISBN: <?php echo e($buku->isbn); ?></p>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <p class="text-gray-700 text-sm line-clamp-1 font-medium">{{ $buku->penulis }}</p>
+                                    <p class="text-gray-700 text-sm line-clamp-1 font-medium"><?php echo e($buku->penulis); ?></p>
                                 </td>
                                 <td class="px-4 py-4">
-                                    <p class="text-gray-600 text-sm line-clamp-1 font-medium">{{ $buku->penerbit }}</p>
+                                    <p class="text-gray-600 text-sm line-clamp-1 font-medium"><?php echo e($buku->penerbit); ?></p>
                                 </td>
                                 <td class="px-4 py-4 text-center">
                                     <span
                                         class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-bold">
-                                        {{ $buku->tahun_terbit }}
+                                        <?php echo e($buku->tahun_terbit); ?>
+
                                     </span>
                                 </td>
                                 <td class="px-4 py-4">
-                                    @if ($buku->kategoris->count())
+                                    <?php if($buku->kategoris->count()): ?>
                                         <div class="flex flex-wrap gap-1.5">
-                                            @foreach ($buku->kategoris->take(2) as $kategori)
+                                            <?php $__currentLoopData = $buku->kategoris->take(2); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <span
                                                     class="inline-block px-2.5 py-1 bg-[#A4B465]/20 text-[#A4B465] rounded-full text-xs font-bold">
-                                                    {{ $kategori->nama_kategori }}
+                                                    <?php echo e($kategori->nama_kategori); ?>
+
                                                 </span>
-                                            @endforeach
-                                            @if ($buku->kategoris->count() > 2)
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($buku->kategoris->count() > 2): ?>
                                                 <span
                                                     class="inline-block px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full text-xs font-bold">
-                                                    +{{ $buku->kategoris->count() - 2 }}
+                                                    +<?php echo e($buku->kategoris->count() - 2); ?>
+
                                                 </span>
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
-                                    @else
+                                    <?php else: ?>
                                         <span class="text-gray-400 italic text-xs">Tidak ada kategori</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td class="px-4 py-4 text-center">
                                     <span
                                         class="inline-flex items-center justify-center w-9 h-9 bg-green-100 text-green-800 rounded-full text-xs font-bold">
-                                        {{ $buku->stok }}
+                                        <?php echo e($buku->stok); ?>
+
                                     </span>
                                 </td>
                                 <td class="px-4 py-4 text-center">
-                                    @php
+                                    <?php
                                         $path = $buku->file_buku;
                                         $url = Storage::url($path);
-                                    @endphp
-                                    <a href="{{ $url }}" target="_blank"
+                                    ?>
+                                    <a href="<?php echo e($url); ?>" target="_blank"
                                         class="inline-block bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 text-xs"
                                         title="Lihat File">
                                         <i class="fas fa-file-pdf"></i>
@@ -190,15 +195,15 @@
                                 </td>
 
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         $(document).ready(function() {
             // Initialize DataTable
@@ -345,7 +350,7 @@
                 e.preventDefault();
                 const bukuId = $(this).data('id');
                 const bukuTitle = $(this).data('title');
-                const restoreUrl = "{{ route('admin.data_buku.restore', ':id') }}".replace(':id', bukuId);
+                const restoreUrl = "<?php echo e(route('admin.data_buku.restore', ':id')); ?>".replace(':id', bukuId);
 
                 Swal.fire({
                     title: 'Konfirmasi Pulihkan',
@@ -368,7 +373,7 @@
                         const csrfToken = $('<input>', {
                             'type': 'hidden',
                             'name': '_token',
-                            'value': '{{ csrf_token() }}'
+                            'value': '<?php echo e(csrf_token()); ?>'
                         });
 
                         const methodField = $('<input>', {
@@ -389,7 +394,7 @@
                 e.preventDefault();
                 const bukuId = $(this).data('id');
                 const bukuTitle = $(this).data('title');
-                const deleteUrl = "{{ route('admin.data_arsip.destroy', ':id') }}".replace(':id', bukuId);
+                const deleteUrl = "<?php echo e(route('admin.data_arsip.destroy', ':id')); ?>".replace(':id', bukuId);
 
                 Swal.fire({
                     title: 'Konfirmasi Hapus Permanen',
@@ -411,24 +416,26 @@
             });
 
             // Success message
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 Swal.fire({
                     title: 'Sukses!',
-                    text: '{{ session('success') }}',
+                    text: '<?php echo e(session('success')); ?>',
                     icon: 'success',
                     confirmButtonColor: '#A4B465',
                     timer: 3000
                 });
-            @endif
+            <?php endif; ?>
 
-            @if (session('error'))
+            <?php if(session('error')): ?>
                 Swal.fire({
                     title: 'Error!',
-                    text: '{{ session('error') }}',
+                    text: '<?php echo e(session('error')); ?>',
                     icon: 'error',
                     confirmButtonColor: '#ef4444'
                 });
-            @endif
+            <?php endif; ?>
         });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layout_superAdmin.super_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/super_admin/data_arsip/index.blade.php ENDPATH**/ ?>

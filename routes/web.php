@@ -35,6 +35,7 @@ use App\Http\Controllers\superAdmin\SuperAdminDataBukuController;
 use App\Http\Controllers\superAdmin\SuperAdminKategoriController;
 use App\Http\Controllers\superAdmin\SuperAdminMediaBukuController;
 use App\Http\Controllers\superAdmin\SuperAdminPeminjamController;
+use App\Http\Controllers\superAdmin\ProfileSuperAdminController;
 use App\Http\Controllers\User\DaftarBukuController as UserDaftarBukuController;
 
 // Public Routes
@@ -118,18 +119,13 @@ Route::middleware([UserMiddleware::class])->group(function () {
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['admin.auth', 'admin.only'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
     Route::resource('/akun', AdminAkunController::class)->names('akun_admin');
-
-    // Data Buku Routes
     Route::get('/profile', [AdminProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');
      Route::post('/admin/profile/update', [AdminProfileController::class, 'update'])
     ->name('profile.update');
     Route::post('/profile/update-password', [AdminProfileController::class, 'updatePassword'])->name('profile.updatePassword');
-
-    
     Route::delete('/data_buku/bulk-delete', [DataBukuController::class, 'bulkDelete'])->name('data_buku.bulkDelete');
     Route::get('/data_buku/template', [DataBukuController::class, 'downloadTemplate'])->name('data_buku.template');
     Route::post('/data_buku/import', [DataBukuController::class, 'import'])->name('data_buku.import');
@@ -192,6 +188,15 @@ Route::prefix('admin')->name('admin.')->middleware(['admin.auth', 'admin.only'])
 // Super Admin
 Route::prefix('superadmin')->name('superadmin.')->middleware(['admin.auth', 'super.admin'])->group(function () {
     Route::get('/dashboard', [DashboardSuperAdminController::class, 'index'])->name('dashboard');
+
+    // profile
+    Route::get('/profile', [ProfileSuperAdminController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileSuperAdminController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile/update', [ProfileSuperAdminController::class, 'update'])->name('profile.update');
+     Route::post('/admin/profile/update', [ProfileSuperAdminController::class, 'update'])
+    ->name('profile.update');
+    Route::post('/profile/update-password', [ProfileSuperAdminController::class, 'updatePassword'])->name('profile.updatePassword');
+
     
     Route::resource('/data_peminjam', SuperAdminPeminjamController::class)->names('data_peminjam');
     Route::resource('/akun_admin', SuperAdminAkunAdminController::class)->names('akun_admin');

@@ -25,16 +25,16 @@
         </button>
 
         <div class="logo-container">
-            @php
+            <?php
                 $logoAdmin = \App\Models\Setting::getValue('logo_admin_sidebar');
                 $currentRoute = Route::currentRouteName();
-            @endphp
+            ?>
 
-            @if ($logoAdmin && \Storage::disk('public')->exists('cms/' . $logoAdmin))
-                <img src="{{ asset('storage/cms/' . $logoAdmin) }}" alt="BPMS Logo" class="logo-img">
-            @else
-                <img src="{{ asset('assets_admin/image/BPMSPH-logo.png') }}" alt="BPMS Logo" class="logo-img">
-            @endif
+            <?php if($logoAdmin && \Storage::disk('public')->exists('cms/' . $logoAdmin)): ?>
+                <img src="<?php echo e(asset('storage/cms/' . $logoAdmin)); ?>" alt="BPMS Logo" class="logo-img">
+            <?php else: ?>
+                <img src="<?php echo e(asset('assets_admin/image/BPMSPH-logo.png')); ?>" alt="BPMS Logo" class="logo-img">
+            <?php endif; ?>
         </div>
 
         <!-- Sidebar Content (Scrollable) -->
@@ -44,79 +44,42 @@
                 <!-- Dashboard -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
-                        {{ $currentRoute == 'superadmin.dashboard' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
-                        href="{{ route('superadmin.dashboard') }}">
+                        <?php echo e($currentRoute == 'admin.dashboard' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('admin.dashboard')); ?>">
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
-                            {{ $currentRoute == 'superadmin.dashboard' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
+                            <?php echo e($currentRoute == 'admin.dashboard' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-house-chimney-window text-lg"></i>
                         </div>
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
-                            {{ $currentRoute == 'superadmin.dashboard' ? 'text-white font-semibold' : '' }}">
+                            <?php echo e($currentRoute == 'admin.dashboard' ? 'text-white font-semibold' : ''); ?>">
                             Dashboard
                         </span>
                     </a>
                 </li>
 
-                <!-- AKUN ADMIN -->
-                <li>
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
-                        {{ $currentRoute == 'superadmin.akun_admin.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
-                        href="{{ route('superadmin.akun_admin.index') }}">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
-                            {{ $currentRoute == 'superadmin.akun_admin.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
-                            <i class="fa-solid fa-user-gear text-lg"></i>
-                        </div>
-                        <span
-                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
-                            {{ $currentRoute == 'superadmin.akun_admin.index' ? 'text-white font-semibold' : '' }}">
-                            Akun Admin
-                        </span>
-                    </a>
-                </li>
-
-                <!-- Akun Pengguna -->
-                <li>
-                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
-                        {{ $currentRoute == 'superadmin.data_user.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
-                        href="{{ route('superadmin.data_user.index') }}">
-                        <div
-                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
-                            {{ $currentRoute == 'superadmin.data_user.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
-                            <i class="fa-solid fa-user text-lg"></i>
-                        </div>
-                        <span
-                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
-                            {{ $currentRoute == 'superadmin.data_user.index' ? 'text-white font-semibold' : '' }}">
-                            Akun Pengguna
-                        </span>
-                    </a>
-                </li>
-
-
                 <!-- Data Peminjam -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
-                        {{ in_array($currentRoute, ['superadmin.data_peminjam.index', 'superadmin.data_peminjam.show'])
+                        <?php echo e(in_array($currentRoute, ['admin.data_peminjam.index', 'admin.data_peminjam.show'])
                             ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
-                            : '' }}"
-                        href="{{ route('superadmin.data_peminjam.index') }}">
+                            : ''); ?>"
+                        href="<?php echo e(route('admin.data_peminjam.index')); ?>">
 
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
-                            {{ in_array($currentRoute, ['admin.data_peminjam.index', 'admin.data_peminjam.show'])
+                            <?php echo e(in_array($currentRoute, ['admin.data_peminjam.index', 'admin.data_peminjam.show'])
                                 ? 'bg-white text-[#8a9a55]'
-                                : 'text-[#8a9a55]' }}">
+                                : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-id-card text-lg"></i>
                         </div>
 
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
-                            {{ in_array($currentRoute, ['superadmin.data_peminjam.index', 'superadmin.data_peminjam.show'])
+                            <?php echo e(in_array($currentRoute, ['admin.data_peminjam.index', 'admin.data_peminjam.show'])
                                 ? 'text-white font-semibold'
-                                : '' }}">
+                                : ''); ?>">
                             Data Peminjam
                         </span>
                     </a>
@@ -126,39 +89,39 @@
                 <!-- Data Buku -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
-                        {{ in_array($currentRoute, [
-                            'superadmin.data_buku.index',
+                        <?php echo e(in_array($currentRoute, [
+                            'admin.data_buku.index',
                             'admin.data_buku.create',
                             'admin.data_buku.edit',
-                            'superadmin.data_buku.show',
+                            'admin.data_buku.show',
                         ])
                             ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
-                            : '' }}"
-                        href="{{ route('superadmin.data_buku.index') }}">
+                            : ''); ?>"
+                        href="<?php echo e(route('admin.data_buku.index')); ?>">
 
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
-                            {{ in_array($currentRoute, [
-                                'superadmin.data_buku.index',
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_buku.index',
                                 'admin.data_buku.create',
                                 'admin.data_buku.edit',
-                                'superadmin.data_buku.show',
+                                'admin.data_buku.show',
                             ])
                                 ? 'bg-white text-[#8a9a55]'
-                                : 'text-[#8a9a55]' }}">
+                                : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-book text-lg"></i>
                         </div>
 
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
-                            {{ in_array($currentRoute, [
-                                'superadmin.data_buku.index',
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_buku.index',
                                 'admin.data_buku.create',
                                 'admin.data_buku.edit',
-                                'superadmin.data_buku.show',
+                                'admin.data_buku.show',
                             ])
                                 ? 'text-white font-semibold'
-                                : '' }}">
+                                : ''); ?>">
                             Data Buku
                         </span>
                     </a>
@@ -168,16 +131,16 @@
                 <!-- Media Buku -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
-                        {{ $currentRoute == 'superadmin.media_buku.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : '' }}"
-                        href="{{ route('superadmin.media_buku.index') }}">
+                        <?php echo e($currentRoute == 'admin.media.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('admin.media.index')); ?>">
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
-                            {{ $currentRoute == 'superadmin.media_buku.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]' }}">
+                            <?php echo e($currentRoute == 'admin.media.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-photo-film text-lg"></i>
                         </div>
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
-                            {{ $currentRoute == 'superadmin.media_buku.index' ? 'text-white font-semibold' : '' }}">
+                            <?php echo e($currentRoute == 'admin.media.index' ? 'text-white font-semibold' : ''); ?>">
                             Media Buku
                         </span>
                     </a>
@@ -186,73 +149,107 @@
                 <!-- Data Kategori -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
-                        {{ in_array($currentRoute, [
-                            'superadmin.kategori.index',
+                        <?php echo e(in_array($currentRoute, [
+                            'admin.data_kategori.index',
                             'admin.data_kategori.create',
-                            'superadmin.kategori.show',
+                            'admin.data_kategori.show',
                             'admin.data_kategori.edit',
                         ])
                             ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
-                            : '' }}"
-                        href="{{ route('superadmin.kategori.index') }}">
+                            : ''); ?>"
+                        href="<?php echo e(route('admin.data_kategori.index')); ?>">
 
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
-                            {{ in_array($currentRoute, [
-                                'superadmin.kategori.index',
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_kategori.index',
                                 'admin.data_kategori.create',
-                                'superadmin.kategori.show',
+                                'admin.data_kategori.show',
                                 'admin.data_kategori.edit',
                             ])
                                 ? 'bg-white text-[#8a9a55]'
-                                : 'text-[#8a9a55]' }}">
+                                : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-tags text-lg"></i>
                         </div>
 
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
-                            {{ in_array($currentRoute, [
-                                'superadmin.kategori.index',
+                            <?php echo e(in_array($currentRoute, [
+                                'admin.data_kategori.index',
                                 'admin.data_kategori.create',
-                                'superadmin.kategori.show',
+                                'admin.data_kategori.show',
                                 'admin.data_kategori.edit',
                             ])
                                 ? 'text-white font-semibold'
-                                : '' }}">
+                                : ''); ?>">
                             Data Kategori
                         </span>
                     </a>
                 </li>
 
+                <!-- Akun Pengguna -->
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
+                        <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('admin.data_pengguna.index')); ?>">
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <i class="fa-solid fa-user text-lg"></i>
+                        </div>
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                            <?php echo e($currentRoute == 'admin.data_pengguna.index' ? 'text-white font-semibold' : ''); ?>">
+                            Akun Pengguna
+                        </span>
+                    </a>
+                </li>
 
+             
 
                 <!-- Data Arsip -->
                 <li>
                     <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative
-                        {{ in_array($currentRoute, ['superadmin.data_arsip.index', 'superadmin.data_arsip.show'])
+                        <?php echo e(in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
                             ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white'
-                            : '' }}"
-                        href="{{ route('superadmin.data_arsip.index') }}">
+                            : ''); ?>"
+                        href="<?php echo e(route('admin.data_arsip.index')); ?>">
 
                         <div
                             class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5
-                            {{ in_array($currentRoute, ['superadmin.data_arsip.index', 'superadmin.data_arsip.show'])
+                            <?php echo e(in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
                                 ? 'bg-white text-[#8a9a55]'
-                                : 'text-[#8a9a55]' }}">
+                                : 'text-[#8a9a55]'); ?>">
                             <i class="fa-solid fa-box-archive text-lg"></i>
                         </div>
 
                         <span
                             class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text
-                            {{ in_array($currentRoute, ['superadmin.data_arsip.index', 'superadmin.data_arsip.show'])
+                            <?php echo e(in_array($currentRoute, ['admin.data_arsip.index', 'admin.data_arsip.show'])
                                 ? 'text-white font-semibold'
-                                : '' }}">
+                                : ''); ?>">
                             Data Arsip
                         </span>
                     </a>
                 </li>
 
-
+                <!-- CMS -->
+                <li>
+                    <a class="menu-item py-3 text-sm ease-nav-brand my-0 flex items-center whitespace-nowrap rounded-lg px-4 font-semibold transition-all relative 
+                        <?php echo e($currentRoute == 'admin.cms.index' ? 'bg-white/20 backdrop-blur-sm shadow-md border-l-4 border-white' : ''); ?>"
+                        href="<?php echo e(route('admin.cms.index')); ?>">
+                        <div
+                            class="icon-container shadow-soft-2xl mr-3 flex h-9 w-9 items-center justify-center rounded-lg bg-center text-center xl:p-2.5 
+                            <?php echo e($currentRoute == 'admin.cms.index' ? 'bg-white text-[#8a9a55]' : 'text-[#8a9a55]'); ?>">
+                            <i class="fa-solid fa-gear text-lg"></i>
+                        </div>
+                        <span
+                            class="ml-1 duration-300 opacity-100 pointer-events-none ease-soft menu-text 
+                            <?php echo e($currentRoute == 'admin.cms.index' ? 'text-white font-semibold' : ''); ?>">
+                            CMS
+                        </span>
+                    </a>
+                </li>
 
 
                 <!-- Logout Menu -->
@@ -271,9 +268,10 @@
     </aside>
 
     <!-- Logout Form (Hidden) -->
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-        @csrf
+    <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+        <?php echo csrf_field(); ?>
     </form>
 
     <!-- SweetAlert2 CDN - Minimal untuk loading lebih cepat -->
 </body>
+<?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/components/sidebarAdmin.blade.php ENDPATH**/ ?>

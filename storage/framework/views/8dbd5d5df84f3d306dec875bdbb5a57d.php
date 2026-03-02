@@ -1,8 +1,8 @@
-@extends('layout_superAdmin.super_admin')
 
-@section('title', 'dashboard super admin')
 
-@section('content')
+<?php $__env->startSection('title', 'dashboard super admin'); ?>
+
+<?php $__env->startSection('content'); ?>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -23,34 +23,34 @@
             </div>
 
             <!-- ALERT SUCCESS -->
-            @if (session('success'))
+            <?php if(session('success')): ?>
                 <div
                     class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 flex items-center justify-between">
                     <div class="flex items-center">
                         <i class="fa-solid fa-circle-check mr-2"></i>
-                        <span>{{ session('success') }}</span>
+                        <span><?php echo e(session('success')); ?></span>
                     </div>
                     <button type="button" onclick="this.parentElement.style.display='none'"
                         class="text-green-700 hover:text-green-900">
                         <i class="fa-solid fa-times"></i>
                     </button>
                 </div>
-            @endif
+            <?php endif; ?>
 
             <!-- ALERT ERROR -->
-            @if (session('error'))
+            <?php if(session('error')): ?>
                 <div
                     class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center justify-between">
                     <div class="flex items-center">
                         <i class="fa-solid fa-circle-exclamation mr-2"></i>
-                        <span>{{ session('error') }}</span>
+                        <span><?php echo e(session('error')); ?></span>
                     </div>
                     <button type="button" onclick="this.parentElement.style.display='none'"
                         class="text-red-700 hover:text-red-900">
                         <i class="fa-solid fa-times"></i>
                     </button>
                 </div>
-            @endif
+            <?php endif; ?>
 
 
         </div>
@@ -79,56 +79,58 @@
                     </thead>
 
                     <tbody class="divide-y divide-gray-100">
-                        @foreach ($bukus as $buku)
-                            @if ($buku->status === 'aktif')
+                        <?php $__currentLoopData = $bukus; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $buku): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($buku->status === 'aktif'): ?>
                                 <tr class="hover:bg-[#F5F7ED] transition">
                                     <td class="px-4 py-3 text-center">
-                                        <input type="checkbox" value="{{ $buku->id }}" class="row-checkbox w-4 h-4">
+                                        <input type="checkbox" value="<?php echo e($buku->id); ?>" class="row-checkbox w-4 h-4">
                                     </td>
 
-                                    <td class="px-4 py-3 text-center">{{ $loop->iteration }}</td>
+                                    <td class="px-4 py-3 text-center"><?php echo e($loop->iteration); ?></td>
 
                                     <td class="px-4 py-3">
                                         <div class="w-16 h-20 overflow-hidden rounded-lg border mx-auto">
-                                            @if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku))
-                                                <img src="{{ asset('storage/' . $buku->foto_buku) }}"
-                                                    class="w-full h-full object-cover" alt="{{ $buku->judul_buku }}">
-                                            @else
-                                                <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
+                                            <?php if($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)): ?>
+                                                <img src="<?php echo e(asset('storage/' . $buku->foto_buku)); ?>"
+                                                    class="w-full h-full object-cover" alt="<?php echo e($buku->judul_buku); ?>">
+                                            <?php else: ?>
+                                                <img src="<?php echo e(asset('assets/image_default/image_default_book.jpeg')); ?>"
                                                     class="w-full h-full object-cover" alt="Default Book">
-                                            @endif
+                                            <?php endif; ?>
                                         </div>
                                     </td>
 
-                                    <td class="px-4 py-3 font-medium text-slate-800">{{ $buku->judul_buku }}</td>
-                                    <td class="px-4 py-3 text-gray-600">{{ $buku->penulis }}</td>
-                                    <td class="px-4 py-3 text-gray-600">{{ $buku->penerbit }}</td>
-                                    <td class="px-4 py-3 text-gray-600">{{ $buku->tahun_terbit }}</td>
+                                    <td class="px-4 py-3 font-medium text-slate-800"><?php echo e($buku->judul_buku); ?></td>
+                                    <td class="px-4 py-3 text-gray-600"><?php echo e($buku->penulis); ?></td>
+                                    <td class="px-4 py-3 text-gray-600"><?php echo e($buku->penerbit); ?></td>
+                                    <td class="px-4 py-3 text-gray-600"><?php echo e($buku->tahun_terbit); ?></td>
                                     <td class="px-4 py-3 text-gray-600">
-                                        {{ $buku->kategoris->pluck('nama_kategori')->join(', ') ?? '-' }}
+                                        <?php echo e($buku->kategoris->pluck('nama_kategori')->join(', ') ?? '-'); ?>
+
                                     </td>
-                                    <td class="px-4 py-3 text-gray-600">{{ $buku->edisi ?? '-' }}</td>
+                                    <td class="px-4 py-3 text-gray-600"><?php echo e($buku->edisi ?? '-'); ?></td>
 
                                     <td class="px-4 py-3 text-center">
                                         <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
-                                            {{ $buku->stok }}
+                                            <?php echo e($buku->stok); ?>
+
                                         </span>
                                     </td>
 
                                     <td class="px-4 py-3 text-center">
-                                        @if ($buku->file_buku)
-                                            <a href="{{ asset('storage/' . $buku->file_buku) }}" target="_blank"
+                                        <?php if($buku->file_buku): ?>
+                                            <a href="<?php echo e(asset('storage/' . $buku->file_buku)); ?>" target="_blank"
                                                 class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition">
                                                 Lihat
                                             </a>
-                                        @else
+                                        <?php else: ?>
                                             <span class="text-gray-400 text-xs">-</span>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
 
                                     <td class="px-4 py-3 text-center">
                                         <div class="flex justify-center gap-2">
-                                            <a href="{{ route('superadmin.data_buku.show', $buku->id) }}"
+                                            <a href="<?php echo e(route('superadmin.data_buku.show', $buku->id)); ?>"
                                                 class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 border border-blue-200 rounded-lg text-xs font-medium hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all duration-200 shadow-sm"
                                                 title="Detail">
                                                 <i class="fa-solid fa-circle-info text-xs"></i>
@@ -137,8 +139,8 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endif
-                        @endforeach
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
 
                 </table>
@@ -311,4 +313,6 @@
         });
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_superAdmin.super_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/super_admin/data_buku/index.blade.php ENDPATH**/ ?>

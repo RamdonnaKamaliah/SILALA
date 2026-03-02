@@ -163,14 +163,6 @@ public function store(Request $request)
     public function destroy(string $id)
     {
         $buku = databuku::findOrFail($id);
-       
-           // Hapus file gambar jika ada
-    if ($buku->file_buku && Storage::disk('public')->exists($buku->file_buku)) {
-        Storage::disk('public')->delete($buku->file_buku);
-    }
-     if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)) {
-        Storage::disk('public')->delete($buku->foto_buku);
-    }
     
         $buku->delete();
         return redirect()->route('admin.data_buku.index')
@@ -194,18 +186,6 @@ public function store(Request $request)
 
     $books = databuku::whereIn('id', $selectedIds)->get();
 
-    foreach ($books as $buku) {
-
-        // Hapus file buku (PDF / e-book)
-        if ($buku->file_buku && Storage::disk('public')->exists($buku->file_buku)) {
-            Storage::disk('public')->delete($buku->file_buku);
-        }
-
-        // Hapus foto / cover buku
-        if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)) {
-            Storage::disk('public')->delete($buku->foto_buku);
-        }
-    }
 
     // Hapus data dari database
     databuku::whereIn('id', $selectedIds)->delete();

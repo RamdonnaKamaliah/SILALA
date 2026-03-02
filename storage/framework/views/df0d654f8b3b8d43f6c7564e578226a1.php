@@ -1,7 +1,6 @@
-@extends('layout_admin.admin')
-@section('pageTitle', 'Detail Data Buku')
+<?php $__env->startSection('pageTitle', 'Detail Data Buku'); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="p-4 md:p-6 font-poppins">
         <!-- Header Section -->
         <div class="mb-6 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] rounded-2xl p-6 text-white shadow-xl">
@@ -26,7 +25,7 @@
 
         <!-- Back Button -->
         <div class="mb-6">
-            <a href="{{ route('admin.data_arsip.index') }}"
+            <a href="<?php echo e(route('admin.data_arsip.index')); ?>"
                 class="inline-flex items-center space-x-3 px-5 py-2.5 
                    border border-gray-300 text-gray-700 rounded-xl font-semibold
                    hover:bg-gray-50 transition-all duration-200 text-sm shadow-sm hover:shadow-md">
@@ -46,12 +45,12 @@
                         <span>Cover Buku</span>
                     </h2>
                     <div class="flex justify-center">
-                        @if ($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku))
-                            <img src="{{ asset('storage/' . $buku->foto_buku) }}" class="w-full h-full object-cover">
-                        @else
-                            <img src="{{ asset('assets/image_default/image_default_book.jpeg') }}"
+                        <?php if($buku->foto_buku && Storage::disk('public')->exists($buku->foto_buku)): ?>
+                            <img src="<?php echo e(asset('storage/' . $buku->foto_buku)); ?>" class="w-full h-full object-cover">
+                        <?php else: ?>
+                            <img src="<?php echo e(asset('assets/image_default/image_default_book.jpeg')); ?>"
                                 class="w-full h-full object-cover">
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -65,7 +64,7 @@
 
 
                         <!-- View PDF Button -->
-                        <button type="button" onclick="openPdfModal('{{ asset('storage/' . $buku->file_buku) }}')"
+                        <button type="button" onclick="openPdfModal('<?php echo e(asset('storage/' . $buku->file_buku)); ?>')"
                             class="flex items-center justify-center space-x-3 px-6 py-3
                                    bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-bold
                                    hover:from-blue-600 hover:to-blue-700 transition-all duration-200
@@ -99,7 +98,7 @@
                                 <div class="flex-1">
                                     <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Judul
                                         Buku</label>
-                                    <p class="text-gray-800 text-base font-semibold">{{ $buku->judul_buku }}</p>
+                                    <p class="text-gray-800 text-base font-semibold"><?php echo e($buku->judul_buku); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -113,7 +112,7 @@
                                 <div class="flex-1">
                                     <label
                                         class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Penulis</label>
-                                    <p class="text-gray-800 text-sm font-medium">{{ $buku->penulis }}</p>
+                                    <p class="text-gray-800 text-sm font-medium"><?php echo e($buku->penulis); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -126,7 +125,7 @@
                                 <div class="flex-1">
                                     <label
                                         class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Penerbit</label>
-                                    <p class="text-gray-800 text-sm font-medium">{{ $buku->penerbit }}</p>
+                                    <p class="text-gray-800 text-sm font-medium"><?php echo e($buku->penerbit); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +139,7 @@
                                 <div class="flex-1">
                                     <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Tahun
                                         Terbit</label>
-                                    <p class="text-gray-800 text-sm font-medium">{{ $buku->tahun_terbit }}</p>
+                                    <p class="text-gray-800 text-sm font-medium"><?php echo e($buku->tahun_terbit); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +152,7 @@
                                 <div class="flex-1">
                                     <label
                                         class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Bahasa</label>
-                                    <p class="text-gray-800 text-sm font-medium">{{ $buku->bahasa }}</p>
+                                    <p class="text-gray-800 text-sm font-medium"><?php echo e($buku->bahasa); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -167,7 +166,7 @@
                                 <div class="flex-1">
                                     <label
                                         class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Edisi</label>
-                                    <p class="text-gray-800 text-sm font-medium">{{ $buku->edisi ?: '-' }}</p>
+                                    <p class="text-gray-800 text-sm font-medium"><?php echo e($buku->edisi ?: '-'); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +181,7 @@
                                         class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Stok</label>
                                     <span
                                         class="inline-flex items-center justify-center px-3 py-1 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full text-sm font-bold shadow-sm">
-                                        {{ $buku->stok }} Buku
+                                        <?php echo e($buku->stok); ?> Buku
                                     </span>
                                 </div>
                             </div>
@@ -197,7 +196,7 @@
                                 <div class="flex-1">
                                     <label class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-1">Jumlah
                                         Halaman</label>
-                                    <p class="text-gray-800 text-sm font-medium">{{ $buku->jumlah_halaman ?: '-' }}</p>
+                                    <p class="text-gray-800 text-sm font-medium"><?php echo e($buku->jumlah_halaman ?: '-'); ?></p>
                                 </div>
                             </div>
                         </div>
@@ -212,18 +211,19 @@
                                 <div class="flex-1">
                                     <label
                                         class="block text-xs font-bold text-gray-600 uppercase tracking-wide mb-2">Kategori</label>
-                                    @if ($buku->kategoris->isNotEmpty())
+                                    <?php if($buku->kategoris->isNotEmpty()): ?>
                                         <div class="flex flex-wrap gap-2">
-                                            @foreach ($buku->kategoris as $kategori)
+                                            <?php $__currentLoopData = $buku->kategoris; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kategori): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <span
                                                     class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] text-white rounded-full text-xs font-bold shadow-sm">
-                                                    {{ $kategori->nama_kategori }}
+                                                    <?php echo e($kategori->nama_kategori); ?>
+
                                                 </span>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </div>
-                                    @else
+                                    <?php else: ?>
                                         <p class="text-gray-500 italic text-sm font-medium">Tidak ada kategori</p>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -238,7 +238,8 @@
                     </h2>
                     <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200">
                         <p class="text-gray-700 leading-relaxed text-sm font-medium">
-                            {{ $buku->deskripsi ?: 'Tidak ada deskripsi tersedia untuk buku ini.' }}
+                            <?php echo e($buku->deskripsi ?: 'Tidak ada deskripsi tersedia untuk buku ini.'); ?>
+
                         </p>
                     </div>
                 </div>
@@ -249,10 +250,10 @@
         <div class="mt-6 pt-6 border-t border-gray-200">
             <div class="flex flex-col sm:flex-row justify-center gap-4">
 
-                <form action="{{ route('admin.data_buku.restore', ['id' => $buku->id]) }}" method="POST"
+                <form action="<?php echo e(route('admin.data_buku.restore', ['id' => $buku->id])); ?>" method="POST"
                     class="flex-1 max-w-xs">
-                    @csrf
-                    @method('PUT')
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('PUT'); ?>
                     <button type="submit"
                         class="w-full flex items-center justify-center space-x-3 px-8 py-3
                            bg-primary text-white rounded-xl font-bold
@@ -263,16 +264,16 @@
                     </button>
                 </form>
 
-                <form action="{{ route('admin.data_arsip.destroy', $buku->id) }}" method="POST"
+                <form action="<?php echo e(route('admin.data_arsip.destroy', $buku->id)); ?>" method="POST"
                     class="flex-1 max-w-xs">
-                    @csrf
-                    @method('DELETE')
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
                     <button type="submit"
                         class="w-full flex items-center justify-center space-x-3 px-8 py-3
                            bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-bold
                            hover:from-red-600 hover:to-red-700 transition-all duration-200
                            shadow-lg hover:shadow-xl transform hover:scale-105 text-sm delete-permanent-btn"
-                        data-title="{{ $buku->judul_buku }}">
+                        data-title="<?php echo e($buku->judul_buku); ?>">
                         <i class="fas fa-trash text-base"></i>
                         <span>Hapus Permanen</span>
                     </button>
@@ -289,7 +290,7 @@
             <!-- Modal Header -->
             <div
                 class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-[#A4B465] to-[#8AA24F] text-white">
-                <h3 class="text-lg font-bold">Preview PDF - {{ $buku->judul_buku }}</h3>
+                <h3 class="text-lg font-bold">Preview PDF - <?php echo e($buku->judul_buku); ?></h3>
                 <button onclick="closePdfModal()"
                     class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
                     <i class="fas fa-times text-sm"></i>
@@ -468,9 +469,11 @@
         });
     </script>
 
-    @push('styles')
+    <?php $__env->startPush('styles'); ?>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    @endpush
+    <?php $__env->stopPush(); ?>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layout_admin.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/admin/data_arsip/show.blade.php ENDPATH**/ ?>

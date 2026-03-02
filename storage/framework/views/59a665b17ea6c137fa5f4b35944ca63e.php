@@ -36,9 +36,9 @@ border-b border-primary_light/20">
                             <div class="relative">
                                 <div
                                     class="h-9 w-9 rounded-full overflow-hidden border-2 border-white/30 shadow-lg hover:border-white/50 transition-all">
-                                    <img src="{{ $admin->foto && Storage::disk('public')->exists($admin->foto)
+                                    <img src="<?php echo e($admin->foto && Storage::disk('public')->exists($admin->foto)
                                         ? asset('storage/' . $admin->foto)
-                                        : asset('default/profile_admin.svg') }}"
+                                        : asset('default/profile_admin.svg')); ?>"
                                         class="w-full h-full object-cover" alt="Foto Admin">
                                 </div>
                                 <div
@@ -59,20 +59,20 @@ border-b border-primary_light/20">
 
                             <!-- Header -->
                             <div class="px-4 py-2 w-full border-b text-center">
-                                <p class="text-sm font-semibold text-gray-800">{{ $admin->nama }}</p>
+                                <p class="text-sm font-semibold text-gray-800"><?php echo e($admin->nama); ?></p>
                                 <p class="text-xs text-gray-500 text-center">Administrator</p>
                             </div>
 
                             <!-- Menu -->
-                            <a href="{{ route('admin.profile.index') }}"
+                            <a href="<?php echo e(route('admin.profile.index')); ?>"
                                 class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
                                 <i class="fas fa-user w-5 mr-2"></i> Profil
                             </a>
 
 
                             <!-- Logout -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
+                            <form method="POST" action="<?php echo e(route('logout')); ?>">
+                                <?php echo csrf_field(); ?>
                                 <button type="submit"
                                     class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
                                     <i class="fas fa-sign-out-alt w-5 mr-2"></i> Logout
@@ -116,3 +116,4 @@ border-b border-primary_light/20">
 </body>
 
 </html>
+<?php /**PATH C:\laragon\www\SILALA_BPMSPH\resources\views/components/navbarAdmin.blade.php ENDPATH**/ ?>
